@@ -18,7 +18,7 @@
       gap: 5px;
       padding: 10px 15px;
       border-radius: 8px;
-      background-color: #007bff;
+      background-color: #cfa448;
       color: #fff;
       border: none;
       cursor: pointer;
@@ -28,6 +28,27 @@
       }
     }
   }
+
+.badge-fixed {
+  min-width: 0.1px;   /* بتحكم بعرض البادج */
+  text-align: center;
+  display: inline-block;
+  padding: 0.01em 0.4em; /* padding ثابت */
+  border-radius: 0.5rem; /* شكل أنعم */
+  color: #fff;
+}
+
+
+
+.badge-fixedd {
+  min-width: 0.1px;   /* بتحكم بعرض البادج */
+  text-align: center;
+  display: inline-block;
+  border-radius: 0.5rem; /* شكل أنعم */
+  padding: 0.01em 0.3em; /* padding ثابت */
+    color: #fff;
+
+}
 
   .custom-table {
     width: 100%;

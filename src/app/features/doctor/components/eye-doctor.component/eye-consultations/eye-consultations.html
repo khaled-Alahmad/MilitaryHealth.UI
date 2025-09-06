@@ -15,10 +15,7 @@
     </div>
   </div>
 
-  <!-- Loading Spinner -->
-  <div *ngIf="loading" class="text-center my-3">
-    <div class="spinner-border text-primary" role="status"></div>
-  </div>
+ 
 
   <!-- جدول النتائج -->
   <div class="table-responsive" *ngIf="!loading && filteredConsultations.length > 0">
@@ -54,8 +51,15 @@
           </td>
           <td>{{ c.doctor?.fullName }}</td>
           <td>
-            <button pButton type="button" icon="pi pi-pencil" class="p-button-sm"
-              (click)="openEditDialog(c)">اضافة نتجية </button>
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-pencil" 
+              class="p-button-sm"
+              (click)="openEditDialog(c)"
+              Tooltip="إضافة نتيجة"
+              tooltipPosition="top">
+            </button>
           </td>
         </tr>
       </tbody>
