@@ -1,5 +1,5 @@
 .sidebar {
-  width: 200px;
+  width: 310px;
   min-height: 100vh;
   background: #fff;
   border-left: 1px solid #eee;
@@ -24,21 +24,20 @@
   overflow: hidden;
   white-space: nowrap;
 }
+    .logo-img {
+            width: 160px;
+            height: 90px;
+            object-fit: contain;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            border-radius: 50%;
+            margin-right: 55px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-.logo-img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  transition: all 0.3s ease;
-}
 
-.logo-text {
-  font-size: 24px;
-  font-weight: bold;
-  margin-right: 10px;
-  color: #333;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
+
 
 .sidebar .menu {
   list-style: none;
