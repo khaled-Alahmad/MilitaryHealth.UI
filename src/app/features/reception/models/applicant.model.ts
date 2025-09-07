@@ -1,3 +1,4 @@
+import { Result } from "../../doctor/models/internal-exam.model";
 import { MaritalStatus } from "./marital-status.model";
 
 export interface ApplicantModel{
@@ -19,6 +20,7 @@ export interface ApplicantDetailsModel {
   applicantID: number;
   fileNumber: string;
   fullName: string;
+  associateNumber?: string;
   maritalStatusID: number;
   job: string;
   height: number;
@@ -34,6 +36,9 @@ export interface ApplicantDetailsModel {
   orthopedicExamDto?: OrthopedicExam;
   internalExam?: InternalExam;
   consultation?: Consultation;
+  investigation?: Investigation;
+  finalDecision?: FinalDecision;
+
 }
 
 export interface EyeExam {
@@ -45,6 +50,7 @@ export interface EyeExam {
   refractionTypeID: number;
   refractionValue: number;
   resultID: number;
+  refractions: Refraction[];
 }
 
 export interface SurgicalExam {
@@ -65,6 +71,7 @@ export interface OrthopedicExam {
   musculoskeletal: string;
   neurologicalSurgery: string;
   resultID: number;
+  reason: string;
 }
 
 export interface InternalExam {
@@ -92,4 +99,33 @@ export interface Consultation {
   referredDoctor: string;
   result: string;
   attachment: string;
+}
+
+export interface Investigation {
+  investigationID: number;
+  applicantFileNumber: string;
+  type: string;
+  result: string;
+  attachment: string;
+  status: string;
+  doctorID: number;
+}
+
+export interface FinalDecision {
+  decisionID: number;
+  orthopedicExamID: number;
+  surgicalExamID: number;
+  internalExamID: number;
+  eyeExamID: number;
+  applicantFileNumber: string;
+  resultID: number;
+  reason: string;
+  postponeDuration: string;
+  decisionDate: string;
+  result: Result;
+}
+
+export interface Refraction {
+  refractionTypeID: number;
+  refractionValue: number;
 }

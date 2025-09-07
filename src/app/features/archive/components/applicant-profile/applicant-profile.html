@@ -1,70 +1,127 @@
-<div class="report-container" >
-  <div class="report-header text-center">
-    <h4>تقرير بيانات المنتسب</h4>
-    <hr>
+<div class="report-container" id="applicant-report">
+  <div class="report-header">
+    <div class="header-top">
+      <div class="branding">
+        <img src="assets/images/syr.svg" alt="Logo" class="logo" />
+        <div class="branding-text">
+          <div class="org-name">القوات المسلحة - الخدمات الطبية</div>
+          <div class="report-title">تقرير بيانات المنتسب</div>
+        </div>
+      </div>
+      <div class="ids">
+        <div class="id"><span class="label">رقم الديوان</span><span class="value accent fw-bold">{{ archive?.applicantFileNumber || '-' }}</span></div>
+        <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant?.associateNumber || '-' }}</span></div>
+        <!-- <div class="id"><span class="label">رقم الملف</span><span class="value">{{ applicant?.fileNumber }}</span></div> -->
+        <div class="id date"><span class="label">تاريخ الطباعة</span><span class="value">{{ (date | date:'yyyy/MM/dd') }}</span></div>
+      </div>
+    </div>
   </div>
-  <h5 class="section-title">البيانات الشخصية</h5>
-  <table class="table table-bordered">
-    <tr><th>رقم الملف</th><td>{{ applicant.fileNumber }}</td></tr>
-    <tr><th>الاسم</th><td>{{ applicant.fullName }}</td></tr>
-    <tr><th>الحالة الاجتماعية</th><td>{{ getMaritalStatusDescription(applicant.maritalStatusID) }}</td></tr>
-    <tr><th>الوظيفة</th><td>{{ applicant.job }}</td></tr>
-    <tr><th>الطول / الوزن</th><td>{{ applicant.height }} سم / {{ applicant.weight }} كجم</td></tr>
-    <tr><th>BMI</th><td>{{ applicant.bmi }}</td></tr>
-    <tr><th>ضغط الدم</th><td>{{ applicant.bloodPressure }}</td></tr>
-    <tr><th>النبض</th><td>{{ applicant.pulse }}</td></tr>
-    <tr><th>وشم</th><td>{{ applicant.tattoo ? 'يوجد' : 'لا يوجد' }}</td></tr>
-    <tr><th>علامات مميزة</th><td>{{ applicant.distinctiveMarks || 'لا توجد' }}</td></tr>
-  </table>
 
-  <!-- الفحوصات -->
-  <h5 class="section-title mt-3">الفحوصات الطبية</h5>
-  <table class="table table-bordered">
-    <tr><th colspan="2"> فحص العيون</th></tr>
-    <tr><td>النظر</td><td>{{ applicant.eyeExam?.vision }}</td></tr>
-    <tr><td>الألوان</td><td>{{ applicant.eyeExam?.colorTest }}</td></tr>
-    <tr><td>قيمة الانكسار</td><td>{{ applicant.eyeExam?.refractionValue }}</td></tr>
-    <tr><td>النتيجة</td><td>{{ getResultDescription(applicant.eyeExam?.resultID) }}</td></tr>
-    
-    <tr><th colspan="2"> الفحص الجراحي</th></tr>
-    <tr><td>عام</td><td>{{ applicant.surgicalExam?.generalSurgery }}</td></tr>
-    <tr><td>المسالك البولية</td><td>{{ applicant.surgicalExam?.urinarySurgery }}</td></tr>
-    <tr><td>الأوعية الدموية</td><td>{{ applicant.surgicalExam?.vascularSurgery }}</td></tr>
-    <tr><td>الصدر</td><td>{{ applicant.surgicalExam?.thoracicSurgery }}</td></tr>
-    <tr><td>النتيجة</td><td>{{ getResultDescription(applicant.surgicalExam?.resultID) }}</td></tr>
-    
-    <tr><th colspan="2"> الفحص الباطني</th></tr>
-    <tr><td>القلب</td><td>{{ applicant.internalExam?.heart }}</td></tr>
-    <tr><td>الجهاز التنفسي</td><td>{{ applicant.internalExam?.respiratory }}</td></tr>
-    <tr><td>الجهاز الهضمي</td><td>{{ applicant.internalExam?.digestive }}</td></tr>
-    <tr><td>الأعصاب</td><td>{{ applicant.internalExam?.neurology }}</td></tr>
-    <tr><td>الجلد</td><td>{{ applicant.internalExam?.skin }}</td></tr>
-    <tr><td>النتيجة</td><td>{{ getResultDescription(applicant.internalExam?.resultID) }}</td></tr>
+  <ng-container *ngIf="applicant as a; else loadingTpl">
+  <div class="grid">
+    <section class="card avoid-break">
+      <h5 class="card-title">البيانات الشخصية</h5>
+      <div class="card-body two-col">
+        <div class="field"><span class="label">رقم الملف</span><span class="value">{{ a.fileNumber || '-' }}</span></div>
+        <div class="field"><span class="label">الاسم</span><span class="value">{{ a.fullName || '-' }}</span></div>
+        <div class="field"><span class="label">الحالة الاجتماعية</span><span class="value">{{ getMaritalStatusDescription(a.maritalStatusID) }}</span></div>
+        <div class="field"><span class="label">الوظيفة</span><span class="value">{{ a.job || '-' }}</span></div>
+        <div class="field"><span class="label">الطول / الوزن</span><span class="value">{{ a.height || '-' }} سم / {{ a.weight || '-' }} كجم</span></div>
+        <div class="field"><span class="label">BMI</span><span class="value">{{ a.bmi || '-' }}</span></div>
+        <div class="field"><span class="label">ضغط الدم</span><span class="value">{{ a.bloodPressure || '-' }}</span></div>
+        <div class="field"><span class="label">النبض</span><span class="value">{{ a.pulse || '-' }}</span></div>
+        <div class="field"><span class="label">وشم</span><span class="value">{{ a.tattoo ? 'يوجد' : 'لا يوجد' }}</span></div>
+        <div class="field full"><span class="label">علامات مميزة</span><span class="value">{{ a.distinctiveMarks || 'لا توجد' }}</span></div>
+      </div>
+    </section>
 
-    <tr><th colspan="2">فحص العظام</th></tr>
-    <tr><td>عضلي هيكلي</td><td>{{ applicant.orthopedicExamDto?.musculoskeletal }}</td></tr>
-    <tr><td> جراحة عصبية</td><td>{{ applicant.orthopedicExamDto?.neurologicalSurgery }}</td></tr>
-    <tr><td> النتيجة</td><td>{{ getResultDescription(applicant.orthopedicExamDto?.resultID) }}</td></tr>
+    <section class="card avoid-break">
+      <h5 class="card-title">الفحوصات الطبية</h5>
+      <div class="card-body">
+        <div class="subcard avoid-break">
+          <div class="subcard-title">فحص العيون</div>
+          <div class="two-col">
+            <div class="field"><span class="label">النظر</span><span class="value">{{ a.eyeExam?.vision || '-' }}</span></div>
+            <div class="field"><span class="label">الألوان</span><span class="value">{{ a.eyeExam?.colorTest || '-' }}</span></div>
+            <div class="field"><span class="label">قيمة الانكسار</span><span class="value">{{ a.eyeExam?.refractionValue || '-' }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.eyeExam?.resultID) }}</span></div>
+          </div>
+        </div>
 
-        <tr><th colspan="2"> الاستشارة</th></tr>
-    <tr><td>النوع</td><td>{{ applicant.consultation?.consultationType }}</td></tr>
-    <tr><td>الطبيب </td><td>{{ applicant.consultation?.referredDoctor }}</td></tr>
+        <div class="subcard avoid-break">
+          <div class="subcard-title">الفحص الجراحي</div>
+          <div class="two-col">
+            <div class="field"><span class="label">عام</span><span class="value">{{ a.surgicalExam?.generalSurgery || '-' }}</span></div>
+            <div class="field"><span class="label">المسالك البولية</span><span class="value">{{ a.surgicalExam?.urinarySurgery || '-' }}</span></div>
+            <div class="field"><span class="label">الأوعية الدموية</span><span class="value">{{ a.surgicalExam?.vascularSurgery || '-' }}</span></div>
+            <div class="field"><span class="label">الصدر</span><span class="value">{{ a.surgicalExam?.thoracicSurgery || '-' }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.surgicalExam?.resultID) }}</span></div>
+          </div>
+        </div>
 
-  </table>
+        <div class="subcard avoid-break">
+          <div class="subcard-title">الفحص الباطني</div>
+          <div class="two-col">
+            <div class="field"><span class="label">القلب</span><span class="value">{{ a.internalExam?.heart || '-' }}</span></div>
+            <div class="field"><span class="label">الجهاز التنفسي</span><span class="value">{{ a.internalExam?.respiratory || '-' }}</span></div>
+            <div class="field"><span class="label">الجهاز الهضمي</span><span class="value">{{ a.internalExam?.digestive || '-' }}</span></div>
+            <div class="field"><span class="label">الأعصاب</span><span class="value">{{ a.internalExam?.neurology || '-' }}</span></div>
+            <div class="field"><span class="label">الجلد</span><span class="value">{{ a.internalExam?.skin || '-' }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.internalExam?.resultID) }}</span></div>
+          </div>
+        </div>
 
-  <!-- القرار -->
-  <h5 class="section-title mt-3">القرار النهائي</h5>
-  <table class="table table-bordered">
-    <tr><th>النتيجة</th><td>{{ getResultDescription(decisionModel?.resultID) }}</td></tr>
-    <tr><th>السبب</th><td>{{ decisionModel?.reason || 'لا يوجد' }}</td></tr>
-    <tr><th>مدة التأجيل</th><td>{{ decisionModel?.postponeDuration || '-' }}</td></tr>
-    <tr><th>تاريخ القرار</th><td>{{ decisionModel?.decisionDate }}</td></tr>
-  </table>
+        <div class="subcard avoid-break">
+          <div class="subcard-title">فحص العظام</div>
+          <div class="two-col">
+            <div class="field"><span class="label">عضلي هيكلي</span><span class="value">{{ a.orthopedicExamDto?.musculoskeletal || '-' }}</span></div>
+            <div class="field"><span class="label">جراحة عصبية</span><span class="value">{{ a.orthopedicExamDto?.neurologicalSurgery || '-' }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.orthopedicExamDto?.resultID) }}</span></div>
+          </div>
+        </div>
 
-  <!-- زر الطباعة -->
-  <div class="text-end mt-3 no-print">
-    <button class="btn btn-primary" (click)="print()">
-      <i class="fas fa-print"></i> طباعة
+        <div class="subcard avoid-break">
+          <div class="subcard-title">الاستشارة</div>
+          <div class="two-col">
+            <div class="field"><span class="label">النوع</span><span class="value">{{ a.consultation?.consultationType || '-' }}</span></div>
+            <div class="field"><span class="label">الطبيب</span><span class="value">{{ a.consultation?.referredDoctor || '-' }}</span></div>
+          </div>
+        </div>
+
+        <div class="subcard avoid-break">
+          <div class="subcard-title">التحاليل</div>
+          <div class="two-col">
+            <div class="field"><span class="label">النوع</span><span class="value">{{ a.investigation?.type || '-' }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value">{{ a.investigation?.result || '-' }}</span></div>
+            <div class="field"><span class="label">الحالة</span><span class="value">{{ a.investigation?.status || '-' }}</span></div>
+            <div class="field full"><span class="label">مرفق</span><span class="value">{{ a.investigation?.attachment || '-' }}</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card avoid-break">
+      <h5 class="card-title">القرار النهائي</h5>
+      <div class="card-body two-col">
+        <div class="field"><span class="label">النتيجة</span><span class="value">{{ a.finalDecision?.result?.description || getResultDescription(a.finalDecision?.resultID) }}</span></div>
+        <div class="field"><span class="label">السبب</span><span class="value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span></div>
+        <div class="field"><span class="label">مدة التأجيل</span><span class="value">{{ a.finalDecision?.postponeDuration || '-' }}</span></div>
+        <div class="field"><span class="label">تاريخ القرار</span><span class="value">{{ a.finalDecision?.decisionDate || '-' }}</span></div>
+      </div>
+    </section>
+  </div>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <div class="card">
+      <div class="card-body">جاري التحميل ...</div>
+    </div>
+  </ng-template>
+
+  <div class="actions no-print">
+    <button class="btn btn-primary">
+      <i class="fas fa-print"></i>
+      طباعة
     </button>
   </div>
 </div>

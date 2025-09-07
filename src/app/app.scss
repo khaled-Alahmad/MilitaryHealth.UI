@@ -20,3 +20,48 @@
   height: 3rem;
   border-width: 0.25rem;
 }
+/* ألوان النصوص والعناوين */
+body {
+  color: #054239;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #054239;
+}
+
+p {
+  color: #428177;
+}
+
+/* ألوان الأزرار */
+.btn-primary {
+  background-color: #428177;
+  color: #ffffff;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #054239;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid #054239;
+  color: #054239;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #f1f1f1;
+}
+
+/* ألوان حقول الإدخال */
+.form-control {
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  border-color: #428177;
+  box-shadow: 0 0 0 0.25rem rgba(66, 129, 119, 0.25);
+}
