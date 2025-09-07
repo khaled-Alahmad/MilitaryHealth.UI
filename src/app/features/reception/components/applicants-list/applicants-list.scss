@@ -162,3 +162,16 @@
   border-radius: 3px;
 }
 
+.btn-modern-view {
+    color: #ffffff; /* لون النص أبيض */
+    background-color: #428177; /* لون الخلفية الرئيسي */
+    border: 1px solid #428177; /* حدود بنفس لون الخلفية */
+    font-weight: 500;
+    transition: all 0.3s ease; /* انتقال سلس */
+  }
+  
+  .btn-modern-view:hover {
+    color: #ffffff; /* يبقى النص أبيض */
+    background-color: #054239; /* لون أغمق عند التمرير */
+    border-color: #054239; /* حدود أغمق عند التمرير */
+  }
