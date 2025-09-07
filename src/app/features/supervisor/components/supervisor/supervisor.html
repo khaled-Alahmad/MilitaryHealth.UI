@@ -18,44 +18,55 @@
   <div class="row g-2 mt-2" *ngIf="applicant">
     <div class="col-12">
       <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-custom text-white d-flex justify-content-between align-items-center">
           <h5 class="mb-0">البيانات الشخصية والطبية</h5>
+          <span class="badge bg-light text-dark">ملف: {{ applicant.fileNumber }}</span>
         </div>
         <div class="card-body py-2">
-          <div class="row row-cols-2 row-cols-md-4 g-2 compact-grid">
+          <div class="row row-cols-2 row-cols-md-4 g-3 compact-grid">
             <div class="col-6 col-md-3">
-              <strong>رقم الملف: </strong> <span>{{ applicant.fileNumber }}</span>
+              <div class="text-muted small">رقم الملف</div>
+              <div class="fw-semibold">{{ applicant.fileNumber }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>الاسم: </strong> <span>{{ applicant.fullName }}</span>
+              <div class="text-muted small">الاسم</div>
+              <div class="fw-semibold">{{ applicant.fullName }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>الحالة الاجتماعية: </strong> <span>{{ getMaritalStatusDescription(applicant.maritalStatusID)
-                }}</span>
+              <div class="text-muted small">الحالة الاجتماعية</div>
+              <div class="fw-semibold">{{ getMaritalStatusDescription(applicant.maritalStatusID) }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>الوظيفة: </strong> <span>{{ applicant.job }}</span>
+              <div class="text-muted small">الوظيفة</div>
+              <div class="fw-semibold">{{ applicant.job }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>الطول: </strong> <span>{{ applicant.height }} سم</span>
+              <div class="text-muted small">الطول</div>
+              <div class="fw-semibold">{{ applicant.height }} سم</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>الوزن: </strong> <span>{{ applicant.weight }} كجم</span>
+              <div class="text-muted small">الوزن</div>
+              <div class="fw-semibold">{{ applicant.weight }} كجم</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>BMI: </strong> <span>{{ applicant.bmi }}</span>
+              <div class="text-muted small">BMI</div>
+              <div class="fw-semibold">{{ applicant.bmi }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>ضغط الدم: </strong> <span>{{ applicant.bloodPressure }}</span>
+              <div class="text-muted small">ضغط الدم</div>
+              <div class="fw-semibold">{{ applicant.bloodPressure }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>النبض: </strong> <span>{{ applicant.pulse }}</span>
+              <div class="text-muted small">النبض</div>
+              <div class="fw-semibold">{{ applicant.pulse }}</div>
             </div>
             <div class="col-6 col-md-3">
-              <strong>وشم: </strong> <span>{{ applicant.tattoo ? 'يوجد' : 'لا يوجد' }}</span>
+              <div class="text-muted small">وشم</div>
+              <div class="fw-semibold">{{ applicant.tattoo ? 'يوجد' : 'لا يوجد' }}</div>
             </div>
             <div class="col-12">
-              <strong>علامات مميزة: </strong> <span>{{ applicant.distinctiveMarks || 'لا توجد' }}</span>
+              <div class="text-muted small">علامات مميزة</div>
+              <div class="fw-semibold">{{ applicant.distinctiveMarks || 'لا توجد' }}</div>
             </div>
           </div>
         </div>
@@ -64,14 +75,14 @@
 
     <div class="col-12 mt-4">
       <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header bg-custom text-white">
           <h5 class="mb-0">الفحوصات الطبية</h5>
         </div>
         <div class="card-body py-2">
           <div class="row row-cols-1 row-cols-md-2 g-2">
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card">
-                <h6 class="text-info mb-2">👁️ فحص العيون</h6>
+                <h6 class="mb-2">فحص العيون</h6>
                 <ng-container *ngIf="applicant.eyeExam; ">
                   <div><strong>النظر:</strong> {{ applicant.eyeExam.vision }}</div>
                   <div><strong>الألوان:</strong> {{ applicant.eyeExam.colorTest }}</div>
@@ -83,7 +94,7 @@
 
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card">
-                <h6 class="text-warning mb-2">🩺 الفحص الجراحي</h6>
+                <h6 class=" mb-2">الفحص الجراحي</h6>
                 <ng-container *ngIf="applicant.surgicalExam; else noData">
                   <div><strong>عام:</strong> {{ applicant.surgicalExam.generalSurgery }}</div>
                   <div><strong>المسالك البولية:</strong> {{ applicant.surgicalExam.urinarySurgery }}</div>
@@ -96,7 +107,7 @@
 
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card">
-                <h6 class="text-danger mb-2">❤️ الفحص الباطني</h6>
+                <h6 class=" mb-2">الفحص الباطني</h6>
                 <ng-container *ngIf="applicant.internalExam; else noData">
                   <div><strong>القلب:</strong> {{ applicant.internalExam.heart }}</div>
                   <div><strong>الجهاز التنفسي:</strong> {{ applicant.internalExam.respiratory }}</div>
@@ -115,7 +126,7 @@
 
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card">
-                <h6 class="text-secondary mb-2">🦴 فحص العظام</h6>
+                <h6 class=" mb-2">فحص العظام</h6>
                 <ng-container *ngIf="applicant.orthopedicExamDto; else noData">
                   <div><strong>عضلي هيكلي:</strong> {{ applicant.orthopedicExamDto.musculoskeletal }}</div>
                   <div><strong>جراحة عصبية:</strong> {{ applicant.orthopedicExamDto.neurologicalSurgery }}</div>
@@ -126,7 +137,7 @@
 
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card">
-                <h6 class="text-dark mb-2">📑 الاستشارة</h6>
+                <h6 class=" mb-2">الاستشارة</h6>
                 <ng-container *ngIf="applicant.consultation; else noData">
                   <div><strong>النوع:</strong> {{ applicant.consultation.consultationType }}</div>
                   <div><strong>الطبيب:</strong> {{ applicant.consultation.referredDoctor }}</div>
@@ -144,7 +155,7 @@
 
     <div class="col-12 mt-4">
       <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header bg-custom text-white">
           <h5 class="mb-0">القرار النهائي</h5>
         </div>
         <div class="card-body py-2">
