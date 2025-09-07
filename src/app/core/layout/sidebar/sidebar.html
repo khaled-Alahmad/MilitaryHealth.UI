@@ -2,7 +2,7 @@
   <div class="sidebar-header">
     <div class="logo">
       <img src="assets/images/syr.svg" alt="Logo" class="logo-img">
-      <span class="logo-text">wooow</span>
+
     </div>
   </div>
 
@@ -15,7 +15,7 @@
         <span>إضافة منتسب</span>
       </li>
       <li routerLink="/reception/applicants">
-        <i class="pi pi-users"></i>
+        <i class="pi pi-id-card"></i>
         <span>قائمة المنتسبين</span>
       </li>
      
@@ -24,18 +24,18 @@
     <!-- Admin -->
     @if (role === 'Admin') {
       <li routerLink="admin/dashboard">
-        <i class="pi pi-chart-line"></i>
+        <i class="pi pi-chart-bar"></i>
         <span>الإحصائيات</span>
       </li>
       <li routerLink="admin/final">
-        <i class="pi pi-users"></i>
+        <i class="pi pi-clipboard"></i>
         <span>قائمة المنتسبين</span>
       </li>
     }
 
     @if (role === 'Diwan') {
       <li routerLink="archive">
-        <i class="pi pi-users"></i>
+        <i class="pi pi-inbox"></i>
         <span> الديوان</span>
       </li>
     }
@@ -46,15 +46,15 @@
         <span>عمليات الفحص العيني   </span>
       </li>
       <li routerLink="/doctor/eye/deferred">
-        <i class="pi pi-file"></i>
+        <i class="pi pi-clock"></i>
         <span> الفحص العيني </span>
       </li>
        <li routerLink="/doctor/eye/consultations">
-        <i class="pi pi-file"></i>
+        <i class="pi pi-comments"></i>
         <span> الاستشارات التخصصية  </span>
       </li>
        <li routerLink="/doctor/eye/investigations">
-        <i class="pi pi-file"></i>
+        <i class="pi pi-flask"></i>
         <span> الاستقصاءات الشعاعية والمخبرية </span>
       </li>
     
@@ -67,15 +67,15 @@
         <span>عمليات الفحوصات الباطنية   </span>
       </li>
       <li routerLink="/doctor/internal/medications">
-        <i class="pi pi-medkit"></i>
+        <i class="pi pi-heart"></i>
         <span>الفحص  الباطني    </span>
       </li>
        <li routerLink="/doctor/internal/consultations">
-    <i class="pi pi-clock"></i>
+    <i class="pi pi-comments"></i>
     <span> الاستشارات التخصصية </span>
   </li>
   <li routerLink="/doctor/internal/investigations">
-    <i class="pi pi-clock"></i>
+    <i class="pi pi-flask"></i>
     <span> الاستقصاءات الشعاعية والمخبرية </span>
   </li>
     }
@@ -83,7 +83,7 @@
    <!-- Doctor Orthopedics -->
 @if (role === 'Doctor_Orthopedics') {
   <li routerLink="/doctor/orthopedics">
-    <i class="pi pi-heart"></i>
+    <i class="pi pi-verified"></i>
     <span>  عمليات الجراحة العظمية </span>
   </li>
   <li routerLink="/doctor/orthopedics/deferred">
@@ -91,7 +91,7 @@
     <span>فحص الجراحة العظمية </span>
   </li>
   <li routerLink="/doctor/orthopedics/consultations">
-    <i class="pi pi-stethoscope"></i>
+    <i class="pi pi-comments"></i>
     <span> الاستشارات التخصصية </span>
   </li>
   <li routerLink="/doctor/orthopedics/investigations">
@@ -108,7 +108,7 @@
     <span>العمليات الجراحية للمريض</span>
   </li>
   <li routerLink="/doctor/surgery/records">
-    <i class="pi pi-file"></i>
+    <i class="pi pi-clipboard"></i>
     <span> الفحص الجراحي</span>
   </li>
   <li routerLink="/doctor/surgery/consultations">
@@ -116,7 +116,7 @@
     <span>الاستشارات التخصصية  </span>
   </li>
   <li routerLink="/doctor/surgery/investigations">
-    <i class="pi pi-search"></i>
+    <i class="pi pi-flask"></i>
     <span> الاستقصاءات الشعاعية والمخبرية </span>
   </li>
 }
@@ -126,7 +126,7 @@
     @if (role === 'Supervisor') {
       
       <li routerLink="supervisor">
-        <i class="pi pi-chart-line"></i>
+        <i class="pi pi-verified"></i>
         <span>تقييم المنتسب</span>
       </li>
        <li routerLink="/reception/applicants">
