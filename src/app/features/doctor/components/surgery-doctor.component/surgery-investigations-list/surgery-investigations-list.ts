@@ -11,7 +11,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-surgery-investigations-list',
-  imports: [CommonModule,ButtonModule, FormsModule, EditInvestigation],
+  standalone: true,
+  imports: [CommonModule, ButtonModule, FormsModule, EditInvestigation],
   templateUrl: './surgery-investigations-list.html',
   styleUrls: ['./surgery-investigations-list.scss']
 })

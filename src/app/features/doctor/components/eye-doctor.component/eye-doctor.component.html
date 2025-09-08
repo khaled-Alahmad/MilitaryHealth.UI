@@ -5,49 +5,32 @@
   </div>
 
   <!-- أزرار الإضافة -->
-  <div class="button-group mb-3 d-flex gap-2">
+  <div *ngIf="selectedApplicant" class="button-group mb-3 d-flex gap-2">
+    <!-- يظهر فقط إذا ما عنده فحص سابق -->
+    <button 
+      *ngIf="!hasEyeExam" 
+      class="btn btn-primary" 
+      (click)="addEyeExam()">
+      إضافة فحص عيني
+    </button>
 
-<div class="button-group mb-3 d-flex gap-2">
-            <button 
-                class="btn btn-primary" 
-                (click)="addEyeExam()" 
-                *ngIf="!hasEyeExam && selectedApplicant">
-                إضافة فحص للعين
-              </button>
-            <button 
-              class="btn btn-warning" 
-              (click)="addConsultation()"
-              *ngIf="selectedApplicant">
-              طلب استشارة
-            </button>
-
-            <button 
-              class="btn btn-success" 
-              (click)="addInvestigation()"
-              *ngIf="selectedApplicant">
-              طلب تحليل
-            </button>
-          </div>
+    <button class="btn btn-warning" (click)="addConsultation()">طلب استشارة</button>
+    <button class="btn btn-success" (click)="addInvestigation()">طلب تحليل</button>
   </div>
 
-  <!-- مودال فحص العيون -->
+  <!-- المكونات -->
   <app-eye-exam-form
     *ngIf="selectedApplicant"
-    #eyeExamForm
     [applicantFileNumber]="selectedApplicant.fileNumber">
   </app-eye-exam-form>
 
-  <!-- مودال الاستشارة -->
   <app-consultation-form
     *ngIf="selectedApplicant"
-    [applicantFileNumber]="selectedApplicant.fileNumber"
-    #consultationForm>
+    [applicantFileNumber]="selectedApplicant.fileNumber">
   </app-consultation-form>
 
-  <!-- مودال التحليل -->
   <app-investigation-form
     *ngIf="selectedApplicant"
-    #investigationForm
     [applicantFileNumber]="selectedApplicant.fileNumber">
   </app-investigation-form>
 </div>

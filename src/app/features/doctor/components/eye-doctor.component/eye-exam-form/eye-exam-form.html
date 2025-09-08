@@ -13,36 +13,134 @@
       <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>
 
         <!-- القسم الأول -->
-        <h6 class="section-title">البيانات الطبي ييييييييييية</h6>
+        <h6 class="section-title">البيانات الطبية</h6>
         <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label">القدرة البصر <span class="text-danger">*</span></label>
+            <label class="form-label">القدرة البصر اليمنى <span class="text-danger">*</span></label>
             <input type="text" class="form-control" formControlName="vision"
               [class.is-invalid]="examForm.get('vision')?.invalid && examForm.get('vision')?.touched" />
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">اختبار الألوان <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" formControlName="colorTest"
-              [class.is-invalid]="examForm.get('colorTest')?.invalid && examForm.get('colorTest')?.touched" />
+            <label class="form-label">القدرة البصر اليسرى <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="visionLeft"
+              [class.is-invalid]="examForm.get('visionLeft')?.invalid && examForm.get('visionLeft')?.touched" />
           </div>
         </div>
 
         <div class="row g-3 mt-3">
           <div class="col-md-6">
-            <label class="form-label">أسواء الانكسار <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="refractionTypeID"
-              [class.is-invalid]="examForm.get('refractionTypeID')?.invalid && examForm.get('refractionTypeID')?.touched">
-              <option *ngFor="let type of refractionTypes" [value]="type.refractionTypeID">
-                {{ type.description }}
-              </option>
-            </select>
+            <label class="form-label">اختبار الألوان اليمنى <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="colorTest"
+              [class.is-invalid]="examForm.get('colorTest')?.invalid && examForm.get('colorTest')?.touched" />
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" formControlName="refractionValue"
-              [class.is-invalid]="examForm.get('refractionValue')?.invalid && examForm.get('refractionValue')?.touched" />
+            <label class="form-label">اختبار الألوان اليسرى <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="colorTestLeft"
+              [class.is-invalid]="examForm.get('colorTestLeft')?.invalid && examForm.get('colorTestLeft')?.touched" />
+          </div>
+        </div>
+
+        <!-- العين اليمنى -->
+        <div class="card mt-3">
+          <div class="card-header">
+            <h6 class="mb-0">العين اليمنى</h6>
+          </div>
+          <div class="card-body" formGroupName="rightEye">
+            <!-- قائمة الانكسارات -->
+            <div class="mb-3" formArrayName="refractions">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">الانكسارات</h6>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addRefraction('rightEye')">
+                  <i class="pi pi-plus"></i> إضافة انكسار
+                </button>
+              </div>
+
+              <div class="card mb-3" *ngFor="let refraction of getRefractions('rightEye').controls; let i=index" [formGroupName]="i">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-5">
+                      <label class="form-label">نوع الانكسار <span class="text-danger">*</span></label>
+                      <select class="form-select" formControlName="refractionTypeID">
+                        <option *ngFor="let type of refractionTypes" [value]="type.refractionTypeID">
+                          {{ type.description }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-5">
+                      <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" formControlName="refractionValue" />
+                    </div>
+
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-danger mt-4" (click)="removeRefraction('rightEye', i)">
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-muted small" *ngIf="!getRefractions('rightEye').length">
+                لا يوجد انكسارات مضافة. اضغط على زر "إضافة انكسار" لإضافة نوع انكسار.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- زر إضافة العين اليسرى -->
+        <button type="button" class="btn btn-outline-primary mt-3" (click)="toggleLeftEye()">
+          <i [class]="showLeftEye ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          {{ showLeftEye ? 'إخفاء العين اليسرى' : 'إضافة العين اليسرى' }}
+        </button>
+
+        <!-- العين اليسرى -->
+        <div class="card mt-3" *ngIf="showLeftEye">
+          <div class="card-header">
+            <h6 class="mb-0">العين اليسرى</h6>
+          </div>
+          <div class="card-body" formGroupName="leftEye">
+            <!-- قائمة الانكسارات -->
+            <div class="mb-3" formArrayName="refractions">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">الانكسارات</h6>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addRefraction('leftEye')">
+                  <i class="pi pi-plus"></i> إضافة انكسار
+                </button>
+              </div>
+
+              <div class="card mb-3" *ngFor="let refraction of getRefractions('leftEye').controls; let i=index" [formGroupName]="i">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-5">
+                      <label class="form-label">نوع الانكسار <span class="text-danger">*</span></label>
+                      <select class="form-select" formControlName="refractionTypeID">
+                        <option *ngFor="let type of refractionTypes" [value]="type.refractionTypeID">
+                          {{ type.description }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-5">
+                      <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" formControlName="refractionValue" />
+                    </div>
+
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-danger mt-4" (click)="removeRefraction('leftEye', i)">
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-muted small" *ngIf="!getRefractions('leftEye').length">
+                لا يوجد انكسارات مضافة. اضغط على زر "إضافة انكسار" لإضافة نوع انكسار.
+              </div>
+            </div>
           </div>
         </div>
 

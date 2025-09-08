@@ -12,6 +12,7 @@ import { InternalExamService } from '../../services/internal-exam.service';
 
 @Component({
   selector: 'app-internal-doctor',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -21,7 +22,7 @@ import { InternalExamService } from '../../services/internal-exam.service';
     InvestigationForm
   ],
   templateUrl: './internal-doctor.component.html',
-  styleUrls: ['./internal-doctor.component.scss'] // ✅ صححنا
+  styleUrls: ['./internal-doctor.component.scss']
 })
 export class InternalDoctorComponent {
   selectedApplicant: Applicant | null = null;

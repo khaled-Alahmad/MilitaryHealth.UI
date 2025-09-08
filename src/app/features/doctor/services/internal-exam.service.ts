@@ -46,7 +46,7 @@ export class InternalExamService {
   }
       //جلب كل الفحوصات الداخلية
     getAllInternalExams(page: number, pageSize: number, searchTerm: string = ''): Observable<InternalExam[]> {
-      const url = `${this.apiUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+      const url = `${this.apiUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
       return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
         map(res => res.data?.items || [])
       );
@@ -64,7 +64,7 @@ export class InternalExamService {
 
   // جلب كل التحاليل للعيادة الداخلية
   getAllInternalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
     return this.http.get<{ data?: { items: Investigation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => {
         const items: Investigation[] = res.data?.items || [];
@@ -75,7 +75,7 @@ export class InternalExamService {
 
   // جلب كل الاستشارات للعيادة الداخلية
   getAllInternalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
-    const url = `${this.consultationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
     return this.http.get<{ data?: { items: Consultation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => {
         const items: Consultation[] = res.data?.items || [];
@@ -84,14 +84,14 @@ export class InternalExamService {
     );
   }
     getInternalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
     return this.http.get<{ data?: { items: Investigation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => (res.data?.items || []).filter(inv => inv.doctor?.specializationID === 2)) // 2 = العيادة الداخلية
     );
   }
 
     getInternalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
-    const url = `${this.consultationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
     return this.http.get<{ data?: { items: Consultation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => (res.data?.items || []).filter(c => c.doctor?.specializationID === 2)) // 2 = العيادة الداخلية
     );
@@ -99,7 +99,7 @@ export class InternalExamService {
 
 
 getByFileNumber(fileNumber: string): Observable<InternalExam | null> {
-  const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
+  const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
   return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
     map(res => {
       const items: InternalExam[] = res.data?.items || [];

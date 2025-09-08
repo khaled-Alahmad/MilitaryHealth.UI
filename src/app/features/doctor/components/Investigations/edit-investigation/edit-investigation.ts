@@ -3,12 +3,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { Investigation } from '../../../models/investigation.model';
-import { EyeExamService } from '../../../services/eye-exam.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EyeExamService } from '../../../services/eye-exam.service';
 
 @Component({
   selector: 'app-edit-investigation',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-investigation.html',
   styleUrl: './edit-investigation.scss'

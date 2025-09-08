@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Consultation } from '../../../models/consultation.model';
-import { EyeExamService } from '../../../services/eye-exam.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { EyeExamService } from '../../../services/eye-exam.service';
 
 @Component({
   selector: 'app-consultation-form',

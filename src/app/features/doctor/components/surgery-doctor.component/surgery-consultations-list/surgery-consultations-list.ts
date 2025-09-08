@@ -10,7 +10,8 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-surgery-consultations-list',
-  imports: [CommonModule,ButtonModule, FormsModule, EditConsultation],
+  standalone: true,
+  imports: [CommonModule, ButtonModule, FormsModule, EditConsultation],
   templateUrl: './surgery-consultations-list.html',
   styleUrls: ['./surgery-consultations-list.scss']
 })

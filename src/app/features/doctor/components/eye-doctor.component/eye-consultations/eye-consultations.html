@@ -1,7 +1,4 @@
 <div class="user-header-section px-1 pt-1 container-fluid">
-  <!-- العنوان -->
-  <h3 class="title">الاستشارات التخصصية</h3>
-
   <!-- البحث -->
   <div class="mb-3 d-flex justify-content-end">
     <div class="search-wrapper">
@@ -12,10 +9,9 @@
   </div>
 
   <!-- جدول النتائج -->
-  <p-table [value]="filteredConsultations" [paginator]="false" [rows]="10" [totalRecords]="totalRecords" [lazy]="true"
-    [showCurrentPageReport]="true" class="custom-table">
+  <p-table [value]="filteredConsultations" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true"
+    [loading]="loading" [showCurrentPageReport]="true" class="custom-table">
 
-    <!-- الهيدر -->
     <ng-template pTemplate="header">
       <tr>
         <th>رقم ملف المريض</th>
@@ -28,41 +24,34 @@
       </tr>
     </ng-template>
 
-    <!-- الصفوف -->
     <ng-template pTemplate="body" let-c>
       <tr>
-        <td>{{ c.applicantFileNumber }}</td>
-        <td>{{ c.consultationType }}</td>
-        <td>{{ c.referredDoctor }}</td>
-        <td class="text-center">{{ c.doctor?.fullName || '-' }}</td>
+        <td><span class="fw-bold text-primary">{{ c.applicantFileNumber }}</span></td>
+        <td><span class="fw-bold">{{ c.consultationType }}</span></td>
+        <td><span class="fw-bold">{{ c.referredDoctor }}</span></td>
+        <td><span class="fw-bold">{{ c.doctor?.fullName || '-' }}</span></td>
         <td>
-          <span class="badge result-badge">
+          <span [ngClass]="getBadgeClass(c.result)">
             {{ c.result || 'غير محدد' }}
           </span>
         </td>
-
-        <td class="text-center">
-          @if(c.attachment){
-
-          <button title="عرض الملف" class="btn btn-sm btn-info btn-small" (click)="openFile(c.attachment)">
-            <i class="fas fa-eye small-icon"></i>
-          </button>
-          }@else {
-          <button title="إضافة/تعديل" class="btn btn-sm btn-success btn-small">
-            <i class="fas fa-pencil-alt small-icon"></i>
-          </button>
-          }
+        <td>
+          <div class="btn-group-vertical d-flex gap-1 justify-content-center">
+            <!-- يظهر الزر فقط إذا كان هناك ملف مرفق -->
+            <button *ngIf="c.attachment" title="عرض الملف" class="btn btn-sm btn-info" (click)="openFile(c.attachment)">
+              <i class="fas fa-eye"></i>
+            </button>
+        
+            <!-- إذا ما فيه ملف، تظهر أيقونة ثابتة -->
+            <i *ngIf="!c.attachment" class="fas fa-eye no-file-icon"></i>
+          </div>
         </td>
-
-
-
-
-        <td class="text-center">
-          <button type="button" class="btn btn-sm btn-success btn-small" title="إضافة نتيجة"
-          (click)="openEditConsultation(c)">إضافة نتيجة
+        
+        <td>
+          <button title="/تعديل" class="btn btn-sm btn-primary" (click)="openEditConsultation(c)">
+            <i class="fas fa-edit"></i>
           </button>
         </td>
-
       </tr>
     </ng-template>
 
@@ -77,11 +66,4 @@
   <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-
-  <!-- مودال التعديل -->
-  <!-- <app-edit-consultation
-    *ngIf="selectedConsultation"
-    [consultation]="selectedConsultation"
-    (dialogClosed)="onDialogClose($event)">
-  </app-edit-consultation> -->
 </div>

@@ -3,11 +3,12 @@
   import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
   import { AuthService } from '../../../../auth/services/auth.service';
   import { Investigation } from '../../../models/investigation.model';
-  import { EyeExamService } from '../../../services/eye-exam.service';
   import { ToastrService } from 'ngx-toastr';
+import { EyeExamService } from '../../../services/eye-exam.service';
 
   @Component({
     selector: 'app-investigation-form',
+    standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './investigation-form.html',
     styleUrl: './investigation-form.scss'

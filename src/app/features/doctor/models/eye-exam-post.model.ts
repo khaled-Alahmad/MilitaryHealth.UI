@@ -1,18 +1,26 @@
-// models/eye-exam.model.ts
-export interface EyeExam {
+// models/eye-exam-post.model.ts
+import { Refraction } from './refraction.model';
+
+export interface EyeExamPost {
   eyeExamID?: number;
 
-  // بيانات أساسية
+  // بيانات المنتسب
+  applicantId?: number;          // معرّف المنتسب (لازم لأنك تستخدمه في showDetails و showRefractions)
   applicantFileNumber: string;   // رقم ملف المريض
+
+  // بيانات الفحص
   doctorID: number;              // رقم الدكتور
   vision: string;                // القدرة البصرية
   colorTest: string;             // اختبار الألوان
-  refractionTypeID: number;      // نوع الانكسار
-  refractionValue: number;       // قيمة الانكسار
-  otherDiseases?: string;        // أمراض أخرى (اختياري) نص وليس ID
+  otherDiseases?: string;        // أمراض أخرى (اختياري)
   resultID: number;              // نتيجة الفحص (ID)
-  reason?: string;               // سبب الفحص (اختياري)
+  reason?: string;               // سبب التأجيل أو الملاحظة
 
+  // الانكسارات
+  refractionID?: number;         // معرف الانكسار (مطلوب في addRefraction)
+  refractions?: Refraction[];    // قائمة الانكسارات (يمين/يسار)
+
+  // علاقات إضافية
   doctor?: {
     doctorID: number;
     fullName: string;

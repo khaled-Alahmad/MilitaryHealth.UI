@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Investigation } from '../../../models/investigation.model';
-import { EyeExamService } from '../../../services/eye-exam.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EditInvestigation } from '../../Investigations/edit-investigation/edit-investigation';
@@ -11,11 +10,13 @@ import { TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PagedResponse } from '../../../../applicants/models/api-response.model';
+import { PagedResponse } from '../../../../../shared/models/paged-response.model';
+import { EyeExamService } from '../../../services/eye-exam.service';
 
 @Component({
   selector: 'app-eye-investigations-list',
-  imports: [CommonModule,ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  standalone: true,
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './eye-investigations-list.html',
   styleUrl: './eye-investigations-list.scss'
 })
@@ -49,9 +50,10 @@ export class EyeInvestigationsList implements OnInit {
     this.loading = true;
     const filter = this.globalFilter || '';
     this.service.getEyeClinicInvestigations(this.page, this.rowsPerPage, filter).subscribe({
-      next: (res:PagedResponse<Investigation>) => {
-        this.investigations = res.items;
-        this.filteredInvestigations = res.items;
+      next: (res: PagedResponse<Investigation>) => {
+        // ترتيب تنازلي حسب investigationID مع التعامل مع undefined
+        this.investigations = res.items.sort((a, b) => (b.investigationID ?? 0) - (a.investigationID ?? 0));
+        this.filteredInvestigations = this.investigations;
         this.totalRecords = res.totalCount;
         this.loading = false;
       },
@@ -61,6 +63,7 @@ export class EyeInvestigationsList implements OnInit {
       }
     });
   }
+  
 
   openFile(attachment: string) {
     if (!attachment) {
@@ -117,4 +120,5 @@ export class EyeInvestigationsList implements OnInit {
         this.loadInvestigations();
       });
     }
+    
 }

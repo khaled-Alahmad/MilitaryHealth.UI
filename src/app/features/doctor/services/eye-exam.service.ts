@@ -1,176 +1,580 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map, Observable, switchMap } from 'rxjs';
+import { Observable, forkJoin, of } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { EyeExam } from '../models/eye-exam-post.model';
-import { Consultation } from '../models/consultation.model'; // لازم تعمل موديل للاستشارة
-import { Investigation } from '../models/investigation.model';
-import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
 
-@Injectable({ providedIn: 'root' })
+// Models
+import { EyeExam } from '../models/eye-exam.model';
+import { Refraction } from '../models/refraction.model';
+import { RefractionType } from '../models/refraction-type.model';
+import { OrganizedRefractions } from '../models/organized-refractions.model';
+import { DetailedEyeExam } from '../models/detailed-eye-exam.model';
+import { Consultation } from '../models/consultation.model';
+import { Investigation } from '../models/investigation.model';
+import { ApiResponse } from '../../applicants/models/api-response.model';
+import { PagedResponse } from '../../../shared/models/paged-response.model';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class EyeExamService {
-  private apiUrl = `${environment.apiUrl}/api/EyeExams`;
-  private consultationUrl = `${environment.apiUrl}/api/Consultations`;
-  private uploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
+  private readonly apiUrl = `${environment.apiUrl}/api/EyeExams`;
+  private readonly consultationUrl = `${environment.apiUrl}/api/Consultations`;
+  private readonly uploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
+  private readonly refractionUrl = `${environment.apiUrl}/api/Refractions`;
+  private readonly refractionTypesUrl = `${environment.apiUrl}/api/RefractionTypes`;
+  private readonly resultsUrl = `${environment.apiUrl}/api/Results`;
+  private readonly investigationUrl = `${environment.apiUrl}/api/Investigations`;
 
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  //  جلب جميع فحوص العين (المؤجلة فقط)
-  getEyeExams(): Observable<EyeExam[]> {
-    return this.http.get<any>(this.apiUrl, { headers: this.getAuthHeaders() }).pipe(
-      map(res => {
-        const items = res.data?.items || res;
-        return items.filter((exam: any) => exam.result?.description === 'مؤجل');
+  // Helper Methods
+  private organizeRefractions(refractions: Refraction[]): OrganizedRefractions {
+    const organized: OrganizedRefractions = {
+      rightEye: {
+        myopia: undefined,
+        hyperopia: undefined,
+        astigmatism: undefined
+      },
+      leftEye: {
+        myopia: undefined,
+        hyperopia: undefined,
+        astigmatism: undefined
+      },
+      hasRefractions: false
+    };
+
+    if (!refractions?.length) {
+      return organized;
+    }
+
+    organized.hasRefractions = true;
+
+    refractions.forEach(refraction => {
+      const eye = refraction.isLeft ? organized.leftEye : organized.rightEye;
+      
+      if (refraction.refractionType) {
+        const description = refraction.refractionType.description.toLowerCase();
+        if (description.includes('قصر') || description.includes('myopia')) {
+          eye.myopia = refraction.refractionValue;
+        } else if (description.includes('طول') || description.includes('hyperopia')) {
+          eye.hyperopia = refraction.refractionValue;
+        } else if (description.includes('استجماتيزم') || description.includes('astigmatism')) {
+          eye.astigmatism = refraction.refractionValue;
+        }
+      } else {
+        switch (refraction.refractionTypeID) {
+          case 1: // قصر نظر
+            eye.myopia = refraction.refractionValue;
+            break;
+          case 2: // طول نظر
+            eye.hyperopia = refraction.refractionValue;
+            break;
+          case 3: // استجماتيزم
+            eye.astigmatism = refraction.refractionValue;
+            break;
+        }
+      }
+    });
+
+    return organized;
+  }
+
+  // Eye Exam CRUD Operations
+  createEyeExam(eyeExam: any): Observable<ApiResponse<EyeExam>> {
+    if (!eyeExam) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'بيانات الفحص مطلوبة',
+        data: {} as EyeExam,
+        traceId: ''
+      });
+    }
+
+    return this.http.post<ApiResponse<EyeExam>>(this.apiUrl, eyeExam, {
+      headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      catchError(error => {
+        return of({
+          succeeded: false,
+          status: error.status || 500,
+          message: error.error?.message || error.message || 'حدث خطأ أثناء إنشاء الفحص',
+          data: {} as EyeExam,
+          traceId: error.error?.traceId || ''
+        });
       })
     );
   }
 
-  //  جلب أنواع الانكسار
-  getRefractionTypes(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/api/RefractionTypes`, {
-      headers: this.getAuthHeaders(),
-    });
+  updateEyeExam(id: number, eyeExam: EyeExam): Observable<ApiResponse<EyeExam>> {
+    if (!id || !eyeExam) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الفحص والبيانات مطلوبة',
+        data: {} as EyeExam,
+        traceId: ''
+      });
+    }
+
+    return this.http.put<ApiResponse<EyeExam>>(`${this.apiUrl}/${id}`, eyeExam, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء تحديث الفحص',
+        data: {} as EyeExam,
+        traceId: ''
+      }))
+    );
   }
 
-  //  جلب نتائج الفحص
-  getResults(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/api/Results`, {
-      headers: this.getAuthHeaders(),
-    });
+  getEyeExamById(id: number): Observable<ApiResponse<EyeExam>> {
+    if (!id) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الفحص مطلوب',
+        data: {} as EyeExam,
+        traceId: ''
+      });
+    }
+
+    return this.http.get<ApiResponse<EyeExam>>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء جلب الفحص',
+        data: {} as EyeExam,
+        traceId: ''
+      }))
+    );
   }
 
-  //  إضافة فحص جديد
-  addEyeExam(exam: EyeExam): Observable<any> {
-    return this.http.post(this.apiUrl, exam, {
-      headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
-    });
-  }
-
-  //  تحديث فحص موجود
-  updateEyeExam(id: number, exam: EyeExam): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, exam, {
-      headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
-    });
-  }
-
-  //  رفع الملف وإرجاع المسار
-uploadFile(file: File): Observable<string> {
-  const formData = new FormData();
-  formData.append('File', file); // لاحظ أن المفتاح File كما في الـ API
-
-  return this.http.post<any>(this.uploadUrl, formData, {
-    headers: this.getAuthHeaders()
-  }).pipe(
-    map(res => res.path) // 🔹 فقط المسار
-  );
-}
-
-
-//  جلب كل فحوصات العيادة العينية فقط مع التصفية
-// getAllEyeExams(page: number = 1, pageSize: number = 20,filter:string=''): Observable<EyeExam[]> {
-//   const url = `${this.apiUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}&filter=${filter}`;
-//   return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-//     map(res => {
-//       const items: EyeExam[] = res.data?.items || [];
-//       // فقط فحوصات العيادة العينية (specializationID = 1)
-//       return items.filter(exam => exam.doctor?.specializationID === 1);
-//     })
-//   );
-// }
-
-getAllEyeExams(
-    page: number = 1,
-    pageSize: number = 20,
-    filter: string = ''
-  ): Observable<PagedResponse<EyeExam>> {
+  getAllEyeExams(page: number = 1, pageSize: number = 20, filter: string = ''): Observable<PagedResponse<EyeExam>> {
     let params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('sortBy', 'applicantFileNumber') // فرز حسب رقم الملف
+    .set('sortDesc', 'true'); // ترتيب تنازلي
 
     if (filter) {
       params = params.set('filter', filter);
     }
 
-
-    // ✅ استخدام HttpParams في الطلب
-    return this.http.get<ApiResponse<PagedResponse<EyeExam>>>(this.apiUrl, { params })
-      .pipe(
-        map(res => res.data)
-      );
-  }
-
-
- //  إضافة استشارة جديدة
-addConsultation(consultation: Consultation): Observable<any> {
-  return this.http.post(this.consultationUrl, consultation, {
-    headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
-  });
-}
- // جلب جميع استشارات العيادة العينية فقط
-// getEyeClinicConsultations(page: number = 1, pageSize: number = 20): Observable<Consultation[]> {
-//   const url = `${this.consultationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
-//   return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-//     map(res => {
-//       const items: Consultation[] = res.data?.items || [];
-//       // فقط استشارات العيادة العينية (specializationID = 1)
-//       return items.filter(c => c.doctor?.specializationID === 1);
-//     })
-//   );
-// }
-getEyeClinicConsultations(
-  page: number = 1,
-  pageSize: number = 20,
-  filter: string = ''
-): Observable<PagedResponse<Consultation>> {
-  let params = new HttpParams()
-    .set('page', page.toString())
-    .set('pageSize', pageSize.toString())
-    .set('sortDesc', false);
-
-  // فلترة حسب الاختصاص (عيادة العيون)
-  if (filter) {
-    params = params.set('filter', filter);
-  }
-
-  return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { 
-      params 
+    return this.http.get<ApiResponse<PagedResponse<EyeExam>>>(this.apiUrl, {
+      headers: this.getAuthHeaders(),
+      params
     }).pipe(
-      map(res => res.data)
+      map(res => res.data),
+      catchError(() => of({
+        items: [],
+        totalCount: 0,
+        pageNumber: page,
+        pageSize: pageSize,
+        totalPages: 0
+      }))
     );
-}
+  }
 
+  getByFileNumber(fileNumber: string): Observable<ApiResponse<EyeExam | null>> {
+    if (!fileNumber) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'رقم الملف مطلوب',
+        data: null,
+        traceId: ''
+      });
+    }
 
-  // تحديث استشارة موجودة
-updateConsultation(id: number, consultation: Consultation): Observable<any> {
-  return this.http.put(`${this.consultationUrl}/${id}`, consultation, {
-    headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
-  });
-}
+    const params = new HttpParams()
+      .set('filter', `applicantFileNumber=${fileNumber}`)
+      .set('page', '1')
+      .set('pageSize', '1');
 
+    return this.http.get<ApiResponse<PagedResponse<EyeExam>>>(this.apiUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(
+      map(response => ({
+        ...response,
+        data: response.data.items?.[0] || null
+      })),
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء جلب الفحص',
+        data: null,
+        traceId: ''
+      }))
+    );
+  }
 
-// EyeExamService
-private investigationUrl = `${environment.apiUrl}/api/Investigations`;
+  // Detailed Eye Exam Operations
+  getDetailedEyeExamByFileNumber(fileNumber: string): Observable<ApiResponse<DetailedEyeExam | null>> {
+    if (!fileNumber) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'رقم الملف مطلوب',
+        data: null,
+        traceId: ''
+      });
+    }
 
-  // جلب جميع التحاليل الخاصة بالعيادة العينية فقط
-  // getEyeClinicInvestigations(page: number = 1, pageSize: number = 20): Observable<Investigation[]> {
-  //   const url = `${this.investigationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
-  //   return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-  //     map(res => {
-  //       const items = res.data?.items || [];
-  //       // نفترض أن العيادة العينية لها specializationID = 1
-  //       return items.filter((inv: any) => inv.doctor?.specializationID === 1);
-  //     })
-  //   );
-  // }
+    return this.getByFileNumber(fileNumber).pipe(
+      switchMap(response => {
+        if (!response.succeeded || !response.data) {
+          return of(response as ApiResponse<DetailedEyeExam | null>);
+        }
 
+        const eyeExam = response.data;
+
+        return forkJoin({
+          refractions: this.getRefractionsByEyeExamId(eyeExam.eyeExamID!),
+          types: this.getRefractionTypes()
+        }).pipe(
+          map(({ refractions, types }) => {
+            if (!refractions.succeeded) {
+              return {
+                ...response,
+                succeeded: false,
+                status: refractions.status,
+                message: 'فشل في جلب الانكسارات',
+                data: null
+              };
+            }
+
+            const refractionsWithTypes = refractions.data.map(refraction => ({
+              ...refraction,
+              refractionType: types.data.items?.find(
+                type => type.refractionTypeID === refraction.refractionTypeID
+              )
+            }));
+
+            const organizedRefractions = this.organizeRefractions(refractionsWithTypes);
+
+            const detailedExam: DetailedEyeExam = {
+              ...eyeExam,
+              organizedRefractions
+            };
+
+            return {
+              succeeded: true,
+              status: 200,
+              message: 'تم جلب تفاصيل الفحص العيني بنجاح',
+              data: detailedExam,
+              traceId: response.traceId
+            };
+          }),
+          catchError(error => of({
+            succeeded: false,
+            status: error.status || 500,
+            message: error.message || 'حدث خطأ غير متوقع',
+            data: null,
+            traceId: ''
+          }))
+        );
+      })
+    );
+  }
+
+  // Refraction Operations
+  addRefraction(refraction: Refraction): Observable<ApiResponse<Refraction>> {
+    if (!refraction || !refraction.eyeExamID) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'بيانات الانكسار ومعرف الفحص مطلوبة',
+        data: {} as Refraction,
+        traceId: ''
+      });
+    }
+
+    return this.http.post<ApiResponse<Refraction>>(this.refractionUrl, refraction, {
+      headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء إضافة الانكسار',
+        data: {} as Refraction,
+        traceId: ''
+      }))
+    );
+  }
+
+  deleteRefraction(refractionId: number): Observable<ApiResponse<void>> {
+    if (!refractionId) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الانكسار مطلوب',
+        data: undefined,
+        traceId: ''
+      });
+    }
+
+    return this.http.delete<ApiResponse<void>>(`${this.refractionUrl}/${refractionId}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء حذف الانكسار',
+        data: undefined,
+        traceId: ''
+      }))
+    );
+  }
+
+  updateRefraction(refractionId: number, refraction: Refraction): Observable<ApiResponse<Refraction>> {
+    if (!refractionId || !refraction) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الانكسار والبيانات مطلوبة',
+        data: {} as Refraction,
+        traceId: ''
+      });
+    }
+
+    return this.http.put<ApiResponse<Refraction>>(`${this.refractionUrl}/${refractionId}`, refraction, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء تحديث الانكسار',
+        data: {} as Refraction,
+        traceId: ''
+      }))
+    );
+  }
+
+  getRefractionsByEyeExamId(eyeExamId: number): Observable<ApiResponse<Refraction[]>> {
+    if (!eyeExamId) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الفحص مطلوب',
+        data: [],
+        traceId: ''
+      });
+    }
+
+    const params = new HttpParams()
+      .set('filter', `eyeExamId=${eyeExamId}`)
+      .set('page', '1')
+      .set('pageSize', '100');
+
+    return this.http.get<ApiResponse<PagedResponse<Refraction>>>(
+      this.refractionUrl,
+      { headers: this.getAuthHeaders(), params }
+    ).pipe(
+      map(response => ({
+        ...response,
+        data: response.data?.items || []
+      })),
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء جلب الانكسارات',
+        data: [],
+        traceId: ''
+      }))
+    );
+  }
+
+  getRefractionsByApplicantId(applicantId: number): Observable<Refraction[]> {
+    if (!applicantId) {
+      return of([]);
+    }
+
+    return this.getEyeExamsByApplicantId(applicantId).pipe(
+      switchMap(exams => {
+        if (!exams.length) {
+          return of([]);
+        }
+        
+        const refractionCalls = exams.map(exam =>
+          this.getRefractionsByEyeExamId(exam.eyeExamID!).pipe(
+            map(response => response.data)
+          )
+        );
+
+        return forkJoin(refractionCalls).pipe(
+          map(refractionArrays => refractionArrays.flat()),
+          catchError(() => of([]))
+        );
+      }),
+      catchError(() => of([]))
+    );
+  }
+
+  private getEyeExamsByApplicantId(applicantId: number): Observable<EyeExam[]> {
+    if (!applicantId) {
+      return of([]);
+    }
+
+    const params = new HttpParams()
+      .set('filter', `applicantId=${applicantId}`)
+      .set('page', '1')
+      .set('pageSize', '1000')
+      .set('sortDesc', 'true');
+
+    return this.http.get<ApiResponse<PagedResponse<EyeExam>>>(this.apiUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(
+      map(res => res.data?.items || []),
+      catchError(() => of([]))
+    );
+  }
+
+  getRefractionTypes(): Observable<ApiResponse<PagedResponse<RefractionType>>> {
+    return this.http.get<ApiResponse<PagedResponse<RefractionType>>>(
+      this.refractionTypesUrl,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء جلب أنواع الانكسارات',
+        data: {
+          items: [],
+          pageNumber: 1,
+          pageSize: 0,
+          totalCount: 0,
+          totalPages: 0
+        },
+        traceId: ''
+      }))
+    );
+  }
+
+  // Results Operations
+  getResults(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(this.resultsUrl, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء جلب النتائج',
+        data: null,
+        traceId: ''
+      }))
+    );
+  }
+
+  // File Operations
+  uploadFile(file: File): Observable<string> {
+    if (!file) {
+      return of('');
+    }
+
+    const formData = new FormData();
+    formData.append('File', file);
+
+    return this.http.post<any>(this.uploadUrl, formData, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(res => res.path || ''),
+      catchError(() => of(''))
+    );
+  }
+
+  // Consultation Operations
+  addConsultation(consultation: Consultation): Observable<ApiResponse<Consultation>> {
+    if (!consultation) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'بيانات الاستشارة مطلوبة',
+        data: {} as Consultation,
+        traceId: ''
+      });
+    }
+
+    return this.http.post<ApiResponse<Consultation>>(this.consultationUrl, consultation, {
+      headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء إضافة الاستشارة',
+        data: {} as Consultation,
+        traceId: ''
+      }))
+    );
+  }
+
+  getEyeClinicConsultations(
+    page: number = 1,
+    pageSize: number = 20,
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', 'true');
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+
+    return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(
+      map(res => res.data),
+      catchError(() => of({
+        items: [],
+        totalCount: 0,
+        pageNumber: page,
+        pageSize: pageSize,
+        totalPages: 0
+      }))
+    );
+  }
+
+  updateConsultation(id: number, consultation: Consultation): Observable<ApiResponse<Consultation>> {
+    if (!id || !consultation) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الاستشارة والبيانات مطلوبة',
+        data: {} as Consultation,
+        traceId: ''
+      });
+    }
+
+    return this.http.put<ApiResponse<Consultation>>(`${this.consultationUrl}/${id}`, consultation, {
+      headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء تحديث الاستشارة',
+        data: {} as Consultation,
+        traceId: ''
+      }))
+    );
+  }
+
+  // Investigation Operations
   getEyeClinicInvestigations(
     page: number = 1,
     pageSize: number = 20,
@@ -179,46 +583,72 @@ private investigationUrl = `${environment.apiUrl}/api/Investigations`;
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
-  
-    // فلترة حسب الاختصاص (عيادة العيون)
+      .set('sortDesc', 'true');
+
     if (filter) {
       params = params.set('filter', filter);
     }
-  
-    return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.consultationUrl, { 
-        params 
-      }).pipe(
-        map(res => res.data)
-      );
+
+    return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(
+      map(res => res.data),
+      catchError(() => of({
+        items: [],
+        totalCount: 0,
+        pageNumber: page,
+        pageSize: pageSize,
+        totalPages: 0
+      }))
+    );
   }
-// إضافة طلب تحليل جديد
-addInvestigation(investigation: Investigation) {
-  return this.http.post(this.investigationUrl, investigation, {
-    headers: this.getAuthHeaders().set('Content-Type', 'application/json')
-  });
-}
-// تعديل تحليل موجود
-  updateInvestigation(id: number, inv: Investigation) {
-    return this.http.put(`${this.investigationUrl}/${id}`, inv, {
+
+  addInvestigation(investigation: Investigation): Observable<ApiResponse<Investigation>> {
+    if (!investigation) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'بيانات الفحص مطلوبة',
+        data: {} as Investigation,
+        traceId: ''
+      });
+    }
+
+    return this.http.post<ApiResponse<Investigation>>(this.investigationUrl, investigation, {
       headers: this.getAuthHeaders().set('Content-Type', 'application/json')
-    });
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء إضافة الفحص',
+        data: {} as Investigation,
+        traceId: ''
+      }))
+    );
   }
 
-// EyeExamService.ts
-getByFileNumber(fileNumber: string): Observable<EyeExam | null> {
-  const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
-  return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => {
-      const items: EyeExam[] = res.data?.items || [];
-      // 🔹 نبحث عن أي فحص سابق لنفس رقم الملف وبالتخصص (specializationID = 1)
-      const exam = items.find(e => 
-        e.applicantFileNumber?.toString() === fileNumber.toString() &&
-        ( e.doctor?.specializationID === 1)
-      );
-      return exam || null;
-    })
-  );
-}
+  updateInvestigation(id: number, investigation: Investigation): Observable<ApiResponse<Investigation>> {
+    if (!id || !investigation) {
+      return of({
+        succeeded: false,
+        status: 400,
+        message: 'معرف الفحص والبيانات مطلوبة',
+        data: {} as Investigation,
+        traceId: ''
+      });
+    }
 
+    return this.http.put<ApiResponse<Investigation>>(`${this.investigationUrl}/${id}`, investigation, {
+      headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      catchError(error => of({
+        succeeded: false,
+        status: error.status || 500,
+        message: error.message || 'حدث خطأ أثناء تحديث الفحص',
+        data: {} as Investigation,
+        traceId: ''
+      }))
+    );
+  }
 }

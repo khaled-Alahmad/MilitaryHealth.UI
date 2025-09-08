@@ -1,5 +1,5 @@
 <div class="user-header-section px-1 pt-1 container-fluid">
-  <!-- بحث -->
+  <!-- البحث -->
   <div class="mb-3 d-flex justify-content-end">
     <div class="search-wrapper">
       <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
@@ -10,7 +10,7 @@
 
   <!-- جدول التحاليل -->
   <p-table #table 
-           [value]="investigations" 
+           [value]="filteredInvestigations" 
            [totalRecords]="totalRecords" 
            [rows]="rowsPerPage" 
            [lazy]="true"
@@ -32,25 +32,29 @@
 
     <ng-template pTemplate="body" let-investigation>
       <tr>
-        <td>{{ investigation.applicantFileNumber }}</td>
-        <td>{{ investigation.type }}</td>
-         <td>
-          <span class="badge result-badge">
-            {{ investigation.result || 'غير محدد' }}
-          </span>
+        <td><span class="fw-bold text-primary">{{ investigation.applicantFileNumber }}</span></td>
+        <td><span class="fw-bold">{{ investigation.type }}</span></td>
+        <td>
+          <span class="fw-bold">{{ investigation.result || 'غير محدد' }}</span>
         </td>
         <td>{{ investigation.status || '-' }}</td>
         <td class="text-center">
-          <button *ngIf="investigation.attachment" 
-                  title="فتح الملف" 
-                  class="btn btn-sm btn-info"
-                  (click)="openFile(investigation.attachment)">
-            <i class="fas fa-eye"></i>
-          </button>
+          <div class="btn-group-vertical d-flex gap-1 justify-content-center">
+            <!-- زر فتح الملف إذا كان موجود -->
+            <button *ngIf="investigation.attachment" 
+                    title="فتح الملف" 
+                    class="btn btn-sm btn-info"
+                    (click)="openFile(investigation.attachment)">
+              <i class="fas fa-eye"></i>
+            </button>
+
+            <!-- أيقونة ثابتة إذا لا يوجد ملف -->
+            <i *ngIf="!investigation.attachment" class="fas fa-eye no-file-icon"></i>
+          </div>
         </td>
         <td>{{ investigation.doctor?.fullName || '-' }}</td>
         <td class="text-center">
-          <button title="إضافة/تعديل نتيجة" 
+          <button title="تعديل نتيجة" 
                   class="btn btn-sm btn-success" 
                   (click)="openEditInvestigation(investigation)">
             <i class="fas fa-pencil-alt"></i>
@@ -66,12 +70,11 @@
     </ng-template>
   </p-table>
 
-  <!-- صفحة النتائج -->
+  <!-- المرقم -->
   <app-paginator [totalRecords]="totalRecords" 
                  [pageSize]="rowsPerPage" 
                  [currentPage]="page"
                  (pageChange)="onPageChange($event)" 
                  (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-
 </div>

@@ -9,28 +9,126 @@
 
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">القدرة البصرية</label>
-          <input class="form-control" formControlName="vision" placeholder="أدخل حدة البصر" />
+          <label class="form-label">القدرة البصرية اليمنى</label>
+          <input class="form-control" formControlName="vision" placeholder="أدخل حدة البصر اليمنى" />
         </div>
         <div class="col-md-6">
-          <label class="form-label">اختبار الألوان</label>
-          <input class="form-control" formControlName="colorTest" placeholder="أدخل نتيجة اختبار الألوان" />
+          <label class="form-label">القدرة البصرية اليسرى</label>
+          <input class="form-control" formControlName="visionLeft" placeholder="أدخل حدة البصر اليسرى" />
         </div>
       </div>
 
-      <!-- صف الانكسار -->
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">أسواء الانكسار</label>
-          <select class="form-select" formControlName="refractionTypeID">
-            <option *ngFor="let r of refractionTypes" [value]="r.refractionTypeID">
-              {{ r.description }}
-            </option>
-          </select>
+          <label class="form-label">اختبار الألوان اليمنى</label>
+          <input class="form-control" formControlName="colorTest" placeholder="أدخل نتيجة اختبار الألوان اليمنى" />
         </div>
         <div class="col-md-6">
-          <label class="form-label">نسبة الانكسار</label>
-          <input type="number" class="form-control" formControlName="refractionValue" />
+          <label class="form-label">اختبار الألوان اليسرى</label>
+          <input class="form-control" formControlName="colorTestLeft" placeholder="أدخل نتيجة اختبار الألوان اليسرى" />
+        </div>
+      </div>
+
+      <!-- قسم فحوصات الانكسار -->
+      <div class="refraction-sections">
+        <!-- العين اليمنى -->
+        <div class="card mb-3">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">فحص الانكسار - العين اليمنى</h6>
+            <button type="button" class="btn btn-sm btn-primary" (click)="addRefraction('rightEye')">
+              <i class="pi pi-plus me-1"></i>
+              إضافة انكسار
+            </button>
+          </div>
+          <div class="card-body" formGroupName="rightEye">
+            <div formArrayName="refractions">
+              <div class="card mb-3" *ngFor="let refraction of getRefractions('rightEye').controls; let i=index" [formGroupName]="i">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-5">
+                      <label class="form-label">نوع الانكسار <span class="text-danger">*</span></label>
+                      <select class="form-select" formControlName="refractionTypeID">
+                        <option *ngFor="let type of refractionTypes" [value]="type.refractionTypeID">
+                          {{ type.description }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-5">
+                      <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" formControlName="refractionValue" />
+                    </div>
+
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-danger mt-4" (click)="removeRefraction('rightEye', i)">
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-muted small" *ngIf="!getRefractions('rightEye').length">
+              لا يوجد انكسارات مضافة. اضغط على زر "إضافة انكسار" لإضافة نوع انكسار.
+            </div>
+          </div>
+        </div>
+
+        <!-- زر إضافة العين اليسرى -->
+        <div class="text-center mb-3" *ngIf="!showLeftEye">
+          <button type="button" class="btn btn-outline-primary" (click)="toggleLeftEye()">
+            <i class="fas fa-plus-circle"></i>
+            إضافة فحص العين اليسرى
+          </button>
+        </div>
+
+        <!-- العين اليسرى -->
+        <div class="card mb-3" *ngIf="showLeftEye">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">فحص الانكسار - العين اليسرى</h6>
+            <div>
+              <button type="button" class="btn btn-sm btn-primary me-2" (click)="addRefraction('leftEye')">
+                <i class="pi pi-plus me-1"></i>
+                إضافة انكسار
+              </button>
+              <button type="button" class="btn-close" (click)="toggleLeftEye()"></button>
+            </div>
+          </div>
+          <div class="card-body" formGroupName="leftEye">
+            <div formArrayName="refractions">
+              <div class="card mb-3" *ngFor="let refraction of getRefractions('leftEye').controls; let i=index" [formGroupName]="i">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-5">
+                      <label class="form-label">نوع الانكسار <span class="text-danger">*</span></label>
+                      <select class="form-select" formControlName="refractionTypeID">
+                        <option value="">اختر نوع الانكسار</option>
+                        <option *ngFor="let type of refractionTypes" [value]="type.refractionTypeID">
+                          {{ type.description }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-5">
+                      <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" formControlName="refractionValue" />
+                    </div>
+
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-danger mt-4" (click)="removeRefraction('leftEye', i)">
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-muted small" *ngIf="!getRefractions('leftEye').length">
+              لا يوجد انكسارات مضافة. اضغط على زر "إضافة انكسار" لإضافة نوع انكسار.
+            </div>
+          </div>
         </div>
       </div>
 

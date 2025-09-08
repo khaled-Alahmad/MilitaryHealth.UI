@@ -1,55 +1,60 @@
 import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+
 import { Applicant } from '../../../applicants/models/applicant.model';
 import { EyeExamForm } from './eye-exam-form/eye-exam-form';
-import { SearchApplicantComponent } from '../../../applicants/components/search-applican/search-applicant.component.ts/search-applicant.component';
-import { CommonModule } from '@angular/common';
 import { ConsultationFormComponent } from '../Consultations/consultation-form.component/consultation-form.component';
 import { InvestigationForm } from '../Investigations/investigation-form/investigation-form';
-import { ToastrService } from 'ngx-toastr';
 import { EyeExamService } from '../../services/eye-exam.service';
+import { SearchApplicantComponent } from '../../../applicants/components/search-applican/search-applicant.component.ts/search-applicant.component';
 
 @Component({
   selector: 'app-eye-doctor',
   standalone: true,
   imports: [
-    SearchApplicantComponent,
-    InvestigationForm,
-    EyeExamForm,
     CommonModule,
-    ConsultationFormComponent
+    SearchApplicantComponent,
+    EyeExamForm,
+    ConsultationFormComponent,
+    InvestigationForm
   ],
   templateUrl: './eye-doctor.component.html',
   styleUrls: ['./eye-doctor.component.scss']
 })
 export class EyeDoctorComponent {
- selectedApplicant: Applicant | null = null;
-    hasEyeExam = false; 
+  selectedApplicant: Applicant | null = null;
+  hasEyeExam = false;
 
-  @ViewChild('eyeExamForm') eyeExamForm!: EyeExamForm;
-  @ViewChild('consultationForm') consultationForm!: ConsultationFormComponent;
-  @ViewChild('investigationForm') investigationForm!: InvestigationForm;
+  @ViewChild(EyeExamForm) eyeExamForm!: EyeExamForm;
+  @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
+  @ViewChild(InvestigationForm) investigationForm!: InvestigationForm;
 
-  constructor(private toastr: ToastrService, private eyeExamService :EyeExamService) {}
+  constructor(
+    private toastr: ToastrService,
+    private eyeExamService: EyeExamService
+  ) {}
 
+  onApplicantSelected(applicant: Applicant) {
+    this.selectedApplicant = applicant;
 
-
-onApplicantSelected(applicant: Applicant) {
-  this.selectedApplicant = applicant;
-
-  if (applicant?.fileNumber) {
-    // جلب الفحوص السابقة
-    this.eyeExamService.getByFileNumber(applicant.fileNumber).subscribe({
-      next: (exam) => this.hasEyeExam = !!exam,
-      error: () => this.hasEyeExam = false
-    });
+    if (applicant?.fileNumber) {
+      this.eyeExamService.getByFileNumber(applicant.fileNumber).subscribe({
+        next: (exam) => {
+          this.hasEyeExam = !!(exam && exam.data?.eyeExamID);
+        },
+        error: () => (this.hasEyeExam = false)
+      });
+    }
   }
-}
-
-
 
   addEyeExam() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('يرجى البحث عن مريض أولاً', 'تنبيه');
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      return;
+    }
+    if (this.hasEyeExam) {
+      this.toastr.error('المريض لديه فحص عيني سابق ولا يمكن إضافته مرة أخرى');
       return;
     }
     this.eyeExamForm.openModal();
@@ -57,7 +62,7 @@ onApplicantSelected(applicant: Applicant) {
 
   addConsultation() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('يرجى البحث عن مريض أولاً', 'تنبيه');
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
       return;
     }
     this.consultationForm.openModal();
@@ -65,7 +70,7 @@ onApplicantSelected(applicant: Applicant) {
 
   addInvestigation() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('يرجى البحث عن مريض أولاً', 'تنبيه');
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
       return;
     }
     this.investigationForm.openModal();

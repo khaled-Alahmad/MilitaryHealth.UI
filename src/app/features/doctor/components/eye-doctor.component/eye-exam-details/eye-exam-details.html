@@ -1,0 +1,192 @@
+<div class="modal-content">
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title">
+      <i class="fas fa-eye me-2"></i>
+      تفاصيل الفحص العيني
+    </h4>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="close()"></button>
+  </div>
+  <div class="modal-body">
+    
+    <!-- معلومات المنتسب -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h6 class="mb-0">
+          <i class="fas fa-user me-2"></i>
+          معلومات المنتسب
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">رقم الملف:</label>
+            <p class="text-primary fw-bold">{{ exam.applicantFileNumber }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">اسم المنتسب:</label>
+            <p>{{ getApplicantName() }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">المهنة:</label>
+            <p>{{ getApplicantJob() }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">الطبيب:</label>
+            <p>{{ exam.doctor?.fullName || 'غير محدد' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- نتائج الفحص الأساسية -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h6 class="mb-0">
+          <i class="fas fa-chart-line me-2"></i>
+          نتائج الفحص الأساسية
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-eye text-info me-2"></i>
+              <label class="form-label fw-bold me-2">القدرة البصرية اليمنى:</label>
+            </div>
+            <span class="badge bg-info fs-6">{{ exam.vision }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-eye text-secondary me-2"></i>
+              <label class="form-label fw-bold me-2">القدرة البصرية اليسرى:</label>
+            </div>
+            <span class="badge bg-secondary fs-6">{{ exam.visionLeft }}</span>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-palette text-success me-2"></i>
+              <label class="form-label fw-bold me-2">اختبار الألوان اليمنى:</label>
+            </div>
+            <span class="badge bg-success fs-6">{{ exam.colorTest }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-palette text-warning me-2"></i>
+              <label class="form-label fw-bold me-2">اختبار الألوان اليسرى:</label>
+            </div>
+            <span class="badge bg-warning text-dark fs-6">{{ exam.colorTestLeft }}</span>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">نتيجة الفحص:</label>
+            <span [ngClass]="getResultBadgeClass()" class="fs-6">
+              {{ getResultName(exam.resultID) }}
+            </span>
+          </div>
+          <div class="col-md-6" *ngIf="exam.otherDiseases">
+            <label class="form-label fw-bold">أمراض أخرى:</label>
+            <p class="text-muted">{{ exam.otherDiseases }}</p>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="exam.reason">
+          <div class="col-12">
+            <label class="form-label fw-bold">سبب التأجيل:</label>
+            <p class="text-muted">{{ exam.reason }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- العين اليمنى -->
+    <div class="card mb-3">
+      <div class="card-header bg-info text-white">
+        <h6 class="mb-0">
+          <i class="fas fa-eye me-2"></i>
+          فحص الانكسار - العين اليمنى
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive" *ngIf="rightEyeRefractions.length > 0">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th><i class="fas fa-list me-1"></i> نوع الانكسار</th>
+                <th><i class="fas fa-chart-bar me-1"></i> نسبة الانكسار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let refraction of rightEyeRefractions">
+                <td>
+                  <span class="fw-bold" [class.text-muted]="!refraction.refractionType">
+                    {{ refraction.refractionType?.description || 'غير معروف' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-primary fs-6" [class.bg-danger]="!refraction.refractionValue">
+                    {{ refraction.refractionValue || 'لا توجد قيمة' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info mb-0" *ngIf="!rightEyeRefractions || rightEyeRefractions.length === 0">
+          <i class="fas fa-info-circle me-2"></i>
+          لا توجد قياسات انكسار مسجلة للعين اليمنى
+        </div>
+      </div>
+    </div>
+
+    <!-- العين اليسرى -->
+    <div class="card mb-3">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">
+          <i class="fas fa-eye me-2"></i>
+          فحص الانكسار - العين اليسرى
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive" *ngIf="leftEyeRefractions.length > 0">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th><i class="fas fa-list me-1"></i> نوع الانكسار</th>
+                <th><i class="fas fa-chart-bar me-1"></i> نسبة الانكسار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let refraction of leftEyeRefractions">
+                <td>
+                  <span class="fw-bold" [class.text-muted]="!refraction.refractionType">
+                    {{ refraction.refractionType?.description || 'غير معروف' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-primary fs-6" [class.bg-danger]="!refraction.refractionValue">
+                    {{ refraction.refractionValue || 'لا توجد قيمة' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info mb-0" *ngIf="!leftEyeRefractions || leftEyeRefractions.length === 0">
+          <i class="fas fa-info-circle me-2"></i>
+          لا توجد قياسات انكسار مسجلة للعين اليسرى
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="close()">إغلاق</button>
+  </div>
+</div>

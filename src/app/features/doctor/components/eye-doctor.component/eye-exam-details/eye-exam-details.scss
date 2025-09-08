@@ -1,0 +1,90 @@
+/* ===== ألوان مخصصة تغطي Bootstrap جاهزة ===== */
+
+/* اللون الأساسي */
+.bg-primary {
+  background-color: #054239 !important; /* primary-dark */
+  color: #ffffff !important;
+}
+
+/* النجاح */
+.bg-success {
+  background-color: #428177 !important; /* accent */
+  color: #ffffff !important;
+}
+
+/* التحذير */
+.bg-warning {
+  background-color: #b9a779 !important; /* primary-light */
+  color: #000000 !important;
+}
+
+/* الثانوي */
+.bg-secondary {
+  background-color: #edebe0 !important; /* secondary-light */
+  color: #000000 !important;
+}
+
+/* الخطأ */
+.bg-danger {
+  background-color: #b33a3a !important;
+  color: #ffffff !important;
+}
+
+/* المعلومات */
+.bg-info {
+  background-color: #5bc0de !important;
+  color: #000000 !important;
+}
+
+/* ===== تأثيرات Hover للأزرار والروابط ===== */
+a.bg-primary:hover, a.bg-primary:focus,
+button.bg-primary:hover, button.bg-primary:focus {
+  background-color: #033128 !important;
+}
+
+a.bg-success:hover, a.bg-success:focus,
+button.bg-success:hover, button.bg-success:focus {
+  background-color: #35685f !important;
+}
+
+a.bg-warning:hover, a.bg-warning:focus,
+button.bg-warning:hover, button.bg-warning:focus {
+  background-color: #9f9465 !important;
+}
+
+a.bg-secondary:hover, a.bg-secondary:focus,
+button.bg-secondary:hover, button.bg-secondary:focus {
+  background-color: #d6d4c9 !important;
+}
+
+/* ===== تخصيص أقسام إضافية ===== */
+
+/* تعديل توزيع الهيدر */
+/* ===== زر الإغلاق داخل رأس المودال ===== */
+.modal-header {
+  .btn-close {
+    order: 1; /* التحكم بالترتيب داخل flex */
+    filter: brightness(0) invert(1); /* أبيض اللون */
+
+
+    /* لو تحب تحركه للجهة اليسرى، استخدم: */
+     margin-right: 28rem; 
+  }
+}
+/* هيدر الكروت */
+.card-header {
+  background: #edebe0 !important; /* secondary-light */
+  color: #054239 !important;
+  font-weight: bold;
+}
+
+/* هيدر الجداول */
+.table thead {
+  background: #edebe0 !important;
+  color: #054239 !important;
+}
+
+/* الصفوف المتناوبة */
+.table tbody tr:nth-child(even) {
+  background: #f5f5f5 !important;
+}

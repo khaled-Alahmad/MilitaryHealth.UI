@@ -76,7 +76,7 @@ getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items
 
 
     getSurgicalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
-    const url = `${this.consultationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
     return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => (res.data?.items || []).filter((c: any) => c.doctor?.specializationID === 3))
     );
@@ -90,7 +90,7 @@ getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items
   }
 
   getSurgicalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=false&page=${page}&pageSize=${pageSize}`;
+    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
     return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => (res.data?.items || []).filter((i: any) => i.doctor?.specializationID === 3))
     );
@@ -101,7 +101,7 @@ getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items
   }
 
   getByFileNumber(fileNumber: string): Observable<SurgicalExam | null> {
-  const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
+  const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
   return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
     map(res => {
       const items: SurgicalExam[] = res.data?.items || [];

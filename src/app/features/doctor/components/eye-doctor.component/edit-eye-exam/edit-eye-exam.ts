@@ -1,10 +1,14 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { EyeExam } from '../../../models/eye-exam-post.model';
-import { EyeExamService } from '../../../services/eye-exam.service';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
+import { Refraction } from '../../../models/refraction.model';
+import { RefractionType } from '../../../models/refraction-type.model';
+import { Result } from '../../../models/result.model';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
+import { EyeExam } from '../../../models/eye-exam.model';
+import { EyeExamService } from '../../../services/eye-exam.service';
 
 @Component({
   selector: 'app-edit-eye-exam',
@@ -12,36 +16,133 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './edit-eye-exam.html',
   styleUrl: './edit-eye-exam.scss'
 })
-export class EditEyeExam {
+export class EditEyeExam implements OnInit {
   @Output() eyeExamUpdated = new EventEmitter<any>();
   @Input() exam!: EyeExam;
-  
   @Output() dialogClosed = new EventEmitter<boolean>();
 
   examForm!: FormGroup;
-  refractionTypes: any[] = [];
-  results: any[] = [];
+  refractionTypes: RefractionType[] = [];
+  results: Result[] = [];
+  refractions: Refraction[] = [];
+
+  showLeftEye = false;
+  showRightEye = false;
 
   constructor(
     private fb: FormBuilder,
     private examService: EyeExamService,
-    private toastr: ToastrService ,
-    private modalService: NgbModal,
+    private toastr: ToastrService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
     this.examForm = this.fb.group({
       vision: [this.exam.vision, Validators.required],
+      visionLeft: [this.exam.visionLeft || '', Validators.required],
       colorTest: [this.exam.colorTest, Validators.required],
-      refractionTypeID: [this.exam.refractionTypeID, Validators.required],
-      refractionValue: [this.exam.refractionValue, Validators.required],
+      colorTestLeft: [this.exam.colorTestLeft || '', Validators.required],
       otherDiseases: [this.exam.otherDiseases || ''],
       resultID: [this.exam.resultID, Validators.required],
-      reason: [this.exam.reason || '']
+      reason: [this.exam.reason || ''],
+      leftEye: this.fb.group({
+        refractions: this.fb.array([])
+      }),
+      rightEye: this.fb.group({
+        refractions: this.fb.array([])
+      })
     });
 
-    this.examService.getRefractionTypes().subscribe(res => this.refractionTypes = res.data.items);
-    this.examService.getResults().subscribe(res => this.results = res.data.items);
+    // جلب أنواع الانكسار والنتائج
+    forkJoin({
+      types: this.examService.getRefractionTypes(),
+      results: this.examService.getResults()
+    }).subscribe({
+      next: (response) => {
+        this.refractionTypes = response.types.data.items || [];
+        this.results = response.results.data.items || [];
+      },
+      error: (error) => {
+        this.toastr.error('❌ حدث خطأ أثناء تحميل البيانات', 'خطأ');
+        console.error('Error loading data:', error);
+      }
+    });
+
+    // استخدام الانكسارات المرسلة أو جلبها من API
+    if (this.exam.refractions && this.exam.refractions.length > 0) {
+      // استخدام الانكسارات المرسلة
+      console.log('استخدام الانكسارات المرسلة:', this.exam.refractions);
+      this.refractions = this.exam.refractions;
+      this.loadRefractionsIntoForm();
+    } else if (this.exam.eyeExamID) {
+      // جلب الانكسارات من API إذا لم تكن مرسلة
+      console.log('جلب الانكسارات من API للفحص:', this.exam.eyeExamID);
+      this.examService.getRefractionsByEyeExamId(this.exam.eyeExamID).subscribe({
+        next: (response) => {
+          this.refractions = response.data || [];
+          this.loadRefractionsIntoForm();
+        },
+        error: (err) => {
+          this.toastr.error('❌ حدث خطأ أثناء تحميل الانكسارات', 'خطأ');
+          console.error('Error loading refractions:', err);
+        }
+      });
+    }
+  }
+
+  // دالة لتحميل الانكسارات في النموذج
+  private loadRefractionsIntoForm() {
+    // تصنيف الانكسارات حسب العين
+    const leftEyeRefractions = this.refractions.filter((r: Refraction) => r.isLeft);
+    const rightEyeRefractions = this.refractions.filter((r: Refraction) => !r.isLeft);
+
+    // تعبئة نموذج الانكسارات للعين اليسرى
+    const leftEyeFormArray = this.examForm.get('leftEye.refractions') as FormArray;
+    leftEyeRefractions.forEach(refraction => {
+      leftEyeFormArray.push(this.fb.group({
+        refractionTypeID: [refraction.refractionTypeID, Validators.required],
+        refractionValue: [refraction.refractionValue, Validators.required]
+      }));
+    });
+
+    if (leftEyeRefractions.length > 0) {
+      this.showLeftEye = true;
+    }
+
+    // تعبئة نموذج الانكسارات للعين اليمنى
+    const rightEyeFormArray = this.examForm.get('rightEye.refractions') as FormArray;
+    rightEyeRefractions.forEach(refraction => {
+      rightEyeFormArray.push(this.fb.group({
+        refractionTypeID: [refraction.refractionTypeID, Validators.required],
+        refractionValue: [refraction.refractionValue, Validators.required]
+      }));
+    });
+
+    if (rightEyeRefractions.length > 0) {
+      this.showRightEye = true;
+    }
+
+    
+  }
+
+  // دالة إضافة انكسار جديد
+  addRefraction(eye: 'rightEye' | 'leftEye') {
+    const refractions = this.examForm.get(`${eye}.refractions`) as FormArray;
+    refractions.push(this.fb.group({
+      refractionTypeID: [null, Validators.required],
+      refractionValue: [null, Validators.required]
+    }));
+  }
+
+  // دالة حذف انكسار
+  removeRefraction(eye: 'rightEye' | 'leftEye', index: number) {
+    const refractions = this.examForm.get(`${eye}.refractions`) as FormArray;
+    refractions.removeAt(index);
+  }
+
+  // دالة للحصول على مصفوفة الانكسارات لعين معينة
+  getRefractions(eye: 'rightEye' | 'leftEye'): FormArray {
+    return this.examForm.get(`${eye}.refractions`) as FormArray;
   }
 
   onSubmit() {
@@ -50,28 +151,166 @@ export class EditEyeExam {
       return;
     }
 
+    const leftEyeRefractions = (this.examForm.get('leftEye.refractions') as FormArray).value;
+    const rightEyeRefractions = (this.examForm.get('rightEye.refractions') as FormArray).value;
+
+    if (!leftEyeRefractions.length && !rightEyeRefractions.length) {
+      this.toastr.warning('⚠️ يجب إدخال قياس الانكسار لعين واحدة على الأقل', 'تنبيه');
+      return;
+    }
+
     const updatedExam: EyeExam = {
       ...this.exam,
-      ...this.examForm.value,
-      refractionTypeID: Number(this.examForm.value.refractionTypeID),
-      refractionValue: Number(this.examForm.value.refractionValue),
-      resultID: Number(this.examForm.value.resultID)
+      vision: this.examForm.value.vision,
+      visionLeft: this.examForm.value.visionLeft || '',
+      colorTest: this.examForm.value.colorTest,
+      colorTestLeft: this.examForm.value.colorTestLeft || '',
+      otherDiseases: this.examForm.value.otherDiseases || '',
+      resultID: Number(this.examForm.value.resultID),
+      reason: this.examForm.value.reason || ''
     };
 
-    const examID = (this.exam as any).eyeExamID; 
-
-    this.examService.updateEyeExam(examID, updatedExam).subscribe({
+    // تحديث الفحص أولاً
+    this.examService.updateEyeExam(this.exam.eyeExamID!, updatedExam).subscribe({
       next: () => {
-        this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
-        this.dialogClosed.emit(true); // إغلاق النافذة وتحديث الجدول
+        this.updateRefractions(leftEyeRefractions, rightEyeRefractions);
       },
       error: () => {
-        this.toastr.error('❌ فشل التحديث', 'خطأ');
+        this.toastr.error('❌ حدث خطأ أثناء تحديث الفحص', 'خطأ');
       }
     });
   }
- 
+
+  private updateRefractions(leftEyeRefractions: any[], rightEyeRefractions: any[]) {
+    const allCurrentRefractions = [...this.refractions];
+    const allNewRefractions: Refraction[] = [];
+
+    // تصفية الانكسارات الفارغة والتحقق من صحة البيانات للعين اليسرى
+    const validLeftRefractions = leftEyeRefractions.filter((r: any) => 
+      r.refractionTypeID && r.refractionValue !== null && r.refractionValue !== undefined && r.refractionValue !== ''
+    );
+
+    // تصفية الانكسارات الفارغة والتحقق من صحة البيانات للعين اليمنى
+    const validRightRefractions = rightEyeRefractions.filter((r: any) => 
+      r.refractionTypeID && r.refractionValue !== null && r.refractionValue !== undefined && r.refractionValue !== ''
+    );
+
+    // تجميع الانكسارات الجديدة الصحيحة
+    validLeftRefractions.forEach((refraction: any) => {
+      allNewRefractions.push({
+        refractionID: 0, // سيتم تحديده لاحقاً
+        refractionTypeID: Number(refraction.refractionTypeID),
+        refractionValue: Number(refraction.refractionValue),
+        isLeft: true,
+        eyeExamID: this.exam.eyeExamID!
+      });
+    });
+
+    validRightRefractions.forEach((refraction: any) => {
+      allNewRefractions.push({
+        refractionID: 0, // سيتم تحديده لاحقاً
+        refractionTypeID: Number(refraction.refractionTypeID),
+        refractionValue: Number(refraction.refractionValue),
+        isLeft: false,
+        eyeExamID: this.exam.eyeExamID!
+      });
+    });
+
+    // تحديد الانكسارات للحذف والتحديث والإضافة
+    const refractionsToDelete: Refraction[] = [];
+    const refractionsToUpdate: { old: Refraction, new: Refraction }[] = [];
+    const refractionsToAdd: Refraction[] = [];
+
+    // مقارنة الانكسارات القديمة مع الجديدة
+    allCurrentRefractions.forEach(oldRefraction => {
+      const matchingNewRefraction = allNewRefractions.find(newRefraction => 
+        newRefraction.refractionTypeID === oldRefraction.refractionTypeID &&
+        newRefraction.isLeft === oldRefraction.isLeft
+      );
+
+      if (matchingNewRefraction) {
+        // إذا كانت القيمة مختلفة، نحتاج لتحديث
+        if (matchingNewRefraction.refractionValue !== oldRefraction.refractionValue) {
+          refractionsToUpdate.push({
+            old: oldRefraction,
+            new: { ...matchingNewRefraction, refractionID: oldRefraction.refractionID }
+          });
+        }
+        // إزالة من القائمة الجديدة لأنها تم التعامل معها
+        const index = allNewRefractions.indexOf(matchingNewRefraction);
+        allNewRefractions.splice(index, 1);
+      } else {
+        // لا يوجد تطابق، نحتاج لحذف
+        refractionsToDelete.push(oldRefraction);
+      }
+    });
+
+    // الباقي في allNewRefractions يحتاج لإضافة
+    refractionsToAdd.push(...allNewRefractions);
+
+    // تنفيذ العمليات
+    const operations: any[] = [];
+
+    // حذف الانكسارات غير المرغوب فيها
+    refractionsToDelete.forEach(refraction => {
+      operations.push(this.examService.deleteRefraction(refraction.refractionID!));
+    });
+
+    // تحديث الانكسارات المتغيرة
+    refractionsToUpdate.forEach(({ old, new: updated }) => {
+      operations.push(this.examService.updateRefraction(old.refractionID!, updated));
+    });
+
+    // إضافة الانكسارات الجديدة
+    refractionsToAdd.forEach(refraction => {
+      operations.push(this.examService.addRefraction(refraction));
+    });
+
+    if (operations.length === 0) {
+      this.toastr.success('✅ تم تحديث الفحص بنجاح', 'نجاح');
+      this.eyeExamUpdated.emit();
+      this.modalService.dismissAll();
+      return;
+    }
+
+    forkJoin(operations).subscribe({
+      next: (responses: any[]) => {
+        // التحقق من نجاح جميع العمليات
+        const failedOperations = responses.filter(r => !r.succeeded);
+        
+        if (failedOperations.length > 0) {
+          this.toastr.error(`❌ فشل في ${failedOperations.length} عملية من أصل ${responses.length}`, 'خطأ');
+          return;
+        }
+
+        this.toastr.success('✅ تم تحديث الفحص والانكسارات بنجاح', 'نجاح');
+        this.eyeExamUpdated.emit();
+        this.modalService.dismissAll();
+      },
+      error: (error) => {
+        this.toastr.error('❌ حدث خطأ أثناء تحديث الانكسارات', 'خطأ');
+        console.error('Error updating refractions:', error);
+      }
+    });
+  }
+
   cancel() {
-  this.modalService.dismissAll();
+    this.modalService.dismissAll();
+  }
+
+  toggleLeftEye() {
+    this.showLeftEye = !this.showLeftEye;
+    if (!this.showLeftEye) {
+      const leftEyeArray = this.examForm.get('leftEye.refractions') as FormArray;
+      leftEyeArray.clear(); // مسح المصفوفة بدل patchValue
+    }
+  }
+
+  toggleRightEye() {
+    this.showRightEye = !this.showRightEye;
+    if (!this.showRightEye) {
+      const rightEyeArray = this.examForm.get('rightEye.refractions') as FormArray;
+      rightEyeArray.clear();
+    }
   }
 }

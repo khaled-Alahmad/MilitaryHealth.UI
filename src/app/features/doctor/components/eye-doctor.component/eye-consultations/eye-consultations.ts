@@ -1,7 +1,6 @@
 import { environment } from './../../../../../../environments/environment';
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
-import { EyeExamService } from '../../../services/eye-exam.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EditConsultation } from '../../Consultations/edit-consultation/edit-consultation';
@@ -11,13 +10,14 @@ import { TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EyeExam } from '../../../models/eye-exam-post.model';
-import { EditEyeExam } from '../edit-eye-exam/edit-eye-exam';
+import { PagedResponse } from '../../../../../shared/models/paged-response.model';
+import { EyeExamService } from '../../../services/eye-exam.service';
+
 
 @Component({
   selector: 'app-eye-consultations',
   standalone: true,
-  imports: [CommonModule, ButtonModule ,FormsModule, EditConsultation, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule ,FormsModule, TableModule, PaginatorComponent],
   templateUrl: './eye-consultations.html',
   styleUrls: ['./eye-consultations.scss']
 })
@@ -46,15 +46,29 @@ export class EyeConsultations implements OnInit {
   ngOnInit(): void {
     this.loadConsultations();
   }
-
+  getBadgeClass(result: string) {
+    switch (result) {
+      case 'مكتمل':
+        return 'badge bg-success';
+      case 'مؤجل':
+        return 'badge bg-warning';
+      case 'مرفوض':
+        return 'badge bg-danger';
+      default:
+        return 'badge bg-secondary';
+    }
+  }
+  
   loadConsultations() {
     this.loading = true;
     const filter = this.globalFilter || '';
     this.service.getEyeClinicConsultations(this.page, this.rowsPerPage, filter).subscribe({
-      next: (res) => {
-        this.consultations = res.items;
+      next: (res: PagedResponse<Consultation>) => {
+        // ترتيب حسب id من الأكبر للأصغر
+        this.consultations = res.items.sort((a, b) => 
+          (b.consultationID ?? 0) - (a.consultationID ?? 0)
+        );        this.filteredConsultations = this.consultations;
         this.totalRecords = res.totalCount;
-        this.filteredConsultations = res.items;
         this.loading = false;
       },
       error: () => {
@@ -63,6 +77,7 @@ export class EyeConsultations implements OnInit {
       }
     });
   }
+  
 
   openFile(attachment: string) {
     if (!attachment) {
