@@ -1,32 +1,207 @@
-a {
-  transition: color 0.3s ease;
-}
-a:hover {
-  color: #0d6efd;
-  text-decoration: underline;
-}
-.login-logo {
-  width: 100px;      
-  height: 100px;
-  object-fit: contain; 
-  border-radius: 50%;   
-  background: #fff;
-}
-.input-group {
-  position: relative; 
+@import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
+
+/* إزالة :host وإضافة التنسيق مباشرة */
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to top, rgb(0, 38, 35) 30%, rgba(0,38,35,0.8) 100%), url('../../../../../assets/images/pattern.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: 0;
+  direction: rtl;
 }
 
-.password-toggle-icon {
+.container.forms {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-size: cover; /* أضف هذا */
+  background-position: center; /* أضف هذا */
+  background-repeat: no-repeat; /* أضف هذا */
+}
+
+.form {
+  max-width: 450px;
+  width: 100%;
+  padding: 40px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.form-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.form-header p {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.field {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input, .password {
+  width: 100%;
+  height: 50px;
+  padding: 0 10px 0 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input:focus, .password:focus {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.2);
+  outline: none;
+}
+
+.input::placeholder, .password::placeholder {
+  color: #6b7280;
+  opacity: 0.6;
+}
+
+.input-icon {
   position: absolute;
-  left: 15px; /* Change 'right' to 'left' */
+  left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
-  cursor: pointer;
-  color: #6c757d; // A neutral color for the icon
+  color: #6b7280;
+  font-size: 20px;
+  pointer-events: none;
 }
 
-/* Add padding to the left of the input field to prevent text from going under the icon */
-.input-group input.form-control {
-  padding-left: 45px; /* Adjust this value as needed to clear the icon */
+.bx-hide, .bx-show {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.bx-hide:hover, .bx-show:hover {
+  color: #14b8a6;
+}
+
+.field.invalid .input,
+.field.invalid .password {
+  border-color: #ef4444;
+}
+
+.field.invalid .input:focus,
+.field.invalid .password:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 18px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.error-message i {
+  font-size: 14px;
+}
+
+.button-field {
+  margin-top: 25px;
+}
+
+.button-field button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #54a092, #2a6b5f);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-field button:hover:not(:disabled) {
+  background: linear-gradient(to right, #76c4b8, #14b8a6);
+  box-shadow: 0 5px 15px rgba(66, 129, 119, 0.2);
+}
+
+.button-field button:disabled {
+  background: #e5e7eb;
+  cursor: not-allowed;
+  color: #6b7280;
+}
+
+.button-field button.loading {
+  background: #e5e7eb;
+}
+
+.bx-loader-alt {
+  font-size: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
