@@ -55,21 +55,17 @@
             {{ c.result || 'غير محدد' }}
           </span>
         </td>
-        <td>
-          <div class="d-flex justify-content-center">
-            <!-- يظهر الزر فقط إذا كان هناك ملف مرفق -->
-            <button
-              *ngIf="c.attachment"
-              title="عرض الملف"
-              class="btn btn-sm btn-info p-1"
-              (click)="openFile(c.attachment)"
-            >
-              <i class="fas fa-eye"></i>
+<td class="text-center">
+          @if(c.attachment){
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
+                (click)="openFile(c.attachment)">
+                <i class="bi bi-file-earmark-text me-1"></i>
+                فتح الملف
             </button>
-
-            <!-- إذا ما فيه ملف، تظهر أيقونة ثابتة -->
-            <i *ngIf="!c.attachment" class="fas fa-eye no-file-icon"></i>
-          </div>
+            }
+            @else {
+            <span>لا يوجد ملف</span>
+            }
         </td>
 
         <td class="text-center">
