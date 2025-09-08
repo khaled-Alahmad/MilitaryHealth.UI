@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { RippleModule } from 'primeng/ripple';
 import { PaginatorComponent } from '../../../../shared/components/paginator/paginator.component';
 import { Router, RouterModule } from '@angular/router';
 import { PagedResponse } from '../../../applicants/models/api-response.model';
@@ -12,7 +15,7 @@ import { EditArchive } from '../edit-archive/edit-archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
 @Component({
   selector: 'app-archive-list',
-  imports: [PaginatorComponent, TableModule, CommonModule,RouterModule],
+  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule],
   templateUrl: './archive-list.html',
   styleUrl: './archive-list.scss'
 })
@@ -54,7 +57,7 @@ archives: ArchiveModel[] = [];
   }
 
  openArchiveDetails(archive: ArchiveModel) {
-    this.router.navigate(['/applicants', archive.applicant.fileNumber], { state: { archiveData: archive } });
+    this.router.navigate(['/applicants', archive.applicantFileNumber], { state: { archive: archive } });
   }
 
   onPageChange(newPage: number) {

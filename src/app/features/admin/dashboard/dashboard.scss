@@ -1,36 +1,46 @@
-.card {
-  border-radius: 1rem;
-  transition: transform 0.2s ease-in-out;
-  border: 1px solid #e0e0e0;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card-body {
-  padding: 2rem;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
-}
-
-.card-text {
-  font-size: 3rem;
-}
-
-body {
+.admin-dashboard {
   direction: rtl;
-  text-align: right;
 }
 
-.container {
-  text-align: right;
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 14px rgba(2, 6, 23, 0.06);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.row {
-  flex-direction: row-reverse;
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(2, 6, 23, 0.08);
+}
+
+.icon-wrap {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.icon-wrap.total { background: #eff6ff; color: #2563eb; }
+.icon-wrap.accepted { background: #ecfdf5; color: #16a34a; }
+.icon-wrap.rejected { background: #fef2f2; color: #ef4444; }
+.icon-wrap.pending { background: #fffbeb; color: #f59e0b; }
+
+.stat-content .label {
+  color: #475569;
+  font-weight: 600;
+}
+
+.stat-content .value {
+  font-size: 28px;
+  font-weight: 700;
 }

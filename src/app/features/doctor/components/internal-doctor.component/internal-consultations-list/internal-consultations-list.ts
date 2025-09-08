@@ -7,20 +7,28 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { RippleModule } from 'primeng/ripple';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-internal-consultations-list',
-  imports: [CommonModule,ButtonModule, FormsModule, EditConsultation],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditConsultation, PaginatorComponent],
   templateUrl: './internal-consultations-list.html',
   styleUrl: './internal-consultations-list.scss'
 })
 export class InternalConsultationsList implements OnInit {
   consultations: Consultation[] = [];
   filteredConsultations: Consultation[] = [];
+  globalFilter: string = '';
   selectedConsultation: Consultation | null = null;
   loading = false;
   searchText = '';
+  page = 1;
+  rowsPerPage = 10;
+  totalRecords = 0;
 
   constructor(
     private service: InternalExamService,
@@ -32,10 +40,12 @@ export class InternalConsultationsList implements OnInit {
 
   loadConsultations() {
     this.loading = true;
-    this.service.getInternalConsultations().subscribe({
+    const filter = this.globalFilter || '';
+    this.service.getInternalConsultations(this.page, this.rowsPerPage,filter).subscribe({
       next: res => {
-        this.consultations = res;
-        this.filteredConsultations = [...res];
+        this.consultations = res.items;
+        this.filteredConsultations = res.items;
+        this.totalRecords = res.totalCount;
         this.loading = false;
       },
       error: () => {
@@ -44,18 +54,33 @@ export class InternalConsultationsList implements OnInit {
       }
     });
   }
-
-  filterConsultations() {
-    const search = this.searchText.trim().toLowerCase();
-    this.filteredConsultations = !search ? [...this.consultations] :
-      this.consultations.filter(c =>
-        c.applicantFileNumber.toLowerCase().includes(search) ||
-        c.consultationType.toLowerCase().includes(search) ||
-        c.referredDoctor.toLowerCase().includes(search) ||
-        c.result.toLowerCase().includes(search) ||
-        (c.doctor?.fullName?.toLowerCase().includes(search) ?? false)
-      );
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadConsultations();
   }
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.loadConsultations();
+  }
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
+    this.page = 1;
+    this.loadConsultations();
+
+  }
+  // filterConsultations() {
+  //   const search = this.searchText.trim().toLowerCase();
+  //   this.filteredConsultations = !search ? [...this.consultations] :
+  //     this.consultations.filter(c =>
+  //       c.applicantFileNumber.toLowerCase().includes(search) ||
+  //       c.consultationType.toLowerCase().includes(search) ||
+  //       c.referredDoctor.toLowerCase().includes(search) ||
+  //       c.result.toLowerCase().includes(search) ||
+  //       (c.doctor?.fullName?.toLowerCase().includes(search) ?? false)
+  //     );
+  // }
 
   openEditDialog(c: Consultation) { this.selectedConsultation = { ...c }; }
 

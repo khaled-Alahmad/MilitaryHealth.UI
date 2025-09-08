@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { InternalExam } from '../models/internal-exam.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
+import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class InternalExamService {
   private investigationUrl = `${environment.apiUrl}/api/Investigations`;
   private consultationUrl = `${environment.apiUrl}/api/Consultations`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token') || '';
@@ -44,73 +45,121 @@ export class InternalExamService {
       })
     );
   }
-      //جلب كل الفحوصات الداخلية
-    getAllInternalExams(page: number, pageSize: number, searchTerm: string = ''): Observable<InternalExam[]> {
-      const url = `${this.apiUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-      return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-        map(res => res.data?.items || [])
-      );
+  // جلب كل الفحوصات الداخلية مع pagination + filter
+  getAllInternalExams(
+    page: number = 1,
+    pageSize: number = 20,
+    filter: string = ''
+  ): Observable<PagedResponse<InternalExam>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
     }
 
-    // تحديث فحص داخلي موجود
-    updateInternalExam(id: number, exam: InternalExam): Observable<any> {
-      return this.http.put(`${this.apiUrl}/${id}`, exam, {
-        headers: this.getAuthHeaders().set('Content-Type', 'application/json')
-      });
+    return this.http
+      .get<ApiResponse<PagedResponse<InternalExam>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
+  }
+
+  // تحديث فحص داخلي موجود
+  updateInternalExam(id: number, exam: InternalExam): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, exam, {
+      headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
+
+
+
+  // جلب كل التحاليل للعيادة الداخلية مع pagination + filter
+  getAllInternalInvestigations(
+    page: number = 1,
+    pageSize: number = 20,
+    filter: string = ''
+  ): Observable<PagedResponse<Investigation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
     }
 
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
+      .pipe(map(res => res.data));
+  }
+
+  // جلب كل الاستشارات للعيادة الداخلية مع pagination + filter
+  getAllInternalConsultations(
+    page: number = 1,
+    pageSize: number = 20,
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+
+    return this.http
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+      .pipe(map(res => res.data));
+  }
+  getInternalInvestigations(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<Investigation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
+      .pipe(map(res => res.data));
+  }
+
+  getInternalConsultations(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<Consultation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+      .pipe(map(res => res.data));
+  }
 
 
-
-  // جلب كل التحاليل للعيادة الداخلية
-  getAllInternalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<{ data?: { items: Investigation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
+  getByFileNumber(fileNumber: string): Observable<InternalExam | null> {
+    const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
+    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => {
-        const items: Investigation[] = res.data?.items || [];
-        return items.filter(inv => inv.doctor?.specializationID === 2);
-      })
+        const items: InternalExam[] = res.data?.items || [];
+        // 🔹 نبحث عن فحص لنفس الملف ونفس التخصص (العيادة الداخلية specializationID = 2)
+        const exam = items.find(e =>
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 2
+        );
+        return exam || null;
+      }),
+      catchError(() => of(null))
     );
   }
-
-  // جلب كل الاستشارات للعيادة الداخلية
-  getAllInternalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
-    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<{ data?: { items: Consultation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-      map(res => {
-        const items: Consultation[] = res.data?.items || [];
-        return items.filter(c => c.doctor?.specializationID === 2);
-      })
-    );
-  }
-    getInternalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<{ data?: { items: Investigation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-      map(res => (res.data?.items || []).filter(inv => inv.doctor?.specializationID === 2)) // 2 = العيادة الداخلية
-    );
-  }
-
-    getInternalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
-    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<{ data?: { items: Consultation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-      map(res => (res.data?.items || []).filter(c => c.doctor?.specializationID === 2)) // 2 = العيادة الداخلية
-    );
-  }
-
-
-getByFileNumber(fileNumber: string): Observable<InternalExam | null> {
-  const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
-  return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => {
-      const items: InternalExam[] = res.data?.items || [];
-      // 🔹 نبحث عن فحص لنفس الملف ونفس التخصص (العيادة الداخلية specializationID = 2)
-      const exam = items.find(e => 
-        e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 2
-      );
-      return exam || null;
-    }),
-    catchError(() => of(null))
-  );
-}
 
 }
