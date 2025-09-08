@@ -129,4 +129,19 @@ export class SurgeryInvestigationsList implements OnInit {
       this.loadInvestigations();
     });
   }
+  getBadgeClass(status: any): string {
+    if (!status) {
+      return 'badge';
+    }
+    switch (status) {
+      case 'مكتمل':
+        return 'badge bg-success';
+      case 'مرفوض':
+        return 'badge bg-danger';
+      case 'مؤجل':
+        return 'badge bg-warning text-dark';
+      default:
+        return 'badge bg-secondary';
+    }
+  }
 }

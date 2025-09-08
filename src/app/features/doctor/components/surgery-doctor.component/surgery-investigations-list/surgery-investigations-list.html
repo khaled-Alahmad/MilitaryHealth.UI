@@ -1,8 +1,8 @@
 <div class="container">
-  <div class=" d-flex justify-content-end" >
-    <div class="search-wrapper  my-1">
+  <div class=" d-flex justify-content-end " >
+    <div class="search-wrapper  my-2">
       <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-        (input)="onFilterChange($event)" (keydown.enter)="onEnterSearch()" />
+        (input)="onFilterChange($event)" />
       <i class="fas fa-search search-icon"></i>
     </div>
   </div>
@@ -14,8 +14,8 @@
         <th>نوع التحليل</th>
         <th>النتيجة</th>
         <th>الحالة</th>
-        <th>الملف المرفق</th>
         <th>الطبيب</th>
+        <th>الملف المرفق</th>
         <th>إجراءات</th>
       </tr>
     </ng-template>
@@ -24,13 +24,25 @@
         <td>{{ i.applicantFileNumber }}</td>
         <td>{{ i.type }}</td>
         <td>{{ i.result }}</td>
-        <td>{{ i.status }}</td>
-        <td class="text-center">
-          <button *ngIf="i.attachment" pButton type="button" icon="pi pi-file" class="p-button-sm p-button-info" (click)="openFile(i.attachment)">فتح الملف</button>
-        </td>
+        <td [ngClass]="getBadgeClass(i.status)">{{ i.status }}</td>
         <td>{{ i.doctor?.fullName }}</td>
         <td class="text-center">
-          <button pButton type="button" icon="pi pi-pencil" class="p-button-sm" (click)="openEditInvestigation(i)">اضافة نتيجة</button>
+          @if(i.attachment){
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
+                (click)="openFile(i.attachment)">
+                <i class="bi bi-file-earmark-text me-1"></i>
+                فتح الملف
+            </button>
+            }
+            @else {
+            <span>لا يوجد ملف</span>
+            }        </td>
+
+        <td class="text-center">
+          <button type="button" class="btn btn-sm btn-primary" title="اضافة نتيجة" (click)="openEditInvestigation(i)">
+            <i class="bi bi-pencil-square me-1"></i>
+            اضافة نتيجة
+        </button>
         </td>
       </tr>
     </ng-template>

@@ -81,11 +81,21 @@ getAllSurgicalExams(page: number = 1,
   }
 
 
-    getSurgicalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
+    getSurgicalConsultations(page: number = 1,
+      pageSize: number = 10,
+      filter: string = ''): Observable<PagedResponse<Consultation>> {
     const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-      map(res => (res.data?.items || []).filter((c: any) => c.doctor?.specializationID === 3))
-    );
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+      .pipe(map(res => res.data));
   }
 
   // ✅ تحاليل خاصة بالجراحة

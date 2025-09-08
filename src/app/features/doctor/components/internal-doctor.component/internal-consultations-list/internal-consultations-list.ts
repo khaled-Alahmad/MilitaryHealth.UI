@@ -70,17 +70,6 @@ export class InternalConsultationsList implements OnInit {
     this.loadConsultations();
 
   }
-  // filterConsultations() {
-  //   const search = this.searchText.trim().toLowerCase();
-  //   this.filteredConsultations = !search ? [...this.consultations] :
-  //     this.consultations.filter(c =>
-  //       c.applicantFileNumber.toLowerCase().includes(search) ||
-  //       c.consultationType.toLowerCase().includes(search) ||
-  //       c.referredDoctor.toLowerCase().includes(search) ||
-  //       c.result.toLowerCase().includes(search) ||
-  //       (c.doctor?.fullName?.toLowerCase().includes(search) ?? false)
-  //     );
-  // }
 
   openEditDialog(c: Consultation) { this.selectedConsultation = { ...c }; }
 
