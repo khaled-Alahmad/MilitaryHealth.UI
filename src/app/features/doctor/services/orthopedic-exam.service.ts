@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { OrthopedicExam } from '../models/orthopedic-exam.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
+import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -44,17 +45,21 @@ export class OrthopedicExamService {
   //   );
   // }
     // 🔹 جلب كل الفحوص العظمية مع Pagination
-    getAllOrthopedicExams(page = 1, pageSize = 10): Observable<{ items: OrthopedicExam[], totalCount: number }> {
+    getAllOrthopedicExams(page: number = 1,
+      pageSize: number = 10,
+      filter: string = ''): Observable<PagedResponse<OrthopedicExam>> {
       const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
-      const headers = this.getAuthHeaders();
+      let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
 
-      return this.http.get<{ data?: { items: OrthopedicExam[], totalCount: number } }>(url, { headers }).pipe(
-        map(res => {
-          const items = res.data?.items || [];
-          const totalCount = res.data?.totalCount || items.length; // fallback إذا الـ API لا ترجع totalCount
-          return { items, totalCount };
-        })
-      );
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+    .get<ApiResponse<PagedResponse<OrthopedicExam>>>(this.apiUrl, { params })
+    .pipe(map(res => res.data));
     }
 
    private getAuthHeaders() {

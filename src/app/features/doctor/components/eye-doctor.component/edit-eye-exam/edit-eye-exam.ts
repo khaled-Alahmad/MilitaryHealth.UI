@@ -71,12 +71,10 @@ export class EditEyeExam implements OnInit {
     // استخدام الانكسارات المرسلة أو جلبها من API
     if (this.exam.refractions && this.exam.refractions.length > 0) {
       // استخدام الانكسارات المرسلة
-      console.log('استخدام الانكسارات المرسلة:', this.exam.refractions);
       this.refractions = this.exam.refractions;
       this.loadRefractionsIntoForm();
     } else if (this.exam.eyeExamID) {
       // جلب الانكسارات من API إذا لم تكن مرسلة
-      console.log('جلب الانكسارات من API للفحص:', this.exam.eyeExamID);
       this.examService.getRefractionsByEyeExamId(this.exam.eyeExamID).subscribe({
         next: (response) => {
           this.refractions = response.data || [];
@@ -84,7 +82,6 @@ export class EditEyeExam implements OnInit {
         },
         error: (err) => {
           this.toastr.error('❌ حدث خطأ أثناء تحميل الانكسارات', 'خطأ');
-          console.error('Error loading refractions:', err);
         }
       });
     }
