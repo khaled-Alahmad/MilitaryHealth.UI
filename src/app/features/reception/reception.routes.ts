@@ -8,7 +8,7 @@ export const RECEPTION_ROUTES: Routes = [
     loadComponent: () =>
       import('./components/applicants-list/applicants-list').then(m => m.ApplicantsList),
     canActivate: [authGuard],
-     data: { roles: [UserRoles.Receptionist] }
+     data: { roles: [UserRoles.Receptionist,UserRoles.Supervisor] }
   },
   {
     path: 'applicants/add',
