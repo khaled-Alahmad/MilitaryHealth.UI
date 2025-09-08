@@ -1,5 +1,5 @@
 .sidebar {
-  width: 310px;
+  width: clamp(220px, 22vw, 280px);
   min-height: 100vh;
   background: #fff;
   border-left: 1px solid #eee;
@@ -19,7 +19,7 @@
 .sidebar-header {
   display: flex;
   justify-content: center;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0 0.25rem 0;
 }
 
 .sidebar .logo {
@@ -32,16 +32,16 @@
   white-space: nowrap;
 }
     .logo-img {
-            width: 160px;
-            height: 90px;
-            object-fit: contain;
-            transition: all 0.3s ease;
-            border: 2px solid white;
-            border-radius: 50%;
-            margin-right: 55px;
-            padding: 5px;
-            background: rgba(255, 255, 255, 0.2);
-        }
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      display: block;
+      margin: 6px auto 10px auto;
+    }
 
 
 
