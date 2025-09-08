@@ -43,8 +43,7 @@ export class DeferredEyeExamsComponent implements OnInit {
     private modalService: NgbModal
   ) { }
 
-  ngOnInit(): void { 
-    // فقط تحميل القوائم الأساسية دون طلب أي تفاصيل فحص غير موجودة
+  ngOnInit(): void {
     this.loadEyeExams();
     this.loadRefractionTypes();
   }

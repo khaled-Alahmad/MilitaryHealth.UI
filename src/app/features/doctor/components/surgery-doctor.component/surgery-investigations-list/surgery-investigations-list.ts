@@ -7,21 +7,29 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-surgery-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, EditInvestigation],
+  imports: [CommonModule, ButtonModule, FormsModule, EditInvestigation, TableModule, PaginatorComponent],
   templateUrl: './surgery-investigations-list.html',
   styleUrls: ['./surgery-investigations-list.scss']
 })
 export class SurgeryInvestigationsList implements OnInit {
   investigations: Investigation[] = [];
   filteredInvestigations: Investigation[] = [];
+  pagedInvestigations: Investigation[] = [];
   selectedInvestigation: Investigation | null = null;
   loading = false;
   searchText = '';
+  globalFilter: string = '';
+
+  page = 1;
+  rowsPerPage = 10;
+  totalRecords = 0;
 
   constructor(
     private service: SurgicalExamService,
@@ -39,6 +47,8 @@ export class SurgeryInvestigationsList implements OnInit {
       next: res => { 
         this.investigations = res; 
         this.filteredInvestigations = [...res]; 
+        this.totalRecords = this.filteredInvestigations.length;
+        this.applyPaging();
         this.loading = false; 
       },
       error: () => { 
@@ -49,15 +59,40 @@ export class SurgeryInvestigationsList implements OnInit {
   }
 
   filterInvestigations() {
-    const search = this.searchText.trim().toLowerCase();
+    const search = this.globalFilter.trim().toLowerCase();
     this.filteredInvestigations = !search ? [...this.investigations] :
       this.investigations.filter(i =>
-        i.applicantFileNumber.toLowerCase().includes(search) ||
-        i.type.toLowerCase().includes(search) ||
-        i.result.toLowerCase().includes(search) ||
-        i.status.toLowerCase().includes(search) ||
+        i.applicantFileNumber?.toLowerCase().includes(search) ||
+        i.type?.toLowerCase().includes(search) ||
+        i.result?.toLowerCase().includes(search) ||
+        i.status?.toLowerCase().includes(search) ||
         (i.doctor?.fullName?.toLowerCase().includes(search) ?? false)
       );
+    this.totalRecords = this.filteredInvestigations.length;
+    this.page = 1;
+    this.applyPaging();
+  }
+
+  onFilterChange(event: Event) {
+    this.globalFilter = (event.target as HTMLInputElement).value;
+    this.filterInvestigations();
+  }
+
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.applyPaging();
+  }
+
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.applyPaging();
+  }
+
+  private applyPaging() {
+    const start = (this.page - 1) * this.rowsPerPage;
+    const end = start + this.rowsPerPage;
+    this.pagedInvestigations = this.filteredInvestigations.slice(start, end);
   }
 
   openEditDialog(inv: Investigation) { 

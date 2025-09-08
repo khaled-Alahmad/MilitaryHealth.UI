@@ -1,11 +1,12 @@
 // services/surgical-exam.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { SurgicalExam } from '../models/surgical-exam-post.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
+import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,17 +48,22 @@ export class SurgicalExamService {
   // }
 
   // 🔹 جلب كل الفحوصات الجراحية مع Pagination
-getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items: SurgicalExam[], totalCount: number }> {
+getAllSurgicalExams(page: number = 1,
+  pageSize: number = 10,
+  filter: string = ''): Observable<PagedResponse<SurgicalExam>> {
   const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
-  const headers = this.getAuthHeaders();
 
-  return this.http.get<{ data?: { items: SurgicalExam[], totalCount: number } }>(url, { headers }).pipe(
-    map(res => {
-      const items = res.data?.items || [];
-      const totalCount = res.data?.totalCount || items.length;
-      return { items, totalCount };
-    })
-  );
+  let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<SurgicalExam>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
 }
 
   // جلب نتائج الفحوص

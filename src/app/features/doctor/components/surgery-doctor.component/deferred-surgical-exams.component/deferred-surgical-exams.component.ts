@@ -6,11 +6,13 @@ import { EditSurgicalExam } from '../edit-surgical-exam/edit-surgical-exam';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TableModule } from "primeng/table";
+import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-deferred-surgical-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule],
+  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './deferred-surgical-exams.component.html',
   styleUrls: ['./deferred-surgical-exams.component.scss']
 })
@@ -21,10 +23,10 @@ export class DeferredSurgicalExamsComponent implements OnInit {
   selectedExam: SurgicalExam | null = null;
   searchTerm: string = '';
 
-  // Pagination
+  globalFilter: string = '';
   page = 1;
-  pageSize = 10;
-  totalItems = 0;
+  rowsPerPage = 10;
+  totalRecords = 0;
 
   constructor(
     private examService: SurgicalExamService,
@@ -35,18 +37,15 @@ export class DeferredSurgicalExamsComponent implements OnInit {
     this.loadExams();
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.totalItems / this.pageSize);
-  }
 
-  loadExams(page: number = 1) {
+  loadExams() {
     this.loading = true;
-    this.examService.getAllSurgicalExams(page, this.pageSize).subscribe({
-      next: ({ items, totalCount }) => {
-        this.exams = items;
-        this.filteredExams = [...items];
-        this.totalItems = totalCount;
-        this.page = page;
+    const filter = this.globalFilter || '';
+    this.examService.getAllSurgicalExams(this.page, this.rowsPerPage, filter).subscribe({
+      next: (data) => {
+        this.exams = data.items;
+        this.filteredExams =data.items;
+        this.totalRecords = data.totalCount;
         this.loading = false;
       },
       error: err => { 
@@ -55,21 +54,21 @@ export class DeferredSurgicalExamsComponent implements OnInit {
       }
     });
   }
-
-  changePage(newPage: number) {
-    if (newPage < 1 || newPage > this.totalPages) return;
-    this.loadExams(newPage);
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadExams();
   }
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.loadExams();
+  }
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
+    this.page = 1;
+    this.loadExams();
 
-  onSearchChange() {
-    const term = this.searchTerm.trim().toLowerCase();
-    if (!term) {
-      this.filteredExams = [...this.exams];
-    } else {
-      this.filteredExams = this.exams.filter(exam =>
-        Object.values(exam).some(val => val?.toString().toLowerCase().includes(term))
-      );
-    }
   }
 
   openEditDialog(exam: SurgicalExam) {
@@ -78,6 +77,21 @@ export class DeferredSurgicalExamsComponent implements OnInit {
 
   onDialogClose(updated: boolean) {
     this.selectedExam = null;
-    if (updated) this.loadExams(this.page);
+    if (updated) this.loadExams();
+  }
+  getBadgeClass(result: any): string {
+    if (!result || !result.description) {
+      return 'badge';
+    }
+    switch (result.description) {
+      case 'مقبول':
+        return 'badge bg-success';
+      case 'مرفوض':
+        return 'badge bg-danger';
+      case 'مؤجل':
+        return 'badge bg-warning text-dark';
+      default:
+        return 'badge bg-secondary';
+    }
   }
 }
