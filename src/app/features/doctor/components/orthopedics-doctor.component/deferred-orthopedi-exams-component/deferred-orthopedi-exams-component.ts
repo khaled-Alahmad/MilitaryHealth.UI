@@ -67,14 +67,7 @@ export class DeferredOrthopediExamsComponent implements OnInit {
     this.loadExams();
   }
 
-  // openEditDialog(exam: OrthopedicExam) {
-  //   this.selectedExam = { ...exam };
-  // }
 
-  // onDialogClose(updated: boolean) {
-  //   this.selectedExam = null;
-  //   if (updated) this.loadExams(this.page);
-  // }
   getBadgeClass(result: any): string {
     if (!result || !result.description) return 'badge bg-secondary';
     switch (result.description) {

@@ -75,11 +75,22 @@ export class OrthopedicExamService {
   }
 
   // 🔹 عرض كل الاستشارات للعيادة العظمية فقط
-getOrthopedicConsultations(page = 1, pageSize = 50): Observable<Consultation[]> {
+getOrthopedicConsultations(page: number = 1,
+  pageSize: number = 10,
+  filter: string = ''): Observable<PagedResponse<Consultation>> {
   const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-  return this.http.get<{ data?: { items: Consultation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => (res.data?.items || []).filter((c: Consultation) => c.doctor?.specializationID === 4))
-  );
+  let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+    .get<ApiResponse<PagedResponse<Consultation>>>(this.apiUrl, { params })
+    .pipe(map(res => res.data));
+
 }
 
   // 🔹 إضافة طلب تحليل
