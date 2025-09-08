@@ -11,10 +11,10 @@ import { ApiResponse, PagedResponse } from '../../applicants/models/api-response
 })
 export class OrthopedicExamService {
   private apiUrl = `${environment.apiUrl}/api/OrthopedicExams`;
-   private consultationUrl = `${environment.apiUrl}/api/Consultations`;
+  private consultationUrl = `${environment.apiUrl}/api/Consultations`;
   private investigationUrl = `${environment.apiUrl}/api/Investigations`;
   public uploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   addOrthopedicExam(exam: OrthopedicExam): Observable<any> {
     const token = localStorage.getItem('token');
@@ -44,12 +44,12 @@ export class OrthopedicExamService {
   //     })
   //   );
   // }
-    // 🔹 جلب كل الفحوص العظمية مع Pagination
-    getAllOrthopedicExams(page: number = 1,
-      pageSize: number = 10,
-      filter: string = ''): Observable<PagedResponse<OrthopedicExam>> {
-      const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
-      let params = new HttpParams()
+  // 🔹 جلب كل الفحوص العظمية مع Pagination
+  getAllOrthopedicExams(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<OrthopedicExam>> {
+    const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', false);
@@ -58,11 +58,11 @@ export class OrthopedicExamService {
       params = params.set('filter', filter);
     }
     return this.http
-    .get<ApiResponse<PagedResponse<OrthopedicExam>>>(this.apiUrl, { params })
-    .pipe(map(res => res.data));
-    }
+      .get<ApiResponse<PagedResponse<OrthopedicExam>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
+  }
 
-   private getAuthHeaders() {
+  private getAuthHeaders() {
     const token = localStorage.getItem('token') || '';
     return { Authorization: `Bearer ${token}` };
   }
@@ -75,11 +75,11 @@ export class OrthopedicExamService {
   }
 
   // 🔹 عرض كل الاستشارات للعيادة العظمية فقط
-getOrthopedicConsultations(page: number = 1,
-  pageSize: number = 10,
-  filter: string = ''): Observable<PagedResponse<Consultation>> {
-  const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-  let params = new HttpParams()
+  getOrthopedicConsultations(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<Consultation>> {
+    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', false);
@@ -88,10 +88,10 @@ getOrthopedicConsultations(page: number = 1,
       params = params.set('filter', filter);
     }
     return this.http
-    .get<ApiResponse<PagedResponse<Consultation>>>(this.apiUrl, { params })
-    .pipe(map(res => res.data));
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
 
-}
+  }
 
   // 🔹 إضافة طلب تحليل
   addInvestigation(investigation: Investigation): Observable<any> {
@@ -101,26 +101,38 @@ getOrthopedicConsultations(page: number = 1,
   }
 
   // 🔹 عرض كل التحاليل للعيادة العظمية فقط
-getOrthopedicInvestigations(page = 1, pageSize = 50): Observable<Investigation[]> {
-  const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-  return this.http.get<{ data?: { items: Investigation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => (res.data?.items || []).filter((i: Investigation) => i.doctor?.specializationID === 4))
-  );
-}
+  getOrthopedicInvestigations(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<Investigation>> {
+    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
 
-getByFileNumber(fileNumber: string): Observable<OrthopedicExam | null> {
-  const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
-  return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => {
-      const items: OrthopedicExam[] = res.data?.items || [];
-      // 🔹 نبحث عن فحص سابق لنفس الملف ونفس عيادة العظام فقط (specializationID = 4)
-      const exam = items.find(e => 
-        e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 4
-      );
-      return exam || null;
-    })
-  );
-}
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
+
+  }
+
+  getByFileNumber(fileNumber: string): Observable<OrthopedicExam | null> {
+    const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
+    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
+      map(res => {
+        const items: OrthopedicExam[] = res.data?.items || [];
+        // 🔹 نبحث عن فحص سابق لنفس الملف ونفس عيادة العظام فقط (specializationID = 4)
+        const exam = items.find(e =>
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 4
+        );
+        return exam || null;
+      })
+    );
+  }
 
 }
 
