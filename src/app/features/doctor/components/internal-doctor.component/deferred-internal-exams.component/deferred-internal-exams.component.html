@@ -66,9 +66,6 @@
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
 
-  <!-- <div *ngIf="!loading && filteredExams.length === 0" class="alert alert-info text-center mt-3">
-    لا توجد فحوصات داخلية
-  </div> -->
 
   <!-- مودال التعديل -->
   <app-edit-internal-exam-component *ngIf="selectedExam" [exam]="selectedExam" (dialogClosed)="onDialogClose($event)">
