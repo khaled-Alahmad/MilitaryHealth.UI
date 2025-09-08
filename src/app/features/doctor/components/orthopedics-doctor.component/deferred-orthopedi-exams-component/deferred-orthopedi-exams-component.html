@@ -13,7 +13,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم الملف</th>
+        <th>رقم ملف المنتسب</th>
         <th>الجهاز العضلي</th>
         <th>الجراحة العصبية</th>
         <th>النتيجة</th>
@@ -50,7 +50,5 @@
   <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-  <!-- <app-edit-orthopedic-exam *ngIf="selectedExam" [exam]="selectedExam" (dialogClosed)="onDialogClose($event)">
-  </app-edit-orthopedic-exam> -->
 
 </div>
