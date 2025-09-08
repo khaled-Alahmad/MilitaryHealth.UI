@@ -71,6 +71,11 @@ export class DeferredSurgicalExamsComponent implements OnInit {
 
   }
 
+  onEnterSearch() {
+    this.page = 1;
+    this.loadExams();
+  }
+
   openEditDialog(exam: SurgicalExam) {
     this.selectedExam = { ...exam };
   }

@@ -70,6 +70,10 @@ export class DeferredInternalExamsComponent {
     this.loadExams();
 
   }
+  onEnterSearch() {
+    this.page = 1;
+    this.loadExams();
+  }
   openEditDialog(exam: InternalExam) { 
     this.selectedExam = { ...exam }; 
   }

@@ -78,6 +78,11 @@ export class SurgeryInvestigationsList implements OnInit {
     this.filterInvestigations();
   }
 
+  onEnterSearch() {
+    this.page = 1;
+    this.filterInvestigations();
+  }
+
   onPageChange(newPage: number) {
     this.page = newPage;
     this.applyPaging();
