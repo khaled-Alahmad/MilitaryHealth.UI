@@ -5,17 +5,17 @@
   </div>
 
   <!-- أزرار الإضافة -->
-  <div *ngIf="selectedApplicant" class="button-group mb-3 d-flex gap-2">
+  <div *ngIf="selectedApplicant" class="button-group me-3 mb-3 d-flex gap-2">
     <!-- يظهر فقط إذا ما عنده فحص سابق -->
     <button 
       *ngIf="!hasEyeExam" 
-      class="btn btn-primary" 
+      class="btn btn-outline-primary" 
       (click)="addEyeExam()">
       إضافة فحص عيني
     </button>
 
-    <button class="btn btn-warning" (click)="addConsultation()">طلب استشارة</button>
-    <button class="btn btn-success" (click)="addInvestigation()">طلب تحليل</button>
+    <button class="btn btn-outline-primary" (click)="addConsultation()">طلب استشارة</button>
+    <button class="btn btn-outline-primary" (click)="addInvestigation()">طلب تحليل</button>
   </div>
 
   <!-- المكونات -->
