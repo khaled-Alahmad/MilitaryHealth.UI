@@ -81,7 +81,7 @@
         <div class="card-body py-2">
           <div class="row row-cols-1 row-cols-md-2 g-2">
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card">
+              <div class="border rounded p-2 small compact-exam-card" [ngClass]="{'missing-exam': !applicant.eyeExam}">
                 <h6 class="mb-2">فحص العيون</h6>
                 <ng-container *ngIf="applicant.eyeExam; ">
                   <div><strong>النظر:</strong> {{ applicant.eyeExam.vision }}</div>
@@ -93,7 +93,8 @@
             </div>
 
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card">
+              <div class="border rounded p-2 small compact-exam-card"
+                [ngClass]="{'missing-exam': !applicant.surgicalExam}">
                 <h6 class=" mb-2">الفحص الجراحي</h6>
                 <ng-container *ngIf="applicant.surgicalExam; else noData">
                   <div><strong>عام:</strong> {{ applicant.surgicalExam.generalSurgery }}</div>
@@ -106,7 +107,8 @@
             </div>
 
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card">
+              <div class="border rounded p-2 small compact-exam-card"
+                [ngClass]="{'missing-exam': !applicant.orthopedicExamDto}">
                 <h6 class=" mb-2">الفحص الباطني</h6>
                 <ng-container *ngIf="applicant.internalExam; else noData">
                   <div><strong>القلب:</strong> {{ applicant.internalExam.heart }}</div>
@@ -125,7 +127,8 @@
             </div>
 
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card">
+              <div class="border rounded p-2 small compact-exam-card"
+                [ngClass]="{'missing-exam': !applicant.internalExam}">
                 <h6 class=" mb-2">فحص العظام</h6>
                 <ng-container *ngIf="applicant.orthopedicExamDto; else noData">
                   <div><strong>عضلي هيكلي:</strong> {{ applicant.orthopedicExamDto.musculoskeletal }}</div>
@@ -164,7 +167,7 @@
               <label class="form-label">النتيجة</label>
               <ng-select [items]="results" bindLabel="description" bindValue="resultID"
                 [(ngModel)]="decisionModel.resultID" name="resultID" (ngModelChange)="onResultChange($event)"
-                placeholder="اختر النتيجة" [appendTo]="'body'">
+                placeholder="اختر النتيجة" [appendTo]="'body'" [disabled]="!hasAllExams()">
               </ng-select>
             </div>
 
@@ -176,7 +179,8 @@
               <label class="form-label">السبب</label>
               }
 
-              <textarea class="form-control" [(ngModel)]="decisionModel.reason" name="reason"></textarea>
+              <textarea class="form-control" [(ngModel)]="decisionModel.reason" name="reason"
+                [disabled]="!hasAllExams()"></textarea>
             </div>
             @if(!isApproved){
             <div class="mb-3">
@@ -186,9 +190,9 @@
             </div>
             }
             <div class="text-end">
-              <button type="button" class="btn btn-primary" (click)="submitDecision()">
-                <i class="fas fa-paper-plane"></i> إرسال
-              </button>
+              <button type="button" class="btn btn-primary" (click)="submitDecision()"
+                [disabled]="!hasAllExams()"></button>>
+              <i class="fas fa-paper-plane"></i> إرسال
             </div>
             <div *ngIf="responseMessage" class="mt-3">
               <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
