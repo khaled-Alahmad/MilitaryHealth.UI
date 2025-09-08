@@ -1,97 +1,111 @@
-<div class="user-header-section px-1 pt-1 container-fluid">
-  <div class="mb-3 d-flex justify-content-end">
-      <div class="search-wrapper">
-          <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-              (input)="onFilterChange($event)" />
-          <i class="fas fa-search search-icon"></i>
-      </div>
+<div class="user-header-section p-3 container-fluid">
+  <div class="mb-3 d-flex justify-content-start">
+    <div class="search-wrapper">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="ابحث عن رقم الملف أو الاسم"
+        (input)="onFilterChange($event)"
+      />
+      <i class="fas fa-search search-icon"></i>
+    </div>
   </div>
 
-  <p-table #table [value]="exams" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" 
-    [showCurrentPageReport]="true" [loading]="loading" class="custom-table">
-
+  <p-table
+    #table
+    [value]="exams"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    [lazy]="true"
+    [showCurrentPageReport]="true"
+    [loading]="loading"
+    styleClass="custom-table my-3"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    responsiveLayout="scroll"
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم ملف المنتسب</th>
-        <th>اسم المنتسب</th>
-        <th>الطبيب</th>
-        <th>القدرة البصرية</th>
-        <th>اختبار الألوان</th>
-        <th>الانكسارات</th>
-        <th>النتيجة</th>
-        <th>إجراءات</th>
+        <th style="min-width:100px" class="text-center">رقم الملف</th>
+        <th style="min-width:140px" class="text-center">اسم المنتسب</th>
+        <th style="min-width:100px" class="text-center">الطبيب</th>
+        <th style="min-width:120px" class="text-center">القدرة البصرية</th>
+        <th style="min-width:120px" class="text-center">اختبار الألوان</th>
+        <th style="min-width:180px" class="text-center">الانكسارات</th>
+        <th style="min-width:80px" class="text-center">النتيجة</th>
+        <th style="min-width:80px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-exam>
       <tr>
-        <td>
-          <span class="fw-bold text-primary">{{ exam.applicantFileNumber }}</span>
+        <td class="text-center align-middle">
+          <span class="fw-bold small text-primary">{{ exam.applicantFileNumber }}</span>
         </td>
-        <td>
-          <span class="fw-bold">{{ getApplicantName(exam) }}</span>
-          <br>
-          <small class="text-muted">{{ getApplicantJob(exam) }}</small>
-        </td>
-        <td>
-          <span class="fw-bold">{{ exam.doctor?.fullName || 'غير محدد' }}</span>
-        </td>
-        <td>
-          <div class="d-flex flex-column">
-            <span class="badge vision-badge-right mb-1">يمين: {{ exam.vision }}</span>
-            <span class="badge vision-badge-left">يسار: {{ exam.visionLeft }}</span>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <span class="fw-bold small">{{ getApplicantName(exam) }}</span>
+            <small class="text-muted">{{ getApplicantJob(exam) }}</small>
           </div>
         </td>
-        <td>
-          <div class="d-flex flex-column">
-            <span class="badge color-test-right mb-1">يمين: {{ exam.colorTest }}</span>
-            <span class="badge color-test-left">يسار: {{ exam.colorTestLeft }}</span>
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ exam.doctor?.fullName || 'غير محدد' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-column justify-content-center align-items-center gap-1">
+            <span class="badge bg-primary-subtle text-primary-emphasis fs-8">يمين: {{ exam.vision }}</span>
+            <span class="badge bg-secondary-subtle text-secondary-emphasis fs-8">يسار: {{ exam.visionLeft }}</span>
           </div>
         </td>
-        <td>
-          <div class="refractions-display">
-            <!-- عرض الانكسارات مباشرة -->
-            <div *ngIf="exam.refractions?.length" class="refractions-list">
-              <div class="mb-2">
-                <small class="text-muted fw-bold">العين اليمنى:</small>
-                <div class="d-flex flex-wrap gap-1 mt-1">
-                  <span *ngFor="let ref of getRightEyeRefractions(exam)" 
-                        class="badge bg-info">
-                    {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
-                  </span>
-                  <span *ngIf="!getRightEyeRefractions(exam).length" class="text-muted small">لا توجد</span>
-                </div>
-              </div>
-              <div>
-                <small class="text-muted fw-bold">العين اليسرى:</small>
-                <div class="d-flex flex-wrap gap-1 mt-1">
-                  <span *ngFor="let ref of getLeftEyeRefractions(exam)" 
-                        class="badge bg-secondary">
-                    {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
-                  </span>
-                  <span *ngIf="!getLeftEyeRefractions(exam).length" class="text-muted small">لا توجد</span>
-                </div>
-              </div>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-column justify-content-center align-items-center gap-1">
+            <span class="badge bg-primary-subtle text-primary-emphasis fs-8">يمين: {{ exam.colorTest }}</span>
+            <span class="badge bg-secondary-subtle text-secondary-emphasis fs-8">يسار: {{ exam.colorTestLeft }}</span>
+          </div>
+        </td>
+        <td class="text-center align-middle">
+          <div class="refractions-display small d-flex flex-column justify-content-center align-items-center" *ngIf="exam.refractions?.length; else noRefractions">
+            <div *ngIf="getRightEyeRefractions(exam).length" class="d-flex flex-wrap justify-content-center align-items-center gap-1 mb-1">
+              <strong class="text-muted fs-9">ي:</strong>
+              <span *ngFor="let ref of getRightEyeRefractions(exam)" class="badge bg-info text-dark fs-8">
+                {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
+              </span>
             </div>
-            <div *ngIf="!exam.refractions?.length" class="text-muted small">
-              <i class="fas fa-info-circle me-1"></i>
-              لا توجد انكسارات مسجلة
+            <div *ngIf="getLeftEyeRefractions(exam).length" class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+              <strong class="text-muted fs-9">س:</strong>
+              <span *ngFor="let ref of getLeftEyeRefractions(exam)" class="badge bg-secondary fs-8">
+                {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
+              </span>
             </div>
           </div>
+          <ng-template #noRefractions>
+            <div class="text-muted fs-9 text-center">لا توجد انكسارات</div>
+          </ng-template>
         </td>
-        <td>
-          <span [ngClass]="getBadgeClass(exam.result)">
+        <td class="text-center align-middle">
+          <span [ngClass]="getBadgeClass(exam.result)" class="small d-inline-block">
             {{ exam.result?.description || 'غير محدد' }}
           </span>
         </td>
-        <td>
-          <div class="btn-group-vertical d-flex gap-1">
-            <button title="عرض التفاصيل الكاملة" class="btn btn-sm btn-info" (click)="showDetails(exam)">
-              <i class="fas fa-eye"></i> 
-            </button>
-            <button title="تعديل الفحص والانكسارات" class="btn btn-sm btn-primary" (click)="openEditExam(exam)">
-              <i class="fas fa-edit"></i> 
-            </button>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-1">
+            <button
+              pButton
+              pRipple
+              icon="pi pi-eye"
+              class="p-button-rounded p-button-info p-button-text p-button-sm d-flex align-items-center justify-content-center"
+              (click)="showDetails(exam)"
+              title="عرض التفاصيل"
+              style="width: 1.8rem; height: 1.8rem;"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success p-button-text p-button-sm d-flex align-items-center justify-content-center"
+              (click)="openEditExam(exam)"
+              title="تعديل الفحص"
+              style="width: 1.8rem; height: 1.8rem;"
+            ></button>
           </div>
         </td>
       </tr>
@@ -99,16 +113,16 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center">لا توجد فحوص مؤجلة.</td>
+        <td colspan="8" class="text-center py-3 align-middle">لا توجد فحوصات لعرضها.</td>
       </tr>
     </ng-template>
-
   </p-table>
 
-  <!-- <app-edit-eye-exam *ngIf="selectedExam" [exam]="selectedExam" (dialogClosed)="onDialogClose($event)">
-  </app-edit-eye-exam> -->
-
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-  (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
-</app-paginator>
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  ></app-paginator>
 </div>

@@ -1,23 +1,34 @@
 .modal-backdrop {
-  position: fixed; inset: 0;
-  display: flex; justify-content: center; align-items: center;
-  background: rgba(0,0,0,.7); z-index: 1050;
-  backdrop-filter: blur(3px); /* 🔹 تأثير ضبابي جميل */
+  position: fixed;
+  margin: 0;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, .7);
+  z-index: 1050;
+  backdrop-filter: blur(3px);
+  /* 🔹 تأثير ضبابي جميل */
 }
 
 .modal-content {
   background: #fff;
   border-radius: 16px;
-  max-width: 700px; width: 100%;
+  max-width: 700px;
+  width: 100%;
   max-height: 85vh;
-  display: flex; flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0,0,0,.35); /* 🔹 ظل أعمق */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+  /* 🔹 ظل أعمق */
   animation: fadeIn 0.35s ease;
-  border-top: 5px solid #0d6efd; /* 🔹 شريط ألوان جذاب */
+  /* 🔹 شريط ألوان جذاب */
 }
 
 .modal-header {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 12px 20px;
   border-bottom: 1px solid #eee;
   background: #f8f9fa;
@@ -47,13 +58,14 @@
   border-bottom: 2px solid #0d6efd;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #0d6efd;
-  box-shadow: 0 0 6px rgba(13,110,253,.3);
+  box-shadow: 0 0 6px rgba(13, 110, 253, .3);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6f42c1, #d63384);
+  background: #475569;
   border: none;
   font-weight: 600;
   transition: all 0.3s;
@@ -61,7 +73,7 @@
 
 .btn-primary:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(110,53,255,.3);
+  box-shadow: 0 6px 12px rgba(110, 53, 255, .3);
 }
 
 .btn-secondary {
@@ -73,6 +85,13 @@
 }
 
 @keyframes fadeIn {
-  from {opacity:0; transform:translateY(-20px);}
-  to {opacity:1; transform:translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
