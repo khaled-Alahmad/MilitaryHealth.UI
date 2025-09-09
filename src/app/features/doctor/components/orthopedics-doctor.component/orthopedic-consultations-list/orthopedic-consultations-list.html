@@ -20,8 +20,8 @@
     <ng-template pTemplate="header">
       <tr>
         <th>رقم الملف</th>
-        <!-- <th>نوع الاستشارة</th>
-        <th>الطبيب المحال إليه</th> -->
+        <th>نوع الاستشارة</th>
+        <th>الطبيب المحال إليه</th>
         <th>اسم الطبيب</th>
         <th>النتيجة</th>
         <th>الملف المرفق</th> 
@@ -32,8 +32,8 @@
     <ng-template pTemplate="body" let-c>
       <tr>
         <td>{{ c.applicantFileNumber || '-' }}</td>
-        <!-- <td>{{ c.consultationType || '-' }}</td>
-        <td>{{ c.referredDoctor || '-' }}</td> -->
+        <td>{{ c.consultationType || '-' }}</td>
+        <td>{{ c.referredDoctor || '-' }}</td>
         <td>{{ c.doctor.code || '-' }}</td>
         <td>
           <span [ngClass]="getBadgeClass(c.result)">{{ c.result || '-' }}</span>
