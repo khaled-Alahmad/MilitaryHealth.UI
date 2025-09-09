@@ -52,7 +52,7 @@ export class OrthopedicExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true);
 
     if (filter) {
       params = params.set('filter', filter);
@@ -105,8 +105,6 @@ export class OrthopedicExamService {
   getOrthopedicInvestigations(page: number = 1,
     pageSize: number = 10,
     filter: string = ''): Observable<PagedResponse<Investigation>> {
-    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
