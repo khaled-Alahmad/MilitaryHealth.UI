@@ -191,8 +191,9 @@
             }
             <div class="text-end">
               <button type="button" class="btn btn-primary" (click)="submitDecision()"
-                [disabled]="!hasAllExams()"></button>>
+                [disabled]="!hasAllExams()">
               <i class="fas fa-paper-plane"></i> إرسال
+            </button>
             </div>
             <div *ngIf="responseMessage" class="mt-3">
               <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
