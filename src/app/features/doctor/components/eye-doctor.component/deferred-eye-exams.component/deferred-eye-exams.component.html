@@ -73,7 +73,14 @@
         </td>
         <td class="text-center align-middle">
           <div class="d-flex flex-row justify-content-center align-items-center gap-1">
-            <button
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="showDetails(exam)">
+          <i class="pi pi-info-circle"></i>
+           عرض التفاصيل
+      </button>
+            <!-- <i class="pi pi-info-circle icon"
+           (click)="showDetails(exam)" title="عرض التفاصيل"></i> -->
+            <!-- <button
               pButton
               pRipple
               icon="pi pi-eye"
@@ -81,8 +88,15 @@
               (click)="showDetails(exam)"
               title="عرض التفاصيل"
               style="width: 1.8rem; height: 1.8rem;"
-            ></button>
-            <button
+            ></button> -->
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="openEditExam(exam)">
+          <i class="pi pi-pen-to-square"></i>
+           عرض التفاصيل
+      </button>
+            <!-- <i class="pi pi-pen-to-square icon"
+           (click)="openEditExam(exam)" title="تعديل الفحص"></i> -->
+            <!-- <button
               pButton
               pRipple
               icon="pi pi-pencil"
@@ -90,7 +104,7 @@
               (click)="openEditExam(exam)"
               title="تعديل الفحص"
               style="width: 1.8rem; height: 1.8rem;"
-            ></button>
+            ></button> -->
           </div>
         </td>
       </tr>

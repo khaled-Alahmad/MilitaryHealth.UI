@@ -199,3 +199,11 @@ border-radius: 3px;
 ::ng-deep .p-button-ghost .pi {
   font-size: 1.1rem;
 }
+.icon{
+  transition: color 0.3s, transform 0.2s;
+}
+.icon:hover {
+  color: #007bff; 
+  transform: scale(1.2); 
+  cursor: pointer; 
+}

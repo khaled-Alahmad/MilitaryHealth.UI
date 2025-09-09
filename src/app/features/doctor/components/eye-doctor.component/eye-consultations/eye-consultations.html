@@ -65,8 +65,13 @@
         </td>
 
         <td class="text-center">
-          <i class="pi pi-file-edit icon"
-           (click)="openEditConsultation(c)" title="تعديل"></i>
+          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="openEditConsultation(c)">
+          <i class="pi pi-pen-to-square"></i>
+          إضافة نتيجة
+      </button>
+          <!-- <i class="pi pi-pen-to-square icon"
+           (click)="openEditConsultation(c)" title="تعديل"></i> -->
         </td>
       </tr>
     </ng-template>

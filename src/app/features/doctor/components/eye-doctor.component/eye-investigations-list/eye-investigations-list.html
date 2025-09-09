@@ -18,12 +18,8 @@
     [value]="filteredInvestigations"
     [totalRecords]="totalRecords"
     [rows]="rowsPerPage"
-    [lazy]="true"
-    [sortMode]="'multiple'"
-    [showCurrentPageReport]="true"
     class="custom-table compact-table"
     [tableStyle]="{ 'min-width': '50rem' }"
-    responsiveLayout="scroll"
   >
     <ng-template pTemplate="header">
       <tr>
@@ -31,8 +27,8 @@
         <th style="width: 120px">نوع التحليل</th>
         <th style="width: 120px">النتيجة</th>
         <th style="width: 100px">الحالة</th>
-        <th style="width: 90px">الملف المرفق</th>
         <th style="width: 120px">الطبيب</th>
+        <th style="width: 90px">الملف المرفق</th>
         <th style="width: 80px">إجراءات</th>
       </tr>
     </ng-template>
@@ -40,7 +36,7 @@
     <ng-template pTemplate="body" let-investigation>
       <tr>
         <td>
-          <span class="fw-bold text-primary small">{{ investigation.applicantFileNumber }}</span>
+          <span class="fw-bold  small">{{ investigation.applicantFileNumber }}</span>
         </td>
         <td>
           <span class="fw-bold small">{{ investigation.type }}</span>
@@ -51,34 +47,50 @@
         <td>
           <span class="small">{{ investigation.status || '-' }}</span>
         </td>
+        <td>
+          <span class="small">{{ investigation.doctor?.fullName || '-' }}</span>
+        </td>
         <td class="text-center">
-          <div class="d-flex justify-content-center">
+          @if(investigation.attachment){
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
+                (click)="openFile(investigation.attachment)">
+                <i class="bi bi-file-earmark-text me-1"></i>
+                فتح الملف
+            </button>
+            }
+            @else {
+            <span>لا يوجد ملف</span>
+            }
+          <!-- <div class="d-flex justify-content-center"> -->
             <!-- زر فتح الملف إذا كان موجود -->
-            <button
+             <!-- @if(investigation.attachment){
+              <i class="pi pi-folder-open icon"
+              (click)="openFile(investigation.attachment)"  title="فتح الملف"></i>
+             }@else {
+              <i class="pi pi-times"  title="لا يوجد ملف"></i>
+             } -->
+            
+            <!-- <button
               *ngIf="investigation.attachment"
               title="فتح الملف"
               class="btn btn-sm btn-info p-1"
               (click)="openFile(investigation.attachment)"
             >
               <i class="fas fa-eye"></i>
-            </button>
+            </button> -->
 
             <!-- أيقونة ثابتة إذا لا يوجد ملف -->
-            <i *ngIf="!investigation.attachment" class="fas fa-eye no-file-icon"></i>
-          </div>
-        </td>
-        <td>
-          <span class="small">{{ investigation.doctor?.fullName || '-' }}</span>
+            <!-- <i *ngIf="!investigation.attachment" class="fas fa-eye no-file-icon"></i> -->
+          <!-- </div> -->
         </td>
         <td class="text-center">
-          <button
-            title="تعديل نتيجة"
-            class="btn btn-sm btn-success p-1 d-flex align-items-center justify-content-center"
-            (click)="openEditInvestigation(investigation)"
-            style="width: 1.8rem; height: 1.8rem; margin: 0 auto"
-          >
-            <i class="fas fa-pencil-alt small"></i>
-          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="openEditInvestigation(investigation)">
+          <i class="pi pi-pen-to-square"></i>
+          إضافة نتيجة
+      </button>
+          <!-- <i class="pi pi-pen-to-square icon"
+          (click)="openEditInvestigation(investigation)"  title="تعديل نتيجة"></i> -->
         </td>
       </tr>
     </ng-template>
