@@ -75,24 +75,55 @@ export class OrthopedicExamService {
   }
 
   // 🔹 عرض كل الاستشارات للعيادة العظمية فقط
-  getOrthopedicConsultations(page: number = 1,
-    pageSize: number = 10,
-    filter: string = ''): Observable<PagedResponse<Consultation>> {
-    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  // getOrthopedicConsultations(page: number = 1,
+  //   pageSize: number = 10,
+  //   filter: string = ''): Observable<PagedResponse<Consultation>> {
+  //   const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true);
+
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+  //     .pipe(map(res => res.data));
+
+  // }
+  getOrthopedicConsultations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true);
-
+      .set('sortDesc', false);
+  
     if (filter) {
       params = params.set('filter', filter);
     }
+  
     return this.http
-      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
-      .pipe(map(res => res.data));
-
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data;
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (c: Consultation) => c.doctor?.specializationID === 4
+            )
+          } as PagedResponse<Consultation>;
+        })
+      );
   }
-
+  
   // 🔹 إضافة طلب تحليل
   addInvestigation(investigation: Investigation): Observable<any> {
     return this.http.post(this.investigationUrl, investigation, {
@@ -101,22 +132,54 @@ export class OrthopedicExamService {
   }
 
   // 🔹 عرض كل التحاليل للعيادة العظمية فقط
-  getOrthopedicInvestigations(page: number = 1,
-    pageSize: number = 10,
-    filter: string = ''): Observable<PagedResponse<Investigation>> {
+  // getOrthopedicInvestigations(page: number = 1,
+  //   pageSize: number = 10,
+  //   filter: string = ''): Observable<PagedResponse<Investigation>> {
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true);
+
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
+  //     .pipe(map(res => res.data));
+
+  // }
+  getOrthopedicInvestigations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Investigation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true);
-
+      .set('sortDesc', false);
+  
     if (filter) {
       params = params.set('filter', filter);
     }
+  
     return this.http
-      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
-      .pipe(map(res => res.data));
-
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data;
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (i: Investigation) => i.doctor?.specializationID === 4
+            )
+          } as PagedResponse<Investigation>;
+        })
+      );
   }
+  
 
   getByFileNumber(fileNumber: string): Observable<OrthopedicExam | null> {
     const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;

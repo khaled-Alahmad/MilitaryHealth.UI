@@ -81,26 +81,58 @@ getAllSurgicalExams(page: number = 1,
   }
 
 
-    getSurgicalConsultations(page: number = 1,
-      pageSize: number = 10,
-      filter: string = ''): Observable<PagedResponse<Consultation>> {
-    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  //   getSurgicalConsultations(page: number = 1,
+  //     pageSize: number = 10,
+  //     filter: string = ''): Observable<PagedResponse<Consultation>> {
+  //   const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true)
+  //     .set('sortBy', 'surgicalExamID');
+
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+  //     .pipe(map(res => res.data));
+  // }
+
+
+  getSurgicalConsultations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', true)
       .set('sortBy', 'surgicalExamID');
-
+  
     if (filter) {
       params = params.set('filter', filter);
     }
+  
     return this.http
-      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
-      .pipe(map(res => res.data));
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data;
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (c: Consultation) => c.doctor?.specializationID === 3 // جراحة عامة مثلاً
+            )
+          } as PagedResponse<Consultation>;
+        })
+      );
   }
-
-
-
+  
   
   // ✅ تحاليل خاصة بالجراحة
   addInvestigation(investigation: Investigation): Observable<any> {

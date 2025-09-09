@@ -548,16 +548,24 @@ export class EyeExamService {
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', 'true');
-
+  
     if (filter) {
       params = params.set('filter', filter);
     }
-
+  
     return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
       headers: this.getAuthHeaders(),
       params
     }).pipe(
-      map(res => res.data),
+      map(res => {
+        const data = res.data;
+        return {
+          ...data,
+          items: (data?.items || []).filter(
+            (c: Consultation) => c.doctor?.specializationID === 1 // 👈 رقم التخصص الخاص بالعيون
+          )
+        } as PagedResponse<Consultation>;
+      }),
       catchError(() => of({
         items: [],
         totalCount: 0,
@@ -567,6 +575,7 @@ export class EyeExamService {
       }))
     );
   }
+  
 
   updateConsultation(id: number, consultation: Consultation): Observable<ApiResponse<Consultation>> {
     if (!id || !consultation) {
@@ -592,35 +601,74 @@ export class EyeExamService {
     );
   }
 
-  // Investigation Operations
-  getEyeClinicInvestigations(
-    page: number = 1,
-    pageSize: number = 20,
-    filter: string = ''
-  ): Observable<PagedResponse<Investigation>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString())
-      .set('sortDesc', 'true');
+  // // Investigation Operations
+  // getEyeClinicInvestigations(
+  //   page: number = 1,
+  //   pageSize: number = 20,
+  //   filter: string = ''
+  // ): Observable<PagedResponse<Investigation>> {
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', 'true');
 
-    if (filter) {
-      params = params.set('filter', filter);
-    }
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
 
-    return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
-      headers: this.getAuthHeaders(),
-      params
-    }).pipe(
-      map(res => res.data),
-      catchError(() => of({
-        items: [],
-        totalCount: 0,
-        pageNumber: page,
-        pageSize: pageSize,
-        totalPages: 0
-      }))
-    );
+  //   return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+  //     headers: this.getAuthHeaders(),
+  //     params
+  //   }).pipe(
+  //     map(res => res.data),
+  //     catchError(() => of({
+  //       items: [],
+  //       totalCount: 0,
+  //       pageNumber: page,
+  //       pageSize: pageSize,
+  //       totalPages: 0
+  //     }))
+  //   );
+  // }
+// Investigation Operations
+getEyeClinicInvestigations(
+  page: number = 1,
+  pageSize: number = 20,
+  filter: string = ''
+): Observable<PagedResponse<Investigation>> {
+  let params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString())
+    .set('sortDesc', 'true');
+
+  if (filter) {
+    params = params.set('filter', filter);
   }
+
+  return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+    headers: this.getAuthHeaders(),
+    params
+  }).pipe(
+    map(res => {
+      const data = res.data;
+      return {
+        ...data,
+        items: (data?.items || []).filter(
+          (i: Investigation) => i.doctor?.specializationID === 1 // 👈 ID تبع عيادة العيون
+        )
+      } as PagedResponse<Investigation>;
+    }),
+    catchError(() => of({
+      items: [],
+      totalCount: 0,
+      pageNumber: page,
+      pageSize: pageSize,
+      totalPages: 0
+    }))
+  );
+}
+
+
 
   addInvestigation(investigation: Investigation): Observable<ApiResponse<Investigation>> {
     if (!investigation) {

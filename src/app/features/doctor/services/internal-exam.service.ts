@@ -98,41 +98,104 @@ export class InternalExamService {
   }
 
 
-  getInternalInvestigations(page: number = 1,
-    pageSize: number = 10,
-    filter: string = ''): Observable<PagedResponse<Investigation>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString())
-      .set('sortDesc', true)
-      .set('sortBy', 'investigationID');
+  // getInternalInvestigations(page: number = 1,
+  //   pageSize: number = 10,
+  //   filter: string = ''): Observable<PagedResponse<Investigation>> {
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true)
+  //     .set('sortBy', 'investigationID');
 
-    if (filter) {
-      params = params.set('filter', filter);
-    }
-    return this.http
-      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
-      .pipe(map(res => res.data));
-  }
-  // جلب كل الاستشارات للعيادة الداخلية مع pagination + filter
-  getAllInternalConsultations(
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
+  //     .pipe(map(res => res.data));
+  // }
+  getOrthopedicConsultations(
     page: number = 1,
-    pageSize: number = 20,
+    pageSize: number = 50,
     filter: string = ''
   ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true)
-      .set('sortBy', 'consultationID');
-
+      .set('sortDesc', false);
+  
     if (filter) {
       params = params.set('filter', filter);
     }
-
+  
     return this.http
-      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
-      .pipe(map(res => res.data));
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data;
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (c: Consultation) => c.doctor?.specializationID === 2
+            )
+          } as PagedResponse<Consultation>;
+        })
+      );
+  }
+  // جلب كل الاستشارات للعيادة الداخلية مع pagination + filter
+  // getAllInternalConsultations(
+  //   page: number = 1,
+  //   pageSize: number = 20,
+  //   filter: string = ''
+  // ): Observable<PagedResponse<Consultation>> {
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true)
+  //     .set('sortBy', 'consultationID');
+
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+  //     .pipe(map(res => res.data));
+  // }
+
+  getOrthopedicInvestigations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Investigation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+  
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+  
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data;
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (i: Investigation) => i.doctor?.specializationID === 2
+            )
+          } as PagedResponse<Investigation>;
+        })
+      );
   }
   getInternalConsultations(page: number = 1,
     pageSize: number = 10,
