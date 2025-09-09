@@ -9,8 +9,8 @@
         <input type="text" class="form-control search-input" placeholder="ابحث عن رقم الملف..." dir="rtl"
           [(ngModel)]="searchValue">
       </div>
-      <div *ngIf="!applicant && responseMessage" class="alert alert-warning mt-3" role="alert">
-        {{ responseMessage }}
+      <div *ngIf="!hasAllExams()" class="alert alert-danger mt-3" role="alert">
+        الفحوصات الطلبة غير مكتملة
       </div>
     </div>
   </div>
