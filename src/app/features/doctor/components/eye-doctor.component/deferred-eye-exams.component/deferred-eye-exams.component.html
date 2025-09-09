@@ -22,8 +22,6 @@
     <ng-template pTemplate="header">
       <tr>
         <th style="min-width:100px" class="text-center">رقم الملف</th>
-        <th  class="text-center">اسم المنتسب</th>
-        <th style="min-width:100px" class="text-center">الطبيب</th>
         <th style="min-width:120px" class="text-center">القدرة البصرية</th>
         <th style="min-width:120px" class="text-center">اختبار الألوان</th>
         <th style="min-width:180px" class="text-center">الانكسارات</th>
@@ -36,16 +34,6 @@
       <tr>
         <td class="text-center align-middle">
           <span class="fw-bold small ">{{ exam.applicantFileNumber }}</span>
-        </td>
-        <td class="text-center align-middle">
-          {{exam.fullName}}
-          <!-- <div class="d-flex flex-column justify-content-center align-items-center">
-            <span class="fw-bold small">{{ getApplicantName(exam) }}</span>
-            <small class="text-muted">{{ getApplicantJob(exam) }}</small>
-          </div> -->
-        </td>
-        <td class="text-center align-middle">
-          <span class="fw-bold small">{{ exam.doctor?.fullName || 'غير محدد' }}</span>
         </td>
         <td class="text-center align-middle">
           <div class="d-flex flex-column justify-content-center align-items-center gap-1">
@@ -62,13 +50,13 @@
         <td class="text-center align-middle">
           <div class="refractions-display small d-flex flex-column justify-content-center align-items-center" *ngIf="exam.refractions?.length; else noRefractions">
             <div *ngIf="getRightEyeRefractions(exam).length" class="d-flex flex-wrap justify-content-center align-items-center gap-1 mb-1">
-              <strong class="text-muted fs-9">ي:</strong>
+              <strong class="text-muted fs-9">يمين:</strong>
               <span *ngFor="let ref of getRightEyeRefractions(exam)" class="badge bg-info text-dark fs-8">
                 {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
               </span>
             </div>
             <div *ngIf="getLeftEyeRefractions(exam).length" class="d-flex flex-wrap justify-content-center align-items-center gap-1">
-              <strong class="text-muted fs-9">س:</strong>
+              <strong class="text-muted fs-9">يسار:</strong>
               <span *ngFor="let ref of getLeftEyeRefractions(exam)" class="badge bg-secondary fs-8">
                 {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
               </span>
