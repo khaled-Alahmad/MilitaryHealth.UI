@@ -22,34 +22,7 @@
               [class.is-invalid]="investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched"
               placeholder="أدخل نوع التحليل">
           </div>
-
-          <div class="col-md-6">
-            <label class="form-label">النتيجة</label>
-            <textarea class="form-control" formControlName="result" rows="3" placeholder="يمكنك كتابة النتيجة إن وجدت"></textarea>
-          </div>
         </div>
-
-        <div class="row g-3 mt-3">
-          <div class="col-md-6">
-            <label class="form-label">حالة التحليل</label>
-            <select class="form-select" formControlName="status">
-              <option value="مؤجل">مؤجل</option>
-              <option value="مكتمل">مكتمل</option>
-            </select>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">ملف مرفق</label>
-            <input type="file" class="form-control" (change)="onFileSelected($event)">
-          </div>
-        </div>
-
-        <!-- معاينة الصورة -->
-        <div *ngIf="previewUrl" class="preview-container mt-3">
-          <p>📷 معاينة الملف:</p>
-          <img [src]="previewUrl" alt="معاينة المرفق" class="img-fluid rounded" style="max-height: 200px;" >
-        </div>
-
         <!-- زر الحفظ -->
         <div class="text-end mt-4">
           <button type="submit" class="btn btn-success px-4" [disabled]="investigationForm.invalid">

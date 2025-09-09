@@ -34,9 +34,9 @@ import { EyeExamService } from '../../../services/eye-exam.service';
   ngOnInit(): void {
     this.investigationForm = this.fb.group({
       type: [this.investigationToEdit?.type || '', Validators.required],
-      result: [this.investigationToEdit?.result || ''],
-      attachment: [this.investigationToEdit?.attachment || null],
-      status: [this.investigationToEdit?.status || 'مؤجل', Validators.required]
+      result: [null],
+      attachment: [null],
+      status: [null]
     });
 
     if (this.investigationToEdit?.attachment) {

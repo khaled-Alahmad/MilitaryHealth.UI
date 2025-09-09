@@ -221,6 +221,24 @@ export class EyeExamService {
     );
   }
 
+
+  getByFileNumber1(fileNumber: string): Observable<EyeExam | null> {
+    const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
+    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
+      map(res => {
+        const items: EyeExam[] = res.data?.items || [];
+        // 🔹 نبحث عن فحص لنفس الملف ونفس التخصص (العيادة الداخلية specializationID = 2)
+        const exam = items.find(e =>
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 1
+        );
+        return exam || null;
+      }),
+      catchError(() => of(null))
+    );
+  }
+
+
+  
   // Detailed Eye Exam Operations
   getDetailedEyeExamByFileNumber(fileNumber: string): Observable<ApiResponse<DetailedEyeExam | null>> {
     if (!fileNumber) {

@@ -105,101 +105,96 @@ export class EyeExamForm implements OnInit {
   }
 
   // ---------------------- SUBMIT ----------------------
-  onSubmit() {
-    if (this.examForm.invalid) {
-      this.toastr.warning('⚠️ يرجى تعبئة جميع الحقول المطلوبة', 'تنبيه');
-      return;
-    }
+onSubmit() {
+  if (this.examForm.invalid) {
+    this.toastr.warning('⚠️ يرجى تعبئة جميع الحقول المطلوبة', 'تنبيه');
+    return;
+  }
 
-    const doctorID = Number(this.authService.getDoctorId());
-    if (!doctorID) {
-      this.toastr.error('❌ لم يتم العثور على معرف الطبيب', 'خطأ');
-      return;
-    }
+  const doctorID = Number(this.authService.getDoctorId());
+  if (!doctorID) {
+    this.toastr.error('❌ لم يتم العثور على معرف الطبيب', 'خطأ');
+    return;
+  }
 
-    const leftEyeRefractions = (this.examForm.get('leftEye.refractions') as FormArray).value;
-    const rightEyeRefractions = (this.examForm.get('rightEye.refractions') as FormArray).value;
+  const leftEyeRefractions = (this.examForm.get('leftEye.refractions') as FormArray).value;
+  const rightEyeRefractions = (this.examForm.get('rightEye.refractions') as FormArray).value;
 
-    // ---------------------- تحقق إذا في فحص سابق ----------------------
-    this.examService.getByFileNumber(this.applicantFileNumber).subscribe({
-      next: (res: any) => {
-        if (res.succeeded && res.data?.eyeExamID) {
-          // تعديل فحص قديم
-          this.updateEyeExam(res.data.eyeExamID, doctorID, leftEyeRefractions, rightEyeRefractions);
-        } else {
-          // إنشاء فحص جديد
-          this.createEyeExam(doctorID, leftEyeRefractions, rightEyeRefractions);
-        }
-      },
-      error: () => {
-        this.toastr.error('❌ خطأ في جلب بيانات الفحص السابق', 'خطأ');
+  // جلب الفحص السابق إذا موجود
+  this.examService.getByFileNumber(this.applicantFileNumber).subscribe({
+    next: (res: any) => {
+      const existingExamID = res.data?.eyeExamID ?? null;
+
+      if (res.succeeded && existingExamID) {
+        // تعديل فحص موجود
+        this.updateEyeExam(existingExamID, doctorID, leftEyeRefractions, rightEyeRefractions);
+      } else {
+        // إنشاء فحص جديد
+        this.createEyeExam(doctorID, leftEyeRefractions, rightEyeRefractions);
       }
-    });
-  }
+    },
+    error: () => {
+      this.toastr.error('❌ خطأ في جلب بيانات الفحص السابق', 'خطأ');
+    }
+  });
+}
 
-  // ---------------------- CREATE & UPDATE ----------------------
-  private createEyeExam(doctorID: number, leftEyeRefractions: any[], rightEyeRefractions: any[]) {
-    const examData = this.buildExamData(doctorID);
-    this.loading = true;
+// ---------------- CREATE & UPDATE ----------------
+private createEyeExam(doctorID: number, leftEyeRefractions: any[], rightEyeRefractions: any[]) {
+  const examData = this.buildExamData(doctorID);
+  this.loading = true;
 
-    this.examService.createEyeExam(examData).subscribe({
-      next: (response: any) => {
-        if (!response.succeeded) {
-          this.loading = false;
-          this.toastr.error('❌ فشل في إنشاء الفحص', 'خطأ');
-          return;
-        }
+  this.examService.createEyeExam(examData).subscribe({
+    next: (response: any) => {
+      if (!response.succeeded) {
+        this.loading = false;
+        this.toastr.error('❌ فشل في إنشاء الفحص', 'خطأ');
+        return;
+      }
 
-        // بعد الإنشاء نجيب eyeExamID من السيرفر
-        this.examService.getByFileNumber(this.applicantFileNumber).subscribe({
-          next: (res: any) => {
-            if (res.succeeded && res.data?.eyeExamID) {
-              this.handleExamResponse(res.data, leftEyeRefractions, rightEyeRefractions, false);
-            } else {
-              this.loading = false;
-              this.toastr.error('❌ لم يتم العثور على معرف الفحص بعد الإنشاء', 'خطأ');
-            }
-          },
-          error: () => {
-            this.loading = false;
-            this.toastr.error('❌ خطأ أثناء جلب الفحص بعد الإنشاء', 'خطأ');
-          }
-        });
-      },
-      error: (error) => this.handleExamError(error)
-    });
-  }
+      const newExamID = response.data?.eyeExamID;
+      if (newExamID) {
+        this.handleExamResponse(response.data, leftEyeRefractions, rightEyeRefractions, false);
+      } else {
+        this.loading = false;
+        this.toastr.error('❌ لم يتم العثور على معرف الفحص بعد الإنشاء', 'خطأ');
+      }
+    },
+    error: (error) => this.handleExamError(error)
+  });
+}
 
-  private updateEyeExam(examId: number, doctorID: number, leftEyeRefractions: any[], rightEyeRefractions: any[]) {
-    const examData = { ...this.buildExamData(doctorID), eyeExamID: examId };
-    this.loading = true;
+private updateEyeExam(examId: number, doctorID: number, leftEyeRefractions: any[], rightEyeRefractions: any[]) {
+  const examData = { ...this.buildExamData(doctorID), eyeExamID: examId };
+  this.loading = true;
 
-    this.examService.updateEyeExam(examId, examData).subscribe({
-      next: (response: any) => {
-        if (!response.succeeded) {
-          this.loading = false;
-          this.toastr.error('❌ فشل في تحديث الفحص', 'خطأ');
-          return;
-        }
-        this.handleExamResponse({ eyeExamID: examId }, leftEyeRefractions, rightEyeRefractions, true);
-      },
-      error: (error) => this.handleExamError(error)
-    });
-  }
+  this.examService.updateEyeExam(examId, examData).subscribe({
+    next: (response: any) => {
+      if (!response.succeeded) {
+        this.loading = false;
+        this.toastr.error('❌ فشل في تحديث الفحص', 'خطأ');
+        return;
+      }
+      this.handleExamResponse({ eyeExamID: examId }, leftEyeRefractions, rightEyeRefractions, true);
+    },
+    error: (error) => this.handleExamError(error)
+  });
+}
 
-  private buildExamData(doctorID: number) {
-    return {
-      applicantFileNumber: this.applicantFileNumber,
-      doctorID,
-      vision: this.examForm.value.vision?.toString() || "",
-      visionLeft: this.examForm.value.visionLeft?.toString() || "",
-      colorTestLeft: this.examForm.value.colorTestLeft?.trim() || "",
-      colorTest: this.examForm.value.colorTest?.trim() || "",
-      otherDiseases: (this.examForm.value.otherDiseases || '').trim() || "",
-      resultID: Number(this.examForm.value.resultID) || 0,
-      reason: (this.examForm.value.reason || '').trim() || ""
-    };
-  }
+// ---------------- BUILD EXAM DATA ----------------
+private buildExamData(doctorID: number) {
+  return {
+    applicantFileNumber: this.applicantFileNumber,
+    doctorID,
+    vision: this.examForm.value.vision?.toString() || "",
+    visionLeft: this.examForm.value.visionLeft?.toString() || "",
+    colorTestLeft: this.examForm.value.colorTestLeft?.trim() || "",
+    colorTest: this.examForm.value.colorTest?.trim() || "",
+    otherDiseases: (this.examForm.value.otherDiseases || '').trim(),
+    resultID: Number(this.examForm.value.resultID) || 0,
+    reason: (this.examForm.value.reason || '').trim()
+  };
+}
 
   // ---------------------- HANDLE RESPONSE ----------------------
   private handleExamResponse(examData: any, leftEyeRefractions: any[], rightEyeRefractions: any[], isUpdate: boolean) {

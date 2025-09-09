@@ -25,11 +25,16 @@
         <label class="form-label">ملف مرفق</label>
         <input type="file" class="form-control" (change)="onFileSelected($event)" />
 
-        <div *ngIf="previewUrl" class="mt-2">
-          <p class="text-muted">📷 معاينة الملف:</p>
-          <img [src]="previewUrl" class="img-fluid rounded border" style="max-height: 200px;">
+           <!-- ✅ عرض المعاينة -->
+            <div *ngIf="previewUrl && previewUrl.startsWith('data:')" class="preview-container mt-3">
+              <img [src]="previewUrl" 
+                  alt="معاينة المرفق" 
+                  class="img-fluid rounded" 
+                  style="max-height: 200px;">
+            </div>
+
+
         </div>
-      </div>
 
       <!-- الأزرار -->
       <div class="modal-footer d-flex gap-2 justify-content-end">
