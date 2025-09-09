@@ -1,47 +1,78 @@
-<div class="container mt-5" style="max-width: 400px;">
+<form [formGroup]="loginForm" (ngSubmit)="loging()">
+  <section class="container forms">
+    <div class="form login">
+      <div class="form-header">
+        <img src="assets/images/syr.svg" alt="Logo" width="100" />
+        <h1>تسجيل الدخول</h1>
+        <p>مرحبًا! قم بتسجيل الدخول باستخدام بياناتك</p>
+      </div>
 
-  <div class="text-center mb-4">
-    <img src="assets/images/syr.svg" alt="Logo" class="login-logo">
-  </div>
+      <!-- يمكن إضافة رسائل الخطأ والنجاح هنا إذا كانت موجودة في الكومبوننت -->
 
-  <h3 class="text-center mb-4">تسجيل الدخول</h3>
+      <!-- اسم المستخدم -->
+      <div class="field input-field"
+        [class.invalid]="(loginForm.get('username')?.invalid && loginForm.get('username')?.touched) || (loginForm.get('username')?.invalid && submitted)">
+        <label for="username">اسم المستخدم:</label>
+        <div class="input-container">
+          <input
+            type="text"
+            id="username"
+            placeholder="اسم المستخدم"
+            formControlName="username"
+            class="input"
+            [attr.aria-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+            (blur)="loginForm.get('username')?.markAsTouched()"
+          />
+          <i class="bx bx-user input-icon"></i>
+        </div>
+        <div class="error-container">
+          <div *ngIf="loginForm.get('username')?.errors?.['required'] && (loginForm.get('username')?.touched || submitted)"
+            class="error-message">
+            <i class="bx bx-error-circle"></i> اسم المستخدم مطلوب!
+          </div>
+        </div>
+      </div>
 
-  <form [formGroup]="loginForm">
-    <!-- اسم المستخدم -->
-    <div class="form-group mb-3">
-      <label for="username" class="pb-2">اسم المستخدم</label>
-      <input type="text" formControlName="username" class="form-control" id="username" required
-             [class.is-invalid]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
-      <div class="invalid-feedback">
-        {{ getFieldError('username') }}
+      <!-- كلمة المرور -->
+      <div class="field input-field"
+        [class.invalid]="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) || (loginForm.get('password')?.invalid && submitted)">
+        <label for="password">كلمة المرور:</label>
+        <div class="input-container">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            placeholder="كلمة المرور"
+            formControlName="password"
+            class="password"
+            [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            (blur)="loginForm.get('password')?.markAsTouched()"
+          />
+          <i
+            class="bx"
+            [class.bx-hide]="!showPassword"
+            [class.bx-show]="showPassword"
+            (click)="togglePassword()"
+          ></i>
+        </div>
+        <div class="error-container">
+          <div *ngIf="loginForm.get('password')?.errors?.['required'] && (loginForm.get('password')?.touched || submitted)"
+            class="error-message">
+            <i class="bx bx-error-circle"></i> كلمة المرور مطلوبة!
+          </div>
+          <div *ngIf="loginForm.get('password')?.errors?.['minlength']" class="error-message">
+            <i class="bx bx-error-circle"></i> كلمة المرور يجب أن تكون {{ loginForm.get('password')?.errors?.['minlength']?.requiredLength }} أحرف على الأقل
+          </div>
+        </div>
+      </div>
+
+      <div class="field button-field">
+        <button
+          type="submit"
+
+        >
+          <span >تسجيل الدخول</span>
+        </button>
       </div>
     </div>
-
-   <!-- كلمة المرور -->
-<div class="form-group mb-3">
-  <label for="password" class="pb-2">كلمة المرور</label>
-  <div class="input-group">
-    <input 
-      [type]="showPassword ? 'text' : 'password'" 
-      formControlName="password"
-      class="form-control"
-      id="password"
-      required
-      [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" 
-    />
-    <span class="password-toggle-icon" (click)="togglePassword()" style="cursor:pointer">
-      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
-    </span>
-  </div>
-  <div class="invalid-feedback">
-    {{ getFieldError('password') }}
-  </div>
-</div>
-
-    <div class="text-danger mb-3"></div>
-
-    <button type="submit" class="btn btn-primary w-100" (click)="loging()">
-      تسجيل
-    </button>
-  </form>
-</div>
+  </section>
+</form>

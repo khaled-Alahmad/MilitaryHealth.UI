@@ -1,7 +1,7 @@
 <!-- المودال -->
 <div class="modal-content modal-lg">
   <div class="modal-header d-flex justify-content-between align-items-center">
-    <h5 class="modal-title flex-grow-1 text-center">تعديل التحليل</h5>
+    <h5 class="modal-title flex-grow-1 text-center">إضافة نتيجة التحليل</h5>
     <button type="button" class="btn-close" aria-label="Close" (click)="cancel()"></button>
   </div>
 
@@ -25,11 +25,16 @@
         <label class="form-label">ملف مرفق</label>
         <input type="file" class="form-control" (change)="onFileSelected($event)" />
 
-        <div *ngIf="previewUrl" class="mt-2">
-          <p class="text-muted">📷 معاينة الملف:</p>
-          <img [src]="previewUrl" class="img-fluid rounded border" style="max-height: 200px;">
+           <!-- ✅ عرض المعاينة -->
+            <div *ngIf="previewUrl && previewUrl.startsWith('data:')" class="preview-container mt-3">
+              <img [src]="previewUrl" 
+                  alt="معاينة المرفق" 
+                  class="img-fluid rounded" 
+                  style="max-height: 200px;">
+            </div>
+
+
         </div>
-      </div>
 
       <!-- الأزرار -->
       <div class="modal-footer d-flex gap-2 justify-content-end">

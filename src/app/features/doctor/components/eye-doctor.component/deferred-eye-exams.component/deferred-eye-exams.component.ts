@@ -18,7 +18,7 @@ import { PagedResponse } from '../../../../../shared/models/paged-response.model
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, EditEyeExam, EyeExamDetails, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })
@@ -43,8 +43,7 @@ export class DeferredEyeExamsComponent implements OnInit {
     private modalService: NgbModal
   ) { }
 
-  ngOnInit(): void { 
-    // فقط تحميل القوائم الأساسية دون طلب أي تفاصيل فحص غير موجودة
+  ngOnInit(): void {
     this.loadEyeExams();
     this.loadRefractionTypes();
   }
@@ -61,7 +60,7 @@ export class DeferredEyeExamsComponent implements OnInit {
         this.totalRecords = data.totalCount;
         this.loading = false;
   
-        this.loadApplicantsInfo(); // تحميل معلومات المنتسبين بشكل آمن
+        //this.loadApplicantsInfo(); // تحميل معلومات المنتسبين بشكل آمن
       },
       error: () => {
         this.toastr.error('فشل في جلب بيانات فحوصات العيون', 'خطأ');
@@ -113,49 +112,65 @@ export class DeferredEyeExamsComponent implements OnInit {
   }
 
   // فتح نافذة تعديل الفحص عند الطلب فقط
-  openEditExam(eyeExam: EyeExam): void {
-    if (!eyeExam.eyeExamID) {
-      this.toastr.error('معرف الفحص غير متوفر', 'خطأ');
-      return;
-    }
-
-    this.loading = true;
-
-    forkJoin({
-      exam: this.examService.getEyeExamById(eyeExam.eyeExamID),
-      refractions: this.examService.getRefractionsByEyeExamId(eyeExam.eyeExamID)
-    }).subscribe({
-      next: (responses) => {
-        if (responses.exam.succeeded && responses.exam.data) {
-          const examWithRefractions = {
-            ...responses.exam.data,
-            refractions: responses.refractions.succeeded ? responses.refractions.data : []
-          };
-
-          const modalRef = this.modalService.open(EditEyeExam, {
-            size: 'lg',
-            backdrop: 'static',
-            keyboard: false,
-            centered: true
-          });
-
-          modalRef.componentInstance.exam = examWithRefractions;
-          this.loading = false;
-
-          modalRef.componentInstance.eyeExamUpdated.subscribe(() => {
-            this.loadEyeExams();
-          });
-        } else {
-          this.loading = false;
-          this.toastr.error(`لم يتم العثور على الفحص: ${responses.exam.message}`, 'خطأ');
-        }
-      },
-      error: () => {
-        this.loading = false;
-        this.toastr.error('حدث خطأ أثناء جلب تفاصيل الفحص', 'خطأ');
-      }
-    });
+openEditExam(eyeExam: EyeExam): void {
+  if (!eyeExam.eyeExamID) {
+    this.toastr.error('معرف الفحص غير متوفر', 'خطأ');
+    return;
   }
+
+  this.loading = true;
+
+  forkJoin({
+    exam: this.examService.getEyeExamById(eyeExam.eyeExamID),
+    refractions: this.examService.getRefractionsByEyeExamId(eyeExam.eyeExamID)
+  }).subscribe({
+    next: (responses) => {
+      if (responses.exam.succeeded && responses.exam.data) {
+        const examWithRefractions = {
+          ...responses.exam.data,
+          refractions: responses.refractions.succeeded ? responses.refractions.data : []
+        };
+
+        const modalRef = this.modalService.open(EditEyeExam, {
+          size: 'lg',
+          backdrop: 'static',
+          keyboard: false,
+          centered: true
+        });
+
+        modalRef.componentInstance.exam = examWithRefractions;
+        this.loading = false;
+
+        // ✅ تحديث لحظي للجدول
+        modalRef.componentInstance.eyeExamUpdated.subscribe((updatedExam: EyeExam) => {
+          if (updatedExam) {
+            const index = this.exams.findIndex(e => e.eyeExamID === updatedExam.eyeExamID);
+        
+                    this.loadEyeExams();
+
+            //   if (index !== -1) {
+          //     this.exams[index] = { ...this.exams[index], ...updatedExam };
+          //     this.filteredExams = [...this.exams]; // تحديث الجدول
+          //   }
+          //   this.cdr.detectChanges();
+          // } else {
+          //   // fallback إذا ما رجع updatedExam
+          //   this.loadEyeExams();
+           }
+        });
+
+      } else {
+        this.loading = false;
+        this.toastr.error(`لم يتم العثور على الفحص: ${responses.exam.message}`, 'خطأ');
+      }
+    },
+    error: () => {
+      this.loading = false;
+      this.toastr.error('حدث خطأ أثناء جلب تفاصيل الفحص', 'خطأ');
+    }
+  });
+}
+
 
   // فتح تفاصيل الفحص عند الطلب فقط
   showDetails(eyeExam: EyeExam): void {

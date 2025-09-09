@@ -1,41 +1,42 @@
 @if(!loading){
-<div class="container mt-5">
-    <div class="row text-center">
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-center">
-                    <h5 class="card-title text-muted">إجمالي المنتسبين</h5>
-                    <h2 class="card-text display-4 fw-bold text-primary">{{ total }}</h2>
-                </div>
-            </div>
+<div class="container mt-4 admin-dashboard">
+  <div class="row g-3">
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="icon-wrap total"><i class="fas fa-users"></i></div>
+        <div class="stat-content">
+          <div class="label">إجمالي المنتسبين</div>
+          <div class="value text-primary">{{ total }}</div>
         </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-center">
-                    <h5 class="card-title text-muted">المقبولين</h5>
-                    <h2 class="card-text display-4 fw-bold text-success">{{ accepted }}</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-center">
-                    <h5 class="card-title text-muted">المرفوضين</h5>
-                    <h2 class="card-text display-4 fw-bold text-danger">{{ rejected }}</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-center">
-                    <h5 class="card-title text-muted">في الانتظار</h5>
-                    <h2 class="card-text display-4 fw-bold text-warning">{{ pending }}</h2>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="icon-wrap accepted"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-content">
+          <div class="label">المقبولين</div>
+          <div class="value text-success">{{ accepted }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="icon-wrap rejected"><i class="fas fa-times-circle"></i></div>
+        <div class="stat-content">
+          <div class="label">المرفوضين</div>
+          <div class="value text-danger">{{ rejected }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-card">
+        <div class="icon-wrap pending"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stat-content">
+          <div class="label">في الانتظار</div>
+          <div class="value text-warning">{{ pending }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 }

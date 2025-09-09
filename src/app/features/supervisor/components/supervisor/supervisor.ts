@@ -146,4 +146,14 @@ export class Supervisor implements OnInit {
   const result = this.results.find(r => r.resultID === resultID);
   return result ? result.description : 'غير محدد';
 }
+hasAllExams(): boolean {
+  if (!this.applicant) return false;
+  return !!(
+    this.applicant.eyeExam &&
+    this.applicant.surgicalExam &&
+    this.applicant.orthopedicExamDto &&
+    this.applicant.internalExam
+  );
+}
+
 }

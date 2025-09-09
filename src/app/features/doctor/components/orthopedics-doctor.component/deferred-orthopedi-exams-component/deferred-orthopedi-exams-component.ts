@@ -6,10 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
 import { ToastrService } from 'ngx-toastr';
+import { TableModule } from "primeng/table";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-deferred-orthopedi-exams-component',
-  imports: [CommonModule, FormsModule, ButtonModule, EditOrthopedicExamComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent],
   templateUrl: './deferred-orthopedi-exams-component.html',
   styleUrl: './deferred-orthopedi-exams-component.scss'
 })
@@ -19,25 +22,27 @@ export class DeferredOrthopediExamsComponent implements OnInit {
   loading = true;
   selectedExam: OrthopedicExam | null = null;
   searchTerm: string = '';
-
+  globalFilter: string = '';
   page = 1;
-  pageSize = 10;
-  totalItems = 0;
+  rowsPerPage = 10;
+  totalRecords = 0;
 
-  constructor(private examService: OrthopedicExamService, private toastr: ToastrService) {}
+  constructor(private examService: OrthopedicExamService, private toastr: ToastrService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.loadExams();
   }
 
-  loadExams(page: number = 1) {
+  loadExams() {
     this.loading = true;
-    this.examService.getAllOrthopedicExams(page, this.pageSize).subscribe({
-      next: ({ items, totalCount }) => {
-        this.exams = items;
-        this.filteredExams = [...items];
-        this.totalItems = totalCount;
-        this.page = page;
+    const filter = this.globalFilter || '';
+    this.examService.getAllOrthopedicExams(this.page, this.rowsPerPage, filter).subscribe({
+      next: (res) => {
+        this.exams = res.items;
+        this.filteredExams =res.items;
+        this.totalRecords = res.totalCount;
         this.loading = false;
       },
       error: err => { 
@@ -47,31 +52,42 @@ export class DeferredOrthopediExamsComponent implements OnInit {
     });
   }
 
-  changePage(newPage: number) {
-    if (newPage < 1 || newPage > Math.ceil(this.totalItems / this.pageSize)) return;
-    this.loadExams(newPage);
+  onPageChange(newPage: number) { this.page = newPage; this.loadExams(); }
+
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.loadExams();
   }
 
-  onSearchChange() {
-    const term = this.searchTerm.trim().toLowerCase();
-    if (!term) {
-      this.filteredExams = [...this.exams];
-      return;
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
+    this.page = 1;
+    this.loadExams();
+  }
+
+
+  getBadgeClass(result: any): string {
+    if (!result || !result.description) return 'badge bg-secondary';
+    switch (result.description) {
+      case 'مقبول': return 'badge bg-success';
+      case 'مرفوض': return 'badge bg-danger';
+      case 'مؤجل': return 'badge bg-warning text-dark';
+      default: return 'badge bg-secondary';
     }
-
-    this.filteredExams = this.exams.filter(e =>
-      Object.values(e).some(val =>
-        val?.toString().toLowerCase().includes(term)
-      )
-    );
   }
 
-  openEditDialog(exam: OrthopedicExam) {
-    this.selectedExam = { ...exam };
-  }
-
-  onDialogClose(updated: boolean) {
-    this.selectedExam = null;
-    if (updated) this.loadExams(this.page);
+  openEditDeferredOrthopedi(orthopedicExam: OrthopedicExam) {
+    const modalRef = this.modalService.open(EditOrthopedicExamComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true
+    });
+    modalRef.componentInstance.exam  = orthopedicExam;
+    modalRef.componentInstance.OrthopedicExamUpdated.subscribe(() => {
+      this.loadExams();
+    });
   }
 }

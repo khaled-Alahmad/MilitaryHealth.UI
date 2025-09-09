@@ -1,11 +1,12 @@
 // services/surgical-exam.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { SurgicalExam } from '../models/surgical-exam-post.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
+import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,17 +48,22 @@ export class SurgicalExamService {
   // }
 
   // 🔹 جلب كل الفحوصات الجراحية مع Pagination
-getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items: SurgicalExam[], totalCount: number }> {
+getAllSurgicalExams(page: number = 1,
+  pageSize: number = 10,
+  filter: string = ''): Observable<PagedResponse<SurgicalExam>> {
   const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
-  const headers = this.getAuthHeaders();
 
-  return this.http.get<{ data?: { items: SurgicalExam[], totalCount: number } }>(url, { headers }).pipe(
-    map(res => {
-      const items = res.data?.items || [];
-      const totalCount = res.data?.totalCount || items.length;
-      return { items, totalCount };
-    })
-  );
+  let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<SurgicalExam>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
 }
 
   // جلب نتائج الفحوص
@@ -75,13 +81,64 @@ getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items
   }
 
 
-    getSurgicalConsultations(page: number = 1, pageSize: number = 50): Observable<Consultation[]> {
-    const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-      map(res => (res.data?.items || []).filter((c: any) => c.doctor?.specializationID === 3))
-    );
-  }
+  //   getSurgicalConsultations(page: number = 1,
+  //     pageSize: number = 10,
+  //     filter: string = ''): Observable<PagedResponse<Consultation>> {
+  //   const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true)
+  //     .set('sortBy', 'surgicalExamID');
 
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+  //     .pipe(map(res => res.data));
+  // }
+
+
+  getSurgicalConsultations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', true)
+  
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+  
+    return this.http
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (c: Consultation) => c.doctor?.specializationID === 2 // جراحة عامة مثلاً
+            )
+          } as PagedResponse<Consultation>;
+        })
+      );
+  }
+  
+  
   // ✅ تحاليل خاصة بالجراحة
   addInvestigation(investigation: Investigation): Observable<any> {
     return this.http.post(this.investigationUrl, investigation, {
@@ -99,6 +156,8 @@ getAllSurgicalExams(page: number = 1, pageSize: number = 10): Observable<{ items
     const token = localStorage.getItem('token') || '';
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
+
+
 
   getByFileNumber(fileNumber: string): Observable<SurgicalExam | null> {
   const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;

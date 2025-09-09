@@ -54,14 +54,14 @@ export class SearchApplicantComponent implements OnInit {
           this.responseMessage = 'لم يتم العثور على منتسب بهذا الرقم';
         } else {
           this.responseMessage = null; // مسح الرسالة عند النجاح
-          this.applicantSelected.emit(this.applicant);
+          this.applicantSelected.emit(this.applicant!);
         }
         this.loading = false;
       },
       error: () => {
         this.applicant = null;
         this.loading = false;
-        this.responseMessage = 'حدث خطأ أثناء جلب البيانات';
+          this.responseMessage = 'لم يتم العثور على منتسب بهذا الرقم';
       }
     });
   }

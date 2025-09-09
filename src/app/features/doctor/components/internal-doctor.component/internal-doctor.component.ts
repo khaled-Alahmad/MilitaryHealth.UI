@@ -42,7 +42,6 @@ onApplicantSelected(applicant: Applicant) {
 
   this.examService.getByFileNumber(applicant.fileNumber).subscribe({
     next: (exam) => {
-      // ✅ تحقّق إذا فعلاً فيه بيانات
       this.hasInternalExam = !!(exam && exam.internalExamID); 
     },
     error: () => this.hasInternalExam = false

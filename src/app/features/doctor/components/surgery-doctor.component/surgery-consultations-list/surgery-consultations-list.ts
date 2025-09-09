@@ -7,11 +7,14 @@ import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from "primeng/table";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-surgery-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, EditConsultation],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './surgery-consultations-list.html',
   styleUrls: ['./surgery-consultations-list.scss']
 })
@@ -21,10 +24,14 @@ export class SurgeryConsultationsList implements OnInit {
   selectedConsultation: Consultation | null = null;
   loading = false;
   searchText = '';
-
+  page = 1;
+  rowsPerPage = 10;
+  totalRecords = 0;
+  globalFilter: string = '';
   constructor(
     private service: SurgicalExamService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit() { 
@@ -33,10 +40,12 @@ export class SurgeryConsultationsList implements OnInit {
 
   loadConsultations() {
     this.loading = true;
-    this.service.getSurgicalConsultations().subscribe({
+    const filter = this.globalFilter || '';
+    this.service.getSurgicalConsultations(this.page, this.rowsPerPage,filter).subscribe({
       next: res => { 
-        this.consultations = res; 
-        this.filteredConsultations = [...res]; 
+        this.consultations = res.items; 
+        this.filteredConsultations = res.items; 
+        this.totalRecords = res.totalCount;
         this.loading = false; 
       },
       error: () => { 
@@ -46,16 +55,21 @@ export class SurgeryConsultationsList implements OnInit {
     });
   }
 
-  filterConsultations() {
-    const search = this.searchText.trim().toLowerCase();
-    this.filteredConsultations = !search ? [...this.consultations] :
-      this.consultations.filter(c =>
-        c.applicantFileNumber.toLowerCase().includes(search) ||
-        c.consultationType.toLowerCase().includes(search) ||
-        c.referredDoctor.toLowerCase().includes(search) ||
-        c.result.toLowerCase().includes(search) ||
-        (c.doctor?.fullName?.toLowerCase().includes(search) ?? false)
-      );
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadConsultations();
+  }
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.loadConsultations();
+  }
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
+    this.page = 1;
+    this.loadConsultations();
+
   }
 
   openEditDialog(c: Consultation) { 
@@ -74,5 +88,17 @@ export class SurgeryConsultationsList implements OnInit {
     }
     const url = `${environment.apiUrl}/${attachment}`;
     window.open(url, '_blank');
+  }
+  openEditConsultation(consultation: Consultation) {
+    const modalRef = this.modalService.open(EditConsultation, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true
+    });
+    modalRef.componentInstance.consultation  = consultation;
+    modalRef.componentInstance.consultationUpdated.subscribe(() => {
+      this.loadConsultations();
+    });
   }
 }

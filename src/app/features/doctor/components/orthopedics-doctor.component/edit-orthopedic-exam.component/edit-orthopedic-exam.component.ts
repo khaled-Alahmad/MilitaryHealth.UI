@@ -5,6 +5,7 @@ import { OrthopedicExamService } from '../../../services/orthopedic-exam.service
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-edit-orthopedic-exam',
@@ -14,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class EditOrthopedicExamComponent implements OnInit {
   @Input() exam!: OrthopedicExam;
+  @Output() OrthopedicExamUpdated = new EventEmitter<any>();
   @Output() dialogClosed = new EventEmitter<boolean>();
 
   examForm!: FormGroup;
@@ -22,7 +24,8 @@ export class EditOrthopedicExamComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private examService: OrthopedicExamService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public activeModal: NgbActiveModal,
   ) {}
 
   ngOnInit(): void {
@@ -66,13 +69,13 @@ export class EditOrthopedicExamComponent implements OnInit {
         this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
         this.exam.resultID = updatedExam.resultID;
         this.exam.result = this.results.find(r => r.resultID === updatedExam.resultID);
-        this.dialogClosed.emit(true);
+       this.close();
       },
       error: err => this.toastr.error('❌ فشل التحديث', 'خطأ')
     });
   }
 
-  onCancel() {
-    this.dialogClosed.emit(false);
+  close() {
+    this.activeModal.dismiss();
   }
 }

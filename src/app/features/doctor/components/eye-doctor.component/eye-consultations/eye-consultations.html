@@ -1,69 +1,95 @@
 <div class="user-header-section px-1 pt-1 container-fluid">
   <!-- البحث -->
-  <div class="mb-3 d-flex justify-content-end">
+  <div class="mb-3 d-flex justify-content-start">
     <div class="search-wrapper">
-      <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-        (input)="onFilterChange($event)" />
+      <input
+        type="text"
+        class="search-input"
+        placeholder="ابحث عن رقم الملف أو الاسم"
+        (input)="onFilterChange($event)"
+      />
       <i class="fas fa-search search-icon"></i>
     </div>
   </div>
 
   <!-- جدول النتائج -->
-  <p-table [value]="filteredConsultations" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true"
-    [loading]="loading" [showCurrentPageReport]="true" class="custom-table">
-
+  <p-table
+    [value]="filteredConsultations"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table compact-table"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم ملف المريض</th>
-        <th>نوع الاستشارة</th>
-        <th>الطبيب المحال إليه</th>
-        <th>اسم الطبيب</th>
-        <th>النتيجة</th>
-        <th>الملف المرفق</th>
-        <th>إجراءات</th>
+        <th style="width: 120px">رقم ملف المريض</th>
+        <th style="width: 130px">نوع الاستشارة</th>
+        <th style="width: 130px">الطبيب المحال إليه</th>
+        <th style="width: 120px">اسم الطبيب</th>
+        <th style="width: 100px">النتيجة</th>
+        <th style="width: 90px">الملف المرفق</th>
+        <th style="width: 80px">إجراءات</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-c>
       <tr>
-        <td><span class="fw-bold text-primary">{{ c.applicantFileNumber }}</span></td>
-        <td><span class="fw-bold">{{ c.consultationType }}</span></td>
-        <td><span class="fw-bold">{{ c.referredDoctor }}</span></td>
-        <td><span class="fw-bold">{{ c.doctor?.fullName || '-' }}</span></td>
         <td>
-          <span [ngClass]="getBadgeClass(c.result)">
+          <span class="fw-bold small">{{ c.applicantFileNumber }}</span>
+        </td>
+        <td>
+          <span class="fw-bold small">{{ c.consultationType }}</span>
+        </td>
+        <td>
+          <span class="fw-bold small">{{ c.referredDoctor }}</span>
+        </td>
+        <td>
+          <span class="fw-bold small">{{ c.doctor?.fullName || '-' }}</span>
+        </td>
+        <td>
+          <span [ngClass]="getBadgeClass(c.result)" class="small">
             {{ c.result || 'غير محدد' }}
           </span>
         </td>
-        <td>
-          <div class="btn-group-vertical d-flex gap-1 justify-content-center">
-            <!-- يظهر الزر فقط إذا كان هناك ملف مرفق -->
-            <button *ngIf="c.attachment" title="عرض الملف" class="btn btn-sm btn-info" (click)="openFile(c.attachment)">
-              <i class="fas fa-eye"></i>
+<td class="text-center">
+          @if(c.attachment){
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
+                (click)="openFile(c.attachment)">
+                <i class="bi bi-file-earmark-text me-1"></i>
+                فتح الملف
             </button>
-        
-            <!-- إذا ما فيه ملف، تظهر أيقونة ثابتة -->
-            <i *ngIf="!c.attachment" class="fas fa-eye no-file-icon"></i>
-          </div>
+            }
+            @else {
+            <span>لا يوجد ملف</span>
+            }
         </td>
-        
-        <td>
-          <button title="/تعديل" class="btn btn-sm btn-primary" (click)="openEditConsultation(c)">
-            <i class="fas fa-edit"></i>
-          </button>
+
+        <td class="text-center">
+          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="openEditConsultation(c)">
+          <i class="pi pi-pen-to-square"></i>
+          إضافة نتيجة
+      </button>
+          <!-- <i class="pi pi-pen-to-square icon"
+           (click)="openEditConsultation(c)" title="تعديل"></i> -->
         </td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center">لا توجد استشارات</td>
+        <td colspan="7" class="text-center py-2 small">لا توجد استشارات</td>
       </tr>
     </ng-template>
   </p-table>
 
   <!-- المـُـرقم -->
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  >
   </app-paginator>
 </div>

@@ -2,6 +2,21 @@
   padding-top: 20px;
 }
 
+/* Syrian Visual Identity palette */
+:root {
+  --si-forest-500: #428177; /* Forest */
+  --si-forest-800: #054239;
+  --si-forest-900: #002623;
+  --si-wheat-50: #edebe0;   /* Golden Wheat */
+  --si-wheat-400: #b9a779;
+  --si-wheat-600: #988561;
+  --si-umber-600: #6b1f2a;  /* Deep Umber */
+  --si-umber-800: #4a151e;
+  --si-umber-900: #260f14;
+  --si-charcoal-900: #161616; /* Charcoal */
+  --si-charcoal-600: #3d3a3b;
+}
+
 .search-wrapper {
   display: flex;
   align-items: center;
@@ -25,11 +40,15 @@
   gap: 5px; 
   padding: 10px 15px; 
   border-radius: 8px;
-  background-color: #007bff;
-  color: white;
+  background-color: #0d6efd; /* blue */
+  color: #fff;
   border: none;
   cursor: pointer;
   white-space: nowrap; 
+}
+
+.search-btn:hover {
+  background-color: #0b5ed7;
 }
 
 .search-btn .fas {
@@ -64,6 +83,7 @@
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.2s;
+  box-shadow: 0 6px 14px rgba(2,6,23,0.06);
 }
 
 .card:hover {
@@ -91,9 +111,34 @@
 }
 
 .list-group-item .fas {
-  color: #007bff;
+  color: var(--si-forest-500);
 }
 
 .bg-success .list-group-item .fas {
   color: #28a745;
+}
+
+/* Identity helper classes */
+.si-bg-forest { background-color: var(--si-forest-800) !important; color: #fff !important; }
+.si-bg-umber { background-color: var(--si-umber-800) !important; color: #fff !important; }
+.si-border-wheat { border-color: var(--si-wheat-400) !important; }
+.si-muted { color: var(--si-charcoal-600); }
+
+/* Compact exam card accent borders */
+.compact-exam-card { border: 1px dashed var(--si-wheat-600) !important; }
+
+/* Emphasis colors for headings */
+.text-primary { color: #0d6efd !important; }
+.text-danger { color: #dc3545 !important; }
+.text-dark { color: #000 !important; }
+.bg-custom {
+  background-color: #428177;
+  color:#edebe0;
+}
+h6{
+ color: #988561;
+}
+.missing-exam {
+  background-color: rgba(255, 0, 0, 0.05); // أحمر فاتح جداً
+  border: 1px solid #f5c2c7;              // حد خفيف بلون التحذير
 }

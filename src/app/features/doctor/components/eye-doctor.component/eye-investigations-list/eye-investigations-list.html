@@ -1,80 +1,114 @@
 <div class="user-header-section px-1 pt-1 container-fluid">
   <!-- البحث -->
-  <div class="mb-3 d-flex justify-content-end">
+  <div class="mb-3 d-flex justify-content-start">
     <div class="search-wrapper">
-      <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-             (input)="onFilterChange($event)" />
+      <input
+        type="text"
+        class="search-input"
+        placeholder="ابحث عن رقم الملف أو الاسم"
+        (input)="onFilterChange($event)"
+      />
       <i class="fas fa-search search-icon"></i>
     </div>
   </div>
 
   <!-- جدول التحاليل -->
-  <p-table #table 
-           [value]="filteredInvestigations" 
-           [totalRecords]="totalRecords" 
-           [rows]="rowsPerPage" 
-           [lazy]="true"
-           [sortMode]="'multiple'" 
-           [showCurrentPageReport]="true" 
-           class="custom-table">
-
+  <p-table
+    #table
+    [value]="filteredInvestigations"
+    [totalRecords]="totalRecords"
+    [rows]="rowsPerPage"
+    class="custom-table compact-table"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم الملف</th>
-        <th>نوع التحليل</th>
-        <th>النتيجة</th>
-        <th>الحالة</th>
-        <th>الملف المرفق</th>
-        <th>الطبيب</th>
-        <th>إجراءات</th>
+        <th style="width: 100px">رقم الملف</th>
+        <th style="width: 120px">نوع التحليل</th>
+        <th style="width: 120px">النتيجة</th>
+        <th style="width: 100px">الحالة</th>
+        <th style="width: 120px">الطبيب</th>
+        <th style="width: 90px">الملف المرفق</th>
+        <th style="width: 80px">إجراءات</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-investigation>
       <tr>
-        <td><span class="fw-bold text-primary">{{ investigation.applicantFileNumber }}</span></td>
-        <td><span class="fw-bold">{{ investigation.type }}</span></td>
         <td>
-          <span class="fw-bold">{{ investigation.result || 'غير محدد' }}</span>
+          <span class="fw-bold  small">{{ investigation.applicantFileNumber }}</span>
         </td>
-        <td>{{ investigation.status || '-' }}</td>
+        <td>
+          <span class="fw-bold small">{{ investigation.type }}</span>
+        </td>
+        <td>
+          <span class="fw-bold small">{{ investigation.result || 'غير محدد' }}</span>
+        </td>
+        <td>
+          <span class="small">{{ investigation.status || '-' }}</span>
+        </td>
+        <td>
+          <span class="small">{{ investigation.doctor?.fullName || '-' }}</span>
+        </td>
         <td class="text-center">
-          <div class="btn-group-vertical d-flex gap-1 justify-content-center">
-            <!-- زر فتح الملف إذا كان موجود -->
-            <button *ngIf="investigation.attachment" 
-                    title="فتح الملف" 
-                    class="btn btn-sm btn-info"
-                    (click)="openFile(investigation.attachment)">
-              <i class="fas fa-eye"></i>
+          @if(investigation.attachment){
+            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
+                (click)="openFile(investigation.attachment)">
+                <i class="bi bi-file-earmark-text me-1"></i>
+                فتح الملف
             </button>
+            }
+            @else {
+            <span>لا يوجد ملف</span>
+            }
+          <!-- <div class="d-flex justify-content-center"> -->
+            <!-- زر فتح الملف إذا كان موجود -->
+             <!-- @if(investigation.attachment){
+              <i class="pi pi-folder-open icon"
+              (click)="openFile(investigation.attachment)"  title="فتح الملف"></i>
+             }@else {
+              <i class="pi pi-times"  title="لا يوجد ملف"></i>
+             } -->
+            
+            <!-- <button
+              *ngIf="investigation.attachment"
+              title="فتح الملف"
+              class="btn btn-sm btn-info p-1"
+              (click)="openFile(investigation.attachment)"
+            >
+              <i class="fas fa-eye"></i>
+            </button> -->
 
             <!-- أيقونة ثابتة إذا لا يوجد ملف -->
-            <i *ngIf="!investigation.attachment" class="fas fa-eye no-file-icon"></i>
-          </div>
+            <!-- <i *ngIf="!investigation.attachment" class="fas fa-eye no-file-icon"></i> -->
+          <!-- </div> -->
         </td>
-        <td>{{ investigation.doctor?.fullName || '-' }}</td>
         <td class="text-center">
-          <button title="تعديل نتيجة" 
-                  class="btn btn-sm btn-success" 
-                  (click)="openEditInvestigation(investigation)">
-            <i class="fas fa-pencil-alt"></i>
-          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="openEditInvestigation(investigation)">
+          <i class="pi pi-pen-to-square"></i>
+          إضافة نتيجة
+      </button>
+          <!-- <i class="pi pi-pen-to-square icon"
+          (click)="openEditInvestigation(investigation)"  title="تعديل نتيجة"></i> -->
         </td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center">لا توجد تحاليل</td>
+        <td colspan="7" class="text-center py-2 small">لا توجد تحاليل</td>
       </tr>
     </ng-template>
   </p-table>
 
   <!-- المرقم -->
-  <app-paginator [totalRecords]="totalRecords" 
-                 [pageSize]="rowsPerPage" 
-                 [currentPage]="page"
-                 (pageChange)="onPageChange($event)" 
-                 (pageSizeChange)="onPageSizeChange($event)">
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  >
   </app-paginator>
 </div>

@@ -8,10 +8,12 @@ import { environment } from '../../../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TableModule } from "primeng/table";
+import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-orthopedic-investigations-list',
-  imports: [CommonModule,ButtonModule, FormsModule, EditInvestigation],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './orthopedic-investigations-list.html',
   styleUrl: './orthopedic-investigations-list.scss'
 })
@@ -21,6 +23,11 @@ export class OrthopedicInvestigationsList implements OnInit {
   selectedInvestigation: Investigation | null = null;
   loading = false;
   searchText = '';
+
+  globalFilter: string = '';
+  page = 1;
+  rowsPerPage = 10;
+  totalRecords = 0;
 
   constructor(private service: OrthopedicExamService,private toastr:ToastrService,
     private modalService: NgbModal,
@@ -32,10 +39,12 @@ export class OrthopedicInvestigationsList implements OnInit {
 
   loadInvestigations() {
     this.loading = true;
-    this.service.getOrthopedicInvestigations().subscribe({
+    const filter = this.globalFilter || '';
+    this.service.getOrthopedicInvestigations(this.page, this.rowsPerPage, filter).subscribe({
       next: res => { 
-        this.investigations = res; 
-        this.filteredInvestigations = [...res]; 
+        this.investigations = res.items; 
+        this.filteredInvestigations = res.items; 
+        this.totalRecords = res.totalCount;
         this.loading = false; 
       },
       error: err => { 
@@ -44,17 +53,19 @@ export class OrthopedicInvestigationsList implements OnInit {
       }
     });
   }
+  onPageChange(newPage: number) { this.page = newPage; this.loadInvestigations(); }
 
-  filterInvestigations() {
-    const search = this.searchText.trim().toLowerCase();
-    this.filteredInvestigations = !search ? [...this.investigations] :
-      this.investigations.filter(i =>
-        i.applicantFileNumber.toLowerCase().includes(search) ||
-        i.type.toLowerCase().includes(search) ||
-        i.result.toLowerCase().includes(search) ||
-        i.status.toLowerCase().includes(search) ||
-        (i.doctor?.fullName?.toLowerCase().includes(search) ?? false)
-      );
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.loadInvestigations();
+  }
+
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
+    this.page = 1;
+    this.loadInvestigations();
   }
 
   openEditDialog(inv: Investigation) {
@@ -86,4 +97,14 @@ export class OrthopedicInvestigationsList implements OnInit {
       this.loadInvestigations();
     });
   }
+  
+  // getBadgeClass(result: any): string {
+  //   if (!result ) return 'badge bg-secondary';
+  //   switch (result) {
+  //     case 'مقبول': return 'badge bg-success';
+  //     case 'مرفوض': return 'badge bg-danger';
+  //     case 'مؤجل': return 'badge bg-warning text-dark';
+  //     default: return 'badge bg-secondary';
+  //   }
+  // }
 }

@@ -20,3 +20,71 @@
   height: 3rem;
   border-width: 0.25rem;
 }
+/* ألوان النصوص والعناوين */
+body {
+  color: #054239;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #054239;
+}
+
+p {
+  color: #428177;
+}
+
+/* ألوان الأزرار */
+.btn-primary {
+  background-color: #428177;
+  color: #ffffff;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #054239;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid #054239;
+  color: #054239;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #f1f1f1;
+}
+
+/* ألوان حقول الإدخال */
+.form-control {
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  border-color: #428177;
+  box-shadow: 0 0 0 0.25rem rgba(66, 129, 119, 0.25);
+}
+.dots-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.dots-spinner div {
+  width: 10px;
+  height: 10px;
+  background: #054239;
+  border-radius: 50%;
+  animation: bounce 0.6s infinite alternate;
+}
+.dots-spinner div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dots-spinner div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes bounce {
+  from { transform: translateY(0); opacity: 0.6; }
+  to   { transform: translateY(-8px); opacity: 1; }
+}

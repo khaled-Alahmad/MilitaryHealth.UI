@@ -27,6 +27,8 @@ export class Login {
       password: ['', [Validators.required]]
     });
   }
+submitted = false;
+
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -35,6 +37,8 @@ export class Login {
 
   
   loging() {
+      this.submitted = true;
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;

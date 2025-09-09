@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-12 col-xxl-12">
             @if(fileNumber){
-            <div  class=" p-2 bg-info text-dark rounded text-center">
+            <div  class=" p-2 bg-custom rounded text-center">
                 <h5 class="mb-0">رقم الملف: {{ fileNumber }}</h5>
             </div>
             }
@@ -12,22 +12,22 @@
 
                     <form [formGroup]="applicantForm " (ngSubmit)="onSubmit()" novalidate>
 
-                        <h6 class="border-bottom pb-2 mb-3 text-primary">البيانات الشخصية</h6>
+                        <h6 class="border-bottom pb-2 mb-3 custom-color">البيانات الشخصية</h6>
                         <div class="row g-3">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="fullName"
                                     [class.is-invalid]="isControlInvalid('fullName')"
                                     [class.is-valid]="isControlValid('fullName')" />
                             </div>
 
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label">العمل<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="job"
                                     [class.is-invalid]="isControlInvalid('job')"
                                     [class.is-valid]="isControlValid('job')" />
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label">الحالة الاجتماعية <span class="text-danger">*</span></label>
                                 <ng-select [items]="maritalStatuses" bindLabel="description" bindValue="maritalStatusID"
                                     formControlName="maritalStatusID" placeholder="اختر الحالة الاجتماعية"
@@ -38,8 +38,14 @@
                                     يرجى اختيار الحالة الاجتماعية
                                 </div>
                             </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label"> كود التجنيد <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="associateNumber"
+                                    [class.is-invalid]="isControlInvalid('associateNumber')"
+                                    [class.is-valid]="isControlValid('associateNumber')" />
+                            </div>
                         </div>
-                        <h6 class="border-bottom pb-2 mt-4 mb-3 text-primary">البيانات الطبية</h6>
+                        <h6 class="border-bottom pb-2 mt-4 mb-3">البيانات الطبية</h6>
                         <div class="row g-3">
                             <div class="col-6 col-md-3">
                                 <label class="form-label">الطول (سم)<span class="text-danger">*</span></label>
@@ -88,7 +94,7 @@
                         </div>
 
                         <div class="d-flex gap-2 mt-5">
-                            <button class="btn btn-primary px-4" type="submit" [disabled]="loading">
+                            <button class="btn bg-custom px-4" type="submit" [disabled]="loading">
                                 <i class="pi pi-save me-2 ms-2"></i>حفظ
                             </button>
                         </div>

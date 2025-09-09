@@ -9,12 +9,12 @@
 
     <!-- Reception -->
     @if (role === 'Receptionist') {
-      <li routerLink="/reception/applicants/add">
+      <li routerLink="/reception/applicants/add" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-user-plus"></i>
         <span>إضافة منتسب</span>
       </li>
-      <li routerLink="/reception/applicants">
-        <i class="pi pi-users"></i>
+      <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-list-check"></i>
         <span>قائمة المنتسبين</span>
       </li>
      
@@ -22,101 +22,101 @@
 
     <!-- Admin -->
     @if (role === 'Admin') {
-      <li routerLink="admin/dashboard">
-        <i class="pi pi-chart-line"></i>
+      <li routerLink="admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-chart-bar"></i>
         <span>الإحصائيات</span>
       </li>
-      <li routerLink="admin/final">
-        <i class="pi pi-users"></i>
+      <li routerLink="admin/final" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-list"></i>
         <span>قائمة المنتسبين</span>
       </li>
     }
 
     @if (role === 'Diwan') {
-      <li routerLink="archive">
-        <i class="pi pi-users"></i>
+      <li routerLink="archive" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-inbox"></i>
         <span> الديوان</span>
       </li>
     }
     <!-- Doctor Eye -->
     @if (role === 'Doctor_Eye') {
-      <li routerLink="/doctor/eye">
+      <li routerLink="/doctor/eye" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-eye"></i>
         <span> الفحص العيني  إجراءات </span>
       </li>
-      <li routerLink="/doctor/eye/deferred">
-        <i class="pi pi-file"></i>
+      <li routerLink="/doctor/eye/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-clock"></i>
         <span> الفحص العيني </span>
       </li>
-       <li routerLink="/doctor/eye/consultations">
-        <i class="pi pi-file"></i>
+       <li routerLink="/doctor/eye/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-comments"></i>
         <span> الاستشارات التخصصية  </span>
       </li>
-       <li routerLink="/doctor/eye/investigations">
-        <i class="pi pi-file"></i>
-        <span> الاستقصاءات الشعاعية والمخبرية </span>
+       <li routerLink="/doctor/eye/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-wave-pulse"></i>
+        <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
       </li>
     
     }
 
     <!-- Doctor Internal -->
     @if (role === 'Doctor_Internal') {
-      <li routerLink="/doctor/internal">
+      <li routerLink="/doctor/internal" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-stethoscope"></i>
         <span>إجراءات الفحوصات الباطنية   </span>
       </li>
-      <li routerLink="/doctor/internal/medications">
-        <i class="pi pi-medkit"></i>
+      <li routerLink="/doctor/internal/medications" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-clock"></i>
         <span>الفحص  الباطني    </span>
       </li>
-       <li routerLink="/doctor/internal/consultations">
-    <i class="pi pi-clock"></i>
+       <li routerLink="/doctor/internal/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-comments"></i>
     <span> الاستشارات التخصصية </span>
   </li>
-  <li routerLink="/doctor/internal/investigations">
-    <i class="pi pi-clock"></i>
-    <span> الاستقصاءات الشعاعية والمخبرية </span>
+  <li routerLink="/doctor/internal/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-wave-pulse"></i>
+    <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
   </li>
     }
 
    <!-- Doctor Orthopedics -->
 @if (role === 'Doctor_Orthopedics') {
-  <li routerLink="/doctor/orthopedics">
-    <i class="pi pi-heart"></i>
+  <li routerLink="/doctor/orthopedics" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-bandage"></i>
     <span>  إجراءات الجراحة العظمية </span>
   </li>
-  <li routerLink="/doctor/orthopedics/deferred">
+  <li routerLink="/doctor/orthopedics/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-refresh"></i>
     <span>فحص الجراحة العظمية </span>
   </li>
-  <li routerLink="/doctor/orthopedics/consultations">
-    <i class="pi pi-stethoscope"></i>
+  <li routerLink="/doctor/orthopedics/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-comments"></i>
     <span> الاستشارات التخصصية </span>
   </li>
-  <li routerLink="/doctor/orthopedics/investigations">
-    <i class="pi pi-flask"></i>
-    <span> الاستقصاءات الشعاعية والمخبرية </span>
+  <li routerLink="/doctor/orthopedics/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-wave-pulse"></i>
+    <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
   </li>
 }
 
 
 <!-- Doctor Surgery -->
 @if (role === 'Doctor_Surgery') {
-  <li routerLink="/doctor/surgery">
+  <li routerLink="/doctor/surgery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-cut"></i>
     <span>إجراءات الجراحية للمريض</span>
   </li>
-  <li routerLink="/doctor/surgery/records">
-    <i class="pi pi-file"></i>
+  <li routerLink="/doctor/surgery/records" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-clipboard"></i>
     <span> الفحص الجراحي</span>
   </li>
-  <li routerLink="/doctor/surgery/consultations">
+  <li routerLink="/doctor/surgery/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-comments"></i>
     <span>الاستشارات التخصصية  </span>
   </li>
-  <li routerLink="/doctor/surgery/investigations">
-    <i class="pi pi-search"></i>
-    <span> الاستقصاءات الشعاعية والمخبرية </span>
+  <li routerLink="/doctor/surgery/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="pi pi-wave-pulse"></i>
+    <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
   </li>
 }
 
@@ -124,11 +124,11 @@
     <!-- Supervisor -->
     @if (role === 'Supervisor') {
       
-      <li routerLink="supervisor">
-        <i class="pi pi-chart-line"></i>
+      <li routerLink="supervisor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="pi pi-verified"></i>
         <span>تقييم المنتسب</span>
       </li>
-       <li routerLink="/reception/applicants">
+       <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-users"></i>
         <span>قائمة المنتسبين</span>
       </li>

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { OrthopedicExam } from '../models/orthopedic-exam.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
+import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
 @Injectable({
   providedIn: 'root'
 })
 export class OrthopedicExamService {
   private apiUrl = `${environment.apiUrl}/api/OrthopedicExams`;
-   private consultationUrl = `${environment.apiUrl}/api/Consultations`;
+  private consultationUrl = `${environment.apiUrl}/api/Consultations`;
   private investigationUrl = `${environment.apiUrl}/api/Investigations`;
   public uploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   addOrthopedicExam(exam: OrthopedicExam): Observable<any> {
     const token = localStorage.getItem('token');
@@ -43,21 +44,25 @@ export class OrthopedicExamService {
   //     })
   //   );
   // }
-    // 🔹 جلب كل الفحوص العظمية مع Pagination
-    getAllOrthopedicExams(page = 1, pageSize = 10): Observable<{ items: OrthopedicExam[], totalCount: number }> {
-      const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
-      const headers = this.getAuthHeaders();
+  // 🔹 جلب كل الفحوص العظمية مع Pagination
+  getAllOrthopedicExams(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<OrthopedicExam>> {
+    const url = `${this.apiUrl}?page=${page}&pageSize=${pageSize}`;
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', true);
 
-      return this.http.get<{ data?: { items: OrthopedicExam[], totalCount: number } }>(url, { headers }).pipe(
-        map(res => {
-          const items = res.data?.items || [];
-          const totalCount = res.data?.totalCount || items.length; // fallback إذا الـ API لا ترجع totalCount
-          return { items, totalCount };
-        })
-      );
+    if (filter) {
+      params = params.set('filter', filter);
     }
+    return this.http
+      .get<ApiResponse<PagedResponse<OrthopedicExam>>>(this.apiUrl, { params })
+      .pipe(map(res => res.data));
+  }
 
-   private getAuthHeaders() {
+  private getAuthHeaders() {
     const token = localStorage.getItem('token') || '';
     return { Authorization: `Bearer ${token}` };
   }
@@ -70,13 +75,61 @@ export class OrthopedicExamService {
   }
 
   // 🔹 عرض كل الاستشارات للعيادة العظمية فقط
-getOrthopedicConsultations(page = 1, pageSize = 50): Observable<Consultation[]> {
-  const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-  return this.http.get<{ data?: { items: Consultation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => (res.data?.items || []).filter((c: Consultation) => c.doctor?.specializationID === 4))
-  );
-}
+  // getOrthopedicConsultations(page: number = 1,
+  //   pageSize: number = 10,
+  //   filter: string = ''): Observable<PagedResponse<Consultation>> {
+  //   const url = `${this.consultationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true);
 
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+  //     .pipe(map(res => res.data));
+
+  // }
+  getOrthopedicConsultations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+  
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+  
+    return this.http
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (c: Consultation) => c.doctor?.specializationID === 4
+            )
+          } as PagedResponse<Consultation>;
+        })
+      );
+  }
+  
   // 🔹 إضافة طلب تحليل
   addInvestigation(investigation: Investigation): Observable<any> {
     return this.http.post(this.investigationUrl, investigation, {
@@ -85,26 +138,73 @@ getOrthopedicConsultations(page = 1, pageSize = 50): Observable<Consultation[]> 
   }
 
   // 🔹 عرض كل التحاليل للعيادة العظمية فقط
-getOrthopedicInvestigations(page = 1, pageSize = 50): Observable<Investigation[]> {
-  const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-  return this.http.get<{ data?: { items: Investigation[] } }>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => (res.data?.items || []).filter((i: Investigation) => i.doctor?.specializationID === 4))
-  );
-}
+  // getOrthopedicInvestigations(page: number = 1,
+  //   pageSize: number = 10,
+  //   filter: string = ''): Observable<PagedResponse<Investigation>> {
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true);
 
-getByFileNumber(fileNumber: string): Observable<OrthopedicExam | null> {
-  const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
-  return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-    map(res => {
-      const items: OrthopedicExam[] = res.data?.items || [];
-      // 🔹 نبحث عن فحص سابق لنفس الملف ونفس عيادة العظام فقط (specializationID = 4)
-      const exam = items.find(e => 
-        e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 4
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
+  //     .pipe(map(res => res.data));
+
+  // }
+  getOrthopedicInvestigations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Investigation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', false);
+  
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+  
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
+          return {
+            ...data,
+            items: (data?.items || []).filter(
+              (i: Investigation) => i.doctor?.specializationID === 4
+            )
+          } as PagedResponse<Investigation>;
+        })
       );
-      return exam || null;
-    })
-  );
-}
+  }
+  
 
+  getByFileNumber(fileNumber: string): Observable<OrthopedicExam | null> {
+    const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
+    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
+      map(res => {
+        const items: OrthopedicExam[] = res.data?.items || [];
+        // 🔹 نبحث عن فحص سابق لنفس الملف ونفس عيادة العظام فقط (specializationID = 4)
+        const exam = items.find(e =>
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 4
+        );
+        return exam || null;
+      })
+    );
+  }
 }
 

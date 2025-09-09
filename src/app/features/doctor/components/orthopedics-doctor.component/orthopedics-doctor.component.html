@@ -7,21 +7,21 @@
   <!-- أزرار الإضافة -->
   <div class="button-group mb-3 d-flex gap-2">
     <button 
-      class="btn btn-primary" 
+      class="btn btn-outline-primary" 
       (click)="addOrthopedicExam()" 
       *ngIf="!hasOrthopedicExam && selectedApplicant">
       إضافة فحص العظام
     </button>
 
     <button 
-      class="btn btn-warning" 
+      class="btn btn-outline-primary" 
       (click)="addConsultation()" 
       *ngIf="selectedApplicant">
       طلب استشارة
     </button>
 
     <button 
-      class="btn btn-success" 
+      class="btn btn-outline-primary" 
       (click)="addInvestigation()" 
       *ngIf="selectedApplicant ">
       طلب تحليل

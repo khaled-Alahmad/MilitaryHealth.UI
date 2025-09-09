@@ -94,17 +94,21 @@ export class EditInvestigation {
     this.loading = true;
 
     this.service.updateInvestigation(this.investigation.investigationID!, updatedInv)
-      .subscribe({
-        next: () => {
-          this.toastr.success('تم تعديل التحليل بنجاح', 'نجاح');
-          this.loading = false;
-          this.cancel();
-        },
-        error: () => {
-          this.toastr.error('فشل التحديث', 'خطأ');
-          this.loading = false;
-        }
-      });
+  .subscribe({
+    next: () => {
+      this.toastr.success('تم تعديل التحليل بنجاح', 'نجاح');
+      this.loading = false;
+
+      // 🔹 إعلام الأب بحدوث تحديث
+      this.investigationUpdated.emit(true);
+
+      this.cancel(); // إغلاق المودال
+    },
+    error: () => {
+      this.toastr.error('فشل التحديث', 'خطأ');
+      this.loading = false;
+    }
+  });
   }
   cancel() {
     this.modalService.dismissAll();

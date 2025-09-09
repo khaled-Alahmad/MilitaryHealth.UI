@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../../shared/services/lookup.service';
 import { Result } from '../../../doctor/models/internal-exam.model';
@@ -12,10 +13,12 @@ import { ArchiveService } from '../../services/archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
 import { ArchiveModel } from '../../models/archive.model';
 import { Subject } from 'rxjs';
+declare const printJS: any;
+declare const html2pdf: any;
 
 @Component({
   selector: 'app-applicant-profile',
-  imports: [],
+  imports: [CommonModule, DatePipe],
   templateUrl: './applicant-profile.html',
   styleUrl: './applicant-profile.scss'
 })
@@ -26,6 +29,7 @@ export class ApplicantProfile implements OnInit, OnDestroy {
   maritalStatuses: MaritalStatus[] = [];
   archive: ArchiveModel | null = null;
   private destroy$ = new Subject<void>();
+  date: Date = new Date();
 
   constructor(
     private route: ActivatedRoute,
@@ -35,20 +39,22 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     private router: Router
   ) {
     const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.archive = navigation.extras.state['archiveData'];
+    const state: any = navigation?.extras?.state ?? history.state ?? {};
+    this.archive = state['archive'] ?? state['archiveData'] ?? null;
+    if (this.archive) {
+      console.log('Archive loaded in constructor:', this.archive);
     }
   }
   ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
-  if (history.state.archiveData) {
-      this.archive = history.state.archiveData;
-      console.log('بيانات الأرشيف التي تم استقبالها:', this.archive);
-    } else {
-      console.log('لا توجد بيانات متاحة.');
+    const state: any = history.state ?? {};
+    if (!this.archive && (state.archive || state.archiveData)) {
+      this.archive = state.archive ?? state.archiveData;
+      console.log('Archive loaded in ngOnInit from history.state:', this.archive);
     }
     const fileNumber = this.route.snapshot.paramMap.get('fileNumber')!;
     this.loadApplicant(fileNumber);
@@ -95,7 +101,5 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     return result ? result.description : 'غير محدد';
   }
 
-  print() {
-    window.print();
-  }
+
 }

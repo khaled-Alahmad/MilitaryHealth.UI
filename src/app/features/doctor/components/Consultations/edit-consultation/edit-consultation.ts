@@ -52,6 +52,8 @@ export class EditConsultation {
   closeModal() {
     this.showModal = false;
     this.dialogClosed.emit(false);
+    this.modalService.dismissAll();
+
   }
 
   onFileSelected(event: any) {
@@ -93,18 +95,22 @@ export class EditConsultation {
 
     this.loading = true;
 
-    this.service.updateConsultation(this.consultation.consultationID!, updatedConsultation)
-      .subscribe({
-        next: () => {
-          this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
-          this.loading = false;
-          this.closeModal();
-        },
-        error: () => {
-          this.toastr.error('❌ فشل التحديث', 'خطأ');
-          this.loading = false;
-        }
-      });
+  this.service.updateConsultation(this.consultation.consultationID!, updatedConsultation)
+  .subscribe({
+    next: () => {
+      this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
+      this.loading = false;
+
+      // 🔹 إطلاق الحدث لإعلام الأب أن التحديث تم
+      this.consultationUpdated.emit(true);
+
+      this.closeModal();
+    },
+    error: () => {
+      this.toastr.error('❌ فشل التحديث', 'خطأ');
+      this.loading = false;
+    }
+  });
   }
   cancel() {
     this.modalService.dismissAll();

@@ -24,7 +24,7 @@ import { SearchApplicantComponent } from '../../../applicants/components/search-
 })
 export class EyeDoctorComponent {
   selectedApplicant: Applicant | null = null;
-  hasEyeExam = false;
+  hasEyeExam = true;
 
   @ViewChild(EyeExamForm) eyeExamForm!: EyeExamForm;
   @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
@@ -35,19 +35,19 @@ export class EyeDoctorComponent {
     private eyeExamService: EyeExamService
   ) {}
 
-  onApplicantSelected(applicant: Applicant) {
+   onApplicantSelected(applicant: Applicant) {
     this.selectedApplicant = applicant;
+    this.hasEyeExam = false;
 
-    if (applicant?.fileNumber) {
-      this.eyeExamService.getByFileNumber(applicant.fileNumber).subscribe({
-        next: (exam) => {
-          this.hasEyeExam = !!(exam && exam.data?.eyeExamID);
-        },
-        error: () => (this.hasEyeExam = false)
-      });
-    }
-  }
+    if (!applicant?.fileNumber) return;
 
+    this.eyeExamService.getByFileNumber1(applicant.fileNumber).subscribe({
+    next: (exam) => {
+      this.hasEyeExam = !!(exam && exam.eyeExamID); 
+    },
+    error: () => this.hasEyeExam = false
+  });
+   }
   addEyeExam() {
     if (!this.selectedApplicant) {
       this.toastr.warning('يرجى البحث عن مريض أولاً');
