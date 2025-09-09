@@ -14,17 +14,19 @@
         [showCurrentPageReport]="true" class="custom-table">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="fileNumber">رقم الملف</th>
-                <th pSortableColumn="fullName">الاسم الكامل</th>
-                <th pSortableColumn="job">العمل</th>
-                <th pSortableColumn="maritalStatus">الحالة الاجتماعية</th>
-                <th pSortableColumn="tattoo">وشم</th>
+                <th >رقم الملف</th>
+                <!-- <th > كود التجنيد</th> -->
+                <th >الاسم الكامل</th>
+                <th >العمل</th>
+                <th >الحالة الاجتماعية</th>
+                <th >وشم</th>
                 <th>Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-applicant>
             <tr>
                 <td>{{applicant.fileNumber}}</td>
+                <!-- <td>{{applicant.associateNumber}}</td> -->
                 <td>{{applicant.fullName}}</td>
                 <td>{{applicant.job}}</td>
                 <td>{{applicant.maritalStatus.description}}</td>

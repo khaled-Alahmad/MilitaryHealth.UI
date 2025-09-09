@@ -14,20 +14,20 @@
 
                         <h6 class="border-bottom pb-2 mb-3 custom-color">البيانات الشخصية</h6>
                         <div class="row g-3">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="fullName"
                                     [class.is-invalid]="isControlInvalid('fullName')"
                                     [class.is-valid]="isControlValid('fullName')" />
                             </div>
 
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label">العمل<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="job"
                                     [class.is-invalid]="isControlInvalid('job')"
                                     [class.is-valid]="isControlValid('job')" />
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label">الحالة الاجتماعية <span class="text-danger">*</span></label>
                                 <ng-select [items]="maritalStatuses" bindLabel="description" bindValue="maritalStatusID"
                                     formControlName="maritalStatusID" placeholder="اختر الحالة الاجتماعية"
@@ -37,6 +37,12 @@
                                     *ngIf="controlHasError('required','maritalStatusID')">
                                     يرجى اختيار الحالة الاجتماعية
                                 </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label"> كود التجنيد <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="associateNumber"
+                                    [class.is-invalid]="isControlInvalid('associateNumber')"
+                                    [class.is-valid]="isControlValid('associateNumber')" />
                             </div>
                         </div>
                         <h6 class="border-bottom pb-2 mt-4 mb-3">البيانات الطبية</h6>

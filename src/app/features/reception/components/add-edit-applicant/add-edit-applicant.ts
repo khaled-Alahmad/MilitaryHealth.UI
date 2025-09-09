@@ -61,7 +61,8 @@ export class AddEditApplicant implements OnInit {
       bloodPressure: ['', Validators.required],
       pulse: [null, Validators.required],
       tattoo: [false, Validators.required],
-      distinctiveMarks: ['', Validators.required]
+      distinctiveMarks: ['', Validators.required],
+      associateNumber: ['', Validators.required]
     });
   }
 

@@ -15,6 +15,7 @@ export interface ApplicantModel{
   tattoo: boolean;
   distinctiveMarks: string;
   maritalStatus: MaritalStatus;
+  associateNumber:string;
 }
 export interface ApplicantDetailsModel {
   applicantID: number;
