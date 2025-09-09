@@ -17,12 +17,8 @@
     [value]="filteredConsultations"
     [rows]="rowsPerPage"
     [totalRecords]="totalRecords"
-    [lazy]="true"
-    [loading]="loading"
-    [showCurrentPageReport]="true"
     class="custom-table compact-table"
     [tableStyle]="{ 'min-width': '50rem' }"
-    responsiveLayout="scroll"
   >
     <ng-template pTemplate="header">
       <tr>
@@ -39,7 +35,7 @@
     <ng-template pTemplate="body" let-c>
       <tr>
         <td>
-          <span class="fw-bold text-primary small">{{ c.applicantFileNumber }}</span>
+          <span class="fw-bold small">{{ c.applicantFileNumber }}</span>
         </td>
         <td>
           <span class="fw-bold small">{{ c.consultationType }}</span>
@@ -69,14 +65,8 @@
         </td>
 
         <td class="text-center">
-          <button
-            title="تعديل"
-            class="btn btn-sm btn-primary p-1 d-flex align-items-center justify-content-center"
-            (click)="openEditConsultation(c)"
-            style="width: 1.8rem; height: 1.8rem; margin: 0 auto"
-          >
-            <i class="fas fa-edit small"></i>
-          </button>
+          <i class="pi pi-file-edit icon"
+           (click)="openEditConsultation(c)" title="تعديل"></i>
         </td>
       </tr>
     </ng-template>
