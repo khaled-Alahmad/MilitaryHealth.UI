@@ -17,21 +17,15 @@ export class ApplicantService {
    * جلب Applicant كامل عن طريق رقم الملف
    */
   getApplicantByFileNumber(fileNumber: string): Observable<Applicant> {
-    const token = localStorage.getItem('token');
-    const headers = { Authorization: `Bearer ${token}` };
-    return this.http.get<ApiResponse<{items: Applicant[], totalCount: number}>>(
-      `${this.apiUrl}?filter=${fileNumber}`,
-      { headers }
-    ).pipe(
-      map(res => {
-        const applicant = res.data.items.find(item => item.fileNumber === fileNumber);
-        if (!applicant) {
-          throw new Error(`Applicant with file number ${fileNumber} not found`);
-        }
-        return applicant;
-      })
-    );
+    return this.http.get<ApiResponse<Applicant>>(`${this.apiUrl}/${fileNumber}`)
+        .pipe(
+          map(response => response.data)
+        );
   }
 
 
+
+
+
+  
 }
