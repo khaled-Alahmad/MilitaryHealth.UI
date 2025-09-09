@@ -61,7 +61,7 @@ export class SearchApplicantComponent implements OnInit {
       error: () => {
         this.applicant = null;
         this.loading = false;
-        this.responseMessage = 'حدث خطأ أثناء جلب البيانات';
+          this.responseMessage = 'لم يتم العثور على منتسب بهذا الرقم';
       }
     });
   }
