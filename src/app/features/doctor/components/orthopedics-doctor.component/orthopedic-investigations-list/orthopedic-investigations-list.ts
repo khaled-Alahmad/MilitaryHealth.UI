@@ -98,13 +98,13 @@ export class OrthopedicInvestigationsList implements OnInit {
     });
   }
   
-  getBadgeClass(result: any): string {
-    if (!result || !result.description) return 'badge bg-secondary';
-    switch (result.description) {
-      case 'مقبول': return 'badge bg-success';
-      case 'مرفوض': return 'badge bg-danger';
-      case 'مؤجل': return 'badge bg-warning text-dark';
-      default: return 'badge bg-secondary';
-    }
-  }
+  // getBadgeClass(result: any): string {
+  //   if (!result ) return 'badge bg-secondary';
+  //   switch (result) {
+  //     case 'مقبول': return 'badge bg-success';
+  //     case 'مرفوض': return 'badge bg-danger';
+  //     case 'مؤجل': return 'badge bg-warning text-dark';
+  //     default: return 'badge bg-secondary';
+  //   }
+  // }
 }

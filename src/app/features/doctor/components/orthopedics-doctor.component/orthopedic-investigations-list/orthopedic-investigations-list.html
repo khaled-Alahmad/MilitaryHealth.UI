@@ -20,9 +20,10 @@
       <tr>
         <th>رقم الملف</th>
         <th>الطبيب</th>
+          <th> نوع التحليل</th>
+            <th> الحالة</th>
+                    <th>النتيجة</th>
         <th>الملف المرفق</th>
-
-        <th>النتيجة</th>
         <th>إجراءات</th>
       </tr>
     </ng-template>
@@ -31,6 +32,11 @@
       <tr>
         <td>{{ i.applicantFileNumber || '-' }}</td>
         <td>{{ i.doctor?.fullName || '-' }}</td>
+        <td>{{ i.type || '-' }}</td>
+        <td>{{ i.status || '-' }}</td>
+           <td>
+          <span >{{ i.result || '-' }}</span>
+        </td>
         <td class="text-center">
           @if(i.attachment){
             <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
@@ -43,9 +49,7 @@
             <span>لا يوجد ملف</span>
             }
         </td>
-        <td>
-          <span [ngClass]="getBadgeClass(i.result)">{{ i.result?.description || '-' }}</span>
-        </td>
+     
         <td class="text-center">
           <button title="إضافة نتيجة"
                   class="btn btn-sm btn-success"

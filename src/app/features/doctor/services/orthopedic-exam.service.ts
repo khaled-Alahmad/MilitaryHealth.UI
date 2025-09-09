@@ -82,14 +82,13 @@ export class OrthopedicExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true)
-      .set('sortBy', 'orthopedicExamID');
+      .set('sortDesc', true);
 
     if (filter) {
       params = params.set('filter', filter);
     }
     return this.http
-      .get<ApiResponse<PagedResponse<Consultation>>>(this.apiUrl, { params })
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
       .pipe(map(res => res.data));
 
   }
@@ -108,14 +107,13 @@ export class OrthopedicExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true)
-      .set('sortBy', 'orthopedicExamID');
+      .set('sortDesc', true);
 
     if (filter) {
       params = params.set('filter', filter);
     }
     return this.http
-      .get<ApiResponse<PagedResponse<Investigation>>>(this.apiUrl, { params })
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
       .pipe(map(res => res.data));
 
   }

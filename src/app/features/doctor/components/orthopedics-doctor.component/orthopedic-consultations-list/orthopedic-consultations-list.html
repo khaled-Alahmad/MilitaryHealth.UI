@@ -36,7 +36,7 @@
         <td>{{ c.referredDoctor || '-' }}</td> -->
         <td>{{ c.doctor.code || '-' }}</td>
         <td>
-          <span [ngClass]="getBadgeClass(c.result)">{{ c.result.description || '-' }}</span>
+          <span [ngClass]="getBadgeClass(c.result)">{{ c.result || '-' }}</span>
         </td>
         
         <td class="text-center">

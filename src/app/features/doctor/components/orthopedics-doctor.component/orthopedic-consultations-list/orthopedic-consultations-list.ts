@@ -90,20 +90,20 @@ export class OrthopedicConsultationsList implements OnInit {
     window.open(url, '_blank');
   }
   openEditDeferredOrthopedi(orthopedicExam: OrthopedicExam) {
-    const modalRef = this.modalService.open(EditOrthopedicExamComponent, {
+    const modalRef = this.modalService.open(EditConsultation, {
       size: 'lg',
       backdrop: 'static',
       keyboard: false,
       centered: true
     });
-    modalRef.componentInstance.exam  = orthopedicExam;
+    modalRef.componentInstance.consultation  = orthopedicExam;
     modalRef.componentInstance.OrthopedicExamUpdated.subscribe(() => {
       this.loadConsultations();
     });
   }
   getBadgeClass(result: any): string {
-    if (!result || !result.description) return 'badge bg-secondary';
-    switch (result.description) {
+    if (!result) return 'badge bg-secondary';
+    switch (result) {
       case 'مقبول': return 'badge bg-success';
       case 'مرفوض': return 'badge bg-danger';
       case 'مؤجل': return 'badge bg-warning text-dark';
