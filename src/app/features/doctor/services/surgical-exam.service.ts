@@ -88,7 +88,8 @@ getAllSurgicalExams(page: number = 1,
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true)
+      .set('sortBy', 'surgicalExamID');
 
     if (filter) {
       params = params.set('filter', filter);
@@ -98,6 +99,9 @@ getAllSurgicalExams(page: number = 1,
       .pipe(map(res => res.data));
   }
 
+
+
+  
   // ✅ تحاليل خاصة بالجراحة
   addInvestigation(investigation: Investigation): Observable<any> {
     return this.http.post(this.investigationUrl, investigation, {
@@ -115,6 +119,8 @@ getAllSurgicalExams(page: number = 1,
     const token = localStorage.getItem('token') || '';
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
+
+
 
   getByFileNumber(fileNumber: string): Observable<SurgicalExam | null> {
   const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
