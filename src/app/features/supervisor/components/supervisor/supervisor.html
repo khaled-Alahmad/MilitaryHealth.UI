@@ -9,8 +9,8 @@
         <input type="text" class="form-control search-input" placeholder="ابحث عن رقم الملف..." dir="rtl"
           [(ngModel)]="searchValue">
       </div>
-      <div *ngIf="!applicant && responseMessage" class="alert alert-warning mt-3" role="alert">
-        {{ responseMessage }}
+      <div *ngIf="!hasAllExams()" class="alert alert-danger mt-3" role="alert">
+        الفحوصات الطلبة غير مكتملة
       </div>
     </div>
   </div>
@@ -191,8 +191,9 @@
             }
             <div class="text-end">
               <button type="button" class="btn btn-primary" (click)="submitDecision()"
-                [disabled]="!hasAllExams()"></button>>
+                [disabled]="!hasAllExams()">
               <i class="fas fa-paper-plane"></i> إرسال
+            </button>
             </div>
             <div *ngIf="responseMessage" class="mt-3">
               <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
