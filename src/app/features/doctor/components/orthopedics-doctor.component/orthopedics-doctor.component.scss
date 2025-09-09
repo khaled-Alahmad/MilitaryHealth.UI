@@ -2,38 +2,32 @@
   display: flex;
   gap: 15px; /* مسافة بين الأزرار */
   flex-wrap: wrap;
-  margin-bottom: 15px;
 }
 
-.button-group button {
-  padding: 10px 20px;
-  border: none;
-  color: #fff;
-  font-weight: 500;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.button-group .btn-primary {
+button.btn-primary {
   background-color: #007bff;
+  border: none;
 }
-.button-group .btn-primary:hover {
+
+button.btn-primary:hover {
   background-color: #0056b3;
 }
 
-.button-group .btn-warning {
-  background-color: #ffc107;
-  color: #212529;
-}
-.button-group .btn-warning:hover {
-  background-color: #e0a800;
+button.btn-secondary {
+  background-color: #6c757d;
+  border: none;
 }
 
-.button-group .btn-success {
-  background-color: #28a745;
+button.btn-secondary:hover {
+  background-color: #545b62;
 }
-.button-group .btn-success:hover {
+
+button.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+button.btn-success:hover {
   background-color: #1e7e34;
 }
 

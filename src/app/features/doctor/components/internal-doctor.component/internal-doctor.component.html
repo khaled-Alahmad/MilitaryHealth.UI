@@ -9,12 +9,12 @@
     <!-- يظهر فقط إذا ما عنده فحص سابق -->
     <button 
       *ngIf="!hasInternalExam " 
-      class="btn btn-primary" 
+      class="btn btn-outline-primary" 
       (click)="addInternalExam()">إضافة فحص داخلي
     </button>
 
-    <button class="btn btn-warning" (click)="addConsultation()">طلب استشارة</button>
-    <button class="btn btn-success" (click)="addInvestigation()">طلب تحليل</button>
+    <button class="btn btn-outline-primary" (click)="addConsultation()">طلب استشارة</button>
+    <button class="btn btn-outline-primary" (click)="addInvestigation()">طلب تحليل</button>
   </div>
 
   <!-- المكونات -->
