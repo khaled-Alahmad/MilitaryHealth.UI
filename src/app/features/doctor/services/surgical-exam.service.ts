@@ -109,7 +109,6 @@ getAllSurgicalExams(page: number = 1,
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', true)
-      .set('sortBy', 'surgicalExamID');
   
     if (filter) {
       params = params.set('filter', filter);
