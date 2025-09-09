@@ -197,25 +197,63 @@ export class InternalExamService {
         })
       );
   }
-  getInternalConsultations(page: number = 1,
+  // getInternalConsultations(page: number = 1,
+  //   pageSize: number = 10,
+  //   filter: string = ''): Observable<PagedResponse<Consultation>> {
+  //   let params = new HttpParams()
+  //     .set('page', page.toString())
+  //     .set('pageSize', pageSize.toString())
+  //     .set('sortDesc', true)
+  //     .set('sortBy', 'consultationID')
+  //     ;
+
+  //   if (filter) {
+  //     params = params.set('filter', filter);
+  //   }
+  //   return this.http
+  //     .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
+  //     .pipe(map(res => res.data));
+  // }
+
+  getInternalConsultations(
+    page: number = 1,
     pageSize: number = 10,
-    filter: string = ''): Observable<PagedResponse<Consultation>> {
+    filter: string = ''
+  ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', true)
-      .set('sortBy', 'consultationID')
-      ;
-
+      .set('sortBy', 'consultationID');
+  
     if (filter) {
       params = params.set('filter', filter);
     }
-    return this.http
-      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
-      .pipe(map(res => res.data));
+  
+    return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(
+      map(res => {
+        const data = res.data;
+        return {
+          ...data,
+          items: (data?.items || []).filter(
+            (c: Consultation) => c.doctor?.specializationID === 3 // 👈 ID الباطنة (عدّله حسب DB عندك)
+          )
+        } as PagedResponse<Consultation>;
+      }),
+      catchError(() => of({
+        items: [],
+        totalCount: 0,
+        page: page,
+        pageSize,
+        totalPages: 0
+      } as PagedResponse<Consultation>))
+      
+    );
   }
-
-
+  
   getByFileNumber(fileNumber: string): Observable<InternalExam | null> {
     const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
     return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
