@@ -132,7 +132,8 @@
               <tr *ngFor="let refraction of rightEyeRefractions">
                 <td class="text-center">
                   <span class="fw-bold" [class.text-muted]="!refraction.refractionType">
-                    {{ refraction.refractionType?.description || 'غير معروف' }}
+                              {{ getRefractionTypeName(refraction.refractionTypeID) }}
+
                   </span>
                 </td>
                 <td class="text-center">
@@ -165,6 +166,7 @@
             <thead class="table-light">
               <tr>
                 <th class="text-center"><i class="fas fa-list me-1"></i> نوع الانكسار</th>
+               
                 <th class="text-center"><i class="fas fa-chart-bar me-1"></i> نسبة الانكسار</th>
               </tr>
             </thead>
@@ -172,12 +174,16 @@
               <tr *ngFor="let refraction of leftEyeRefractions">
                 <td class="text-center">
                   <span class="fw-bold" [class.text-muted]="!refraction.refractionType">
-                    {{ refraction.refractionType?.description || 'غير معروف' }}
+                          {{ getRefractionTypeName(refraction.refractionTypeID) }}
+
                   </span>
+
                 </td>
                 <td class="text-center">
                   <span class="badge bg-primary fs-6 px-3 py-2" [class.bg-danger]="!refraction.refractionValue">
                     {{ refraction.refractionValue || 'لا توجد قيمة' }}
+
+
                   </span>
                 </td>
               </tr>

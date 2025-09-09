@@ -637,6 +637,9 @@ export class EyeExamService {
   //   );
   // }
 // Investigation Operations
+
+
+
 getEyeClinicInvestigations(
   page: number = 1,
   pageSize: number = 20,

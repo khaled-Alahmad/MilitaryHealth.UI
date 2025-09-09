@@ -251,7 +251,7 @@ export class InternalExamService {
         return {
           ...data,
           items: (data?.items || []).filter(
-            (c: Consultation) => c.doctor?.specializationID === 3 // 👈 ID الباطنة (عدّله حسب DB عندك)
+            (c: Consultation) => c.doctor?.specializationID === 2 // 👈 ID الباطنة (عدّله حسب DB عندك)
           )
         } as PagedResponse<Consultation>;
       }),

@@ -25,7 +25,7 @@ export class EyeInvestigationsList implements OnInit {
   filteredInvestigations: Investigation[] = [];
   globalFilter: string = '';
   page = 1;
-  rowsPerPage = 10;
+  rowsPerPage = 5;
   totalRecords = 0;
   loading = false;
   tableHeight = '360px';
