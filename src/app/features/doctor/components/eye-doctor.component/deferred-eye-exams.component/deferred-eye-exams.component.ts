@@ -60,7 +60,7 @@ export class DeferredEyeExamsComponent implements OnInit {
         this.totalRecords = data.totalCount;
         this.loading = false;
   
-        this.loadApplicantsInfo(); // تحميل معلومات المنتسبين بشكل آمن
+        //this.loadApplicantsInfo(); // تحميل معلومات المنتسبين بشكل آمن
       },
       error: () => {
         this.toastr.error('فشل في جلب بيانات فحوصات العيون', 'خطأ');

@@ -16,17 +16,13 @@
     [value]="exams"
     [rows]="rowsPerPage"
     [totalRecords]="totalRecords"
-    [lazy]="true"
-    [showCurrentPageReport]="true"
-    [loading]="loading"
-    styleClass="custom-table my-3"
+    class="custom-table my-3"
     [tableStyle]="{ 'min-width': '50rem' }"
-    responsiveLayout="scroll"
   >
     <ng-template pTemplate="header">
       <tr>
         <th style="min-width:100px" class="text-center">رقم الملف</th>
-        <th style="min-width:140px" class="text-center">اسم المنتسب</th>
+        <th  class="text-center">اسم المنتسب</th>
         <th style="min-width:100px" class="text-center">الطبيب</th>
         <th style="min-width:120px" class="text-center">القدرة البصرية</th>
         <th style="min-width:120px" class="text-center">اختبار الألوان</th>
@@ -39,13 +35,14 @@
     <ng-template pTemplate="body" let-exam>
       <tr>
         <td class="text-center align-middle">
-          <span class="fw-bold small text-primary">{{ exam.applicantFileNumber }}</span>
+          <span class="fw-bold small ">{{ exam.applicantFileNumber }}</span>
         </td>
         <td class="text-center align-middle">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          {{exam.fullName}}
+          <!-- <div class="d-flex flex-column justify-content-center align-items-center">
             <span class="fw-bold small">{{ getApplicantName(exam) }}</span>
             <small class="text-muted">{{ getApplicantJob(exam) }}</small>
-          </div>
+          </div> -->
         </td>
         <td class="text-center align-middle">
           <span class="fw-bold small">{{ exam.doctor?.fullName || 'غير محدد' }}</span>
