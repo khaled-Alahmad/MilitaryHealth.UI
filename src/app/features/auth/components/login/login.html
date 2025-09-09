@@ -68,12 +68,9 @@
       <div class="field button-field">
         <button
           type="submit"
-          [disabled]="submitted || !loginForm.valid"
-          [class.loading]="submitted"
-          [class.btn-pulse]="submitted"
+
         >
-          <span *ngIf="!submitted">تسجيل الدخول</span>
-          <i class="bx bx-loader-alt bx-spin" *ngIf="submitted"></i>
+          <span >تسجيل الدخول</span>
         </button>
       </div>
     </div>
