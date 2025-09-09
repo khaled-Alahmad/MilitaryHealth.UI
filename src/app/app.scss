@@ -65,3 +65,26 @@ p {
   border-color: #428177;
   box-shadow: 0 0 0 0.25rem rgba(66, 129, 119, 0.25);
 }
+.dots-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.dots-spinner div {
+  width: 10px;
+  height: 10px;
+  background: #054239;
+  border-radius: 50%;
+  animation: bounce 0.6s infinite alternate;
+}
+.dots-spinner div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dots-spinner div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes bounce {
+  from { transform: translateY(0); opacity: 0.6; }
+  to   { transform: translateY(-8px); opacity: 1; }
+}

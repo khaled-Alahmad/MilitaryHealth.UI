@@ -1,7 +1,10 @@
 <div *ngIf="loadingService.loading$ | async" class="loading-overlay">
-    <div class="loading-spinner text-center">
-      <div class="spinner-border text-primary"></div>
+  <div class="loading-spinner text-center">
+    <div class="dots-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
   </div>
+</div>
 <router-outlet></router-outlet>
-
