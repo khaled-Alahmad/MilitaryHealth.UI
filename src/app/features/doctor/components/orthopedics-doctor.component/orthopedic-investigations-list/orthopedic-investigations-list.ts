@@ -13,7 +13,7 @@ import { PaginatorComponent } from "../../../../../shared/components/paginator/p
 
 @Component({
   selector: 'app-orthopedic-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, EditInvestigation, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './orthopedic-investigations-list.html',
   styleUrl: './orthopedic-investigations-list.scss'
 })

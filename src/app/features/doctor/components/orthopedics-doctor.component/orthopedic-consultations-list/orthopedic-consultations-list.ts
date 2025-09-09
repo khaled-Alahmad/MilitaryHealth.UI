@@ -17,7 +17,7 @@ import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/e
 @Component({
   selector: 'app-orthopedic-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, EditConsultation, PaginatorComponent, TableModule],
+  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule],
   templateUrl: './orthopedic-consultations-list.html',
   styleUrls: ['./orthopedic-consultations-list.scss'] // ✅ صحيح: styleUrls وليس styleUrl
 })

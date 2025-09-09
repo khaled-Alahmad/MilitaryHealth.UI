@@ -14,7 +14,7 @@ import { PaginatorComponent } from "../../../../../shared/components/paginator/p
 @Component({
   selector: 'app-surgery-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, EditConsultation, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './surgery-consultations-list.html',
   styleUrls: ['./surgery-consultations-list.scss']
 })

@@ -121,11 +121,17 @@ getAllSurgicalExams(page: number = 1,
       })
       .pipe(
         map(res => {
-          const data = res.data;
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
           return {
             ...data,
             items: (data?.items || []).filter(
-              (c: Consultation) => c.doctor?.specializationID === 3 // جراحة عامة مثلاً
+              (c: Consultation) => c.doctor?.specializationID === 2 // جراحة عامة مثلاً
             )
           } as PagedResponse<Consultation>;
         })

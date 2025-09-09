@@ -13,7 +13,7 @@ import { PaginatorComponent } from "../../../../../shared/components/paginator/p
 
 @Component({
   selector: 'app-internal-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, EditInvestigation, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './internal-investigations-list.html',
   styleUrl: './internal-investigations-list.scss'
 })

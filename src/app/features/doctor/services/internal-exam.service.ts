@@ -187,7 +187,13 @@ export class InternalExamService {
       })
       .pipe(
         map(res => {
-          const data = res.data;
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
           return {
             ...data,
             items: (data?.items || []).filter(
@@ -235,7 +241,13 @@ export class InternalExamService {
       params
     }).pipe(
       map(res => {
-        const data = res.data;
+        const data = res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
+        };
         return {
           ...data,
           items: (data?.items || []).filter(

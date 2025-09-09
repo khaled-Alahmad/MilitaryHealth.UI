@@ -12,7 +12,7 @@ import { PaginatorComponent } from "../../../../../shared/components/paginator/p
 
 @Component({
   selector: 'app-deferred-orthopedi-exams-component',
-  imports: [CommonModule, FormsModule, ButtonModule, EditOrthopedicExamComponent, TableModule, PaginatorComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent],
   templateUrl: './deferred-orthopedi-exams-component.html',
   styleUrl: './deferred-orthopedi-exams-component.scss'
 })

@@ -558,7 +558,13 @@ export class EyeExamService {
       params
     }).pipe(
       map(res => {
-        const data = res.data;
+        const data = res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
+        };
         return {
           ...data,
           items: (data?.items || []).filter(
@@ -650,7 +656,13 @@ getEyeClinicInvestigations(
     params
   }).pipe(
     map(res => {
-      const data = res.data;
+      const data = res.data ?? {
+        items: [],
+        totalCount: 0,
+        page,
+        pageSize,
+        totalPages: 0
+      };
       return {
         ...data,
         items: (data?.items || []).filter(

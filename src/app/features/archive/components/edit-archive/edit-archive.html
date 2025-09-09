@@ -3,7 +3,7 @@
   <button type="button" class="btn-close" aria-label="Close" (click)="cancel()"></button>
 
   <h4 class="modal-title text-center flex-grow-1">
-    تحميل نسخة رقمية للملف: {{ archive?.fileNumber }}
+    تحميل نسخة رقمية للملف: {{ archive.fileNumber }}
   </h4>
 </div>
 
@@ -35,6 +35,6 @@
 
   <div class="modal-footer">
     <button class="btn btn-secondary" (click)="cancel()">إلغاء</button>
-    <button *ngIf="!archive?.digitalCopy" class="btn btn-primary" (click)="save()" [disabled]="!selectedFile && !archive?.digitalCopy">حفظ</button>
+    <button *ngIf="!archive?.digitalCopy" class="btn btn-primary" (click)="save()" [disabled]="!selectedFile && !archive.digitalCopy">حفظ</button>
   </div>
 </div>

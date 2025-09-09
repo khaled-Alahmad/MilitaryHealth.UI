@@ -18,7 +18,7 @@ import { PagedResponse } from '../../../../../shared/models/paged-response.model
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, EditEyeExam, EyeExamDetails, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })

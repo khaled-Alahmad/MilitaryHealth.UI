@@ -15,7 +15,7 @@ import { PaginatorComponent } from '../../../../../shared/components/paginator/p
 
 @Component({
   selector: 'app-internal-consultations-list',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditConsultation, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, PaginatorComponent],
   templateUrl: './internal-consultations-list.html',
   styleUrl: './internal-consultations-list.scss'
 })

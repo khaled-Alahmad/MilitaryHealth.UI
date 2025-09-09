@@ -113,7 +113,13 @@ export class OrthopedicExamService {
       })
       .pipe(
         map(res => {
-          const data = res.data;
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
           return {
             ...data,
             items: (data?.items || []).filter(
@@ -169,7 +175,13 @@ export class OrthopedicExamService {
       })
       .pipe(
         map(res => {
-          const data = res.data;
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
           return {
             ...data,
             items: (data?.items || []).filter(
