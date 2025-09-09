@@ -64,10 +64,9 @@ export class EyeConsultations implements OnInit {
     const filter = this.globalFilter || '';
     this.service.getEyeClinicConsultations(this.page, this.rowsPerPage, filter).subscribe({
       next: (res: PagedResponse<Consultation>) => {
-        // ترتيب حسب id من الأكبر للأصغر
-        this.consultations = res.items.sort((a, b) => 
-          (b.consultationID ?? 0) - (a.consultationID ?? 0)
-        );        this.filteredConsultations = this.consultations;
+        this.consultations = res.items;
+        this.filteredConsultations = res.items;
+        console.log(res);
         this.totalRecords = res.totalCount;
         this.loading = false;
       },

@@ -51,11 +51,16 @@
         </td>
      
         <td class="text-center">
-          <button title="إضافة نتيجة"
+          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
+          (click)="openEditInvestigation(i)">
+          <i class="pi pi-pen-to-square"></i>
+            إضافة نتيجة
+      </button>
+          <!-- <button title="إضافة نتيجة"
                   class="btn btn-sm btn-success"
                   (click)="openEditInvestigation(i)">
             <i class="fas fa-pencil-alt"></i>
-          </button>
+          </button> -->
         </td>
       </tr>
     </ng-template>
