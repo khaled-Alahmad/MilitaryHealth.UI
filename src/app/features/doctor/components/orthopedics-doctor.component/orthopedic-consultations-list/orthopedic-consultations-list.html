@@ -34,7 +34,7 @@
         <td>{{ c.applicantFileNumber || '-' }}</td>
         <td>{{ c.consultationType || '-' }}</td>
         <td>{{ c.referredDoctor || '-' }}</td>
-        <td>{{ c.doctor.code || '-' }}</td>
+        <td>{{ c.doctor.fullName || '-' }}</td>
         <td>
           <span [ngClass]="getBadgeClass(c.result)">{{ c.result || '-' }}</span>
         </td>
