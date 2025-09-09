@@ -82,7 +82,8 @@ export class OrthopedicExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true)
+      .set('sortBy', 'orthopedicExamID');
 
     if (filter) {
       params = params.set('filter', filter);
@@ -107,7 +108,8 @@ export class OrthopedicExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true);
+      .set('sortDesc', true)
+      .set('sortBy', 'orthopedicExamID');
 
     if (filter) {
       params = params.set('filter', filter);
@@ -131,6 +133,5 @@ export class OrthopedicExamService {
       })
     );
   }
-
 }
 
