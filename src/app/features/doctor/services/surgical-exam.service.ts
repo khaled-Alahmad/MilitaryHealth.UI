@@ -88,7 +88,7 @@ getAllSurgicalExams(page: number = 1,
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true);
 
     if (filter) {
       params = params.set('filter', filter);

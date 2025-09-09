@@ -54,7 +54,8 @@ export class InternalExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true)
+      .set('sortBy', 'internalExamID');
 
     if (filter) {
       params = params.set('filter', filter);
@@ -78,13 +79,14 @@ export class InternalExamService {
   // جلب كل التحاليل للعيادة الداخلية مع pagination + filter
   getAllInternalInvestigations(
     page: number = 1,
-    pageSize: number = 20,
+    pageSize: number = 10,
     filter: string = ''
   ): Observable<PagedResponse<Investigation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', 'true')
+      .set('sortBy', 'investigationID');
 
     if (filter) {
       params = params.set('filter', filter);
@@ -95,6 +97,23 @@ export class InternalExamService {
       .pipe(map(res => res.data));
   }
 
+
+  getInternalInvestigations(page: number = 1,
+    pageSize: number = 10,
+    filter: string = ''): Observable<PagedResponse<Investigation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', true)
+      .set('sortBy', 'investigationID');
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
+      .pipe(map(res => res.data));
+  }
   // جلب كل الاستشارات للعيادة الداخلية مع pagination + filter
   getAllInternalConsultations(
     page: number = 1,
@@ -104,7 +123,8 @@ export class InternalExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true)
+      .set('sortBy', 'consultationID');
 
     if (filter) {
       params = params.set('filter', filter);
@@ -114,29 +134,15 @@ export class InternalExamService {
       .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, { params })
       .pipe(map(res => res.data));
   }
-  getInternalInvestigations(page: number = 1,
-    pageSize: number = 10,
-    filter: string = ''): Observable<PagedResponse<Investigation>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
-
-    if (filter) {
-      params = params.set('filter', filter);
-    }
-    return this.http
-      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
-      .pipe(map(res => res.data));
-  }
-
   getInternalConsultations(page: number = 1,
     pageSize: number = 10,
     filter: string = ''): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', true)
+      .set('sortBy', 'consultationID')
+      ;
 
     if (filter) {
       params = params.set('filter', filter);

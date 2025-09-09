@@ -17,14 +17,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   if (roles.length > 0 && !auth.isAuthorizated(roles)) {
-    Swal.fire({
-      title: 'غير مسموح',
-      text: `${messageError}. لا تملك صلاحية للوصول إلى هذه الصفحة.`,
-      icon: 'error',
-      confirmButtonText: 'إغلاق',
-      background: '#f8d7da',
-      confirmButtonColor: '#d33'
-    });
     return router.createUrlTree(['/unauthorized']);
   }
 
