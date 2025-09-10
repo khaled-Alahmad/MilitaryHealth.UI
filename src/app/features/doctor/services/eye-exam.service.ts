@@ -392,19 +392,37 @@ export class EyeExamService {
       });
     }
 
-    const params = new HttpParams()
-      .set('filter', `eyeExamId=${eyeExamId}`)
-      .set('page', '1')
-      .set('pageSize', '100');
+    const fetchWithKey = (key: 'eyeExamId' | 'eyeExamID') => {
+      const params = new HttpParams()
+        .set('filter', `${key}=${eyeExamId}`)
+        .set('page', '1')
+        .set('pageSize', '100');
 
-    return this.http.get<ApiResponse<PagedResponse<Refraction>>>(
-      this.refractionUrl,
-      { headers: this.getAuthHeaders(), params }
-    ).pipe(
-      map(response => ({
-        ...response,
-        data: response.data?.items || []
-      })),
+      return this.http.get<ApiResponse<PagedResponse<Refraction>>>(
+        this.refractionUrl,
+        { headers: this.getAuthHeaders(), params }
+      ).pipe(
+        map(response => ({
+          ...response,
+          data: response.data?.items || []
+        })),
+        catchError(() => of({
+          succeeded: false,
+          status: 500,
+          message: 'فشل الجلب',
+          data: [],
+          traceId: ''
+        }))
+      );
+    };
+
+    return fetchWithKey('eyeExamId').pipe(
+      switchMap(first => {
+        if (first.succeeded && first.data && first.data.length > 0) {
+          return of(first);
+        }
+        return fetchWithKey('eyeExamID');
+      }),
       catchError(error => of({
         succeeded: false,
         status: error.status || 500,

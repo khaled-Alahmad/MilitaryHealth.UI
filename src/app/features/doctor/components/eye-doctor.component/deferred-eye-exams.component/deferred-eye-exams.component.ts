@@ -126,9 +126,11 @@ openEditExam(eyeExam: EyeExam): void {
   }).subscribe({
     next: (responses) => {
       if (responses.exam.succeeded && responses.exam.data) {
+        const fetchedRefs = responses.refractions.succeeded ? (responses.refractions.data || []) : [];
         const examWithRefractions = {
           ...responses.exam.data,
-          refractions: responses.refractions.succeeded ? responses.refractions.data : []
+          // fallback إلى الانكسارات الموجودة في الصف إذا لم يرجع الـ API شيئًا
+          refractions: fetchedRefs.length ? fetchedRefs : (eyeExam.refractions || [])
         };
 
         const modalRef = this.modalService.open(EditEyeExam, {
