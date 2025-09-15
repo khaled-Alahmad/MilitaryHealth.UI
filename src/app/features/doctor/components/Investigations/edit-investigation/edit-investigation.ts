@@ -6,6 +6,7 @@ import { Investigation } from '../../../models/investigation.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-edit-investigation',
@@ -23,7 +24,7 @@ export class EditInvestigation {
   previewUrl: string | null = null;
   loading: boolean = false;
   showModal: boolean = true; // 🔹 التحكم بالظهور مباشرة
-
+  private baseUrl = 'http://itmanager12-001-site1.ltempurl.com/';
   constructor(
     private fb: FormBuilder,
     private service: EyeExamService,
@@ -39,11 +40,12 @@ export class EditInvestigation {
     status: [this.investigation.result ? 'مكتمل' : 'مؤجل', Validators.required],
     attachment: [this.investigation.attachment || null]
   });
-
+  console.log(this.investigation.attachment);
   if (this.investigation.attachment) {
     this.uploadedPath = this.investigation.attachment;
-    this.previewUrl = this.uploadedPath;
+    this.previewUrl = `${environment.apiUrl}/${this.uploadedPath}`;
   }
+  console.log(this.previewUrl);
 
   // 🔹 مراقبة التغيرات على حقل النتيجة لتحديث الحالة تلقائيًا
   this.investigationForm.get('result')?.valueChanges.subscribe(value => {
@@ -55,23 +57,30 @@ export class EditInvestigation {
 }
 
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => this.previewUrl = e.target.result;
-      reader.readAsDataURL(file);
+onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
 
-      this.service.uploadFile(file).subscribe({
-        next: (path) => {
-          this.uploadedPath = path;
-          this.investigationForm.patchValue({ attachment: path });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
-        },
-        error: () => this.toastr.error('❌ فشل رفع الملف', 'خطأ')
-      });
-    }
+    // ✅ معاينة الصورة مباشرة (base64)
+    reader.onload = (e: any) => {
+      this.previewUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // ✅ رفع الملف للسيرفر
+    this.service.uploadFile(file).subscribe({
+      next: (path) => {
+       
+        this.uploadedPath =path; // مسار السيرفر للحفظ فقط
+        this.investigationForm.patchValue({ attachment: path });
+        this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+      },
+      error: () => this.toastr.error('❌ فشل رفع الملف', 'خطأ')
+    });
   }
+}
+
 
   onSubmit() {
     if (!this.investigationForm.valid) {
@@ -113,4 +122,6 @@ export class EditInvestigation {
   cancel() {
     this.modalService.dismissAll();
     }
+    
+    
 }

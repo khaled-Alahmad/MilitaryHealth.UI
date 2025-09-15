@@ -38,28 +38,52 @@
     <section class="card avoid-break">
       <h5 class="card-title">الفحوصات الطبية</h5>
       <div class="card-body">
-        <div class="subcard avoid-break">
+        <div class="subcard avoid-break compact-exam-card">
           <div class="subcard-title">فحص العيون</div>
           <div class="two-col">
             <div class="field"><span class="label">النظر</span><span class="value">{{ a.eyeExam?.vision || '-' }}</span></div>
             <div class="field"><span class="label">الألوان</span><span class="value">{{ a.eyeExam?.colorTest || '-' }}</span></div>
-            <div class="field"><span class="label">قيمة الانكسار</span><span class="value">{{ a.eyeExam?.refractionValue || '-' }}</span></div>
-            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.eyeExam?.resultID) }}</span></div>
+            <div class="field full">
+              <span class="label">قيم الانكسار</span>
+              <span class="value">
+                @if(groupedRefractions?.length){
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>النوع</th>
+                        <th class="text-center">يمين</th>
+                        <th class="text-center">يسار</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let g of groupedRefractions">
+                        <td>{{ g.typeName }}</td>
+                        <td class="text-center">{{ g.right ?? 'لا يوجد' }}</td>
+                        <td class="text-center">{{ g.left ?? 'لا يوجد' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                } @else {
+                  <span class="text-muted">لا يوجد انكسار</span>
+                }
+              </span>
+            </div>
+            <div class="field"><span class="label">النتيجة</span><span class="value fw-bold">{{ getResultDescription(a.eyeExam?.resultID) }}</span></div>
           </div>
         </div>
 
-        <div class="subcard avoid-break">
+        <div class="subcard avoid-break compact-exam-card">
           <div class="subcard-title">الفحص الجراحي</div>
           <div class="two-col">
             <div class="field"><span class="label">عام</span><span class="value">{{ a.surgicalExam?.generalSurgery || '-' }}</span></div>
             <div class="field"><span class="label">المسالك البولية</span><span class="value">{{ a.surgicalExam?.urinarySurgery || '-' }}</span></div>
             <div class="field"><span class="label">الأوعية الدموية</span><span class="value">{{ a.surgicalExam?.vascularSurgery || '-' }}</span></div>
             <div class="field"><span class="label">الصدر</span><span class="value">{{ a.surgicalExam?.thoracicSurgery || '-' }}</span></div>
-            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.surgicalExam?.resultID) }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value fw-bold">{{ getResultDescription(a.surgicalExam?.resultID) }}</span></div>
           </div>
         </div>
 
-        <div class="subcard avoid-break">
+        <div class="subcard avoid-break compact-exam-card">
           <div class="subcard-title">الفحص الباطني</div>
           <div class="two-col">
             <div class="field"><span class="label">القلب</span><span class="value">{{ a.internalExam?.heart || '-' }}</span></div>
@@ -67,20 +91,20 @@
             <div class="field"><span class="label">الجهاز الهضمي</span><span class="value">{{ a.internalExam?.digestive || '-' }}</span></div>
             <div class="field"><span class="label">الأعصاب</span><span class="value">{{ a.internalExam?.neurology || '-' }}</span></div>
             <div class="field"><span class="label">الجلد</span><span class="value">{{ a.internalExam?.skin || '-' }}</span></div>
-            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.internalExam?.resultID) }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value fw-bold">{{ getResultDescription(a.internalExam?.resultID) }}</span></div>
           </div>
         </div>
 
-        <div class="subcard avoid-break">
+        <div class="subcard avoid-break compact-exam-card">
           <div class="subcard-title">فحص العظام</div>
           <div class="two-col">
             <div class="field"><span class="label">عضلي هيكلي</span><span class="value">{{ a.orthopedicExamDto?.musculoskeletal || '-' }}</span></div>
             <div class="field"><span class="label">جراحة عصبية</span><span class="value">{{ a.orthopedicExamDto?.neurologicalSurgery || '-' }}</span></div>
-            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.orthopedicExamDto?.resultID) }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value fw-bold">{{ getResultDescription(a.orthopedicExamDto?.resultID) }}</span></div>
           </div>
         </div>
 
-        <div class="subcard avoid-break">
+        <div class="subcard avoid-break compact-exam-card">
           <div class="subcard-title">الاستشارة</div>
           <div class="two-col">
             @if(a.consultation){
@@ -98,7 +122,7 @@
             @if(a.investigation){
               <div class="field"><span class="label">النوع</span><span class="value">{{ a.investigation.type || '-' }}</span></div>
               <div class="field"><span class="label">النتيجة</span><span class="value">{{ a.investigation.result || '-' }}</span></div>
-              <div class="field"><span class="label">الحالة</span><span class="value">{{ a.investigation.status || '-' }}</span></div>
+              <div class="field"><span class="label">الحالة</span><span class="value fw-bold">{{ a.investigation.status || '-' }}</span></div>
   
             }@else {
               <div class="label">لا يوجد تحاليل</div>

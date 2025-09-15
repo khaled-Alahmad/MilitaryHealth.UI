@@ -55,6 +55,7 @@ export class EyeInvestigationsList implements OnInit {
         this.investigations = res.items.sort((a, b) => (b.investigationID ?? 0) - (a.investigationID ?? 0));
         this.filteredInvestigations = this.investigations;
         this.totalRecords = res.totalCount;
+        console.log(this.investigations[0].attachment);
         this.loading = false;
       },
       error: () => {

@@ -162,3 +162,15 @@ button.bg-secondary:hover, button.bg-secondary:focus {
 .fas {
   font-size: 0.8rem;
 }
+
+i {
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+i:hover {
+  color: #007BFF;
+}

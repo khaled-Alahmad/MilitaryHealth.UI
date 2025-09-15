@@ -10,6 +10,7 @@ import { DecisionService } from '../../services/decision.service';
 import { FinalDecisionModel } from '../../models/final-decision.model';
 import { MaritalStatusService } from '../../../reception/services/marital-status.service';
 import { MaritalStatus } from '../../../reception/models/marital-status.model';
+import { EyeExamService } from '../../../doctor/services/eye-exam.service';
 @Component({
   selector: 'app-supervisor',
   imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule],
@@ -22,6 +23,8 @@ export class Supervisor implements OnInit {
   results: Result[] = [];
   decisionModel!: FinalDecisionModel;
   maritalStatuses: MaritalStatus[] = [];
+  refractionTypes: any[] = [];
+  groupedRefractions: Array<{ typeName: string; left?: number; right?: number }> = [];
 
   rejectedId: number | null = null;
   postponedId: number | null = null;
@@ -32,11 +35,13 @@ export class Supervisor implements OnInit {
   isApproved: boolean = true;
   isAccept : boolean = false;
   constructor(private applicantService: ApplicantService, private lookupService: LookupService,
-    private decisionService: DecisionService, private maritalStatusService: MaritalStatusService
+    private decisionService: DecisionService, private maritalStatusService: MaritalStatusService,
+    private examService: EyeExamService,
   ) { }
   ngOnInit(): void {
     this.loadResults();
     this.loadMaritalStatuses();
+    this.loadRefractionTypes();
   }
 
   loadApplicants() {
@@ -55,6 +60,7 @@ export class Supervisor implements OnInit {
         if (applicantDetails) {
           this.applicant = applicantDetails;
           this.mapApplicantToDecision(applicantDetails);
+          this.groupedRefractions = this.buildGroupedRefractions();
 
         } else {
           this.responseMessage = 'لم يتم العثور على المنتسب';
@@ -67,6 +73,20 @@ export class Supervisor implements OnInit {
       this.responseMessage = 'لم يتم العثور على المنتسب';
       this.responseSuccess = false;
     }
+    });
+  }
+  private loadRefractionTypes() {
+    this.examService.getRefractionTypes().subscribe({
+      next: (response) => {
+        if (response.succeeded && response.data?.items) {
+          this.refractionTypes = response.data.items;
+          // recompute if applicant already loaded
+          this.groupedRefractions = this.buildGroupedRefractions();
+        }
+      },
+      error: () => {
+       
+      }
     });
   }
    loadMaritalStatuses() {
@@ -119,6 +139,45 @@ export class Supervisor implements OnInit {
     }else{
       this.isAccept = false;
     }
+  }
+
+  getSectionClass(resultId?: number): string {
+    if (!resultId && resultId !== 0) return 'section-unknown';
+    if (this.acceptedId && resultId === this.acceptedId) return 'section-accepted';
+    if (this.rejectedId && resultId === this.rejectedId) return 'section-rejected';
+    if (this.postponedId && resultId === this.postponedId) return 'section-postponed';
+    return 'section-unknown';
+  }
+
+  getResultValueClass(resultId?: number): string {
+    if (!resultId && resultId !== 0) return 'exam-value-muted';
+    if (this.acceptedId && resultId === this.acceptedId) return 'exam-value-success';
+    if (this.rejectedId && resultId === this.rejectedId) return 'exam-value-danger';
+    if (this.postponedId && resultId === this.postponedId) return 'exam-value-danger';
+    return 'exam-value-muted';
+  }
+
+  isAccepted(resultId?: number): boolean {
+    return !!(this.acceptedId && resultId === this.acceptedId);
+  }
+
+  getRefractionTypeName(typeId?: number): string {
+    if (!typeId) return '-';
+    const found = this.refractionTypes.find(x => x.refractionTypeID === typeId);
+    return found ? found.description : '-';
+  }
+
+  private buildGroupedRefractions(): Array<{ typeName: string; left?: number; right?: number }> {
+    const list = this.applicant?.eyeExam?.refractions || [];
+    if (!list.length) return [];
+    const map = new Map<number, { typeName: string; left?: number; right?: number }>();
+    for (const r of list) {
+      const key = r.refractionTypeID;
+      const existing = map.get(key) || { typeName: this.getRefractionTypeName(key) };
+      if (r.isLeft) existing.left = r.refractionValue; else existing.right = r.refractionValue;
+      map.set(key, existing);
+    }
+    return Array.from(map.values());
   }
 
   submitDecision() {

@@ -19,12 +19,13 @@
         <label class="form-label">ملف مرفق</label>
         <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)" />
 
-       <div *ngIf="previewUrl && previewUrl.startsWith('data:')" class="preview-container mt-3">
-  <img [src]="previewUrl" 
-       alt="معاينة المرفق" 
-       class="img-fluid rounded" 
-       style="max-height: 200px;">
-</div>
+        <div class="preview-container mt-3" >
+          <img 
+            [src]="previewUrl" 
+            alt="معاينة المرفق" 
+            class="img-fluid rounded" 
+            style="max-height: 200px; cursor: pointer;" />
+        </div>
 
       </div>
 

@@ -142,3 +142,44 @@ h6{
   background-color: rgba(255, 0, 0, 0.05); // أحمر فاتح جداً
   border: 1px solid #f5c2c7;              // حد خفيف بلون التحذير
 }
+
+/* Section backgrounds similar to reference design */
+.section-accepted,
+.section-rejected,
+.section-postponed,
+.section-unknown {
+  background: #ffffff;
+  border: none;
+}
+
+/* Row-like blocks */
+.exam-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+.exam-row.compact { padding: 6px 10px; }
+
+/* Two-per-row grid inside each exam card */
+.exam-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 8px;
+}
+
+@media (max-width: 576px) {
+  .exam-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.exam-title {
+  color: #000;
+  font-weight: 600;
+}
+.exam-value-success { color: #16a34a; font-weight: 700; }
+.exam-value-danger { color: #dc2626; font-weight: 700; }
+.exam-value-muted { color: #000; font-weight: 600; }

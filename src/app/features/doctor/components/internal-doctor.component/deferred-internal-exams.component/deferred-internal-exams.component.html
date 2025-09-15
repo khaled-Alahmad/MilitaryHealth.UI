@@ -46,10 +46,7 @@
           <span [ngClass]="getBadgeClass(exam.result)">{{ exam.result?.description }}</span>
         </td>
         <td class="text-center">
-          <button type="button" class="btn btn-sm btn-outline-secondary" title="تعديل" (click)="openEditDialog(exam)">
-            <i class="pi pi-pen-to-square"></i>
-            تعديل
-          </button>
+            <i class="pi pi-pen-to-square" title="تعديل" (click)="openEditDialog(exam)"></i>
           <!-- <button type="button" class="btn btn-sm btn-primary" title="تعديل" (click)="openEditDialog(exam)">
             <i class="bi bi-pencil-square me-1"></i>
             تعديل

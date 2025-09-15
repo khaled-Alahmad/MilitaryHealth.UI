@@ -52,6 +52,7 @@ export interface EyeExam {
   refractionValue: number;
   resultID: number;
   refractions: Refraction[];
+  otherDiseases:string;
 }
 
 export interface SurgicalExam {
@@ -129,4 +130,7 @@ export interface FinalDecision {
 export interface Refraction {
   refractionTypeID: number;
   refractionValue: number;
+  isLeft?: boolean;
+  refractionID?: number;
+  eyeExamID?: number;
 }

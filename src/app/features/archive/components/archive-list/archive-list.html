@@ -14,6 +14,7 @@
       <tr>
         <th>رقم الأرشيف</th>
         <th>رقم ملف المنتسب</th>
+        <th>كود التجنيد</th>
         <th >الاسم</th>
         <th>الوظيفة</th>
         <th>الطول / الوزن</th>
@@ -27,6 +28,7 @@
       <tr>
         <td><span class="fw-bold">{{ archive.fileNumber }}</span></td>
         <td>{{ archive.applicant?.fileNumber }}</td>
+        <td>{{ archive.applicant?.associateNumber }}</td>
         <td>{{ archive.applicant?.fullName }}</td>
         <td>{{ archive.applicant?.job }}</td>
         <td>{{ archive.applicant?.height }} سم / {{ archive.applicant?.weight }} كجم</td>

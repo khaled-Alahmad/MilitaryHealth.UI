@@ -47,17 +47,14 @@
           <span class="fw-bold small">{{ c.doctor?.fullName || '-' }}</span>
         </td>
         <td>
-          <span [ngClass]="getBadgeClass(c.result)" class="small">
+          <span class="small">
             {{ c.result || 'غير محدد' }}
           </span>
         </td>
 <td class="text-center">
           @if(c.attachment){
-            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
-                (click)="openFile(c.attachment)">
-                <i class="bi bi-file-earmark-text me-1"></i>
-                فتح الملف
-            </button>
+                <i class="bi bi-folder2-open me-1" title="فتح الملف"
+                (click)="openFile(c.attachment)"></i>
             }
             @else {
             <span>لا يوجد ملف</span>
@@ -65,11 +62,9 @@
         </td>
 
         <td class="text-center">
-          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
-          (click)="openEditConsultation(c)">
-          <i class="pi pi-pen-to-square"></i>
-          إضافة نتيجة
-      </button>
+          <i class="pi pi-pen-to-square" title="إضافة نتيجة"
+          (click)="openEditConsultation(c)"></i>
+
           <!-- <i class="pi pi-pen-to-square icon"
            (click)="openEditConsultation(c)" title="تعديل"></i> -->
         </td>

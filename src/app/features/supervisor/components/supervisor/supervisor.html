@@ -83,57 +83,149 @@
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card" [ngClass]="{'missing-exam': !applicant.eyeExam}">
                 <h6 class="mb-2">فحص العيون</h6>
-                <ng-container *ngIf="applicant.eyeExam; ">
-                  <div><strong>النظر:</strong> {{ applicant.eyeExam.vision }}</div>
-                  <div><strong>الألوان:</strong> {{ applicant.eyeExam.colorTest }}</div>
-                  <div><strong>قيمة الانكسار:</strong> {{ applicant.eyeExam.refractionValue }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.eyeExam.resultID) }}</div>
+                <ng-container *ngIf="applicant.eyeExam;else noData">
+                  <div class="row g-2 align-items-center">
+                    <div class="col-4">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">النظر</span>
+                        <span class="fw-semibold">{{ applicant.eyeExam.vision }}</span>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">أمراض أخرى</span>
+                        <span class="fw-semibold">{{ applicant.eyeExam.colorTest }}</span>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">اختبار الألوان</span>
+                        <span class="fw-semibold">{{ applicant.eyeExam.otherDiseases }}</span>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="row gx-2 gy-2">
+                        
+                        <div class="col-12" *ngIf="groupedRefractions?.length">
+                          <div class="border rounded px-2 py-2">
+                            <div class="text-muted small mb-2">قيم الانكسار</div>
+                            <div class="table-responsive">
+                              <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                  <tr>
+                                    <th class="text-muted small">النوع</th>
+                                    <th class="text-muted small text-center">يمين</th>
+                                    <th class="text-muted small text-center">يسار</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let g of groupedRefractions">
+                                    <td class="small">{{ g.typeName }}</td>
+                                    <td class="text-center fw-semibold">{{ g.right ?? 'لا يوجد' }}</td>
+                                    <td class="text-center fw-semibold">{{ g.left ?? 'لا يوجد' }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                            <span class="text-muted small">النتيجة</span>
+                            <span class="fw-bold" [ngClass]="getResultValueClass(applicant.eyeExam.resultID)">{{ getResultDescription(applicant.eyeExam.resultID) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
             </div>
 
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.surgicalExam}">
+              <div class="border rounded p-2 small compact-exam-card">
                 <h6 class=" mb-2">الفحص الجراحي</h6>
                 <ng-container *ngIf="applicant.surgicalExam; else noData">
-                  <div><strong>عام:</strong> {{ applicant.surgicalExam.generalSurgery }}</div>
-                  <div><strong>المسالك البولية:</strong> {{ applicant.surgicalExam.urinarySurgery }}</div>
-                  <div><strong>الأوعية الدموية:</strong> {{ applicant.surgicalExam.vascularSurgery }}</div>
-                  <div><strong>الصدر:</strong> {{ applicant.surgicalExam.thoracicSurgery }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.surgicalExam.resultID) }}</div>
+                  <div class="row g-2 align-items-center">
+                    <div class="col-6" *ngFor="let item of [
+                      {l:'عام', v: applicant.surgicalExam.generalSurgery},
+                      {l:'المسالك البولية', v: applicant.surgicalExam.urinarySurgery},
+                      {l:'الأوعية الدموية', v: applicant.surgicalExam.vascularSurgery},
+                      {l:'الصدر', v: applicant.surgicalExam.thoracicSurgery}
+                    ]">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">{{item.l}}</span>
+                        <span class="fw-semibold">{{item.v}}</span>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">النتيجة</span>
+                        <span class="fw-bold" [ngClass]="getResultValueClass(applicant.surgicalExam.resultID)">{{ getResultDescription(applicant.surgicalExam.resultID) }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
             </div>
 
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.orthopedicExamDto}">
+              <div class="border rounded p-2 small compact-exam-card">
                 <h6 class=" mb-2">الفحص الباطني</h6>
                 <ng-container *ngIf="applicant.internalExam; else noData">
-                  <div><strong>القلب:</strong> {{ applicant.internalExam.heart }}</div>
-                  <div><strong>الجهاز التنفسي:</strong> {{ applicant.internalExam.respiratory }}</div>
-                  <div><strong>الجهاز الهضمي:</strong> {{ applicant.internalExam.digestive }}</div>
-                  <div><strong>الغدد الصماء:</strong> {{ applicant.internalExam.endocrine }}</div>
-                  <div><strong>الأعصاب:</strong> {{ applicant.internalExam.neurology }}</div>
-                  <div><strong>الدم:</strong> {{ applicant.internalExam.blood }}</div>
-                  <div><strong>المفاصل:</strong> {{ applicant.internalExam.joints }}</div>
-                  <div><strong>الكلى:</strong> {{ applicant.internalExam.kidney }}</div>
-                  <div><strong>السمع:</strong> {{ applicant.internalExam.hearing }}</div>
-                  <div><strong>الجلد:</strong> {{ applicant.internalExam.skin }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.internalExam.resultID) }}</div>
+                  <div class="row g-2 align-items-center">
+                    <div class="col-6" *ngFor="let item of [
+                      {l:'القلب', v: applicant.internalExam.heart},
+                      {l:'الجهاز التنفسي', v: applicant.internalExam.respiratory},
+                      {l:'الجهاز الهضمي', v: applicant.internalExam.digestive},
+                      {l:'الغدد الصماء', v: applicant.internalExam.endocrine},
+                      {l:'الأعصاب', v: applicant.internalExam.neurology},
+                      {l:'الدم', v: applicant.internalExam.blood},
+                      {l:'المفاصل', v: applicant.internalExam.joints},
+                      {l:'الكلى', v: applicant.internalExam.kidney},
+                      {l:'السمع', v: applicant.internalExam.hearing},
+                      {l:'الجلد', v: applicant.internalExam.skin}
+                    ]">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">{{item.l}}</span>
+                        <span class="fw-semibold">{{item.v}}</span>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">النتيجة</span>
+                        <span class="fw-bold" [ngClass]="getResultValueClass(applicant.internalExam.resultID)">{{ getResultDescription(applicant.internalExam.resultID) }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
             </div>
 
             <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.internalExam}">
+              <div class="border rounded p-2 small compact-exam-card">
                 <h6 class=" mb-2">فحص العظام</h6>
                 <ng-container *ngIf="applicant.orthopedicExamDto; else noData">
-                  <div><strong>عضلي هيكلي:</strong> {{ applicant.orthopedicExamDto.musculoskeletal }}</div>
-                  <div><strong>جراحة عصبية:</strong> {{ applicant.orthopedicExamDto.neurologicalSurgery }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.orthopedicExamDto.resultID) }}</div>
+                  <div class="row g-2 align-items-center">
+                    <div class="col-6">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">عضلي هيكلي</span>
+                        <span class="fw-semibold">{{ applicant.orthopedicExamDto.musculoskeletal }}</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">جراحة عصبية</span>
+                        <span class="fw-semibold">{{ applicant.orthopedicExamDto.neurologicalSurgery }}</span>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">النتيجة</span>
+                        <span class="fw-bold" [ngClass]="getResultValueClass(applicant.orthopedicExamDto.resultID)">{{ getResultDescription(applicant.orthopedicExamDto.resultID) }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
             </div>
@@ -142,8 +234,20 @@
               <div class="border rounded p-2 small compact-exam-card">
                 <h6 class=" mb-2">الاستشارة</h6>
                 <ng-container *ngIf="applicant.consultation; else noData">
-                  <div><strong>النوع:</strong> {{ applicant.consultation.consultationType }}</div>
-                  <div><strong>الطبيب:</strong> {{ applicant.consultation.referredDoctor }}</div>
+                  <div class="row g-2 align-items-center">
+                    <div class="col-6">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">النوع</span>
+                        <span class="fw-semibold">{{ applicant.consultation.consultationType }}</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                        <span class="text-muted small">الطبيب</span>
+                        <span class="fw-semibold">{{ applicant.consultation.referredDoctor }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
             </div>

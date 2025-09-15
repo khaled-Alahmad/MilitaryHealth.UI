@@ -6,6 +6,7 @@ import { AuthService } from '../../../../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-edit-consultation',
@@ -44,7 +45,7 @@ export class EditConsultation {
     });
 
     if (this.consultation.attachment) {
-      this.uploadedPath = this.consultation.attachment;
+      this.uploadedPath = `${environment.apiUrl}/${this.consultation.attachment}`;
       this.previewUrl = this.uploadedPath;
     }
   }
@@ -65,7 +66,7 @@ export class EditConsultation {
 
       this.service.uploadFile(file).subscribe({
         next: (path) => {
-          this.uploadedPath = path;
+          this.uploadedPath = `${environment.apiUrl}/${path}`;
           this.consultationForm.patchValue({ attachment: path });
           this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
         },

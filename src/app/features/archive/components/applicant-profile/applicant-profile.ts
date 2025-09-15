@@ -9,6 +9,7 @@ import { ApplicantService } from '../../../reception/services/applicant.service'
 import { MaritalStatusService } from '../../../reception/services/marital-status.service';
 import { FinalDecisionModel } from '../../../supervisor/models/final-decision.model';
 import { DecisionService } from '../../../supervisor/services/decision.service';
+import { EyeExamService } from '../../../doctor/services/eye-exam.service';
 import { ArchiveService } from '../../services/archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
 import { ArchiveModel } from '../../models/archive.model';
@@ -30,13 +31,16 @@ export class ApplicantProfile implements OnInit, OnDestroy {
   archive: ArchiveModel | null = null;
   private destroy$ = new Subject<void>();
   date: Date = new Date();
+  refractionTypes: any[] = [];
+  groupedRefractions: Array<{ typeName: string; left?: number; right?: number }> = [];
 
   constructor(
     private route: ActivatedRoute,
     private applicantService: ApplicantService,
     private lookupService: LookupService,
     private maritalStatusService: MaritalStatusService,
-    private router: Router
+    private router: Router,
+    private examService: EyeExamService
   ) {
     const navigation = this.router.getCurrentNavigation();
     const state: any = navigation?.extras?.state ?? history.state ?? {};
@@ -60,6 +64,7 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     this.loadApplicant(fileNumber);
     this.loadResults();
     this.loadMaritalStatuses();
+    this.loadRefractionTypes();
 
   }
 
@@ -68,6 +73,7 @@ export class ApplicantProfile implements OnInit, OnDestroy {
       next: (data) => {
         console.log(data);
         this.applicant = data;
+        this.groupedRefractions = this.buildGroupedRefractions();
       },
       error: () => {
         console.error('فشل في تحميل بيانات المنتسب');
@@ -87,6 +93,36 @@ export class ApplicantProfile implements OnInit, OnDestroy {
       next: (data) => (this.maritalStatuses = data),
       error: (err) => console.error('فشل في تحميل الحالات الاجتماعية', err)
     });
+  }
+
+  private loadRefractionTypes() {
+    this.examService.getRefractionTypes().subscribe({
+      next: (response) => {
+        if (response?.succeeded && response.data?.items) {
+          this.refractionTypes = response.data.items;
+          this.groupedRefractions = this.buildGroupedRefractions();
+        }
+      }
+    });
+  }
+
+  private buildGroupedRefractions(): Array<{ typeName: string; left?: number; right?: number }> {
+    const list = this.applicant?.eyeExam?.refractions || [];
+    if (!list.length) return [];
+    const map = new Map<number, { typeName: string; left?: number; right?: number }>();
+    for (const r of list) {
+      const key = r.refractionTypeID;
+      const existing = map.get(key) || { typeName: this.getRefractionTypeName(key) };
+      if (r.isLeft) existing.left = r.refractionValue; else existing.right = r.refractionValue;
+      map.set(key, existing);
+    }
+    return Array.from(map.values());
+  }
+
+  getRefractionTypeName(typeId?: number): string {
+    if (!typeId) return '-';
+    const found = this.refractionTypes.find(x => x.refractionTypeID === typeId);
+    return found ? found.description : '-';
   }
 
 

@@ -72,12 +72,10 @@
           </span>
         </td>
         <td class="text-center align-middle">
-          <div class="d-flex flex-row justify-content-center align-items-center gap-1">
-            <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
-          (click)="showDetails(exam)">
-          <i class="pi pi-info-circle"></i>
-           عرض التفاصيل
-      </button>
+          <div class="d-flex flex-row justify-content-center align-items-center gap-3">
+          <i class="pi pi-info-circle" title="تفاصيل"
+          (click)="showDetails(exam)"></i>
+
             <!-- <i class="pi pi-info-circle icon"
            (click)="showDetails(exam)" title="عرض التفاصيل"></i> -->
             <!-- <button
@@ -89,11 +87,8 @@
               title="عرض التفاصيل"
               style="width: 1.8rem; height: 1.8rem;"
             ></button> -->
-            <button type="button" class="btn btn-sm btn-outline-secondary" title="تعديل الفحص"
-          (click)="openEditExam(exam)">
-          <i class="pi pi-pen-to-square"></i>
-            تعديل
-      </button>
+          <i class="pi pi-pen-to-square" title="تعديل الفحص"
+          (click)="openEditExam(exam)"></i>
             <!-- <i class="pi pi-pen-to-square icon"
            (click)="openEditExam(exam)" title="تعديل الفحص"></i> -->
             <!-- <button
