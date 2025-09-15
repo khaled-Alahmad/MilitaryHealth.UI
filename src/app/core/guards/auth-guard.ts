@@ -13,7 +13,9 @@ export const authGuard: CanActivateFn = (route, state) => {
   const messageError = route.data['messageError'] || 'تم رفض الوصول';
 
   if (!auth.isAuthenticated()) {
-    return router.createUrlTree(['/login']);
+    // حفظ URL الحالي للعودة إليه بعد تسجيل الدخول
+    const returnUrl = state.url;
+    return router.createUrlTree(['/login'], { queryParams: { returnUrl } });
   }
 
   if (roles.length > 0 && !auth.isAuthorizated(roles)) {

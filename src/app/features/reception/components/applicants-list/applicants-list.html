@@ -34,9 +34,10 @@
                     <input type="checkbox" [checked]="applicant.tattoo" style="pointer-events: none;" />
                 </td>
                 <td class="text-center">
-                    <button class="btn btn-sm btn-outline-primary me-1 btn-modern-view" (click)="viewApplicant(applicant.applicantID)">
+                    <i class="fas fa-eye" title="عرض بيانات المنتسب" (click)="viewApplicant(applicant.applicantID)"></i>
+                    <!-- <button class="btn btn-sm btn-outline-primary me-1 btn-modern-view" (click)="viewApplicant(applicant.applicantID)">
                         <i class="fas fa-eye"></i>
-                    </button>
+                    </button> -->
                 </td>
             </tr>
         </ng-template>

@@ -101,5 +101,35 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     return result ? result.description : 'غير محدد';
   }
 
+  getResultClass(resultID?: number): string {
+    if (!resultID) return 'result-unknown';
+    
+    switch (resultID) {
+      case 1: // مقبول
+        return 'result-accepted';
+      case 2: // مرفوض
+        return 'result-rejected';
+      case 3: // مؤجل
+        return 'result-postponed';
+      default:
+        return 'result-unknown';
+    }
+  }
+
+  getResultIcon(resultID?: number): string {
+    if (!resultID) return 'fas fa-question-circle';
+    
+    switch (resultID) {
+      case 1: // مقبول
+        return 'fas fa-check-circle';
+      case 2: // مرفوض
+        return 'fas fa-times-circle';
+      case 3: // مؤجل
+        return 'fas fa-clock';
+      default:
+        return 'fas fa-question-circle';
+    }
+  }
+
 
 }

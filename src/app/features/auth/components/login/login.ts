@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
@@ -18,7 +18,8 @@ export class Login {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -45,10 +46,19 @@ submitted = false;
     }
 
     const loginData = this.loginForm.value;
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     this.authService.login(loginData).subscribe({
       next: () => {
         const role = this.authService.getUserRole();
+        
+        // إذا كان هناك returnUrl صالح، ارجع إليه
+        if (returnUrl && returnUrl !== '/') {
+          this.router.navigateByUrl(returnUrl);
+          return;
+        }
+        
+        // وإلا استخدم التوجيه الافتراضي حسب الدور
         if (role === 'Admin') 
         {
           this.router.navigate(['/admin/dashboard']);
@@ -59,7 +69,7 @@ submitted = false;
         }
          else if (role === 'Diwan') 
         {
-          this.router.navigate(['/archive']);
+          this.router.navigate(['/archive/']);
         }  
         else if (role === 'Doctor') 
         {
@@ -105,7 +115,7 @@ submitted = false;
   }
 }
         else if (role === 'Supervisor') {
-          this.router.navigate(['/supervisor']);
+          this.router.navigate(['/supervisor/']);
         }
          else {
           this.router.navigate(['/unauthorized']); // fallback لو حابب
