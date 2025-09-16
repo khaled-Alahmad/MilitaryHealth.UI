@@ -14,11 +14,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApplicantService } from '../../../../reception/services/applicant.service';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })

@@ -9,10 +9,11 @@ import { ToastrService } from 'ngx-toastr';
 import { TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-deferred-orthopedi-exams-component',
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent, Loading],
   templateUrl: './deferred-orthopedi-exams-component.html',
   styleUrl: './deferred-orthopedi-exams-component.scss'
 })

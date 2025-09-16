@@ -11,9 +11,10 @@ import { FinalDecisionModel } from '../../models/final-decision.model';
 import { MaritalStatusService } from '../../../reception/services/marital-status.service';
 import { MaritalStatus } from '../../../reception/models/marital-status.model';
 import { EyeExamService } from '../../../doctor/services/eye-exam.service';
+import { Loading } from "../../../../shared/components/loading/loading";
 @Component({
   selector: 'app-supervisor',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, Loading],
   templateUrl: './supervisor.html',
   styleUrl: './supervisor.scss'
 })
@@ -34,6 +35,7 @@ export class Supervisor implements OnInit {
 
   isApproved: boolean = true;
   isAccept : boolean = false;
+  loading: boolean = false;
   constructor(private applicantService: ApplicantService, private lookupService: LookupService,
     private decisionService: DecisionService, private maritalStatusService: MaritalStatusService,
     private examService: EyeExamService,
@@ -49,10 +51,12 @@ export class Supervisor implements OnInit {
     this.decisionModel = undefined!;
     this.responseMessage = '';
     this.responseSuccess = false;
+    this.loading = true;
 
     if (!this.searchValue?.trim()) {
       this.responseMessage = 'يرجى إدخال رقم الملف للبحث';
       this.responseSuccess = false;
+      this.loading = false;
       return;
     }
     this.applicantService.getApplicantByFileNumber$(this.searchValue).subscribe({
@@ -61,10 +65,12 @@ export class Supervisor implements OnInit {
           this.applicant = applicantDetails;
           this.mapApplicantToDecision(applicantDetails);
           this.groupedRefractions = this.buildGroupedRefractions();
+          this.loading = false;
 
         } else {
           this.responseMessage = 'لم يتم العثور على المنتسب';
           this.responseSuccess = false;
+          this.loading = false;
         }
       },
       error: () => {
@@ -72,6 +78,7 @@ export class Supervisor implements OnInit {
       this.decisionModel = undefined!;
       this.responseMessage = 'لم يتم العثور على المنتسب';
       this.responseSuccess = false;
+      this.loading = false;
     }
     });
   }

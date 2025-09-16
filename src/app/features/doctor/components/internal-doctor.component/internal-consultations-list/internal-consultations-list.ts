@@ -12,10 +12,11 @@ import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-internal-consultations-list',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, PaginatorComponent, Loading],
   templateUrl: './internal-consultations-list.html',
   styleUrl: './internal-consultations-list.scss'
 })

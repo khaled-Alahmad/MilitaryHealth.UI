@@ -46,13 +46,14 @@
         </td>
       </tr>
     </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="7" class="text-center">لا توجد تحاليل</td>
-      </tr>
-    </ng-template>
-  </p-table>
 
+  </p-table>
+  <app-loading [isLoading]="loading"></app-loading>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7" class="text-center">لا توجد تحاليل</td>
+    </tr>
+  </ng-template>
   <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>

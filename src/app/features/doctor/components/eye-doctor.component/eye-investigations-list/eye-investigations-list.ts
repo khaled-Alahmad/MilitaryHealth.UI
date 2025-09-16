@@ -12,11 +12,12 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-eye-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading],
   templateUrl: './eye-investigations-list.html',
   styleUrl: './eye-investigations-list.scss'
 })
@@ -55,7 +56,6 @@ export class EyeInvestigationsList implements OnInit {
         this.investigations = res.items.sort((a, b) => (b.investigationID ?? 0) - (a.investigationID ?? 0));
         this.filteredInvestigations = this.investigations;
         this.totalRecords = res.totalCount;
-        console.log(this.investigations[0].attachment);
         this.loading = false;
       },
       error: () => {

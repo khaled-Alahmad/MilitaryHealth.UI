@@ -38,11 +38,9 @@
         <td>{{ c.doctor?.fullName || '-' }}</td>
         <td>
           @if(c.attachment){
-          <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
-            (click)="openFile(c.attachment)">
-            <i class="bi bi-file-earmark-text me-1"></i>
-            فتح الملف
-          </button>
+            <i class="bi bi-folder2-open me-1" title="فتح الملف"
+            (click)="openFile(c.attachment)"></i>
+
           }
           @else {
           <span>لا يوجد ملف</span>
@@ -52,20 +50,17 @@
           <i class="pi pi-pen-to-square" title="إضافة نتيجة"
           (click)="openEditConsultation(c)"></i>
 
-          <!-- <button type="button" class="btn btn-sm btn-primary" title="اضافة نتيجة" (click)="openEditConsultation(c)">
-            <i class="bi bi-pencil-square me-1"></i>
-            اضافة نتيجة
-          </button> -->
         </td>
       </tr>
     </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="7" class="text-center">لا توجد استشارات</td>
-      </tr>
-    </ng-template>
+   
   </p-table>
-
+  <app-loading [isLoading]="loading"></app-loading>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7" class="text-center">لا توجد استشارات</td>
+    </tr>
+  </ng-template>
   <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>

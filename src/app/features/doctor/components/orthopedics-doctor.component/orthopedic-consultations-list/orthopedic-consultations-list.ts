@@ -13,11 +13,12 @@ import { TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-orthopedic-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule],
+  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule, Loading],
   templateUrl: './orthopedic-consultations-list.html',
   styleUrls: ['./orthopedic-consultations-list.scss'] // ✅ صحيح: styleUrls وليس styleUrl
 })

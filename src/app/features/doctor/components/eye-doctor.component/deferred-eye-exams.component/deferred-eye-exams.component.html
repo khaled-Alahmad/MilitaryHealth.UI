@@ -75,43 +75,21 @@
           <div class="d-flex flex-row justify-content-center align-items-center gap-3">
           <i class="pi pi-info-circle" title="تفاصيل"
           (click)="showDetails(exam)"></i>
-
-            <!-- <i class="pi pi-info-circle icon"
-           (click)="showDetails(exam)" title="عرض التفاصيل"></i> -->
-            <!-- <button
-              pButton
-              pRipple
-              icon="pi pi-eye"
-              class="p-button-rounded p-button-info p-button-text p-button-sm d-flex align-items-center justify-content-center"
-              (click)="showDetails(exam)"
-              title="عرض التفاصيل"
-              style="width: 1.8rem; height: 1.8rem;"
-            ></button> -->
           <i class="pi pi-pen-to-square" title="تعديل الفحص"
           (click)="openEditExam(exam)"></i>
-            <!-- <i class="pi pi-pen-to-square icon"
-           (click)="openEditExam(exam)" title="تعديل الفحص"></i> -->
-            <!-- <button
-              pButton
-              pRipple
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-success p-button-text p-button-sm d-flex align-items-center justify-content-center"
-              (click)="openEditExam(exam)"
-              title="تعديل الفحص"
-              style="width: 1.8rem; height: 1.8rem;"
-            ></button> -->
           </div>
         </td>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="8" class="text-center py-3 align-middle">لا توجد فحوصات لعرضها.</td>
-      </tr>
-    </ng-template>
-  </p-table>
 
+  </p-table>
+  <app-loading [isLoading]="loading"></app-loading>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="8" class="text-center py-3 align-middle">لا توجد فحوصات لعرضها.</td>
+    </tr>
+  </ng-template>
   <app-paginator
     [totalRecords]="totalRecords"
     [pageSize]="rowsPerPage"

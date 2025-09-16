@@ -299,15 +299,22 @@
               <i class="fas fa-paper-plane"></i> إرسال
             </button>
             </div>
-            <div *ngIf="responseMessage" class="mt-3">
-              <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
-                role="alert">
-                {{ responseMessage }}
-              </div>
-            </div>
+           
+            
           </form>
+        
         </div>
+     
       </div>
+      
+    </div>
+   
+  </div>
+  <div *ngIf="responseMessage" class="card-body mt-3">
+    <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
+      role="alert">
+      {{ responseMessage }}
     </div>
   </div>
+  <app-loading [isLoading]="loading"></app-loading>
 </div>

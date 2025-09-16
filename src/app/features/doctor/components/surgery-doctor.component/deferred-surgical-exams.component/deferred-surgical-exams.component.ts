@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { TableModule } from "primeng/table";
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-deferred-surgical-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule, TableModule, PaginatorComponent, Loading],
   templateUrl: './deferred-surgical-exams.component.html',
   styleUrls: ['./deferred-surgical-exams.component.scss']
 })

@@ -11,10 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { ApiResponse } from '../../../../shared/models/paged-response.model';
 import { ToastrService } from 'ngx-toastr';
+import { Loading } from "../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-add-edit-applicant',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, Loading],
   templateUrl: './add-edit-applicant.html',
   styleUrl: './add-edit-applicant.scss'
 })

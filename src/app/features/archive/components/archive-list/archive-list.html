@@ -15,7 +15,7 @@
         <th>رقم الأرشيف</th>
         <th>رقم ملف المنتسب</th>
         <th>كود التجنيد</th>
-        <th >الاسم</th>
+        <th>الاسم</th>
         <th>الوظيفة</th>
         <th>الطول / الوزن</th>
         <th>ضغط الدم</th>
@@ -40,7 +40,7 @@
       </tr>
     </ng-template>
   </p-table>
-
+  <app-loading [isLoading]="loading"></app-loading>
   <!-- مكون الصفحات -->
   <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">

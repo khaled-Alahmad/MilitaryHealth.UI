@@ -10,10 +10,11 @@ import { ButtonModule } from 'primeng/button';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableModule } from "primeng/table";
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-orthopedic-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading],
   templateUrl: './orthopedic-investigations-list.html',
   styleUrl: './orthopedic-investigations-list.scss'
 })

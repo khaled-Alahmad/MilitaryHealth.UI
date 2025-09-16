@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../../shared/services/lookup.service';
 import { Result } from '../../../doctor/models/internal-exam.model';
@@ -13,13 +13,14 @@ import { EyeExamService } from '../../../doctor/services/eye-exam.service';
 import { ArchiveService } from '../../services/archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
 import { ArchiveModel } from '../../models/archive.model';
+import { Loading } from '../../../../shared/components/loading/loading';
 import { Subject } from 'rxjs';
 declare const printJS: any;
 declare const html2pdf: any;
 
 @Component({
   selector: 'app-applicant-profile',
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, Loading],
   templateUrl: './applicant-profile.html',
   styleUrl: './applicant-profile.scss'
 })
@@ -48,6 +49,7 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     if (this.archive) {
       console.log('Archive loaded in constructor:', this.archive);
     }
+  
   }
   ngOnDestroy(): void {
     this.destroy$.next();

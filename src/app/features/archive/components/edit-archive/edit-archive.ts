@@ -7,9 +7,10 @@ import { ArchiveService } from '../../services/archive';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { Loading } from "../../../../shared/components/loading/loading";
 @Component({
   selector: 'app-edit-archive',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Loading],
   templateUrl: './edit-archive.html',
   styleUrl: './edit-archive.scss'
 })

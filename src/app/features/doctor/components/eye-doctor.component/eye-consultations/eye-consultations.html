@@ -71,13 +71,14 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="7" class="text-center py-2 small">لا توجد استشارات</td>
-      </tr>
-    </ng-template>
-  </p-table>
 
+  </p-table>
+  <app-loading [isLoading]="loading"></app-loading>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7" class="text-center py-2 small">لا توجد استشارات</td>
+    </tr>
+  </ng-template>
   <!-- المـُـرقم -->
   <app-paginator
     [totalRecords]="totalRecords"

@@ -1,4 +1,13 @@
-<div class="loading-overlay" *ngIf="isLoading">
+<!-- <div class="loading-overlay" *ngIf="isLoading">
     <div class="spinner"></div>
   </div>
-  
+   -->
+
+@if(isLoading){
+    <div class="loading-container m-2" >
+        <div class="card-body text-center">
+          <i class="fas fa-spinner fa-spin fa-x mb-2"></i>
+          <div>{{title}}</div>
+        </div>
+    </div>
+}

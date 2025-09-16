@@ -6,10 +6,11 @@ import { ApplicantService } from '../../services/applicant.service';
 import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
+import { Loading } from "../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-applicants-list',
-  imports: [TableModule, CommonModule, PaginatorComponent],
+  imports: [TableModule, CommonModule, PaginatorComponent, Loading],
   templateUrl: './applicants-list.html',
   styleUrl: './applicants-list.scss'
 })

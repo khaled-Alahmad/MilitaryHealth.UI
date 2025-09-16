@@ -10,10 +10,11 @@ import { RippleModule } from 'primeng/ripple';
 import { EditInternalExamComponent } from '../edit-internal-exam-component/edit-internal-exam-component';
 import { ToastrService } from 'ngx-toastr';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
+import { Loading } from "../../../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-deferred-internal-exams.component',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, PaginatorComponent, Loading],
   templateUrl: './deferred-internal-exams.component.html',
   styleUrl: './deferred-internal-exams.component.scss'
 })

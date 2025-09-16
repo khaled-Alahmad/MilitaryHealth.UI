@@ -13,9 +13,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Result } from '../../../../shared/models/result.model';
 import { EditArchive } from '../edit-archive/edit-archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
+import { Loading } from "../../../../shared/components/loading/loading";
 @Component({
   selector: 'app-archive-list',
-  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule],
+  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule, Loading],
   templateUrl: './archive-list.html',
   styleUrl: './archive-list.scss'
 })
