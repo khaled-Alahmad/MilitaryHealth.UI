@@ -174,7 +174,8 @@ export class InternalExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortBy', 'applicantFileNumber') // فرز حسب رقم الملف
+      .set('sortDesc', 'true'); 
   
     if (filter) {
       params = params.set('filter', filter);

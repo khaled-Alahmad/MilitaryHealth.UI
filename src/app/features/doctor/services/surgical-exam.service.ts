@@ -56,7 +56,8 @@ getAllSurgicalExams(page: number = 1,
   let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortBy', 'surgicalExamID') // فرز حسب رقم الملف
+      .set('sortDesc', 'true'); 
 
     if (filter) {
       params = params.set('filter', filter);
@@ -108,7 +109,8 @@ getAllSurgicalExams(page: number = 1,
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true)
+      .set('sortBy', 'consultationID') // فرز حسب رقم الملف
+      .set('sortDesc', 'true'); 
   
     if (filter) {
       params = params.set('filter', filter);
@@ -146,8 +148,8 @@ getAllSurgicalExams(page: number = 1,
     });
   }
 
-  getSurgicalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
+  getSurgicalInvestigations(page: number = 1, pageSize: number =10): Observable<Investigation[]> {
+    const url = `${this.investigationUrl}?sortDesc=true&sortBy=investigationID&page=${page}&pageSize=${pageSize}`;
     return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => (res.data?.items || []).filter((i: any) => i.doctor?.specializationID === 3))
     );

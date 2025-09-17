@@ -8,6 +8,7 @@ import { LoadingInterceptor } from './core/interceptors/loading.inspector';
 import { MessageService } from 'primeng/api';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { HttpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -21,7 +22,8 @@ export const appConfig: ApplicationConfig = {
     }),
     MessageService,
     provideHttpClient(withInterceptorsFromDi(),withInterceptors([authInterceptor])),
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
   ],
 };
 

@@ -151,14 +151,6 @@ openEditExam(eyeExam: EyeExam): void {
         
                     this.loadEyeExams();
 
-            //   if (index !== -1) {
-          //     this.exams[index] = { ...this.exams[index], ...updatedExam };
-          //     this.filteredExams = [...this.exams]; // تحديث الجدول
-          //   }
-          //   this.cdr.detectChanges();
-          // } else {
-          //   // fallback إذا ما رجع updatedExam
-          //   this.loadEyeExams();
            }
         });
 

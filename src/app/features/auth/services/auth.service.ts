@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
@@ -91,12 +91,19 @@ export class AuthService {
   getRefreshToken(): string | null {
     return localStorage.getItem(this.REFRESH_KEY);
   }
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+  }
   logout(): Observable<ApiResponse<any>> {
     const refreshToken = this.getRefreshToken();
+    const header = this.getAuthHeaders().set('Content-Type', 'application/json');
     this.clearStorage();
     return this.http.post<ApiResponse<any>>(
       `${environment.apiUrl}/api/auth/logout`,
-      { refreshToken }
+      {refreshToken : refreshToken} ,{
+        headers: header
+      }
     );
   }
 

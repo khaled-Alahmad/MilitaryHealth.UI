@@ -1,358 +1,375 @@
-<div class="applicant-profile-page container-fluid">
+<div class="supervisor-page container-fluid">
   <!-- Enhanced Header Section -->
-  <div class="report-header">
-    <div class="header-card">
-      <div class="branding-section">
-        <img src="assets/images/syr.svg" alt="Logo" class="logo" />
-        <div class="branding-text">
-          <div class="org-name">القوات المسلحة - الخدمات الطبية</div>
-          <div class="report-title">تقرير بيانات المنتسب</div>
+  <div class="row justify-content-center mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-custom text-white d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <img src="assets/images/syr.svg" alt="Logo" class="logo ms-3" />
+            <div>
+              <h5 class="mb-0">القوات المسلحة - الخدمات الطبية</h5>
+              <small class="opacity-75">تقرير بيانات المنتسب</small>
+            </div>
+          </div>
+          <div class="d-flex gap-3">
+            <div class="text-center">
+              <small class="d-block opacity-75">رقم الملف</small>
+              <span class="fw-bold">{{ archive?.applicantFileNumber || '-' }}</span>
+            </div>
+            <div class="text-center">
+              <small class="d-block opacity-75">رقم التجنيد</small>
+              <span class="fw-bold">{{ applicant?.associateNumber || '-' }}</span>
+            </div>
+            <div class="text-center">
+              <small class="d-block opacity-75">رقم الديوان</small>
+              <span class="fw-bold">{{ archive?.fileNumber || '-' }}</span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="ids-section">
-        <div class="id-badge neutral">
-          <span class="id-label">رقم الديوان</span>
-          <span class="id-value">{{ archive?.fileNumber || '-' }}</span>
-        </div>
-        <div class="id-badge neutral">
-          <span class="id-label">رقم التجنيد</span>
-          <span class="id-value">{{ applicant?.associateNumber || '-' }}</span>
-        </div>
-        <div class="id-badge neutral">
-          <span class="id-label">رقم الملف</span>
-          <span class="id-value">{{ applicant?.fileNumber || '-' }}</span>
-        </div>
-        <!-- <div class="id-badge neutral">
-          <span class="id-label">تاريخ الطباعة</span>
-          <span class="id-value">{{ (date | date:'yyyy/MM/dd') }}</span>
-        </div> -->
       </div>
     </div>
   </div>
 
   <ng-container *ngIf="applicant as a; else loadingTpl">
-    <div class="content-grid">
+    <div class="row g-2 mt-2">
       <!-- Personal Information Card -->
-      <div class="card modern-card">
-        <div class="card-header bg-custom">
-          <h5 class="card-title mb-0">
-            <i class="fas fa-user me-2"></i>
-            البيانات الشخصية
-          </h5>
-          <span class="badge bg-light text-dark">ملف: {{ a.fileNumber }}</span>
-        </div>
-        <div class="card-body">
-          <div class="info-grid">
-            <div class="info-item">
-              <span class="info-label">رقم الملف</span>
-              <span class="info-value">{{ a.fileNumber || '-' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">الاسم</span>
-              <span class="info-value">{{ a.fullName || '-' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">الحالة الاجتماعية</span>
-              <span class="info-value">{{ getMaritalStatusDescription(a.maritalStatusID) }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">الوظيفة</span>
-              <span class="info-value">{{ a.job || '-' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">الطول</span>
-              <span class="info-value">{{ a.height || '-' }} سم</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">الوزن</span>
-              <span class="info-value">{{ a.weight || '-' }} كجم</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">BMI</span>
-              <span class="info-value">{{ a.bmi || '-' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">ضغط الدم</span>
-              <span class="info-value">{{ a.bloodPressure || '-' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">النبض</span>
-              <span class="info-value">{{ a.pulse || '-' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">وشم</span>
-              <span class="info-value">{{ a.tattoo ? 'يوجد' : 'لا يوجد' }}</span>
-            </div>
-            <div class="info-item full-width">
-              <span class="info-label">علامات مميزة</span>
-              <span class="info-value">{{ a.distinctiveMarks || 'لا توجد' }}</span>
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-custom text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              البيانات الشخصية
+            </h5>
+            <span class="badge bg-light text-dark">ملف: {{ a.fileNumber }}</span>
+          </div>
+          <div class="card-body py-2">
+            <div class="row row-cols-2 row-cols-md-4 g-3 compact-grid">
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">رقم الملف</div>
+                <div class="fw-semibold">{{ a.fileNumber || '-' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">الاسم</div>
+                <div class="fw-semibold">{{ a.fullName || '-' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">الحالة الاجتماعية</div>
+                <div class="fw-semibold">{{ getMaritalStatusDescription(a.maritalStatusID) }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">الوظيفة</div>
+                <div class="fw-semibold">{{ a.job || '-' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">الطول</div>
+                <div class="fw-semibold">{{ a.height || '-' }} سم</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">الوزن</div>
+                <div class="fw-semibold">{{ a.weight || '-' }} كجم</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">BMI</div>
+                <div class="fw-semibold">{{ a.bmi || '-' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">ضغط الدم</div>
+                <div class="fw-semibold">{{ a.bloodPressure || '-' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">النبض</div>
+                <div class="fw-semibold">{{ a.pulse || '-' }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="text-muted small">وشم</div>
+                <div class="fw-semibold">{{ a.tattoo ? 'يوجد' : 'لا يوجد' }}</div>
+              </div>
+              <div class="col-12">
+                <div class="text-muted small">علامات مميزة</div>
+                <div class="fw-semibold">{{ a.distinctiveMarks || 'لا توجد' }}</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Medical Examinations Card -->
-      <div class="card modern-card">
-        <div class="card-header bg-custom">
-          <h5 class="card-title mb-0">
-            <i class="fas fa-stethoscope me-2"></i>
-            الفحوصات الطبية
-          </h5>
-        </div>
-        <div class="card-body">
-          <div class="exams-grid">
-            
-            <!-- Eye Examination -->
-            <div class="exam-card">
-              <div class="exam-header">
-                <h6 class="exam-title">
-                  فحص العيون
-                </h6>
-              </div>
-              <div class="exam-content">
-                <div class="exam-fields">
-                  <div class="exam-field">
-                    <span class="field-label">النظر</span>
-                    <span class="field-value">{{ a.eyeExam?.vision || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الألوان</span>
-                    <span class="field-value">{{ a.eyeExam?.colorTest || '-' }}</span>
-                  </div>
-                </div>
-                
-                @if(groupedRefractions?.length) {
-                  <div class="refraction-table-container">
-                    <div class="table-label">قيم الانكسار</div>
-                    <div class="table-responsive">
-                      <table class="refraction-table">
-                        <thead>
-                          <tr>
-                            <th>النوع</th>
-                            <th>يمين</th>
-                            <th>يسار</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let g of groupedRefractions">
-                            <td>{{ g.typeName }}</td>
-                            <td>{{ g.right ?? 'لا يوجد' }}</td>
-                            <td>{{ g.left ?? 'لا يوجد' }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+      <div class="col-12 mt-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-custom text-white">
+            <h5 class="mb-0">
+              الفحوصات الطبية
+            </h5>
+          </div>
+          <div class="card-body py-2">
+            <div class="row row-cols-1 row-cols-md-2 g-2">
+              
+              <!-- Eye Examination -->
+              <div class="col">
+                <div class="border rounded p-2 small compact-exam-card">
+                  <h6 class="mb-2">
+                    فحص العيون
+                  </h6>
+                  <ng-container *ngIf="a.eyeExam; else noData">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النظر</span>
+                          <span class="fw-semibold">{{ a.eyeExam.vision || '-' }}</span>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">الألوان</span>
+                          <span class="fw-semibold">{{ a.eyeExam.colorTest || '-' }}</span>
+                        </div>
+                      </div>
+                      
+                      @if(groupedRefractions?.length) {
+                        <div class="col-12">
+                          <div class="border rounded px-2 py-2">
+                            <div class="text-muted small mb-2">قيم الانكسار</div>
+                            <div class="table-responsive">
+                              <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                  <tr>
+                                    <th class="text-muted small">النوع</th>
+                                    <th class="text-muted small text-center">يمين</th>
+                                    <th class="text-muted small text-center">يسار</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let g of groupedRefractions">
+                                    <td class="small">{{ g.typeName }}</td>
+                                    <td class="text-center fw-semibold">{{ g.right ?? 'لا يوجد' }}</td>
+                                    <td class="text-center fw-semibold">{{ g.left ?? 'لا يوجد' }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      
+                      <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النتيجة</span>
+                          <span class="fw-bold">
+                            <i [class]="getResultIcon(a.eyeExam.resultID)" class="me-1"></i>
+                            {{ getResultDescription(a.eyeExam.resultID) }}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                }
-                
-                <div class="exam-result">
-                  <span class="result-label">النتيجة</span>
-                  <span class="result-badge" [ngClass]="getResultClass(a.eyeExam?.resultID)">
-                    <i [class]="getResultIcon(a.eyeExam?.resultID)"></i>
-                    {{ getResultDescription(a.eyeExam?.resultID) }}
-                  </span>
+                  </ng-container>
                 </div>
               </div>
-            </div>
 
-            <!-- Surgical Examination -->
-            <div class="exam-card">
-              <div class="exam-header">
-                <h6 class="exam-title">
-                  الفحص الجراحي
-                </h6>
-              </div>
-              <div class="exam-content">
-                <div class="exam-fields">
-                  <div class="exam-field">
-                    <span class="field-label">عام</span>
-                    <span class="field-value">{{ a.surgicalExam?.generalSurgery || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">المسالك البولية</span>
-                    <span class="field-value">{{ a.surgicalExam?.urinarySurgery || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الأوعية الدموية</span>
-                    <span class="field-value">{{ a.surgicalExam?.vascularSurgery || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الصدر</span>
-                    <span class="field-value">{{ a.surgicalExam?.thoracicSurgery || '-' }}</span>
-                  </div>
-                </div>
-                <div class="exam-result">
-                  <span class="result-label">النتيجة</span>
-                  <span class="result-badge" [ngClass]="getResultClass(a.surgicalExam?.resultID)">
-                    <i [class]="getResultIcon(a.surgicalExam?.resultID)"></i>
-                    {{ getResultDescription(a.surgicalExam?.resultID) }}
-                  </span>
+              <!-- Surgical Examination -->
+              <div class="col">
+                <div class="border rounded p-2 small compact-exam-card">
+                  <h6 class="mb-2">
+                    الفحص الجراحي
+                  </h6>
+                  <ng-container *ngIf="a.surgicalExam; else noData">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-6" *ngFor="let item of [
+                        {l:'عام', v: a.surgicalExam.generalSurgery},
+                        {l:'المسالك البولية', v: a.surgicalExam.urinarySurgery},
+                        {l:'الأوعية الدموية', v: a.surgicalExam.vascularSurgery},
+                        {l:'الصدر', v: a.surgicalExam.thoracicSurgery}
+                      ]">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">{{item.l}}</span>
+                          <span class="fw-semibold">{{item.v || '-'}}</span>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النتيجة</span>
+                          <span class="fw-bold" >
+                            <i [class]="getResultIcon(a.surgicalExam.resultID)" class="me-1"></i>
+                            {{ getResultDescription(a.surgicalExam.resultID) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
               </div>
-            </div>
 
-            <!-- Internal Examination -->
-            <div class="exam-card">
-              <div class="exam-header">
-                <h6 class="exam-title">
-                  الفحص الباطني
-                </h6>
-              </div>
-              <div class="exam-content">
-                <div class="exam-fields">
-                  <div class="exam-field">
-                    <span class="field-label">القلب</span>
-                    <span class="field-value">{{ a.internalExam?.heart || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الجهاز التنفسي</span>
-                    <span class="field-value">{{ a.internalExam?.respiratory || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الجهاز الهضمي</span>
-                    <span class="field-value">{{ a.internalExam?.digestive || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الأعصاب</span>
-                    <span class="field-value">{{ a.internalExam?.neurology || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">الجلد</span>
-                    <span class="field-value">{{ a.internalExam?.skin || '-' }}</span>
-                  </div>
-                </div>
-                <div class="exam-result">
-                  <span class="result-label">النتيجة</span>
-                  <span class="result-badge" [ngClass]="getResultClass(a.internalExam?.resultID)">
-                    <i [class]="getResultIcon(a.internalExam?.resultID)"></i>
-                    {{ getResultDescription(a.internalExam?.resultID) }}
-                  </span>
+              <!-- Internal Examination -->
+              <div class="col">
+                <div class="border rounded p-2 small compact-exam-card">
+                  <h6 class="mb-2">
+                    الفحص الباطني
+                  </h6>
+                  <ng-container *ngIf="a.internalExam; else noData">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-6" *ngFor="let item of [
+                        {l:'القلب', v: a.internalExam.heart},
+                        {l:'الجهاز التنفسي', v: a.internalExam.respiratory},
+                        {l:'الجهاز الهضمي', v: a.internalExam.digestive},
+                        {l:'الأعصاب', v: a.internalExam.neurology},
+                        {l:'الجلد', v: a.internalExam.skin}
+                      ]">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">{{item.l}}</span>
+                          <span class="fw-semibold">{{item.v || '-'}}</span>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النتيجة</span>
+                          <span class="fw-bold">
+                            <i [class]="getResultIcon(a.internalExam.resultID)" class="me-1"></i>
+                            {{ getResultDescription(a.internalExam.resultID) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
               </div>
-            </div>
 
-            <!-- Orthopedic Examination -->
-            <div class="exam-card">
-              <div class="exam-header">
-                <h6 class="exam-title">
-                  فحص العظام
-                </h6>
-              </div>
-              <div class="exam-content">
-                <div class="exam-fields">
-                  <div class="exam-field">
-                    <span class="field-label">عضلي هيكلي</span>
-                    <span class="field-value">{{ a.orthopedicExamDto?.musculoskeletal || '-' }}</span>
-                  </div>
-                  <div class="exam-field">
-                    <span class="field-label">جراحة عصبية</span>
-                    <span class="field-value">{{ a.orthopedicExamDto?.neurologicalSurgery || '-' }}</span>
-                  </div>
+              <!-- Orthopedic Examination -->
+              <div class="col">
+                <div class="border rounded p-2 small compact-exam-card">
+                  <h6 class="mb-2">
+                    فحص العظام
+                  </h6>
+                  <ng-container *ngIf="a.orthopedicExamDto; else noData">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">عضلي هيكلي</span>
+                          <span class="fw-semibold">{{ a.orthopedicExamDto.musculoskeletal || '-' }}</span>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">جراحة عصبية</span>
+                          <span class="fw-semibold">{{ a.orthopedicExamDto.neurologicalSurgery || '-' }}</span>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النتيجة</span>
+                          <span class="fw-bold">
+                            <i [class]="getResultIcon(a.orthopedicExamDto.resultID)" class="me-1"></i>
+                            {{ getResultDescription(a.orthopedicExamDto.resultID) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
-                <div class="exam-result">
-                  <span class="result-label">النتيجة</span>
-                  <span class="result-badge" [ngClass]="getResultClass(a.orthopedicExamDto?.resultID)">
-                    <i [class]="getResultIcon(a.orthopedicExamDto?.resultID)"></i>
-                    {{ getResultDescription(a.orthopedicExamDto?.resultID) }}
-                  </span>
+              </div>
+
+              <!-- Consultation -->
+              <div class="col">
+                <div class="border rounded p-2 small compact-exam-card">
+                  <h6 class="mb-2">
+                    الاستشارة
+                  </h6>
+                  <ng-container *ngIf="a.consultation; else noData">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النوع</span>
+                          <span class="fw-semibold">{{ a.consultation.consultationType || '-' }}</span>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">الطبيب</span>
+                          <span class="fw-semibold">{{ a.consultation.referredDoctor || '-' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
               </div>
-            </div>
 
-            <!-- Consultation -->
-            <div class="exam-card">
-              <div class="exam-header">
-                <h6 class="exam-title">
-                  الاستشارة
-                </h6>
-              </div>
-              <div class="exam-content">
-                @if(a.consultation) {
-                  <div class="exam-fields">
-                    <div class="exam-field">
-                      <span class="field-label">النوع</span>
-                      <span class="field-value">{{ a.consultation.consultationType || '-' }}</span>
+              <!-- Investigation -->
+              <div class="col">
+                <div class="border rounded p-2 small compact-exam-card">
+                  <h6 class="mb-2">
+                    التحاليل
+                  </h6>
+                  <ng-container *ngIf="a.investigation; else noData">
+                    <div class="row g-2 align-items-center">
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النوع</span>
+                          <span class="fw-semibold">{{ a.investigation.type || '-' }}</span>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">النتيجة</span>
+                          <span class="fw-semibold">{{ a.investigation.result || '-' }}</span>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center border rounded px-2 py-2">
+                          <span class="text-muted small">الحالة</span>
+                          <span class="fw-bold">{{ a.investigation.status || '-' }}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="exam-field">
-                      <span class="field-label">الطبيب</span>
-                      <span class="field-value">{{ a.consultation.referredDoctor || '-' }}</span>
-                    </div>
-                  </div>
-                } @else {
-                  <div class="no-data">لا يوجد استشارة</div>
-                }
+                  </ng-container>
+                </div>
               </div>
-            </div>
 
-            <!-- Investigation -->
-            <div class="exam-card">
-              <div class="exam-header">
-                <h6 class="exam-title">
-                  التحاليل
-                </h6>
-              </div>
-              <div class="exam-content">
-                @if(a.investigation) {
-                  <div class="exam-fields">
-                    <div class="exam-field">
-                      <span class="field-label">النوع</span>
-                      <span class="field-value">{{ a.investigation.type || '-' }}</span>
-                    </div>
-                    <div class="exam-field">
-                      <span class="field-label">النتيجة</span>
-                      <span class="field-value">{{ a.investigation.result || '-' }}</span>
-                    </div>
-                    <div class="exam-field">
-                      <span class="field-label">الحالة</span>
-                      <span class="field-value fw-bold">{{ a.investigation.status || '-' }}</span>
-                    </div>
-                  </div>
-                } @else {
-                  <div class="no-data">لا يوجد تحاليل</div>
-                }
-              </div>
+              <ng-template #noData>
+                <div class="text-muted text-center py-3">لا يوجد بيانات</div>
+              </ng-template>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Final Decision Card -->
-      <div class="card modern-card">
-        <div class="card-header bg-decision">
-          <h5 class="card-title mb-0">
-            <i class="fas fa-gavel me-2"></i>
-            القرار النهائي
-          </h5>
-        </div>
-        <div class="card-body">
-          <div class="decision-content">
-            <div class="decision-result">
-              <span class="decision-label">النتيجة</span>
-              <span class="decision-badge" [ngClass]="getResultClass(a.finalDecision?.resultID)">
-                <i [class]="getResultIcon(a.finalDecision?.resultID)"></i>
-                {{ a.finalDecision?.result?.description || getResultDescription(a.finalDecision?.resultID) }}
-              </span>
-            </div>
-            
-            <div class="decision-details">
-              @if(a.finalDecision?.resultID == 1) {
-                <div class="decision-field">
-                  <span class="field-label">التوصية</span>
-                  <span class="field-value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span>
+      <div class="col-12 mt-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-custom text-white">
+            <h5 class="mb-0">
+              القرار النهائي
+            </h5>
+          </div>
+          <div class="card-body py-2">
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center border rounded px-3 py-3 bg-light">
+                  <span class="text-muted fw-medium">النتيجة النهائية</span>
+                  <span class="fw-bold fs-5">
+                    <i [class]="getResultIcon(a.finalDecision?.resultID)" class="me-2"></i>
+                    {{ a.finalDecision?.result?.description || getResultDescription(a.finalDecision?.resultID) }}
+                  </span>
                 </div>
-              } @else {
-                <div class="decision-field">
-                  <span class="field-label">السبب</span>
-                  <span class="field-value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span>
+              </div>
+              
+              <div class="col-md-6" *ngIf="a.finalDecision?.reason">
+                <div class="border rounded px-2 py-2">
+                  <div class="text-muted small">
+                    {{ a.finalDecision?.resultID == 1 ? 'التوصية' : 'السبب' }}
+                  </div>
+                  <div class="fw-semibold">{{ a.finalDecision?.reason }}</div>
                 </div>
-                <div class="decision-field">
-                  <span class="field-label">مدة التأجيل</span>
-                  <span class="field-value">{{ a.finalDecision?.postponeDuration || '-' }}</span>
+              </div>
+              
+              <div class="col-md-6" *ngIf="a.finalDecision?.postponeDuration && a.finalDecision?.resultID != 1">
+                <div class="border rounded px-2 py-2">
+                  <div class="text-muted small">مدة التأجيل</div>
+                  <div class="fw-semibold">{{ a.finalDecision?.postponeDuration }}</div>
                 </div>
-              }
-              <div class="decision-field">
-                <span class="field-label">تاريخ القرار</span>
-                <span class="field-value">{{ a.finalDecision?.decisionDate || '-' }}</span>
+              </div>
+              
+              <div class="col-md-6" *ngIf="a.finalDecision?.decisionDate">
+                <div class="border rounded px-2 py-2">
+                  <div class="text-muted small">تاريخ القرار</div>
+                  <div class="fw-semibold">{{ a.finalDecision?.decisionDate }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -362,11 +379,13 @@
   </ng-container>
 
   <ng-template #loadingTpl>
-    <div class="loading-container">
-      <div class="card modern-card">
-        <div class="card-body text-center">
-          <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
-          <div>جاري التحميل ...</div>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body text-center py-5">
+            <i class="fas fa-spinner fa-spin fa-2x mb-3 text-primary"></i>
+            <div class="text-muted">جاري التحميل ...</div>
+          </div>
         </div>
       </div>
     </div>
