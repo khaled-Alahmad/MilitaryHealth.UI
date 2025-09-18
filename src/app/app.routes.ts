@@ -41,12 +41,14 @@ export const routes: Routes = [
         path: 'reception',
         loadChildren: () =>
           import('./features/reception/reception.routes').then(m => m.RECEPTION_ROUTES),
+        
         data: { roles: [UserRoles.Receptionist] }
       },
       {
         path: 'doctor',
         loadChildren: () =>
           import('./features/doctor/doctor.routes').then(m => m.Doctor_ROUTES),
+        canActivate: [roleRedirectGuard],
         data: { roles: [UserRoles.Doctor] }
       },
       {

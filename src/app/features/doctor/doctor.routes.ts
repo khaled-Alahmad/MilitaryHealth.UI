@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/guards/auth-guard';
+import { roleRedirectGuard } from '../../core/guards/role-redirect-guard';
 
 export const Doctor_ROUTES: Routes = [
   {
@@ -7,112 +8,113 @@ export const Doctor_ROUTES: Routes = [
     loadComponent: () =>
       import('./components/eye-doctor.component/eye-doctor.component')
         .then(m => m.EyeDoctorComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
+    
   },
   {
     path: 'eye/deferred', 
     loadComponent: () =>
       import('./components/eye-doctor.component/deferred-eye-exams.component/deferred-eye-exams.component')
         .then(m => m.DeferredEyeExamsComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
     path: 'eye/consultations',
     loadComponent: () =>
       import('./components/eye-doctor.component/eye-consultations/eye-consultations')
         .then(m => m.EyeConsultations),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
     path: 'eye/investigations',   // ← هذا الراوت الجديد
     loadComponent: () =>
       import('./components/eye-doctor.component/eye-investigations-list/eye-investigations-list')
         .then(m => m.EyeInvestigationsList),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
     path: 'internal',
     loadComponent: () =>
       import('./components/internal-doctor.component/internal-doctor.component')
         .then(m => m.InternalDoctorComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
     path: 'internal/medications',
     loadComponent: () =>
       import('./components/internal-doctor.component/deferred-internal-exams.component/deferred-internal-exams.component')
         .then(m => m.DeferredInternalExamsComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
    {
     path: 'internal/consultations',
     loadComponent: () =>
       import('./components/internal-doctor.component/internal-consultations-list/internal-consultations-list')
         .then(m => m.InternalConsultationsList),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
     path: 'internal/investigations',
     loadComponent: () =>
       import('./components/internal-doctor.component/internal-investigations-list/internal-investigations-list')
         .then(m => m.InternalInvestigationsList),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
   path: 'orthopedics',
   loadComponent: () =>
     import('./components/orthopedics-doctor.component/orthopedics-doctor.component')
       .then(m => m.OrthopedicsDoctorComponent),
-  canActivate: [authGuard]
+  canActivate: [authGuard,roleRedirectGuard]
 },
 {
   path: 'orthopedics/deferred',
   loadComponent: () =>
     import('./components/orthopedics-doctor.component/deferred-orthopedi-exams-component/deferred-orthopedi-exams-component')
       .then(m => m.DeferredOrthopediExamsComponent),
-  canActivate: [authGuard]
+  canActivate: [authGuard,roleRedirectGuard]
 },
 {
   path: 'orthopedics/consultations',
   loadComponent: () =>
     import('./components/orthopedics-doctor.component/orthopedic-consultations-list/orthopedic-consultations-list')
       .then(m => m.OrthopedicConsultationsList),
-  canActivate: [authGuard]
+  canActivate: [authGuard,roleRedirectGuard]
 },
 {
   path: 'orthopedics/investigations',
   loadComponent: () =>
     import('./components/orthopedics-doctor.component/orthopedic-investigations-list/orthopedic-investigations-list')
       .then(m => m.OrthopedicInvestigationsList),
-  canActivate: [authGuard]
+  canActivate: [authGuard,roleRedirectGuard]
 },
   {
     path: 'surgery',
     loadComponent: () =>
       import('./components/surgery-doctor.component/surgery-doctor.component')
         .then(m => m.SurgeryDoctorComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
     path: 'surgery/records',
     loadComponent: () =>
       import('./components/surgery-doctor.component/deferred-surgical-exams.component/deferred-surgical-exams.component')
         .then(m => m.DeferredSurgicalExamsComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleRedirectGuard]
   },
   {
   path: 'surgery/consultations',
   loadComponent: () =>
     import('./components/surgery-doctor.component/surgery-consultations-list/surgery-consultations-list')
       .then(m => m.SurgeryConsultationsList),
-  canActivate: [authGuard]
+  canActivate: [authGuard,roleRedirectGuard]
 },
 {
   path: 'surgery/investigations',
   loadComponent: () =>
     import('./components/surgery-doctor.component/surgery-investigations-list/surgery-investigations-list')
       .then(m => m.SurgeryInvestigationsList),
-  canActivate: [authGuard]
+  canActivate: [authGuard,roleRedirectGuard]
 },
 { path: '**', loadComponent: () => import('./components/doctor-not-found-component/doctor-not-found-component').then(m => m.DoctorNotFoundComponent) }
 ];

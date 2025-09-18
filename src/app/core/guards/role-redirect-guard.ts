@@ -14,7 +14,6 @@ export const roleRedirectGuard: CanActivateFn = (route, state) => {
 
   if (state.url === '/' || state.url === '') {
     const role = authService.getUserRole();
-    console.log(role);
     switch (role) {
       case UserRoles.Admin:
         router.navigate(['/admin']);
@@ -30,25 +29,41 @@ export const roleRedirectGuard: CanActivateFn = (route, state) => {
         break;
       case UserRoles.Doctor:
         const specialty = localStorage.getItem("doctor_specialty");
-        switch (specialty) {
-          case 'عيون':
-          case 'eye':
-            router.navigate(['/doctor/eye']);
+        const doctor = authService.getDoctorInfo();
+
+        if (!specialty || !doctor || !doctor.specializationID) {
+          authService.logout();
+          break;
+        }
+        const doctorId = localStorage.getItem("doctorId");
+        if(!doctorId){
+          if (doctorId?.toString() != doctor.doctorID.toString()) {
+            authService.logout();
             break;
-          case 'باطنة':
-          case 'internal':
-            router.navigate(['/doctor/internal']);
-            break;
-          case 'عظمية':
-          case 'orthopedics':
-            router.navigate(['/doctor/orthopedics']);
-            break;
-          case 'جراحة':
-          case 'surgery':
-            router.navigate(['/doctor/surgery']);
-            break;
-          default:
-            router.navigate(['/doctor']); // fallback
+          }
+        }
+        
+        if(specialty!= null){
+          switch (specialty) {
+            case 'عيون':
+            case 'eye':
+              router.navigate(['/doctor/eye']);
+              break;
+            case 'باطنة':
+            case 'internal':
+              router.navigate(['/doctor/internal']);
+              break;
+            case 'عظمية':
+            case 'orthopedics':
+              router.navigate(['/doctor/orthopedics']);
+              break;
+            case 'جراحة':
+            case 'surgery':
+              router.navigate(['/doctor/surgery']);
+              break;
+            default:
+              authService.logout(); // fallback
+          }
         }
         break;
       default:

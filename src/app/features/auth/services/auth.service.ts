@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 import { LoginResponse } from '../../../core/models/auth.dto';
@@ -165,4 +165,35 @@ export class AuthService {
 getDoctorInfo(){
   return this.doctorInfo;
 }
+
+
+checkDoctorSpecialty(): Observable<boolean> {
+  // أولاً، تحقق من وجود بيانات الدكتور
+  const doctor = this.getDoctorInfo();
+  if (!doctor || !doctor.specializationID) {
+    return of(false); // لا يوجد دكتور أو specializationID
+  }
+
+  const specIdLocal = Number(this.getDoctorSpecialty());
+  if (specIdLocal !== doctor.specializationID) {
+    console.warn('Specialty in localStorage does not match doctor specializationID');
+    return of(false);
+  }
+
+  // تحقق من أن التخصص موجود ضمن قائمة الاختصاصات من السيرفر
+  return this.getSpecializationNameById(specIdLocal).pipe(
+    map(name => {
+      if (!name || name === 'unknown') {
+        console.warn('Specialty ID is not valid or does not exist on server');
+        return false;
+      }
+      return true; // كل شيء صحيح
+    }),
+    catchError(err => {
+      console.error('Error checking specialty:', err);
+      return of(false);
+    })
+  );
+}
+
 }
