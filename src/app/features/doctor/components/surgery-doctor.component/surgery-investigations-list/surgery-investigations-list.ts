@@ -11,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Loading } from "../../../../../shared/components/loading/loading";
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-surgery-investigations-list',
@@ -26,8 +27,8 @@ export class SurgeryInvestigationsList implements OnInit {
   selectedInvestigation: Investigation | null = null;
   loading = false;
   searchText = '';
-  globalFilter: string = '';
 
+  globalFilter: string = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
@@ -36,6 +37,7 @@ export class SurgeryInvestigationsList implements OnInit {
     private service: SurgicalExamService,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    private authService : AuthService
   ) {}
 
   ngOnInit() { 
@@ -44,13 +46,16 @@ export class SurgeryInvestigationsList implements OnInit {
 
   loadInvestigations() {
     this.loading = true;
-    this.service.getSurgicalInvestigations().subscribe({
+    const filter = this.globalFilter || '';
+    const doctorId = this.authService.getDoctorId();
+    this.service.getSurgicalInvestigations(this.page, this.rowsPerPage, filter,doctorId).subscribe({
       next: res => { 
-        this.investigations = res; 
-        this.filteredInvestigations = [...res]; 
-        this.totalRecords = this.filteredInvestigations.length;
-        this.applyPaging();
+        this.investigations = res.items; 
+        this.filteredInvestigations = res.items; 
+        this.totalRecords = res.totalCount;
         this.loading = false; 
+        //this.applyPaging();
+
       },
       error: () => { 
         this.toastr.error('حدث خطأ أثناء تحميل الفحوصات الجراحية'); 
@@ -59,40 +64,44 @@ export class SurgeryInvestigationsList implements OnInit {
     });
   }
 
-  filterInvestigations() {
-    const search = this.globalFilter.trim().toLowerCase();
-    this.filteredInvestigations = !search ? [...this.investigations] :
-      this.investigations.filter(i =>
-        i.applicantFileNumber?.toLowerCase().includes(search) ||
-        i.type?.toLowerCase().includes(search) ||
-        i.result?.toLowerCase().includes(search) ||
-        i.status?.toLowerCase().includes(search) ||
-        (i.doctor?.fullName?.toLowerCase().includes(search) ?? false)
-      );
-    this.totalRecords = this.filteredInvestigations.length;
-    this.page = 1;
-    this.applyPaging();
-  }
+  // filterInvestigations() {
+  //   const search = this.globalFilter.trim().toLowerCase();
+  //   this.filteredInvestigations = !search ? [...this.investigations] :
+  //     this.investigations.filter(i =>
+  //       i.applicantFileNumber?.toLowerCase().includes(search) ||
+  //       i.type?.toLowerCase().includes(search) ||
+  //       i.result?.toLowerCase().includes(search) ||
+  //       i.status?.toLowerCase().includes(search) ||
+  //       (i.doctor?.fullName?.toLowerCase().includes(search) ?? false)
+  //     );
+  //   this.totalRecords = this.filteredInvestigations.length;
+  //   this.page = 1;
+  //   this.applyPaging();
+  // }
 
-  onFilterChange(event: Event) {
-    this.globalFilter = (event.target as HTMLInputElement).value;
-    this.filterInvestigations();
-  }
+  // onFilterChange(event: Event) {
+  //   this.globalFilter = (event.target as HTMLInputElement).value;
+  //   this.filterInvestigations();
+  // }
 
-  onEnterSearch() {
-    this.page = 1;
-    this.filterInvestigations();
-  }
+  // onEnterSearch() {
+  //   this.page = 1;
+  //   this.filterInvestigations();
+  // }
 
-  onPageChange(newPage: number) {
-    this.page = newPage;
-    this.applyPaging();
-  }
+  onPageChange(newPage: number) { this.page = newPage; this.loadInvestigations(); }
 
   onPageSizeChange(newSize: number) {
     this.rowsPerPage = newSize;
     this.page = 1;
-    this.applyPaging();
+    this.loadInvestigations();
+  }
+
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
+    this.page = 1;
+    this.loadInvestigations();
   }
 
   private applyPaging() {

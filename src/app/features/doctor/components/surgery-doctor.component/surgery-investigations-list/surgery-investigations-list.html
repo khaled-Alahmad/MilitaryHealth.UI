@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class=" d-flex justify-content-end " >
     <div class="search-wrapper  my-2">
       <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <p-table #table [value]="pagedInvestigations" [rows]="rowsPerPage" class="custom-table">
+  <p-table #table [value]="filteredInvestigations" [rows]="rowsPerPage" class="custom-table">
     <ng-template pTemplate="header">
       <tr>
         <th>رقم الملف</th>

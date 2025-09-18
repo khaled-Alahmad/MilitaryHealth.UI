@@ -17,7 +17,8 @@ export class ConsultationFormComponent {
  @Input() applicantFileNumber: string = '';
   @Input() showModal: boolean = false;  // ✅ أضفنا @Input() هنا
   @Output() close = new EventEmitter<void>(); // لإرسال حدث الإغلاق للأب
-
+  @Input() showApplicantField: boolean = false;
+  isExternalAdd: boolean = false;
   consultationForm!: FormGroup;
   uploadedPath: string | null = null;
   previewUrl: string | null = null;
@@ -35,7 +36,9 @@ export class ConsultationFormComponent {
       consultationType: ['', Validators.required],
       referredDoctor: ['', Validators.required],
       result: [null],
-      attachment: [null]
+      attachment: [null],
+      applicantFileNumber: [this.showApplicantField ? '' : this.applicantFileNumber, 
+        this.showApplicantField ? Validators.required : []]
     });
   }
 
@@ -76,7 +79,7 @@ export class ConsultationFormComponent {
   }
 
   onSubmit() {
-    if (this.consultationForm.invalid || !this.applicantFileNumber) {
+    if (this.consultationForm.invalid) {
       this.toastr.warning('يرجى إدخال جميع الحقول', 'تحذير');
       return;
     }
@@ -89,7 +92,7 @@ export class ConsultationFormComponent {
 
     const consultation: Consultation = {
       doctorID,
-      applicantFileNumber: this.applicantFileNumber,
+      applicantFileNumber: this.consultationForm.value.applicantFileNumber || this.applicantFileNumber,
       consultationType: this.consultationForm.value.consultationType,
       referredDoctor: this.consultationForm.value.referredDoctor,
       result: this.consultationForm.value.result,

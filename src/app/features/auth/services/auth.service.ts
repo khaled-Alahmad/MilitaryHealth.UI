@@ -9,6 +9,7 @@ import { UserRoles } from '../../../core/models/enums/user-roles.enum';
 import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ApiResponse } from '../../applicants/models/api-response.model';
+import { Doctor } from '../../doctor/models/internal-exam.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class AuthService {
   private readonly REFRESH_KEY = 'refresh_token';
   private readonly SPECIALTY_KEY = 'doctor_specialty';
   private readonly DOCTOR_ID_KEY = 'doctorId';
-
+  doctorInfo!: Doctor;
   constructor(private http: HttpClient, private toastr: ToastrService) { }
 
   login(userDto: any): Observable<LoginResponse> {
@@ -30,7 +31,7 @@ export class AuthService {
           this.setToken(response.data.accessToken, response.data.refreshToken);
 
           const role = this.getUserRole();
-
+          this.doctorInfo = response.data.doctor;
           if (role === UserRoles.Doctor && response.data.doctor) {
             const { specializationID, doctorID } = response.data.doctor;
             if (specializationID) localStorage.setItem(this.SPECIALTY_KEY, specializationID.toString());
@@ -55,9 +56,9 @@ export class AuthService {
 
 
 
-  getDoctorId(): number | null {
+  getDoctorId(): number {
     const doctorId = localStorage.getItem(this.DOCTOR_ID_KEY);
-    return doctorId ? +doctorId : null;
+    return doctorId ? +doctorId : 0;
   }
 
   getSpecializationId(): number | null {
@@ -101,9 +102,9 @@ export class AuthService {
     this.clearStorage();
     return this.http.post<ApiResponse<any>>(
       `${environment.apiUrl}/api/auth/logout`,
-      {refreshToken : refreshToken} ,{
-        headers: header
-      }
+      { refreshToken: refreshToken }, {
+      headers: header
+    }
     );
   }
 
@@ -161,4 +162,7 @@ export class AuthService {
   getDoctorSpecialty(): string | null {
     return localStorage.getItem(this.SPECIALTY_KEY);
   }
+getDoctorInfo(){
+  return this.doctorInfo;
+}
 }

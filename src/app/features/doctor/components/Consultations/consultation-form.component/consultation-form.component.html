@@ -12,6 +12,11 @@
     <div class="modal-body">
       <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
         
+        <div class="form-group mb-3" *ngIf="showApplicantField">
+          <label>رقم المنتسب <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="applicantFileNumber">
+        </div>
+        
         <div class="form-group mb-3">
           <label>نوع الاستشارة <span class="text-danger">*</span></label>
           <input class="form-control" formControlName="consultationType">

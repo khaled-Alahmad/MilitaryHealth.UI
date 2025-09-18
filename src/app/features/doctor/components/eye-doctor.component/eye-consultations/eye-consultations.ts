@@ -1,5 +1,5 @@
 import { environment } from './../../../../../../environments/environment';
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,12 +13,15 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { Loading } from "../../../../../shared/components/loading/loading";
+import { Toolbar } from "primeng/toolbar";
+import { AuthService } from '../../../../auth/services/auth.service';
+import { ConsultationFormComponent } from "../../Consultations/consultation-form.component/consultation-form.component";
 
 
 @Component({
   selector: 'app-eye-consultations',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading, Toolbar, ConsultationFormComponent],
   templateUrl: './eye-consultations.html',
   styleUrls: ['./eye-consultations.scss']
 })
@@ -31,7 +34,7 @@ export class EyeConsultations implements OnInit {
   totalRecords = 0;
   loading = false;
   tableHeight = '360px';
-
+  @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
   // selectedConsultation: Consultation | null = null;
   // searchText: string = '';
   // environment = environment;  
@@ -42,6 +45,7 @@ export class EyeConsultations implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private modalService: NgbModal,
+    private authService : AuthService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +67,8 @@ export class EyeConsultations implements OnInit {
   loadConsultations() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.service.getEyeClinicConsultations(this.page, this.rowsPerPage, filter).subscribe({
+    const doctorId = this.authService.getDoctorId();
+    this.service.getEyeClinicConsultations(this.page, this.rowsPerPage, filter,doctorId).subscribe({
       next: (res: PagedResponse<Consultation>) => {
         this.consultations = res.items;
         this.filteredConsultations = res.items;
@@ -136,5 +141,8 @@ export class EyeConsultations implements OnInit {
     modalRef.componentInstance.consultationUpdated.subscribe(() => {
       this.loadConsultations();
     });
+  }
+  addConsultation(){
+    this.consultationForm.openModal();
   }
 }

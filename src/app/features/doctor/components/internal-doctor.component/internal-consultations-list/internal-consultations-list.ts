@@ -13,6 +13,7 @@ import { RippleModule } from 'primeng/ripple';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { Loading } from "../../../../../shared/components/loading/loading";
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-internal-consultations-list',
@@ -35,6 +36,7 @@ export class InternalConsultationsList implements OnInit {
     private service: InternalExamService,
     private toastr: ToastrService ,
     private modalService: NgbModal,// ✅ toastr
+    private authService : AuthService
   ) {}
 
   ngOnInit() { this.loadConsultations(); }
@@ -42,7 +44,8 @@ export class InternalConsultationsList implements OnInit {
   loadConsultations() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.service.getInternalConsultations(this.page, this.rowsPerPage,filter).subscribe({
+    const doctorId = this.authService.getDoctorId();
+    this.service.getInternalConsultations(this.page, this.rowsPerPage,filter,doctorId).subscribe({
       next: res => {
         this.consultations = res.items;
         this.filteredConsultations = res.items;

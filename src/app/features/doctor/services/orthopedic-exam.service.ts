@@ -95,12 +95,14 @@ export class OrthopedicExamService {
   getOrthopedicConsultations(
     page: number = 1,
     pageSize: number = 50,
-    filter: string = ''
+    filter: string = '',
+    doctorId : number
   ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', false)
+      .set('doctorID', doctorId);
   
     if (filter) {
       params = params.set('filter', filter);
@@ -122,9 +124,10 @@ export class OrthopedicExamService {
           };
           return {
             ...data,
-            items: (data?.items || []).filter(
-              (c: Consultation) => c.doctor?.specializationID === 4
-            )
+            items:data?.items
+            //  (data?.items || []).filter(
+            //   (c: Consultation) => c.doctor?.specializationID === 4
+            // )
           } as PagedResponse<Consultation>;
         })
       );
@@ -157,12 +160,15 @@ export class OrthopedicExamService {
   getOrthopedicInvestigations(
     page: number = 1,
     pageSize: number = 50,
-    filter: string = ''
+    filter: string = '',
+    doctorId:number
   ): Observable<PagedResponse<Investigation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', false)
+      .set('doctorID', doctorId);
+      
   
     if (filter) {
       params = params.set('filter', filter);
@@ -184,9 +190,10 @@ export class OrthopedicExamService {
           };
           return {
             ...data,
-            items: (data?.items || []).filter(
-              (i: Investigation) => i.doctor?.specializationID === 4
-            )
+            items: data?.items
+            // (data?.items || []).filter(
+            //   (i: Investigation) => i.doctor?.specializationID === 4
+            // )
           } as PagedResponse<Investigation>;
         })
       );

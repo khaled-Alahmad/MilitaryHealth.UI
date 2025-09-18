@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Investigation } from '../../../models/investigation.model';
 import { FormsModule } from '@angular/forms';
@@ -13,11 +13,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { Loading } from "../../../../../shared/components/loading/loading";
+import { Toolbar } from "primeng/toolbar";
+import { AuthService } from '../../../../auth/services/auth.service';
+import { InvestigationForm } from '../../Investigations/investigation-form/investigation-form';
 
 @Component({
   selector: 'app-eye-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, Loading, Toolbar, InvestigationForm],
   templateUrl: './eye-investigations-list.html',
   styleUrl: './eye-investigations-list.scss'
 })
@@ -30,7 +33,7 @@ export class EyeInvestigationsList implements OnInit {
   totalRecords = 0;
   loading = false;
   tableHeight = '360px';
-
+  @ViewChild(InvestigationForm) investigationForm!: InvestigationForm;
   selectedInvestigation: Investigation | null = null;
   searchText = '';
   environment = environment;
@@ -41,6 +44,7 @@ export class EyeInvestigationsList implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private modalService: NgbModal,
+    private authService : AuthService
   ) {}
 
   ngOnInit() {
@@ -50,7 +54,8 @@ export class EyeInvestigationsList implements OnInit {
   loadInvestigations() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.service.getEyeClinicInvestigations(this.page, this.rowsPerPage, filter).subscribe({
+    const doctorId = this.authService.getDoctorId();
+    this.service.getEyeClinicInvestigations(this.page, this.rowsPerPage, filter,doctorId).subscribe({
       next: (res: PagedResponse<Investigation>) => {
         // ترتيب تنازلي حسب investigationID مع التعامل مع undefined
         this.investigations = res.items.sort((a, b) => (b.investigationID ?? 0) - (a.investigationID ?? 0));
@@ -122,4 +127,7 @@ export class EyeInvestigationsList implements OnInit {
       });
     }
     
+    addInvestigation() {
+      this.investigationForm.openModal();
+    }
 }

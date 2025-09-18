@@ -18,7 +18,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
   @Input() showModal: boolean = false;  // 🔹 مهم جدًا
   @Input() investigationToEdit?: Investigation;
   @Output() close = new EventEmitter<void>();
-
+  @Input() showApplicantField: boolean = false;
   investigationForm!: FormGroup;
   uploadedPath: string | null = null;
   
@@ -36,7 +36,9 @@ import { EyeExamService } from '../../../services/eye-exam.service';
       type: [this.investigationToEdit?.type || '', Validators.required],
       result: [null],
       attachment: [null],
-      status: [null]
+      status: [null],
+      applicantFileNumber: [this.showApplicantField ? '' : this.applicantFileNumber, 
+        this.showApplicantField ? Validators.required : []]
     });
 
     if (this.investigationToEdit?.attachment) {
@@ -70,7 +72,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
   }
 
   onSubmit() {
-    if (!this.applicantFileNumber || this.investigationForm.invalid) {
+    if (this.investigationForm.invalid) {
       this.toastr.warning('يرجى إدخال جميع الحقول المطلوبة', 'تنبيه');
       return;
     }
@@ -84,7 +86,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
     const investigation: Investigation = {
       ...this.investigationToEdit,
       doctorID,
-      applicantFileNumber: this.applicantFileNumber,
+      applicantFileNumber: this.investigationForm.value.applicantFileNumber || this.applicantFileNumber,
       type: this.investigationForm.value.type,
       result: this.investigationForm.value.result,
       status: this.investigationForm.value.status,

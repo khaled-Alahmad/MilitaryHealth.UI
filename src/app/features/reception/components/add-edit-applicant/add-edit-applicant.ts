@@ -20,7 +20,7 @@ import { Loading } from "../../../../shared/components/loading/loading";
   styleUrl: './add-edit-applicant.scss'
 })
 export class AddEditApplicant implements OnInit {
-    applicantForm!: FormGroup;
+  applicantForm!: FormGroup;
   maritalStatuses: MaritalStatus[] = [];
   applicantId!: number;
   fileNumber: string = '';

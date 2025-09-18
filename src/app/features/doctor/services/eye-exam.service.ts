@@ -560,12 +560,14 @@ export class EyeExamService {
   getEyeClinicConsultations(
     page: number = 1,
     pageSize: number = 20,
-    filter: string = ''
+    filter: string = '',
+    doctorId : number
   ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', 'true');
+      .set('sortDesc', 'true')
+      .set('doctorID', doctorId);
   
     if (filter) {
       params = params.set('filter', filter);
@@ -585,9 +587,10 @@ export class EyeExamService {
         };
         return {
           ...data,
-          items: (data?.items || []).filter(
-            (c: Consultation) => c.doctor?.specializationID === 1 // 👈 رقم التخصص الخاص بالعيون
-          )
+          items: data?.items
+          // (data?.items || []).filter(
+          //   (c: Consultation) => c.doctor?.specializationID === 1 // 👈 رقم التخصص الخاص بالعيون
+          // )
         } as PagedResponse<Consultation>;
       }),
       catchError(() => of({
@@ -661,12 +664,14 @@ export class EyeExamService {
 getEyeClinicInvestigations(
   page: number = 1,
   pageSize: number = 20,
-  filter: string = ''
+  filter: string = '',
+  doctorId : number
 ): Observable<PagedResponse<Investigation>> {
   let params = new HttpParams()
     .set('page', page.toString())
     .set('pageSize', pageSize.toString())
-    .set('sortDesc', 'true');
+    .set('sortDesc', 'true')
+    .set('doctorID', doctorId);
 
   if (filter) {
     params = params.set('filter', filter);
@@ -686,9 +691,10 @@ getEyeClinicInvestigations(
       };
       return {
         ...data,
-        items: (data?.items || []).filter(
-          (i: Investigation) => i.doctor?.specializationID === 1 // 👈 ID تبع عيادة العيون
-        )
+        items: data?.items 
+        // (data?.items || []).filter(
+        //   (i: Investigation) => i.doctor?.specializationID === 1 // 👈 ID تبع عيادة العيون
+        // )
       } as PagedResponse<Investigation>;
     }),
     catchError(() => of({

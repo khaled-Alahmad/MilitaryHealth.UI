@@ -13,10 +13,13 @@
     <div class="modal-body">
       <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()" novalidate>
 
-        <!-- القسم الأول: بيانات التحليل -->
-        <h6 class="section-title">بيانات التحليل</h6>
+        <div class="form-group mb-3" *ngIf="showApplicantField">
+          <label>رقم المنتسب <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="applicantFileNumber"
+          [class.is-invalid]="investigationForm.get('applicantFileNumber')?.invalid && investigationForm.get('applicantFileNumber')?.touched">
+        </div>
         <div class="row g-3">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <label class="form-label">نوع التحليل <span class="text-danger">*</span></label>
             <input type="text" class="form-control" formControlName="type"
               [class.is-invalid]="investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched"

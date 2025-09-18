@@ -43,7 +43,8 @@ getApplicantByFileNumber$(fileNumber: string): Observable<ApplicantDetailsModel>
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortBy', 'applicantID')
+      .set('sortDesc', true);
 
     if (filter) {
       params = params.set('filter', filter);

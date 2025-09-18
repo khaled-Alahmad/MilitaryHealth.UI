@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
 import { Loading } from "../../../../../shared/components/loading/loading";
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-orthopedic-consultations-list',
@@ -35,7 +36,7 @@ export class OrthopedicConsultationsList implements OnInit {
   totalRecords = 0;
 
   constructor(private service: OrthopedicExamService, private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal , private authService : AuthService
   ) { }
 
   ngOnInit() {
@@ -45,7 +46,8 @@ export class OrthopedicConsultationsList implements OnInit {
   loadConsultations() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.service.getOrthopedicConsultations(this.page, this.rowsPerPage, filter).subscribe({
+    const doctorId = this.authService.getDoctorId();
+    this.service.getOrthopedicConsultations(this.page, this.rowsPerPage, filter,doctorId).subscribe({
       next: (res) => {
         this.consultations = res.items;
         this.filteredConsultations = res.items;

@@ -117,12 +117,15 @@ export class InternalExamService {
   getOrthopedicConsultations(
     page: number = 1,
     pageSize: number = 50,
-    filter: string = ''
+    filter: string = '',
+    doctorId:number
   ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', false)
+      .set('doctorID', doctorId);
+
   
     if (filter) {
       params = params.set('filter', filter);
@@ -138,9 +141,10 @@ export class InternalExamService {
           const data = res.data;
           return {
             ...data,
-            items: (data?.items || []).filter(
-              (c: Consultation) => c.doctor?.specializationID === 2
-            )
+            items:data?.items
+            //  (data?.items || []).filter(
+            //   (c: Consultation) => c.doctor?.specializationID === 2
+            // )
           } as PagedResponse<Consultation>;
         })
       );
@@ -169,13 +173,15 @@ export class InternalExamService {
   getOrthopedicInvestigations(
     page: number = 1,
     pageSize: number = 50,
-    filter: string = ''
+    filter: string = '',
+    doctorId:number
   ): Observable<PagedResponse<Investigation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortBy', 'applicantFileNumber') // فرز حسب رقم الملف
-      .set('sortDesc', 'true'); 
+      .set('sortDesc', 'true')
+      .set('doctorID', doctorId);
   
     if (filter) {
       params = params.set('filter', filter);
@@ -197,9 +203,10 @@ export class InternalExamService {
           };
           return {
             ...data,
-            items: (data?.items || []).filter(
-              (i: Investigation) => i.doctor?.specializationID === 2
-            )
+            items: data?.items
+            // (data?.items || []).filter(
+            //   (i: Investigation) => i.doctor?.specializationID === 2
+            // )
           } as PagedResponse<Investigation>;
         })
       );
@@ -225,13 +232,15 @@ export class InternalExamService {
   getInternalConsultations(
     page: number = 1,
     pageSize: number = 10,
-    filter: string = ''
+    filter: string = '',
+    doctorId:number
   ): Observable<PagedResponse<Consultation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortDesc', true)
-      .set('sortBy', 'consultationID');
+      .set('sortBy', 'consultationID')
+      .set('doctorID', doctorId);
   
     if (filter) {
       params = params.set('filter', filter);
@@ -251,9 +260,10 @@ export class InternalExamService {
         };
         return {
           ...data,
-          items: (data?.items || []).filter(
-            (c: Consultation) => c.doctor?.specializationID === 2 // 👈 ID الباطنة (عدّله حسب DB عندك)
-          )
+          items: data?.items
+          // (data?.items || []).filter(
+          //   (c: Consultation) => c.doctor?.specializationID === 2 // 👈 ID الباطنة (عدّله حسب DB عندك)
+          // )
         } as PagedResponse<Consultation>;
       }),
       catchError(() => of({

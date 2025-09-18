@@ -4,6 +4,13 @@ import { UserRoles } from '../../core/models/enums/user-roles.enum';
 
 export const RECEPTION_ROUTES: Routes = [
   {
+    path: '',
+    loadComponent: () =>
+      import('./components/add-edit-applicant/add-edit-applicant').then(m => m.AddEditApplicant),
+    canActivate: [authGuard],
+    data: { roles: [UserRoles.Receptionist] }
+  },
+  {
     path: 'applicants',
     loadComponent: () =>
       import('./components/applicants-list/applicants-list').then(m => m.ApplicantsList),

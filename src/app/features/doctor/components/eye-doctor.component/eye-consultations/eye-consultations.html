@@ -1,6 +1,6 @@
 <div class="user-header-section px-1 pt-1 container-fluid">
   <!-- البحث -->
-  <div class="mb-3 d-flex justify-content-start">
+  <!-- <div class="mb-3 d-flex justify-content-start">
     <div class="search-wrapper">
       <input
         type="text"
@@ -10,7 +10,23 @@
       />
       <i class="fas fa-search search-icon"></i>
     </div>
-  </div>
+  </div> -->
+  <p-toolbar class="mb-6">
+    <ng-template  #start>
+      <div class="search-wrapper my-2">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
+      </div>
+    </ng-template>
+
+    <ng-template #end>
+      <button class="btn btn-sm btn-success" (click)="addConsultation()">إضافة استشارة</button>
+         </ng-template>
+</p-toolbar>
 
   <!-- جدول النتائج -->
   <p-table
@@ -89,3 +105,8 @@
   >
   </app-paginator>
 </div>
+<app-consultation-form 
+
+  [showApplicantField]="true" 
+>
+</app-consultation-form>

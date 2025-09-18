@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableModule } from "primeng/table";
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { Loading } from "../../../../../shared/components/loading/loading";
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-internal-investigations-list',
@@ -32,6 +33,7 @@ export class InternalInvestigationsList implements OnInit {
     private service: InternalExamService,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    private authService : AuthService
   ) {}
 
   ngOnInit() { this.loadInvestigations(); }
@@ -39,7 +41,8 @@ export class InternalInvestigationsList implements OnInit {
   loadInvestigations() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.service.getOrthopedicInvestigations(this.page, this.rowsPerPage, filter).subscribe({
+    const doctorId = this.authService.getDoctorId();
+    this.service.getOrthopedicInvestigations(this.page, this.rowsPerPage, filter,doctorId).subscribe({
       next: res => {
         this.investigations = res.items;
         this.filteredInvestigations = res.items;
