@@ -1,5 +1,6 @@
 <!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()">
+@if (showModal) {
+<div class="modal-backdrop" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <!-- الهيدر -->
     <div class="modal-header">
@@ -86,9 +87,9 @@
                 </button>
               </div>
 
+              @for (refraction of getRefractions('rightEye').controls; track i; let i = $index) {
               <div
                 class="card mb-3"
-                *ngFor="let refraction of getRefractions('rightEye').controls; let i = index"
                 [formGroupName]="i"
               >
                 <div class="card-body">
@@ -98,12 +99,11 @@
                         >نوع الانكسار <span class="text-danger">*</span></label
                       >
                       <select class="form-select" formControlName="refractionTypeID">
-                        <option
-                          *ngFor="let type of refractionTypes"
-                          [value]="type.refractionTypeID"
-                        >
+                        @for (type of refractionTypes; track type.refractionTypeID) {
+                        <option [value]="type.refractionTypeID">
                           {{ type.description }}
                         </option>
+                        }
                       </select>
                     </div>
 
@@ -126,10 +126,13 @@
                   </div>
                 </div>
               </div>
+              }
 
-              <div class="text-muted small" *ngIf="!getRefractions('rightEye').length">
+              @if (!getRefractions('rightEye').length) {
+              <div class="text-muted small">
                 لا يوجد انكسارات مضافة. اضغط على زر "إضافة انكسار" لإضافة نوع انكسار.
               </div>
+              }
             </div>
           </div>
         </div>
@@ -141,7 +144,8 @@
         </button>
 
         <!-- العين اليسرى -->
-        <div class="card mt-3" *ngIf="showLeftEye">
+        @if (showLeftEye) {
+        <div class="card mt-3">
           <div class="card-header">
             <h6 class="mb-0">العين اليسرى</h6>
           </div>
@@ -159,9 +163,9 @@
                 </button>
               </div>
 
+              @for (refraction of getRefractions('leftEye').controls; track i; let i = $index) {
               <div
                 class="card mb-3"
-                *ngFor="let refraction of getRefractions('leftEye').controls; let i = index"
                 [formGroupName]="i"
               >
                 <div class="card-body">
@@ -171,12 +175,11 @@
                         >نوع الانكسار <span class="text-danger">*</span></label
                       >
                       <select class="form-select" formControlName="refractionTypeID">
-                        <option
-                          *ngFor="let type of refractionTypes"
-                          [value]="type.refractionTypeID"
-                        >
+                        @for (type of refractionTypes; track type.refractionTypeID) {
+                        <option [value]="type.refractionTypeID">
                           {{ type.description }}
                         </option>
+                        }
                       </select>
                     </div>
 
@@ -199,13 +202,17 @@
                   </div>
                 </div>
               </div>
+              }
 
-              <div class="text-muted small" *ngIf="!getRefractions('leftEye').length">
+              @if (!getRefractions('leftEye').length) {
+              <div class="text-muted small">
                 لا يوجد انكسارات مضافة. اضغط على زر "إضافة انكسار" لإضافة نوع انكسار.
               </div>
+              }
             </div>
           </div>
         </div>
+        }
 
         <div class="row g-3 mt-3">
           <div class="col-md-6">
@@ -222,9 +229,11 @@
                 examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched
               "
             >
-              <option *ngFor="let r of results" [value]="r.resultID">
+              @for (r of results; track r.resultID) {
+              <option [value]="r.resultID">
                 {{ r.description }}
               </option>
+              }
             </select>
           </div>
         </div>
@@ -250,3 +259,4 @@
     </div>
   </div>
 </div>
+}

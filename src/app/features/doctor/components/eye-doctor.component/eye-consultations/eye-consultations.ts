@@ -87,6 +87,12 @@ export class EyeConsultations implements OnInit {
     window.open(url, '_blank');
   }
 
+  onLazyLoad(event: any) {
+    this.page = Math.floor(event.first / event.rows) + 1;
+    this.rowsPerPage = event.rows;
+    this.loadConsultations();
+  }
+
   onPageChange(newPage: number) {
     this.page = newPage;
     this.loadConsultations();

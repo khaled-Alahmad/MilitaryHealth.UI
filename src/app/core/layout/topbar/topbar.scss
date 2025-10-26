@@ -1,16 +1,19 @@
 .topbar {
-  background: #fff;
-  padding: 0.75rem 1.5rem;
+  background: white !important;
+  padding: var(--spacing-md) var(--spacing-xl);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 2px solid var(--primary-dark);
+  box-shadow: 0 4px 12px rgba(5, 66, 57, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 100;
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .hamburger {
@@ -18,6 +21,17 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  color: var(--primary-dark);
+}
+
+.ministry-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-dark) !important;
+  margin: 0;
+  font-family: 'Cairo', 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(5, 66, 57, 0.1);
 }
 
 .search-box input {
@@ -43,6 +57,30 @@
   height: 32px;
   border-radius: 50%;
 }
+
+/* Logout Button Styles */
+.topbar .btn-outline-danger {
+  background: transparent !important;
+  color: var(--status-danger) !important;
+  border: 2px solid var(--status-danger) !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.topbar .btn-outline-danger:hover {
+  background: var(--status-danger) !important;
+  border-color: var(--status-danger) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(107, 31, 42, 0.3);
+}
+
+.topbar .btn-outline-danger i {
+  font-size: 1rem;
+}
+
 @media (max-width: 768px) {
   .user-profile span {
     display: none;

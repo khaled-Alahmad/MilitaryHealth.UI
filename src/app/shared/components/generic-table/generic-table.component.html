@@ -1,88 +1,231 @@
-<p-toolbar styleClass="mb-1" *ngIf="isToolbar">
-            <ng-template #start>
-                <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2"  />
-                <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined />
-            </ng-template>
+<!-- Professional Table Container -->
+<div class="professional-table-container">
+  
+  <!-- Table Header -->
+  <div class="table-header" *ngIf="title">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="pi pi-table"></i>
+      </div>
+      <div class="header-text">
+        <h2 class="table-title">{{ title }}</h2>
+        <p class="table-subtitle">عرض وإدارة البيانات</p>
+      </div>
+    </div>
+    
+    <div class="table-stats" *ngIf="data.length > 0">
+      <div class="stat-item">
+        <i class="pi pi-list"></i>
+        <span>إجمالي السجلات: {{ data.length }}</span>
+      </div>
+    </div>
+  </div>
 
-            <ng-template #end>
-                <p-button label="Export" icon="pi pi-upload" severity="secondary" />
-            </ng-template>
-        </p-toolbar>
-    <p-table
-        #dt1
-        [value]="data"
-        
-        dataKey="dataKey"
-        [rows]="rows"
-        [loading]="false"
-        [rowHover]="true"
-        [showGridlines]="true"
-         [tableStyle]="{ 'min-width': '75rem' }"
-        [paginator]="isPaginator"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} rows"
-        [globalFilterFields]="globalFilterFields"
-        responsiveLayout="scroll"
-        scrollable="true"
-       
-        styleClass="custom-table min-w-full" >
-        <ng-template #caption>
-            <div
-                class="flex justify-between items-center flex-column sm:flex-row">
-                <button pButton label="Clear" class="p-button-outlined mb-2"
-                    icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-                <p-iconfield iconPosition="left" class="ml-auto">
-                    <p-inputicon>
-                        <i class="pi pi-search"></i>
-                    </p-inputicon>
-                    <input pInputText type="text"
-                        (input)="onGlobalFilter(dt1, $event)"
-                        placeholder="Search keyword" />
-                </p-iconfield>
-            </div>
-        </ng-template>
-        <ng-template #header>
-            <tr>
-                 <!-- <th style="width: 3rem">
-                        <p-tableHeaderCheckbox />
-                    </th> -->
-                <th *ngFor="let col of columns" [pSortableColumn]="col.sortable ? col.field : undefined">
-                     {{ col.header }}
-                    <p-sortIcon *ngIf="col.sortable" [field]="col.field" class='ms-2'></p-sortIcon>
-                    <p-columnFilter *ngIf="col.filterable" type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
-                 </th>
-    </tr>
-        </ng-template>
-        <ng-template #body let-rowData>
-            <tr>
-                <!-- <td style="width: 3rem">
-                        <p-tableCheckbox [value]="rowData" />
-                    </td> -->
-                <td *ngFor="let col of columns">
-            <ng-container *ngIf="col.field !== 'actions'; else actionsTemplate">
-                {{ rowData[col.field] }}
-            </ng-container>
-            <ng-template #actionsTemplate>
-                <div class="flex items-center space-x-1 justify-center">
-                    <p-button icon="pi pi-pencil" class="btn btn-sm" 
-                    [rounded]="true" [outlined]="true"
-                        (click)="onEdit(rowData)" />
-                    <p-button icon="pi pi-trash" severity="danger" class="btn btn-sm"
-                        [rounded]="true" [outlined]="true" (click)="onDelete(rowData)" />
-                </div>
-            </ng-template>
+  <!-- Toolbar -->
+  <p-toolbar styleClass="professional-toolbar mb-3" *ngIf="isToolbar">
+    <ng-template #start>
+      <div class="toolbar-actions">
+        <p-button 
+          label="إضافة جديد" 
+          icon="pi pi-plus" 
+          severity="success" 
+          class="action-btn"
+          (onClick)="onAdd()" />
+        <p-button 
+          label="تصدير" 
+          icon="pi pi-download" 
+          severity="secondary" 
+          class="action-btn"
+          outlined
+          (onClick)="onExport()" />
+        <p-button 
+          label="حذف المحدد" 
+          icon="pi pi-trash" 
+          severity="danger" 
+          class="action-btn"
+          outlined
+          [disabled]="selectedRows.length === 0"
+          (onClick)="onBulkDelete()" />
+      </div>
+    </ng-template>
+
+    <ng-template #end>
+      <div class="toolbar-filters">
+        <p-button 
+          label="مسح الفلاتر" 
+          icon="pi pi-filter-slash" 
+          severity="secondary" 
+          class="filter-btn"
+          outlined
+          (onClick)="clear(dt1)" />
+        <div class="search-container">
+          <p-iconfield iconPosition="right">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input 
+              pInputText 
+              type="text"
+              [(ngModel)]="filterValue"
+              (input)="onGlobalFilter(dt1, $event)"
+              placeholder="البحث في البيانات..." 
+              class="search-input" />
+          </p-iconfield>
+        </div>
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- Data Table -->
+  <p-table
+    #dt1
+    [value]="data"
+    dataKey="dataKey"
+    [rows]="rows"
+    [loading]="loading"
+    [rowHover]="true"
+    [showGridlines]="false"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [paginator]="isPaginator"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="عرض {first} إلى {last} من {totalRecords} سجل"
+    [globalFilterFields]="globalFilterFields"
+    responsiveLayout="scroll"
+    scrollable="true"
+    styleClass="professional-table"
+    selectionMode="multiple"
+    [(selection)]="selectedRows">
+    
+    <!-- Table Caption -->
+    <ng-template #caption>
+      <div class="table-caption">
+        <div class="caption-info">
+          <i class="pi pi-info-circle"></i>
+          <span>جدول البيانات التفاعلي</span>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Table Header -->
+    <ng-template #header>
+      <tr class="table-header-row">
+        <th style="width: 3rem" *ngIf="isToolbar">
+          <p-tableHeaderCheckbox />
+        </th>
+        <th 
+          *ngFor="let col of columns" 
+          [pSortableColumn]="col.sortable ? col.field : undefined"
+          class="table-header-cell">
+          <div class="header-cell-content">
+            <span class="header-text">{{ col.header }}</span>
+            <p-sortIcon 
+              *ngIf="col.sortable" 
+              [field]="col.field" 
+              class="sort-icon">
+            </p-sortIcon>
+            <p-columnFilter 
+              *ngIf="col.filterable" 
+              type="text" 
+              field="name" 
+              display="menu" 
+              placeholder="البحث..."
+              class="filter-icon">
+            </p-columnFilter>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <!-- Table Body -->
+    <ng-template #body let-rowData let-rowIndex="rowIndex">
+      <tr class="table-body-row" [class.selected-row]="isRowSelected(rowData)">
+        <td style="width: 3rem" *ngIf="isToolbar">
+          <p-tableCheckbox [value]="rowData" />
         </td>
-            </tr>
-        </ng-template>
-        <ng-template #emptymessage>
-            <tr>
-                <td colspan="8">No data found.</td>
-            </tr>
-        </ng-template>
-        <ng-template #loadingbody>
-            <tr>
-                <td colspan="8">Loading data. Please wait.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+        <td 
+          *ngFor="let col of columns" 
+          class="table-body-cell"
+          [class.action-cell]="col.field === 'actions'">
+          
+          <ng-container *ngIf="col.field !== 'actions'; else actionsTemplate">
+            <div class="cell-content">
+              <span class="cell-text">{{ rowData[col.field] }}</span>
+            </div>
+          </ng-container>
+          
+          <ng-template #actionsTemplate>
+            <div class="action-buttons">
+              <p-button 
+                icon="pi pi-eye" 
+                class="action-btn view-btn"
+                [rounded]="true" 
+                [outlined]="true"
+                severity="info"
+                pTooltip="عرض التفاصيل"
+                (onClick)="onView(rowData)" />
+              <p-button 
+                icon="pi pi-pencil" 
+                class="action-btn edit-btn"
+                [rounded]="true" 
+                [outlined]="true"
+                severity="help"
+                pTooltip="تعديل"
+                (onClick)="onEdit(rowData)" />
+              <p-button 
+                icon="pi pi-trash" 
+                class="action-btn delete-btn"
+                [rounded]="true" 
+                [outlined]="true"
+                severity="danger"
+                pTooltip="حذف"
+                (onClick)="onDelete(rowData)" />
+            </div>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Empty Message -->
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="columns.length + (isToolbar ? 1 : 0)" class="empty-message">
+          <div class="empty-state">
+            <i class="pi pi-inbox empty-icon"></i>
+            <h3 class="empty-title">لا توجد بيانات</h3>
+            <p class="empty-description">لم يتم العثور على أي سجلات في الجدول</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Loading Message -->
+    <ng-template #loadingbody>
+      <tr>
+        <td [attr.colspan]="columns.length + (isToolbar ? 1 : 0)" class="loading-message">
+          <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">جاري تحميل البيانات...</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Table Footer -->
+  <div class="table-footer" *ngIf="data.length > 0">
+    <div class="footer-info">
+      <i class="pi pi-chart-bar"></i>
+      <span>إجمالي {{ data.length }} سجل</span>
+    </div>
+    <div class="footer-actions">
+      <p-button 
+        label="تحديث البيانات" 
+        icon="pi pi-refresh" 
+        severity="secondary" 
+        size="small"
+        outlined
+        (onClick)="onRefresh()" />
+    </div>
+  </div>
+</div>

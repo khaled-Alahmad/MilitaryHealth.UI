@@ -1,35 +1,100 @@
-<!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-
-    <!-- الهيدر -->
-    <div class="modal-header">
-      <h5 class="modal-title">إضافة استشارة</h5>
-      <button type="button" class="btn-close ms-0 me-auto" (click)="closeModal()"></button>
+@if (showModal) {
+  <!-- Backdrop -->
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+  
+  <!-- Professional Consultation Form Modal -->
+  <div class="professional-modal-container">
+  <!-- Modal Header -->
+  <div class="modal-header-professional">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="pi pi-comments"></i>
+      </div>
+      <div class="header-text">
+        <h5 class="modal-title-professional">إضافة استشارة طبية</h5>
+        <p class="modal-subtitle">أدخل بيانات الاستشارة المطلوبة</p>
+      </div>
     </div>
-
-    <!-- البودي -->
-    <div class="modal-body">
-      <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
-        
-        <div class="form-group mb-3">
-          <label>نوع الاستشارة <span class="text-danger">*</span></label>
-          <input class="form-control" formControlName="consultationType">
-        </div>
-
-        <div class="form-group mb-3">
-          <label>الطبيب المُحال إليه <span class="text-danger">*</span></label>
-          <input class="form-control" formControlName="referredDoctor">
-        </div>
-
-        <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-success" [disabled]="loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-            حفظ الاستشارة
-          </button>
-        </div>
-
-      </form>
-    </div>
+    <button type="button" class="btn-close-professional" (click)="closeModal()">
+      <i class="pi pi-times"></i>
+    </button>
   </div>
-</div>
+
+  <!-- Modal Body -->
+  <div class="modal-body-professional">
+    <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-file-edit"></i>
+          <h4>بيانات الاستشارة</h4>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>
+              <i class="pi pi-tag"></i>
+              نوع الاستشارة
+              <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="consultationType" 
+              placeholder="أدخل نوع الاستشارة"
+              [class.is-invalid]="consultationForm.get('consultationType')?.invalid && consultationForm.get('consultationType')?.touched">
+            @if (consultationForm.get('consultationType')?.invalid && consultationForm.get('consultationType')?.touched) {
+              <div class="error-message">
+                نوع الاستشارة مطلوب
+              </div>
+            }
+          </div>
+
+          <div class="form-field">
+            <label>
+              <i class="pi pi-user"></i>
+              الطبيب المُحال إليه
+              <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="referredDoctor" 
+              placeholder="أدخل اسم الطبيب المُحال إليه"
+              [class.is-invalid]="consultationForm.get('referredDoctor')?.invalid && consultationForm.get('referredDoctor')?.touched">
+            @if (consultationForm.get('referredDoctor')?.invalid && consultationForm.get('referredDoctor')?.touched) {
+              <div class="error-message">
+                اسم الطبيب مطلوب
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal Footer -->
+  <div class="modal-footer-professional">
+    <button 
+      type="button" 
+      class="btn btn-secondary" 
+      (click)="closeModal()">
+      <i class="pi pi-times me-2"></i>
+      إلغاء
+    </button>
+    <button 
+      type="button" 
+      class="btn btn-primary" 
+      (click)="onSubmit()" 
+      [disabled]="loading || consultationForm.invalid">
+      @if (loading) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      }
+      @if (!loading) {
+        <i class="pi pi-save me-2"></i>
+      }
+      {{ loading ? 'جاري الحفظ...' : 'حفظ الاستشارة' }}
+    </button>
+  </div>
+  </div>
+}

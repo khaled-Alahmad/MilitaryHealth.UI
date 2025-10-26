@@ -1,34 +1,52 @@
+.container {
+  background: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid #e9ecef;
+}
+
 .button-group {
   display: flex;
   gap: 15px; /* مسافة بين الأزرار */
   flex-wrap: wrap;
 }
 
-button.btn-primary {
-  background-color: #007bff;
-  border: none;
+button.btn-outline-primary {
+  background: transparent !important;
+  color: var(--primary-dark) !important;
+  border: 2px solid var(--primary-dark) !important;
 }
 
-button.btn-primary:hover {
-  background-color: #0056b3;
+button.btn-outline-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  color: white !important;
+  border-color: var(--primary-dark) !important;
 }
 
 button.btn-secondary {
-  background-color: #6c757d;
-  border: none;
+  background: transparent !important;
+  color: var(--neutral-dark) !important;
+  border: 2px solid var(--neutral-medium) !important;
 }
 
 button.btn-secondary:hover {
-  background-color: #545b62;
+  background: var(--neutral-light) !important;
+  color: var(--neutral-dark) !important;
+  border-color: var(--neutral-medium) !important;
 }
 
 button.btn-success {
-  background-color: #28a745;
-  border: none;
+  background: transparent !important;
+  color: #28a745 !important;
+  border: 2px solid #28a745 !important;
 }
 
 button.btn-success:hover {
-  background-color: #1e7e34;
+  background: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
 }
 
 .app-search-applicant {

@@ -15,8 +15,7 @@
   <!-- جدول النتائج -->
   <p-table
     [value]="filteredConsultations"
-    [rows]="rowsPerPage"
-    [totalRecords]="totalRecords"
+    [loading]="loading"
     class="custom-table compact-table"
     [tableStyle]="{ 'min-width': '50rem' }"
   >
@@ -83,7 +82,7 @@
     </ng-template>
   </p-table>
 
-  <!-- المـُـرقم -->
+  <!-- Paginator -->
   <app-paginator
     [totalRecords]="totalRecords"
     [pageSize]="rowsPerPage"

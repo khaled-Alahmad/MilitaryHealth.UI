@@ -41,9 +41,9 @@ export class EyeDoctorComponent {
 
     if (!applicant?.fileNumber) return;
 
-    this.eyeExamService.getByFileNumber1(applicant.fileNumber).subscribe({
-    next: (exam) => {
-      this.hasEyeExam = !!(exam && exam.eyeExamID); 
+    this.eyeExamService.getByFileNumber(applicant.fileNumber).subscribe({
+    next: (response) => {
+      this.hasEyeExam = !!(response?.data && response.data.eyeExamID); 
     },
     error: () => this.hasEyeExam = false
   });

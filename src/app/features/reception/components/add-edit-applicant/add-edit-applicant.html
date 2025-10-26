@@ -1,106 +1,281 @@
-<div class="container-fluid py-4">
-    <div class="row justify-content-center">
-        <div class="col-12 col-xxl-12">
-            @if(fileNumber){
-            <div  class=" p-2 bg-custom rounded text-center">
-                <h5 class="mb-0">رقم الملف: {{ fileNumber }}</h5>
-            </div>
-            }
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-4">
-                    <h4 class="card-title mb-4 fw-bold">إضافة منتسب</h4>
-
-                    <form [formGroup]="applicantForm " (ngSubmit)="onSubmit()" novalidate>
-
-                        <h6 class="border-bottom pb-2 mb-3 custom-color">البيانات الشخصية</h6>
-                        <div class="row g-3">
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="fullName"
-                                    [class.is-invalid]="isControlInvalid('fullName')"
-                                    [class.is-valid]="isControlValid('fullName')" />
-                            </div>
-
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">العمل<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="job"
-                                    [class.is-invalid]="isControlInvalid('job')"
-                                    [class.is-valid]="isControlValid('job')" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">الحالة الاجتماعية <span class="text-danger">*</span></label>
-                                <ng-select [items]="maritalStatuses" bindLabel="description" bindValue="maritalStatusID"
-                                    formControlName="maritalStatusID" placeholder="اختر الحالة الاجتماعية"
-                                    [ngClass]="{'is-invalid': isControlInvalid('maritalStatusID')}">
-                                </ng-select>
-                                <div class="invalid-feedback d-block"
-                                    *ngIf="controlHasError('required','maritalStatusID')">
-                                    يرجى اختيار الحالة الاجتماعية
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label"> كود التجنيد <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="associateNumber"
-                                    [class.is-invalid]="isControlInvalid('associateNumber')"
-                                    [class.is-valid]="isControlValid('associateNumber')" />
-                            </div>
-                        </div>
-                        <h6 class="border-bottom pb-2 mt-4 mb-3">البيانات الطبية</h6>
-                        <div class="row g-3">
-                            <div class="col-6 col-md-3">
-                                <label class="form-label">الطول (سم)<span class="text-danger">*</span></label>
-                                <input type="number" min="0" step="0.1" class="form-control" formControlName="height"
-                                (keydown)="preventMinus($event)"
-                                [ngClass]="{'is-invalid': isControlInvalid('height')}" />
-                            </div>
-
-                            <div class="col-6 col-md-3">
-                                <label class="form-label">الوزن (كغ)<span class="text-danger">*</span></label>
-                                <input type="number" min="0" step="0.1" class="form-control" formControlName="weight" 
-                                [ngClass]="{'is-invalid': isControlInvalid('weight')}"/>
-                            </div>
-
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">BMI <span class="text-danger">*</span></label>
-                                <input type="number" min="0" class="form-control" formControlName="bmi"
-                                [ngClass]="{'is-invalid': isControlInvalid('bmi')}" />
-                            </div>
-
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">ضغط الدم<span class="text-danger">*</span></label>
-                                <input type="text" min="0" class="form-control" formControlName="bloodPressure"
-                                     [ngClass]="{'is-invalid': isControlInvalid('bloodPressure')}"/>
-                            </div>
-
-                            <div class="col-6 col-md-3">
-                                <label class="form-label">النبض (نبضة/دقيقة)<span class="text-danger">*</span></label>
-                                <input type="number" min="0" class="form-control" formControlName="pulse" 
-                                [ngClass]="{'is-invalid': isControlInvalid('pulse')}" />
-                            </div>
-
-                            <div class="col-6 col-md-3 d-flex align-items-end">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="tattooCheck"
-                                        formControlName="tattoo" />
-                                    <label class="form-check-label" for="tattooCheck">وشم</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">علامات مميزة <span class="text-danger">*</span></label>
-                                <textarea class="form-control" formControlName="distinctiveMarks" rows="2"
-                                [ngClass]="{'is-invalid': isControlInvalid('distinctiveMarks')}"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="d-flex gap-2 mt-5">
-                            <button class="btn bg-custom px-4" type="submit" [disabled]="loading">
-                                <i class="pi pi-save me-2 ms-2"></i>حفظ
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<div class="professional-form-container">
+  <!-- Header Section with Professional Design -->
+  <div class="form-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="pi pi-user-plus"></i>
+      </div>
+      <div class="header-text">
+        <h2 class="form-title">إضافة منتسب جديد</h2>
+        <p class="form-subtitle">أدخل البيانات الشخصية والطبية للمنتسب</p>
+      </div>
     </div>
+    
+    @if(fileNumber) {
+      <div class="file-number-badge">
+        <i class="pi pi-file"></i>
+        <span>رقم الملف: {{ fileNumber }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- Form Card with PrimeNG -->
+  <p-card class="form-card">
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <i class="pi pi-id-card"></i>
+        <span>بيانات المنتسب</span>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="applicantForm" (ngSubmit)="onSubmit()" novalidate>
+      
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-user"></i>
+          <h3>البيانات الشخصية</h3>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-user"></i>
+              الاسم الكامل
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="text" 
+              formControlName="fullName"
+              placeholder="أدخل الاسم الكامل"
+              [class.p-invalid]="isControlInvalid('fullName')"
+            />
+            @if (controlHasError('required', 'fullName')) {
+              <small class="p-error">الاسم الكامل مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-briefcase"></i>
+              العمل
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="text" 
+              formControlName="job"
+              placeholder="أدخل نوع العمل"
+              [class.p-invalid]="isControlInvalid('job')"
+            />
+            @if (controlHasError('required', 'job')) {
+              <small class="p-error">نوع العمل مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-heart"></i>
+              الحالة الاجتماعية
+              <span class="required">*</span>
+            </label>
+            <select 
+              formControlName="maritalStatusID" 
+              class="form-control"
+              [class.p-invalid]="isControlInvalid('maritalStatusID')">
+              <option value="">اختر الحالة الاجتماعية</option>
+              @for (status of maritalStatuses; track status.maritalStatusID) {
+                <option [value]="status.maritalStatusID">{{ status.description }}</option>
+              }
+            </select>
+            @if (controlHasError('required', 'maritalStatusID')) {
+              <small class="p-error">يرجى اختيار الحالة الاجتماعية</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-tag"></i>
+              كود التجنيد
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="text" 
+              formControlName="associateNumber"
+              placeholder="أدخل كود التجنيد"
+              [class.p-invalid]="isControlInvalid('associateNumber')"
+            />
+            @if (controlHasError('required', 'associateNumber')) {
+              <small class="p-error">كود التجنيد مطلوب</small>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Medical Information Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-heartbeat"></i>
+          <h3>البيانات الطبية</h3>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-arrows-v"></i>
+              الطول (سم)
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="number" 
+              min="0" 
+              step="0.1" 
+              formControlName="height"
+              placeholder="أدخل الطول"
+              (keydown)="preventMinus($event)"
+              [class.p-invalid]="isControlInvalid('height')"
+            />
+            @if (controlHasError('required', 'height')) {
+              <small class="p-error">الطول مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-chart-line"></i>
+              الوزن (كغ)
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="number" 
+              min="0" 
+              step="0.1" 
+              formControlName="weight"
+              placeholder="أدخل الوزن"
+              [class.p-invalid]="isControlInvalid('weight')"
+            />
+            @if (controlHasError('required', 'weight')) {
+              <small class="p-error">الوزن مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-calculator"></i>
+              مؤشر كتلة الجسم (BMI)
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="number" 
+              min="0" 
+              formControlName="bmi"
+              placeholder="أدخل مؤشر كتلة الجسم"
+              [class.p-invalid]="isControlInvalid('bmi')"
+            />
+            @if (controlHasError('required', 'bmi')) {
+              <small class="p-error">مؤشر كتلة الجسم مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-heart"></i>
+              ضغط الدم
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="text" 
+              formControlName="bloodPressure"
+              placeholder="مثال: 120/80"
+              [class.p-invalid]="isControlInvalid('bloodPressure')"
+            />
+            @if (controlHasError('required', 'bloodPressure')) {
+              <small class="p-error">ضغط الدم مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-circle"></i>
+              النبض (نبضة/دقيقة)
+              <span class="required">*</span>
+            </label>
+            <input 
+              pInputText 
+              type="number" 
+              min="0" 
+              formControlName="pulse"
+              placeholder="أدخل معدل النبض"
+              [class.p-invalid]="isControlInvalid('pulse')"
+            />
+            @if (controlHasError('required', 'pulse')) {
+              <small class="p-error">معدل النبض مطلوب</small>
+            }
+          </div>
+
+          <div class="form-group checkbox-group">
+            <p-checkbox 
+              formControlName="tattoo" 
+              [binary]="true"
+              inputId="tattooCheck"
+            ></p-checkbox>
+            <label for="tattooCheck" class="checkbox-label">
+              <i class="pi pi-palette"></i>
+              وجود وشم
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">
+            <i class="pi pi-info-circle"></i>
+            العلامات المميزة
+            <span class="required">*</span>
+          </label>
+          <textarea 
+            formControlName="distinctiveMarks" 
+            rows="3"
+            placeholder="أدخل أي علامات مميزة أو ملاحظات مهمة"
+            class="form-control"
+            [class.p-invalid]="isControlInvalid('distinctiveMarks')"
+          ></textarea>
+          @if (controlHasError('required', 'distinctiveMarks')) {
+            <small class="p-error">العلامات المميزة مطلوبة</small>
+          }
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-lg"
+          [disabled]="loading || applicantForm.invalid">
+          <i class="pi pi-save me-2"></i>
+          @if (!loading) {
+            حفظ البيانات
+          } @else {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            جاري الحفظ...
+          }
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-lg"
+          (click)="resetForm()">
+          <i class="pi pi-refresh me-2"></i>
+          إعادة تعيين
+        </button>
+      </div>
+    </form>
+  </p-card>
+  
+  <p-toast></p-toast>
 </div>

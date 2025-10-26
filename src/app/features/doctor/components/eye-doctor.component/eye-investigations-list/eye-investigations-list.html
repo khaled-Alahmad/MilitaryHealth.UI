@@ -16,8 +16,7 @@
   <p-table
     #table
     [value]="filteredInvestigations"
-    [totalRecords]="totalRecords"
-    [rows]="rowsPerPage"
+    [loading]="loading"
     class="custom-table compact-table"
     [tableStyle]="{ 'min-width': '50rem' }"
   >

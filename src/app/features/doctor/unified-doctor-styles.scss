@@ -1,0 +1,113 @@
+/* ===========================================
+   Unified Doctor Component Styles
+   Remove all blue colors and use brand identity
+   =========================================== */
+
+/* Search Input */
+.search-input {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.875rem;
+  font-family: var(--font-family-primary);
+  transition: all var(--transition-fast);
+  
+  &:focus {
+    border-color: var(--primary-medium);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+  }
+}
+
+/* Search Buttons */
+.search-btn {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Form Section Titles - Brand Colors */
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: var(--spacing-lg) 0 var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--primary-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  
+  &::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--accent-gold);
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Modal Headers */
+.modal-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  
+  .modal-title {
+    color: white !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* Primary Button */
+.btn-primary,
+.p-button-primary {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  color: white !important;
+  border: none !important;
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%) !important;
+  }
+}
+
+/* Tables Header */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+/* Table Hover */
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: rgba(5, 66, 57, 0.05) !important;
+}
+
+/* Ghost Buttons */
+::ng-deep .p-button-ghost {
+  background: transparent !important;
+  color: var(--primary-dark) !important;
+  border: none !important;
+  
+  &:hover {
+    background: rgba(5, 66, 57, 0.1) !important;
+    color: var(--primary-medium) !important;
+  }
+}
+
+/* Highlight */
+.highlight-primary {
+  background-color: var(--primary-dark);
+  color: white;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+

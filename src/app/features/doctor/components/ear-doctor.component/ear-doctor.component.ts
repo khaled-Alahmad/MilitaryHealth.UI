@@ -37,10 +37,13 @@ export class EarDoctorComponent {
 
   onApplicantSelected(applicant: Applicant) {
     this.selectedApplicant = applicant;
-    this.hasEarClinicExam = false;
 
-    if (!applicant?.fileNumber) return;
+    if (!applicant?.fileNumber) {
+      this.hasEarClinicExam = false;
+      return;
+    }
 
+    // التحقق من وجود فحص سابق
     this.earClinicExamService.getByFileNumber(applicant.fileNumber).subscribe({
       next: (exam) => {
         this.hasEarClinicExam = !!(exam && exam.earClinicID); 
@@ -68,14 +71,26 @@ export class EarDoctorComponent {
   }
 
   addEarClinicExam() {
+    if (!this.selectedApplicant) {
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      return;
+    }
     this.earClinicExamForm?.addEarClinicExam();
   }
 
   addConsultation() {
+    if (!this.selectedApplicant) {
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      return;
+    }
     this.consultationForm?.openModal();
   }
 
   addInvestigation() {
+    if (!this.selectedApplicant) {
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      return;
+    }
     this.investigationForm?.openModal();
   }
 }

@@ -146,10 +146,28 @@ getAllSurgicalExams(page: number = 1,
     });
   }
 
-  getSurgicalInvestigations(page: number = 1, pageSize: number = 50): Observable<Investigation[]> {
-    const url = `${this.investigationUrl}?sortDesc=true&page=${page}&pageSize=${pageSize}`;
-    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
-      map(res => (res.data?.items || []).filter((i: any) => i.doctor?.specializationID === 3))
+  getSurgicalInvestigations(page: number = 1, pageSize: number = 50, filter: string = ''): Observable<Investigation[]> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortDesc', 'true');
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+
+    // إضافة فلترة حسب التخصص للتحاليل
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
+
+    return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+      headers: this.getAuthHeaders(),
+      params
+    }).pipe(
+      map(res => res.data?.items ?? [])
     );
   }
   private getAuthHeaders(): HttpHeaders {

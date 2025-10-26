@@ -33,16 +33,13 @@ export class AuthService {
 
           if (role === UserRoles.Doctor && response.data.doctor) {
             const { specializationID, doctorID } = response.data.doctor;
-            console.log('Doctor data from login:', { specializationID, doctorID });
-            console.log('SPECIALTY_KEY:', this.SPECIALTY_KEY);
-            console.log('DOCTOR_ID_KEY:', this.DOCTOR_ID_KEY);
+            
             if (specializationID) {
               localStorage.setItem(this.SPECIALTY_KEY, specializationID.toString());
-              console.log('Saved specializationID:', specializationID.toString());
             }
+            
             if (doctorID) {
               localStorage.setItem(this.DOCTOR_ID_KEY, doctorID.toString());
-              console.log('Saved doctorID:', doctorID.toString());
             }
           }
         }
@@ -71,9 +68,6 @@ export class AuthService {
 
   getSpecializationId(): number | null {
     const specId = localStorage.getItem(this.SPECIALTY_KEY);
-    console.log('SPECIALTY_KEY:', this.SPECIALTY_KEY);
-    console.log('Raw specId from localStorage:', specId);
-    console.log('Parsed specId:', specId ? +specId : null);
     return specId ? +specId : null;
   }
 
@@ -131,9 +125,20 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const payload = this.getDecodedToken();
-    if (!payload) return false;
+    if (!payload) {
+      this.clearStorage();
+      return false;
+    }
     const now = Math.floor(Date.now() / 1000);
-    return payload.exp ? payload.exp > now : false;
+    const isValid = payload.exp ? payload.exp > now : false;
+    
+    // Auto logout if token expired
+    if (!isValid) {
+      this.clearStorage();
+      window.location.href = '/login';
+    }
+    
+    return isValid;
   }
 
   isAuthorizated(roles: UserRoles[]): boolean {

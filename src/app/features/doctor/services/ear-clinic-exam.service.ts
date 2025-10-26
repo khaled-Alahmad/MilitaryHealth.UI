@@ -141,7 +141,7 @@ export class EarClinicExamService {
     pageSize: number = 10,
     filter: string = ''
   ): Observable<PagedResponse<Investigation>> {
-    const currentDoctorId = this.authService.getDoctorId();
+    const currentSpecializationId = this.authService.getSpecializationId();
     
     let params = new HttpParams()
       .set('page', page.toString())
@@ -153,9 +153,9 @@ export class EarClinicExamService {
       params = params.set('filter', filter);
     }
 
-    // إضافة فلترة حسب doctorID للتحاليل
-    if (currentDoctorId) {
-      params = params.set('filterDict[doctorID]', currentDoctorId.toString());
+    // إضافة فلترة حسب التخصص للتحاليل
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
     }
 
     return this.http
@@ -226,11 +226,17 @@ export class EarClinicExamService {
   }
 
   getByFileNumber(fileNumber: string): Observable<EarClinicExam | null> {
-    const url = `${this.apiUrl}/file/${fileNumber}`;
-    return this.http.get<ApiResponse<EarClinicExam>>(url, {
-      headers: this.getAuthHeaders()
-    }).pipe(
-      map(res => res.data || null),
+    const url = `${this.apiUrl}?sortDesc=true&page=1&pageSize=1000`;
+    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
+      map(res => {
+        const items: EarClinicExam[] = res.data?.items || [];
+        const currentSpecializationId = this.authService.getSpecializationId();
+        // نبحث عن فحص سابق لنفس الملف ونفس التخصص
+        const exam = items.find(e =>
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === currentSpecializationId
+        );
+        return exam || null;
+      }),
       catchError(() => of(null))
     );
   }

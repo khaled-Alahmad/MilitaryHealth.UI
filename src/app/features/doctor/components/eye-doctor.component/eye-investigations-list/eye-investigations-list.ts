@@ -72,6 +72,12 @@ export class EyeInvestigationsList implements OnInit {
     }
     window.open(`${environment.apiUrl}/${attachment}`, '_blank');
   }
+  onLazyLoad(event: any) {
+    this.page = Math.floor(event.first / event.rows) + 1;
+    this.rowsPerPage = event.rows;
+    this.loadInvestigations();
+  }
+
   onPageChange(newPage: number) {
     this.page = newPage;
     this.loadInvestigations();

@@ -1,14 +1,19 @@
+/* ===========================================
+   Loading Overlay - Professional Design
+   =========================================== */
+
 .loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.6); /* خلفية شفافة */
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; /* فوق كلشي */
+  z-index: 1050;
 }
 
 .loading-spinner {
@@ -19,72 +24,111 @@
   width: 3rem;
   height: 3rem;
   border-width: 0.25rem;
+  border: 0.25em solid var(--neutral-light);
+  border-right-color: var(--primary-dark);
+  border-radius: 50%;
+  animation: spinner-border 0.75s linear infinite;
 }
-/* ألوان النصوص والعناوين */
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===========================================
+   Typography - Unified Design
+   =========================================== */
+
 body {
-  color: #054239;
+  color: var(--neutral-dark);
+  font-family: var(--font-family-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #054239;
+  color: var(--primary-dark);
+  font-weight: 600;
 }
 
 p {
-  color: #428177;
+  color: var(--neutral-medium);
 }
 
-/* ألوان الأزرار */
-.btn-primary {
-  background-color: #428177;
-  color: #ffffff;
-  border: none;
-  transition: all 0.3s ease;
-}
+/* ===========================================
+   Form Controls - Professional Inputs
+   =========================================== */
 
-.btn-primary:hover {
-  background-color: #054239;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  border: 1px solid #054239;
-  color: #054239;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background-color: #f1f1f1;
-}
-
-/* ألوان حقول الإدخال */
 .form-control {
-  border: 1px solid #ced4da;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  
+  &:focus {
+    border-color: var(--primary-medium);
+    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+    outline: none;
+  }
+  
+  &.is-invalid {
+    border-color: var(--status-danger);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(107, 31, 42, 0.1);
+    }
+  }
 }
 
-.form-control:focus {
-  border-color: #428177;
-  box-shadow: 0 0 0 0.25rem rgba(66, 129, 119, 0.25);
+.form-select {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  font-family: var(--font-family-primary);
+  transition: all var(--transition-fast);
+  
+  &:focus {
+    border-color: var(--primary-medium);
+    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+    outline: none;
+  }
 }
+
+/* ===========================================
+   Loading Dots Spinner
+   =========================================== */
+
 .dots-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
 }
+
 .dots-spinner div {
   width: 10px;
   height: 10px;
-  background: #054239;
+  background: var(--primary-dark);
   border-radius: 50%;
   animation: bounce 0.6s infinite alternate;
 }
+
 .dots-spinner div:nth-child(2) {
   animation-delay: 0.2s;
 }
+
 .dots-spinner div:nth-child(3) {
   animation-delay: 0.4s;
 }
+
 @keyframes bounce {
-  from { transform: translateY(0); opacity: 0.6; }
-  to   { transform: translateY(-8px); opacity: 1; }
+  from {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
 }

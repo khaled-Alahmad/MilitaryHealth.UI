@@ -1,3 +1,7 @@
+/* ===========================================
+   Professional Eye Exam Form Modal
+   =========================================== */
+
 .modal-backdrop {
   position: fixed;
   margin: 0;
@@ -5,91 +9,135 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, .7);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1050;
-  backdrop-filter: blur(3px);
-  /* 🔹 تأثير ضبابي جميل */
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-  background: #fff;
-  border-radius: 16px;
-  max-width: 700px;
-  width: 100%;
+  background: white;
+  border-radius: var(--radius-xl);
+  max-width: 900px;
+  width: 90%;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
-  /* 🔹 ظل أعمق */
-  animation: fadeIn 0.35s ease;
-  /* 🔹 شريط ألوان جذاب */
+  box-shadow: var(--shadow-xl);
+  animation: slideIn 0.3s ease;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid #eee;
-  background: #f8f9fa;
-  border-radius: 16px 16px 0 0;
-}
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 
-.modal-header .modal-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #0d6efd;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  .modal-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
 }
 
 .modal-body {
-  padding: 20px;
+  padding: var(--spacing-xl);
   overflow-y: auto;
+  max-height: calc(85vh - 100px);
+  
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--neutral-light);
+    border-radius: var(--radius-sm);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-medium);
+    border-radius: var(--radius-sm);
+    
+    &:hover {
+      background: var(--primary-dark);
+    }
+  }
 }
 
 .section-title {
-  font-size: 1rem;
+  font-size: var(--font-size-lg);
   font-weight: 700;
-  color: #0d6efd;
-  margin: 16px 0 12px;
-  padding-bottom: 4px;
-  border-bottom: 2px solid #0d6efd;
+  color: var(--primary-dark);
+  margin: var(--spacing-lg) 0 var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--primary-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  
+  &::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--accent-gold);
+    border-radius: var(--radius-sm);
+  }
 }
 
 .form-control:focus,
 .form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 6px rgba(13, 110, 253, .3);
+  border-color: var(--primary-medium);
+  box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
 }
 
 .btn-primary {
-  background: #475569;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  color: white;
   border: none;
   font-weight: 600;
-  transition: all 0.3s;
-}
-
-.btn-primary:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(110, 53, 255, .3);
+  transition: all var(--transition-fast);
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
 }
 
 .btn-secondary {
-  transition: all 0.3s;
-}
-
-.btn-secondary:hover {
-  transform: scale(1.05);
+  background: var(--neutral-medium);
+  color: white;
+  border: none;
+  transition: all var(--transition-fast);
+  
+  &:hover {
+    background: var(--neutral-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
     transform: translateY(-20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);

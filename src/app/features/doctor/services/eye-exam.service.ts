@@ -645,7 +645,7 @@ getEyeClinicInvestigations(
   pageSize: number = 20,
   filter: string = ''
 ): Observable<PagedResponse<Investigation>> {
-  const currentDoctorId = this.authService.getDoctorId();
+  const currentSpecializationId = this.authService.getSpecializationId();
   
   let params = new HttpParams()
     .set('page', page.toString())
@@ -656,9 +656,9 @@ getEyeClinicInvestigations(
     params = params.set('filter', filter);
   }
 
-  // إضافة فلترة حسب doctorID للتحاليل
-  if (currentDoctorId) {
-    params = params.set('filterDict[doctorID]', currentDoctorId.toString());
+  // إضافة فلترة حسب التخصص للتحاليل
+  if (currentSpecializationId) {
+    params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
   }
 
   return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {

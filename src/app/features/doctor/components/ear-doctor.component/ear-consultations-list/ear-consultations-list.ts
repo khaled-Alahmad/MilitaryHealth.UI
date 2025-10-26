@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { ToastrService } from 'ngx-toastr';
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
@@ -14,7 +15,7 @@ import { EditEarConsultationComponent } from '../edit-ear-consultation/edit-ear-
 @Component({
   selector: 'app-ear-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, TooltipModule, PaginatorComponent],
   templateUrl: './ear-consultations-list.html',
   styleUrls: ['./ear-consultations-list.scss']
 })
@@ -67,6 +68,12 @@ export class EarConsultationsList implements OnInit {
   onFilterChange(event: any) {
     this.globalFilter = event.target.value;
     this.page = 1; // إعادة تعيين الصفحة إلى الأولى عند البحث
+    this.loadConsultations();
+  }
+
+  onLazyLoad(event: any) {
+    this.page = Math.floor(event.first / event.rows) + 1;
+    this.rowsPerPage = event.rows;
     this.loadConsultations();
   }
 

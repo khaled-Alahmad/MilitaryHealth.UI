@@ -1,22 +1,39 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { tap } from 'rxjs';
+
+// PrimeNG Components
+import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
+// Models and Services
 import { MaritalStatus } from '../../models/marital-status.model';
 import { MaritalStatusService } from '../../services/marital-status.service';
 import { ApplicantModel } from '../../models/applicant.model';
 import { ApplicantService } from '../../services/applicant.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { tap } from 'rxjs';
 import { ApiResponse } from '../../../../shared/models/paged-response.model';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-edit-applicant',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    FormsModule,
+    CardModule,
+    InputTextModule,
+    CheckboxModule,
+    ButtonModule,
+    ToastModule
+  ],
   templateUrl: './add-edit-applicant.html',
-  styleUrl: './add-edit-applicant.scss'
+  styleUrl: './add-edit-applicant.scss',
+  providers: [MessageService]
 })
 export class AddEditApplicant implements OnInit {
     applicantForm!: FormGroup;
@@ -34,7 +51,7 @@ export class AddEditApplicant implements OnInit {
     private applicantService: ApplicantService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +86,14 @@ export class AddEditApplicant implements OnInit {
   loadMaritalStatuses() {
     this.maritalStatusService.getMaritalStatus().subscribe({
       next: (data) => (this.maritalStatuses = data),
-      error: (err) => console.error('Error fetching marital statuses', err)
+      error: (err) => {
+        console.error('Error fetching marital statuses', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'خطأ',
+          detail: 'فشل في تحميل الحالات الاجتماعية'
+        });
+      }
     });
   }
 
@@ -79,18 +103,43 @@ export class AddEditApplicant implements OnInit {
         this.applicantForm.patchValue(applicant); 
         this.fileNumber = applicant.fileNumber;
       },
-      error: () => console.error('Error fetching applicant data')
+      error: () => {
+        console.error('Error fetching applicant data');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'خطأ',
+          detail: 'فشل في تحميل بيانات المنتسب'
+        });
+      }
     });
   }
+
 preventMinus(event: KeyboardEvent) {
   if (event.key === '-' || event.key === 'e') {
     event.preventDefault();
   }
 }
 
+resetForm() {
+  this.applicantForm.reset();
+  this.submitted = false;
+  this.messageService.add({
+    severity: 'info',
+    summary: 'تم',
+    detail: 'تم إعادة تعيين النموذج'
+  });
+}
+
   onSubmit() {
     this.submitted = true;
-    if (this.applicantForm.invalid) return;
+    if (this.applicantForm.invalid) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'تحذير',
+        detail: 'يرجى ملء جميع الحقول المطلوبة'
+      });
+      return;
+    }
 
     const applicantModel: ApplicantModel = this.applicantForm.getRawValue();
     this.loading = true;
@@ -99,16 +148,25 @@ preventMinus(event: KeyboardEvent) {
       this.applicantService.createApplicant(applicantModel)
         .pipe(
           tap((res: ApiResponse<ApplicantModel>) => {
-            this.toastr.success("تمت إضافة منتسب بنجاح");
+            this.messageService.add({
+              severity: 'success',
+              summary: 'نجح',
+              detail: 'تمت إضافة منتسب بنجاح'
+            });
             this.success = true;
             this.applicantId = res.data.applicantID;
             this.router.navigate(['reception/applicants/', res.data.applicantID]);
           })
         )
         .subscribe({
-          error: () => {
+          error: (err) => {
             this.success = false;
             this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'خطأ',
+              detail: 'فشل في إضافة المنتسب'
+            });
           }
         });
     } else {
@@ -116,10 +174,20 @@ preventMinus(event: KeyboardEvent) {
         next: () => {
           this.success = true;
           this.loading = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'نجح',
+            detail: 'تم تحديث بيانات المنتسب بنجاح'
+          });
         },
-        error: () => {
+        error: (err) => {
           this.success = false;
           this.loading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'خطأ',
+            detail: 'فشل في تحديث بيانات المنتسب'
+          });
         }
       });
     }

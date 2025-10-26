@@ -15,11 +15,9 @@
   <p-table
     #table
     [value]="filteredConsultations"
-    [rows]="rowsPerPage"
-    [totalRecords]="totalRecords"
+    [loading]="loading"
     class="custom-table my-3"
     [tableStyle]="{ 'min-width': '50rem' }"
-    [loading]="loading"
   >
     <ng-template pTemplate="header">
       <tr>
@@ -53,16 +51,19 @@
           <span class="small">{{ consultation.doctor?.fullName || 'غير محدد' }}</span>
         </td>
         <td class="text-center align-middle">
-          <button 
-            *ngIf="consultation.attachment"
-            pButton 
-            type="button" 
-            icon="pi pi-download" 
-            class="p-button-sm p-button-outlined"
-            (click)="openFile(consultation.attachment)"
-            pTooltip="تحميل المرفق"
-          ></button>
-          <span *ngIf="!consultation.attachment" class="text-muted small">لا يوجد</span>
+          @if (consultation.attachment) {
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-download" 
+              class="p-button-sm p-button-outlined"
+              (click)="openFile(consultation.attachment)"
+              pTooltip="تحميل المرفق"
+            ></button>
+          }
+          @if (!consultation.attachment) {
+            <span class="text-muted small">لا يوجد</span>
+          }
         </td>
                <td class="text-center align-middle">
                  <button

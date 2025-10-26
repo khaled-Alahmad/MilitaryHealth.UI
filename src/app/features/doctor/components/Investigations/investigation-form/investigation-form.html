@@ -1,36 +1,76 @@
-
-<!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal-content card" (click)="$event.stopPropagation()">
-
-    <!-- الهيدر -->
-    <div class="modal-header">
-      <h5 class="modal-title">طلب تحليل</h5>
-      <button type="button" class="btn-close ms-0 me-auto" (click)="closeModal()"></button>
+@if (showModal) {
+  <!-- Backdrop -->
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+  
+  <!-- Professional Investigation Form Modal -->
+  <div class="professional-modal-container">
+  <!-- Modal Header -->
+  <div class="modal-header-professional">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="pi pi-flask"></i>
+      </div>
+      <div class="header-text">
+        <h5 class="modal-title-professional">طلب تحليل طبي</h5>
+        <p class="modal-subtitle">أدخل نوع التحليل المطلوب</p>
+      </div>
     </div>
+    <button type="button" class="btn-close-professional" (click)="closeModal()">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
 
-    <!-- البودي -->
-    <div class="modal-body">
-      <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()" novalidate>
+  <!-- Modal Body -->
+  <div class="modal-body-professional">
+    <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-file-check"></i>
+          <h4>بيانات التحليل</h4>
+        </div>
 
-        <!-- القسم الأول: بيانات التحليل -->
-        <h6 class="section-title">بيانات التحليل</h6>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">نوع التحليل <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" formControlName="type"
-              [class.is-invalid]="investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched"
-              placeholder="أدخل نوع التحليل">
+        <div class="form-row">
+          <div class="form-field">
+            <label>
+              <i class="pi pi-tag"></i>
+              نوع التحليل
+              <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="type"
+              placeholder="أدخل نوع التحليل"
+              [class.is-invalid]="investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched">
+            @if (investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched) {
+              <div class="error-message">
+                نوع التحليل مطلوب
+              </div>
+            }
           </div>
         </div>
-        <!-- زر الحفظ -->
-        <div class="text-end mt-4">
-          <button type="submit" class="btn btn-success px-4" [disabled]="investigationForm.invalid">
-            حفظ طلب التحليل
-          </button>
-        </div>
-
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
-</div>
+
+  <!-- Modal Footer -->
+  <div class="modal-footer-professional">
+    <button 
+      type="button" 
+      class="btn btn-secondary" 
+      (click)="closeModal()">
+      <i class="pi pi-times me-2"></i>
+      إلغاء
+    </button>
+    <button 
+      type="button" 
+      class="btn btn-primary" 
+      (click)="onSubmit()" 
+      [disabled]="investigationForm.invalid">
+      <i class="pi pi-save me-2"></i>
+      حفظ طلب التحليل
+    </button>
+  </div>
+  </div>
+}
