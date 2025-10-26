@@ -9,6 +9,7 @@ import { EyeExamDetails } from '../eye-exam-details/eye-exam-details';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin, of, switchMap, map } from 'rxjs';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApplicantService } from '../../../../reception/services/applicant.service';
@@ -18,7 +19,7 @@ import { PagedResponse } from '../../../../../shared/models/paged-response.model
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })

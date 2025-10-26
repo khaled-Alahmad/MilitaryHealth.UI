@@ -67,13 +67,15 @@
         margin: 0;
         font-size: 1.5rem;
         font-weight: 700;
-        color: white;
+        color: #ffffff !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
 
       .modal-subtitle {
         margin: 0;
         font-size: 0.875rem;
-        color: rgba(255, 255, 255, 0.9);
+        color: #f0f0f0 !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
     }
   }
@@ -329,10 +331,13 @@
 
     .modal-title-professional {
       font-size: 1.25rem;
+      color: #ffffff !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
-
-    .header-icon {
-      display: none;
+    
+    .modal-subtitle {
+      color: #f0f0f0 !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
   }
 

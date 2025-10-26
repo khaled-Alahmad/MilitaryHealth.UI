@@ -3,22 +3,55 @@
    =========================================== */
 
 .sidebar {
-  width: clamp(220px, 22vw, 280px);
+  width: clamp(240px, 22vw, 280px);
   min-height: 100vh;
   height: 100vh;
-  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-darkest) 100%);
-  border-left: 1px solid var(--primary-medium);
+  background: linear-gradient(180deg, #054239 0%, #042e26 100%);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   transition: all var(--transition-normal);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
   position: sticky;
   top: 0;
   align-self: flex-start;
 
   &.collapsed {
-    display: none;
+    width: 90px;
+    
+    .sidebar-header {
+      padding: 1rem;
+      
+      .logo-img {
+        width: 48px;
+        height: 48px;
+      }
+    }
+    
+    .menu {
+      li {
+        padding: 1rem 0.5rem;
+        justify-content: center;
+        
+        span {
+          display: none;
+        }
+        
+        i {
+          font-size: 1.5rem;
+          width: 2.5rem;
+          height: 2.5rem;
+        }
+      }
+    }
+  }
+  
+  /* Hide sidebar on mobile */
+  @media (max-width: 768px) {
+    &.collapsed {
+      display: none;
+    }
   }
 
   /* Header */
@@ -86,25 +119,36 @@
       position: relative;
       display: flex;
       align-items: center;
-      padding: var(--spacing-md);
-      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-lg);
       cursor: pointer;
       transition: all var(--transition-fast);
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
       font-weight: 500;
+      gap: 1.25rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid transparent;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        transform: translateX(-2px);
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: white !important;
+        transform: translateX(-4px);
+        border-color: rgba(255, 255, 255, 0.1);
+        
+        i {
+          transform: scale(1.2);
+          color: var(--accent-gold) !important;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
       }
 
       &.active {
-        background: white;
-        color: var(--primary-dark);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+        color: var(--primary-dark) !important;
         font-weight: 600;
-        box-shadow: var(--shadow-md);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-color: var(--accent-gold);
 
         &::before {
           content: "";
@@ -112,23 +156,39 @@
           right: 0;
           top: 0;
           bottom: 0;
-          width: 4px;
-          background: linear-gradient(180deg, var(--primary-medium) 0%, var(--primary-dark) 100%);
+          width: 5px;
+          background: linear-gradient(180deg, var(--accent-gold) 0%, var(--primary-dark) 100%);
           border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        
+        i {
+          color: var(--primary-dark) !important;
+          transform: scale(1.15);
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
       }
 
       i {
-        margin-left: var(--spacing-md);
-        font-size: var(--font-size-lg);
-        width: 24px;
-        text-align: center;
+        font-size: 1.75rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: inherit;
+        transition: all var(--transition-fast);
+        flex-shrink: 0;
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.05);
       }
 
       span {
         flex: 1;
-        font-size: var(--font-size-sm);
+        font-size: 1rem;
+        font-weight: inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .menu-badge {

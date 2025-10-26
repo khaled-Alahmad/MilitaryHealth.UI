@@ -7,8 +7,16 @@
   </div>
 
   <div class="topbar-right">
-    <button class="btn btn-outline-danger btn-sm" (click)="logout()">
-      <i class="bi bi-box-arrow-right"></i>
+    @if (displayName) {
+      <div class="user-info">
+        <div class="user-role-badge">
+          <i class="pi pi-id-card"></i>
+          <span class="display-name"> عيادة {{ displayName }}</span>
+        </div>
+      </div>
+    }
+    <button class="btn-logout" (click)="logout()" title="تسجيل الخروج">
+      <i class="pi pi-sign-out"></i>
     </button>
   </div>
 </header>

@@ -65,13 +65,13 @@
         </td>
         <td class="text-center align-middle">
           <button
-            pButton
             type="button"
-            icon="pi pi-pencil"
-            class="p-button-sm p-button-outlined"
-            (click)="openEditExam(exam)"
+            class="btn-icon-action"
             pTooltip="تعديل الفحص"
-          ></button>
+            tooltipPosition="top"
+            (click)="openEditExam(exam)">
+            <i class="pi pi-pen-to-square"></i>
+          </button>
         </td>
       </tr>
     </ng-template>

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
@@ -14,7 +15,7 @@ import { EditEarExamComponent } from '../edit-ear-exam/edit-ear-exam';
 @Component({
   selector: 'app-deferred-ear-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule],
   templateUrl: './deferred-ear-exams.component.html',
   styleUrls: ['./deferred-ear-exams.component.scss']
 })

@@ -20,6 +20,7 @@ export class AuthService {
   private readonly REFRESH_KEY = 'refresh_token';
   private readonly SPECIALTY_KEY = 'doctor_specialty';
   private readonly DOCTOR_ID_KEY = 'doctorId';
+  private readonly SPECIALTY_NAME_KEY = 'doctor_specialty_name';
 
   constructor(private http: HttpClient, private toastr: ToastrService) { }
 
@@ -40,6 +41,17 @@ export class AuthService {
             
             if (doctorID) {
               localStorage.setItem(this.DOCTOR_ID_KEY, doctorID.toString());
+            }
+            
+            // جلب اسم التخصص من الـ API
+            if (specializationID) {
+              this.getSpecializationNameById(specializationID).subscribe({
+                next: (name) => {
+                  if (name && name !== 'unknown') {
+                    localStorage.setItem(this.SPECIALTY_NAME_KEY, name);
+                  }
+                }
+              });
             }
           }
         }
@@ -109,7 +121,14 @@ export class AuthService {
   clearStorage() {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_KEY);
+    localStorage.removeItem(this.SPECIALTY_KEY);
+    localStorage.removeItem(this.DOCTOR_ID_KEY);
+    localStorage.removeItem(this.SPECIALTY_NAME_KEY);
     localStorage.clear();
+  }
+
+  getDoctorSpecialtyName(): string | null {
+    return localStorage.getItem(this.SPECIALTY_NAME_KEY);
   }
 
 

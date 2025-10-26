@@ -41,20 +41,20 @@
     <!-- Doctor Eye -->
     @if (role === 'Doctor_Eye') {
       <li routerLink="/doctor/eye" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <i class="pi pi-eye"></i>
-        <span> الفحص العيني  إجراءات </span>
+        <i class="pi pi-file-edit"></i>
+        <span>إجراءات الفحص العيني</span>
       </li>
       <li routerLink="/doctor/eye/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-clock"></i>
-        <span> الفحص العيني </span>
+        <span>الفحوصات المؤجلة</span>
       </li>
        <li routerLink="/doctor/eye/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-comments"></i>
-        <span> الاستشارات التخصصية  </span>
+        <span>الاستشارات التخصصية</span>
       </li>
        <li routerLink="/doctor/eye/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <i class="pi pi-wave-pulse"></i>
-        <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
+        <i class="pi pi-id-card"></i>
+        <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
       </li>
     
     }
@@ -62,40 +62,40 @@
     <!-- Doctor Internal -->
     @if (role === 'Doctor_Internal') {
       <li routerLink="/doctor/internal" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <i class="pi pi-stethoscope"></i>
-        <span>إجراءات الفحوصات الباطنية   </span>
+        <i class="pi pi-file-edit"></i>
+        <span>إجراءات الفحوصات الباطنية</span>
       </li>
       <li routerLink="/doctor/internal/medications" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="pi pi-clock"></i>
-        <span>الفحص  الباطني    </span>
+        <span>الفحوصات المؤجلة</span>
       </li>
        <li routerLink="/doctor/internal/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-comments"></i>
-    <span> الاستشارات التخصصية </span>
+    <span>الاستشارات التخصصية</span>
   </li>
   <li routerLink="/doctor/internal/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-wave-pulse"></i>
-    <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
+    <i class="pi pi-id-card"></i>
+    <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
     }
 
    <!-- Doctor Orthopedics -->
 @if (role === 'Doctor_Orthopedics') {
   <li routerLink="/doctor/orthopedics" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-bandage"></i>
-    <span>  إجراءات الجراحة العظمية </span>
+    <i class="pi pi-file-edit"></i>
+    <span>إجراءات الجراحة العظمية</span>
   </li>
   <li routerLink="/doctor/orthopedics/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-refresh"></i>
-    <span>فحص الجراحة العظمية </span>
+    <i class="pi pi-clock"></i>
+    <span>الفحوصات المؤجلة</span>
   </li>
   <li routerLink="/doctor/orthopedics/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-comments"></i>
-    <span> الاستشارات التخصصية </span>
+    <span>الاستشارات التخصصية</span>
   </li>
   <li routerLink="/doctor/orthopedics/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-wave-pulse"></i>
-    <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
+    <i class="pi pi-id-card"></i>
+    <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
 }
 
@@ -103,40 +103,40 @@
 <!-- Doctor Surgery -->
 @if (role === 'Doctor_Surgery') {
   <li routerLink="/doctor/surgery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-cut"></i>
-    <span>إجراءات الجراحية للمريض</span>
+    <i class="pi pi-file-edit"></i>
+    <span>إجراءات الفحوصات الجراحية</span>
   </li>
   <li routerLink="/doctor/surgery/records" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-clipboard"></i>
-    <span> الفحص الجراحي</span>
+    <i class="pi pi-clock"></i>
+    <span>الفحوصات المؤجلة</span>
   </li>
   <li routerLink="/doctor/surgery/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-comments"></i>
-    <span>الاستشارات التخصصية  </span>
+    <span>الاستشارات التخصصية</span>
   </li>
   <li routerLink="/doctor/surgery/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-wave-pulse"></i>
-    <span class="menu-label-investigations"> الاستقصاءات الشعاعية والمخبرية </span>
+    <i class="pi pi-id-card"></i>
+    <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
 }
 
 <!-- Doctor Ear -->
 @if (role === 'Doctor_Ear') {
   <li routerLink="/doctor/ear" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-volume-up"></i>
-    <span>إجراءات فحص</span>
+    <i class="pi pi-file-edit"></i>
+    <span>إجراءات الفحص</span>
   </li>
   <li routerLink="/doctor/ear/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-clock"></i>
-      <span>فحوصات  المؤجلة</span>
+    <span>الفحوصات المؤجلة</span>
   </li>
   <li routerLink="/doctor/ear/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
     <i class="pi pi-comments"></i>
-    <span> الاستشارات الخارجية</span>
+    <span>الاستشارات التخصصية</span>
   </li>
   <li routerLink="/doctor/ear/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <i class="pi pi-wave-pulse"></i>
-    <span class="menu-label-investigations"> التحاليل المخبرية والشعاعية</span>
+    <i class="pi pi-id-card"></i>
+    <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
 }
 

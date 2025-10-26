@@ -72,39 +72,23 @@
           </span>
         </td>
         <td class="text-center align-middle">
-          <div class="d-flex flex-row justify-content-center align-items-center gap-1">
-            <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
-          (click)="showDetails(exam)">
-          <i class="pi pi-info-circle"></i>
-           عرض التفاصيل
-      </button>
-            <!-- <i class="pi pi-info-circle icon"
-           (click)="showDetails(exam)" title="عرض التفاصيل"></i> -->
-            <!-- <button
-              pButton
-              pRipple
-              icon="pi pi-eye"
-              class="p-button-rounded p-button-info p-button-text p-button-sm d-flex align-items-center justify-content-center"
-              (click)="showDetails(exam)"
-              title="عرض التفاصيل"
-              style="width: 1.8rem; height: 1.8rem;"
-            ></button> -->
-            <button type="button" class="btn btn-sm btn-outline-secondary" title="تعديل الفحص"
-          (click)="openEditExam(exam)">
-          <i class="pi pi-pen-to-square"></i>
-            تعديل
-      </button>
-            <!-- <i class="pi pi-pen-to-square icon"
-           (click)="openEditExam(exam)" title="تعديل الفحص"></i> -->
-            <!-- <button
-              pButton
-              pRipple
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-success p-button-text p-button-sm d-flex align-items-center justify-content-center"
-              (click)="openEditExam(exam)"
-              title="تعديل الفحص"
-              style="width: 1.8rem; height: 1.8rem;"
-            ></button> -->
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <button 
+              type="button" 
+              class="btn-icon-action" 
+              pTooltip="عرض التفاصيل"
+              tooltipPosition="top"
+              (click)="showDetails(exam)">
+              <i class="pi pi-info-circle"></i>
+            </button>
+            <button 
+              type="button" 
+              class="btn-icon-action" 
+              pTooltip="تعديل الفحص"
+              tooltipPosition="top"
+              (click)="openEditExam(exam)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
           </div>
         </td>
       </tr>

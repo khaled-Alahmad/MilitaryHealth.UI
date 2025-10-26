@@ -7,12 +7,13 @@ import { ButtonModule } from 'primeng/button';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
 import { ToastrService } from 'ngx-toastr';
 import { TableModule } from "primeng/table";
+import { TooltipModule } from 'primeng/tooltip';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-deferred-orthopedi-exams-component',
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent, TooltipModule],
   templateUrl: './deferred-orthopedi-exams-component.html',
   styleUrl: './deferred-orthopedi-exams-component.scss'
 })

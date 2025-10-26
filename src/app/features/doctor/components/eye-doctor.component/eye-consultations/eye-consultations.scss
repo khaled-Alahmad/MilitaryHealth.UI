@@ -19,32 +19,61 @@
 }
 
 ::ng-deep .p-datatable .p-datatable-thead>tr>th {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
-  color: white !important;
-  font-size: 14px;
-  font-weight: 600 !important;
-  padding: 10px 12px;
+  background: #054239 !important;
+  color: #ffffff !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 0.75rem 1rem !important;
   text-align: center !important;
   white-space: nowrap;
-  border: none !important;
-}
-
-::ng-deep .p-datatable .p-datatable-tbody>tr>td {
-  padding: 8px 12px;
-  font-size: 13.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-::ng-deep .p-datatable .p-datatable-tbody>tr:hover {
-  background-color: rgba(5, 66, 57, 0.05) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  position: relative !important;
+  
+  &:first-child {
+    border-top-right-radius: 15px !important;
+  }
+  
+  &:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-top-left-radius: 15px !important;
+  }
 }
 
 ::ng-deep .p-datatable .p-datatable-tbody>tr {
-  height: 36px;
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  
+  &:nth-child(even) {
+    background: #f8f9fa !important;
+  }
+  
+  &:hover {
+    background: #e8ecef !important;
+    
+    td {
+      font-weight: 500 !important;
+    }
+  }
+}
+
+::ng-deep .p-datatable .p-datatable-tbody>tr>td {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  white-space: nowrap;
+  vertical-align: middle !important;
+  border-bottom: 2px solid #e0e0e0 !important;
+  border-right: 1px solid #e0e0e0 !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+  color: #34495e !important;
+  
+  &:last-child {
+    border-right: 1px solid #e0e0e0 !important;
+  }
 }
 
 .badge {
