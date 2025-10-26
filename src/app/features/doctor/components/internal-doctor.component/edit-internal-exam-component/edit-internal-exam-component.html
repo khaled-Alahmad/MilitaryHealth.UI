@@ -1,7 +1,10 @@
-<div class="dialog-backdrop">
-  <div class="dialog-card">
+<div class="dialog-backdrop" (click)="onCancel()">
+  <div class="dialog-card" (click)="$event.stopPropagation()">
     <div class="dialog-header">
       <h3>تعديل الفحص الداخلي</h3>
+      <button type="button" class="btn-close" (click)="onCancel()">
+        ×
+      </button>
     </div>
 
     <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="dialog-form">

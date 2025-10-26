@@ -1,11 +1,16 @@
+/* Import unified modal styles */
+@import '../../../doctor/components/shared-modal-styles.scss';
+
+/* Custom overrides for this component */
+.modal-content {
+  background: #EDEBE0 !important;
+}
+
 .preview-image {
   max-width: 350px; 
   max-height: 250px;
-
   width: auto;
   height: auto;
-  
   object-fit: contain;
-  
   margin-top: 10px;
 }

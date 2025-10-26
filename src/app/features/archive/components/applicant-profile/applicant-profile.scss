@@ -161,10 +161,14 @@ html[dir="rtl"] .field {
   }
   @page {
     size: A4;
-    margin: 12mm;
+    margin: 8mm;
   }
   .only-print {
     display: block;
+  }
+  .report-container {
+    padding: 0;
+    font-size: 11px !important;
   }
   .print-header .org {
     display: flex;
@@ -172,36 +176,79 @@ html[dir="rtl"] .field {
     gap: 12px;
   }
   .print-header .logo {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
   .print-header .meta .org-name {
     font-weight: 700;
+    font-size: 13px !important;
   }
   .print-header .report-title {
-    font-size: 14px;
+    font-size: 12px !important;
     color: #111;
   }
-  .grid {
+  .report-header {
+    margin-bottom: 8px;
+  }
+  .header-top {
     gap: 8px;
+  }
+  .grid {
+    gap: 6px;
   }
   .card {
     box-shadow: none;
     border-color: #bbb;
     background: #fff;
     break-inside: avoid;
+    page-break-inside: avoid;
   }
   .card-title {
     background: #fff;
     border-bottom-color: #bbb;
+    padding: 6px 10px;
+    font-size: 12px !important;
+  }
+  .card-body {
+    padding: 8px 10px;
   }
   .two-col {
     grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
   }
   .field {
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 120px 1fr;
+    gap: 4px;
+  }
+  .label {
+    font-size: 10px !important;
+  }
+  .value {
+    font-size: 10px !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .subcard {
     border-color: #ccc;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  .subcard-title {
+    font-size: 11px !important;
+    margin-bottom: 4px;
+  }
+  .ids {
+    gap: 10px;
+  }
+  .id {
+    font-size: 10px !important;
+    gap: 4px;
+  }
+  .logo {
+    width: 35px !important;
+    height: 35px !important;
+  }
+  .org-name {
+    font-size: 12px !important;
   }
 }

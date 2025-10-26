@@ -74,7 +74,7 @@ export class EarClinicExamService {
     );
   }
 
-  // جلب الفحوص المؤجلة الخاصة بالعيادة الأذنية فقط
+  // جلب جميع الفحوص الخاصة بالعيادة الأذنية
   getDeferredEarClinicExamsPaged(
     page: number = 1,
     pageSize: number = 10,
@@ -106,23 +106,22 @@ export class EarClinicExamService {
           totalPages: 0
         };
         
-        // فلترة الفحوص المؤجلة حسب doctorID
-        const deferredExams = (data?.items || []).filter((exam: EarClinicExam) => {
-          const resultDesc = exam.result?.description || '';
-          return exam.doctorID === currentDoctorId && resultDesc.toLowerCase().includes('مؤجل');
+        // فلترة الفحوص حسب doctorID فقط (جميع الفحوص بدون فلترة حسب النتيجة)
+        const allExams = (data?.items || []).filter((exam: EarClinicExam) => {
+          return exam.doctorID === currentDoctorId;
         });
         
         // تطبيق pagination محلي
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
-        const paginatedItems = deferredExams.slice(startIndex, endIndex);
+        const paginatedItems = allExams.slice(startIndex, endIndex);
         
         return {
           items: paginatedItems,
-          totalCount: deferredExams.length,
+          totalCount: allExams.length,
           page: page,
           pageSize: pageSize,
-          totalPages: Math.ceil(deferredExams.length / pageSize)
+          totalPages: Math.ceil(allExams.length / pageSize)
         } as PagedResponse<EarClinicExam>;
       }),
       catchError(() => of({

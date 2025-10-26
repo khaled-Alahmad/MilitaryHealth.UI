@@ -55,34 +55,30 @@
           <span class="small">{{ investigation.doctor?.fullName || 'غير محدد' }}</span>
         </td>
         <td class="text-center align-middle">
-          <button 
-            *ngIf="investigation.attachment"
-            pButton 
-            type="button" 
-            icon="pi pi-download" 
-            class="p-button-sm p-button-outlined"
-            (click)="openFile(investigation.attachment)"
-            pTooltip="تحميل المرفق"
-          ></button>
-          <span *ngIf="!investigation.attachment" class="text-muted small">لا يوجد</span>
+          @if (investigation.attachment) {
+            <button 
+              type="button" 
+              class="btn btn-sm btn-outline-secondary" 
+              title="فتح الملف"
+              (click)="openFile(investigation.attachment)">
+              <i class="bi bi-file-earmark-text me-1"></i>
+              فتح الملف
+            </button>
+          }
+          @if (!investigation.attachment) {
+            <span class="text-muted small">لا يوجد</span>
+          }
         </td>
-               <td class="text-center align-middle">
-                 <button
-                   pButton
-                   type="button"
-                   icon="pi pi-eye"
-                   class="p-button-sm p-button-outlined me-1"
-                   pTooltip="عرض التفاصيل"
-                 ></button>
-                 <button
-                   pButton
-                   type="button"
-                   icon="pi pi-pencil"
-                   class="p-button-sm p-button-outlined"
-                   (click)="openEditInvestigation(investigation)"
-                   pTooltip="إضافة نتيجة"
-                 ></button>
-               </td>
+        <td class="text-center align-middle">
+          <button 
+            type="button" 
+            class="btn btn-sm btn-outline-secondary" 
+            title="إضافة نتيجة"
+            (click)="openEditInvestigation(investigation)">
+            <i class="pi pi-pen-to-square"></i>
+            إضافة نتيجة
+          </button>
+        </td>
       </tr>
     </ng-template>
 

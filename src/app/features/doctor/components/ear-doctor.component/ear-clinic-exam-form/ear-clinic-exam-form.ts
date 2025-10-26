@@ -49,9 +49,10 @@ export class EarClinicExamForm implements OnInit {
       leftNose: ['', Validators.required],
       isRightHugeMates: [false],
       isLeftHugeMates: [false],
-      rightString: ['', Validators.required],
-      leftString: ['', Validators.required],
+      rightString: [''],
+      leftString: [''],
       mouth: ['', Validators.required],
+      mouthOther: [''],
       otherDiseases: [''],
       resultID: [null, Validators.required],
       reason: ['']
@@ -92,6 +93,8 @@ export class EarClinicExamForm implements OnInit {
       this.loading = true;
       
       const formData = this.examForm.value;
+      console.log('Form Data:', formData);
+      
       const examData: EarClinicExam = {
         applicantFileNumber: this.applicantFileNumber,
         doctorID: Number(this.authService.getDoctorId()) || 0,
@@ -108,16 +111,19 @@ export class EarClinicExamForm implements OnInit {
         leftNose: formData.leftNose,
         isRightHugeMates: formData.isRightHugeMates,
         isLeftHugeMates: formData.isLeftHugeMates,
-        rightString: formData.rightString,
-        leftString: formData.leftString,
-        mouth: formData.mouth,
-        otherDiseases: formData.otherDiseases,
+        rightString: formData.rightString || '',
+        leftString: formData.leftString || '',
+        mouth: formData.mouth === 'أخرى' ? `أخرى: ${formData.mouthOther}` : formData.mouth,
+        otherDiseases: formData.otherDiseases || '',
         resultID: formData.resultID,
-        reason: formData.reason
+        reason: formData.reason || ''
       };
 
+      console.log('Sending Exam Data:', examData);
+      
       this.examService.addEarClinicExam(examData).subscribe({
         next: (response) => {
+          console.log('Exam saved successfully:', response);
           this.toastr.success('تم حفظ فحص الأذن والأنف والحنجرة بنجاح');
           this.examForm.reset();
           this.showModal = false;
@@ -130,6 +136,13 @@ export class EarClinicExamForm implements OnInit {
         }
       });
     } else {
+      console.log('Form is invalid');
+      Object.keys(this.examForm.controls).forEach(key => {
+        const control = this.examForm.get(key);
+        if (control?.invalid) {
+          console.log('Invalid field:', key, control.errors);
+        }
+      });
       this.toastr.error('يرجى ملء جميع الحقول المطلوبة');
     }
   }
@@ -141,6 +154,11 @@ export class EarClinicExamForm implements OnInit {
 
   addEarClinicExam() {
     this.showModal = true;
+  }
+
+  openModal() {
+    this.showModal = true;
+    console.log('Modal opened');
   }
 
   closeModal() {

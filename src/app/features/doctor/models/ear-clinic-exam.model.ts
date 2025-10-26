@@ -31,7 +31,7 @@ export interface EarClinicExam {
   mouth: string;
   otherDiseases: string;
   resultID: number;
-  reason?: string;
+  reason: string;
   result?: Result;
   doctor?: Doctor;
 }

@@ -11,6 +11,30 @@
   border: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #054239;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #428177;
+    }
+  }
+}
+
 .search-wrapper {
   position: relative;
   width: 400px;

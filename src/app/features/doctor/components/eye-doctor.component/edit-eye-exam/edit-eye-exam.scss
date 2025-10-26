@@ -1,97 +1,11 @@
 /* Import unified modal styles */
 @import '../../shared-modal-styles.scss';
 
-/* Dialog Card Override */
+/* Custom overrides for this component */
 .dialog-card {
   background: #EDEBE0 !important;
 }
 
-/* Form styling */
-.dialog-form .form-row {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-
-  @media (max-width: 767px) {
-    flex-direction: column;
-  }
-}
-
-.dialog-form .form-group {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.dialog-form label {
-  font-weight: 500;
-  margin-bottom: 5px;
-  color: #374151;
-}
-
-.dialog-form input,
-.dialog-form select,
-.dialog-form textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 0.95rem;
-}
-
-.dialog-form input::placeholder,
-.dialog-form textarea::placeholder {
-  color: #9ca3af;
-}
-
-.dialog-form textarea {
-  min-height: 70px;
-  resize: vertical;
-}
-
-/* Modal header override */
-.modal-header {
-  background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
-  border-bottom: 2px solid #B9A779 !important;
-  
-  .modal-title {
-    color: white !important;
-  }
-  
-  .btn-close {
-    color: white !important;
-    opacity: 1 !important;
-  }
-}
-
-/* Buttons */
-.btn-primary {
-  background: #054239 !important;
-  border-color: #054239 !important;
-  color: white !important;
-}
-
-.btn-secondary {
-  background: #3D3A3B !important;
-  border-color: #3D3A3B !important;
-  color: white !important;
-}
-
-/* Modal footer */
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive */
-@media (max-width: 767px) {
-  .modal-footer {
-    flex-direction: column;
-    
-    .btn {
-      width: 100%;
-    }
-  }
+.dialog-form {
+  padding: 2rem;
 }

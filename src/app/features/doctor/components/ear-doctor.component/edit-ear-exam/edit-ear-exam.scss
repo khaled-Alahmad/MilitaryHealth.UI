@@ -1,7 +1,7 @@
-/* ===========================================
-   Professional Edit Ear Exam Modal Design
-   =========================================== */
+/* Import unified modal styles */
+@import '../../shared-modal-styles.scss';
 
+/* Custom overrides for ear exam */
 .professional-modal-container {
   background: #EDEBE0;
   border-radius: 16px;

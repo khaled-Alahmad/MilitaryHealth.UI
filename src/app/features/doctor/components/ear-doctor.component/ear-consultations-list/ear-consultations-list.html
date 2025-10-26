@@ -53,35 +53,28 @@
         <td class="text-center align-middle">
           @if (consultation.attachment) {
             <button 
-              pButton 
               type="button" 
-              icon="pi pi-download" 
-              class="p-button-sm p-button-outlined"
-              (click)="openFile(consultation.attachment)"
-              pTooltip="تحميل المرفق"
-            ></button>
+              class="btn btn-sm btn-outline-secondary" 
+              title="فتح الملف"
+              (click)="openFile(consultation.attachment)">
+              <i class="bi bi-file-earmark-text me-1"></i>
+              فتح الملف
+            </button>
           }
           @if (!consultation.attachment) {
             <span class="text-muted small">لا يوجد</span>
           }
         </td>
-               <td class="text-center align-middle">
-                 <button
-                   pButton
-                   type="button"
-                   icon="pi pi-eye"
-                   class="p-button-sm p-button-outlined me-1"
-                   pTooltip="عرض التفاصيل"
-                 ></button>
-                 <button
-                   pButton
-                   type="button"
-                   icon="pi pi-pencil"
-                   class="p-button-sm p-button-outlined"
-                   (click)="openEditConsultation(consultation)"
-                   pTooltip="إضافة نتيجة"
-                 ></button>
-               </td>
+        <td class="text-center align-middle">
+          <button 
+            type="button" 
+            class="btn btn-sm btn-outline-secondary" 
+            title="إضافة نتيجة"
+            (click)="openEditConsultation(consultation)">
+            <i class="pi pi-pen-to-square"></i>
+            إضافة نتيجة
+          </button>
+        </td>
       </tr>
     </ng-template>
 

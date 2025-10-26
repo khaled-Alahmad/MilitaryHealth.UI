@@ -11,6 +11,7 @@ import { EarClinicExamService } from '../../../services/ear-clinic-exam.service'
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarExamComponent } from '../edit-ear-exam/edit-ear-exam';
+import { ExamDetailsComponent } from '../exam-details/exam-details';
 
 @Component({
   selector: 'app-deferred-ear-exams',
@@ -41,23 +42,23 @@ export class DeferredEarExamsComponent implements OnInit {
 
   loadEarExams() {
     this.loading = true;
-    console.log('Loading deferred ear exams...');
+    console.log('Loading ear exams...');
     const filter = this.globalFilter || '';
     this.examService.getDeferredEarClinicExamsPaged(this.page, this.rowsPerPage, filter).subscribe({
       next: (res: any) => {
-        console.log('Received deferred exams:', res);
+        console.log('Received exams:', res);
         this.exams = res.items;
         this.filteredExams = res.items;
         this.totalRecords = res.totalCount;
         this.loading = false;
         
         if (res.items.length === 0) {
-          this.toastr.warning('لا توجد فحوصات مؤجلة');
+          this.toastr.warning('لا توجد فحوصات');
         }
       },
       error: (err) => {
-        console.error('Error loading deferred exams:', err);
-        this.toastr.error('❌ فشل تحميل الفحوصات المؤجلة', 'خطأ');
+        console.error('Error loading exams:', err);
+        this.toastr.error('❌ فشل تحميل الفحوصات', 'خطأ');
         this.loading = false;
       }
     });
@@ -110,5 +111,16 @@ export class DeferredEarExamsComponent implements OnInit {
         this.loadEarExams();
       }
     });
+  }
+
+  openExamDetails(exam: EarClinicExam) {
+    const modalRef = this.modalService.open(ExamDetailsComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: true,
+      centered: true
+    });
+    
+    modalRef.componentInstance.exam = exam;
   }
 }

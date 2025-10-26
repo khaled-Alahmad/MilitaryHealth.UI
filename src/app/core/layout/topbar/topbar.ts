@@ -41,7 +41,7 @@ export class Topbar {
           next: (name) => {
             if (name && name !== 'unknown') {
               localStorage.setItem('doctor_specialty_name', name);
-              this.displayName = name;
+              this.displayName = 'عيادة ' + name;
             }
           }
         });

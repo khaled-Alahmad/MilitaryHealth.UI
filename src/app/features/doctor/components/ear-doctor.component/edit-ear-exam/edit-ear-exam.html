@@ -6,7 +6,7 @@
         <i class="pi pi-pen-to-square"></i>
       </div>
       <div class="header-text">
-        <h3 class="modal-title-professional">تعديل فحص الأذن والأنف والحنجرة</h3>
+        <h3 class="modal-title-professional" >تعديل فحص الأذن والأنف والحنجرة</h3>
       </div>
     </div>
     <button type="button" class="btn-close-professional" (click)="onCancel()">
@@ -63,20 +63,6 @@
         </div>
 
         <div class="form-field">
-          <input 
-            type="checkbox" 
-            class="form-check-input" 
-            formControlName="isRightHugeMates" 
-            id="isRightHugeMates">
-          <label class="checkbox-label" for="isRightHugeMates">
-            <i class="pi pi-triangle-fill"></i>
-            اللوزتان الأيمنتان متضخمتان
-          </label>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
           <label>
             <i class="pi pi-circle"></i>
             طبلة الأذن اليسرى
@@ -87,17 +73,33 @@
             formControlName="leftTympanicMembrane" 
             placeholder="أدخل حالة طبلة الأذن اليسرى">
         </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <div class="form-check">
+            <input 
+              type="checkbox" 
+              class="form-check-input" 
+              formControlName="isRightHugeMates" 
+              id="isRightHugeMates">
+            <label class="form-check-label" for="isRightHugeMates">
+              ضخامة قرينات - يمين
+            </label>
+          </div>
+        </div>
 
         <div class="form-field">
-          <input 
-            type="checkbox" 
-            class="form-check-input" 
-            formControlName="isLeftHugeMates" 
-            id="isLeftHugeMates">
-          <label class="checkbox-label" for="isLeftHugeMates">
-            <i class="pi pi-triangle-fill"></i>
-            اللوزتان الأيسرتان متضخمتان
-          </label>
+          <div class="form-check">
+            <input 
+              type="checkbox" 
+              class="form-check-input" 
+              formControlName="isLeftHugeMates" 
+              id="isLeftHugeMates">
+            <label class="form-check-label" for="isLeftHugeMates">
+              ضخامة قرينات - يسار
+            </label>
+          </div>
         </div>
       </div>
 
@@ -241,13 +243,38 @@
         <div class="form-field">
           <label>
             <i class="pi pi-briefcase"></i>
-            فحص الفم
+            الفم
           </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="mouth" 
-            placeholder="أدخل نتيجة فحص الفم">
+          <div class="ms-3">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="mouth" id="mouthNormalEdit"
+                value="سوي" formControlName="mouth" />
+              <label class="form-check-label" for="mouthNormalEdit">سوي</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="mouth" id="mouthMalocclusionEdit"
+                value="سوء إطباق" formControlName="mouth" />
+              <label class="form-check-label" for="mouthMalocclusionEdit">سوء إطباق</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="mouth" id="mouthClickEdit"
+                value="قطة مفصل" formControlName="mouth" />
+              <label class="form-check-label" for="mouthClickEdit">قطة مفصل</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="mouth" id="mouthSubluxationEdit"
+                value="تحت خلع مفصل فكي" formControlName="mouth" />
+              <label class="form-check-label" for="mouthSubluxationEdit">تحت خلع مفصل فكي</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="mouth" id="mouthOtherEdit"
+                value="أخرى" formControlName="mouth" />
+              <label class="form-check-label" for="mouthOtherEdit">أخرى</label>
+            </div>
+            <div *ngIf="examForm.get('mouth')?.value === 'أخرى'" class="ms-4 mb-2">
+              <input type="text" class="form-control" placeholder="أدخل التفاصيل" />
+            </div>
+          </div>
         </div>
 
         <div class="form-field">

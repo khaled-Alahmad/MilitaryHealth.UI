@@ -100,3 +100,23 @@
   border-radius: var(--radius-full) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
+
+/* Enhance action buttons inside p-table */
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr>td .btn.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr>td .btn-outline-secondary {
+  border-color: #ced4da;
+  color: #495057;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr>td .btn-outline-secondary:hover {
+  background-color: #e9ecef;
+  color: #212529;
+}

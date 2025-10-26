@@ -1,43 +1,31 @@
 /* Import unified modal styles */
 @import '../../shared-modal-styles.scss';
 
-.dialog-form .form-row {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
+/* Custom overrides for this component */
+.modal-content {
+  background: #EDEBE0 !important;
+}
 
-  @media (max-width: 767px) {
-    flex-direction: column;
+/* Ensure form styling applies */
+form {
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #374151;
+    display: block;
   }
-}
 
-.dialog-form .form-group {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
+  .form-control {
+    padding: 0.75rem 1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 
-.dialog-form label {
-  font-weight: 500;
-  margin-bottom: 5px;
-  color: #374151;
-}
-
-.dialog-form input,
-.dialog-form select,
-.dialog-form textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 0.95rem;
-}
-
-.dialog-form input::placeholder,
-.dialog-form textarea::placeholder {
-  color: #9ca3af;
-}
-
-.dialog-form textarea {
-  min-height: 70px;
-  resize: vertical;
+    &:focus {
+      outline: none;
+      border-color: #428177;
+      box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1);
+    }
+  }
 }

@@ -101,5 +101,7 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     return result ? result.description : 'غير محدد';
   }
 
-
+  printProfile() {
+    window.print();
+  }
 }

@@ -1,0 +1,29 @@
+@import '../../../components/shared-modal-styles.scss';
+
+.professional-modal-container {
+  max-width: 900px !important;
+  width: 100% !important;
+}
+
+.info-value {
+  background: white;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.95rem;
+  color: #161616;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.detail-section {
+  background: #f8f9fa;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+

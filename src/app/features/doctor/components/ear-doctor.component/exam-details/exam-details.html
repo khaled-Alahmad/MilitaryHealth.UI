@@ -1,0 +1,162 @@
+<div class="professional-modal-container">
+  <!-- Modal Header with Brand Identity -->
+  <div class="modal-header-professional">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="pi pi-file-export"></i>
+      </div>
+      <div class="header-text">
+        <h3 class="modal-title-professional">تفاصيل فحص الأذن والأنف والحنجرة</h3>
+        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }}</span>
+      </div>
+    </div>
+    <button type="button" class="btn-close-professional" (click)="closeModal()">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+
+  <div class="modal-body-professional">
+    <!-- Section Header -->
+    <div class="section-header">
+      <i class="pi pi-ear-silence"></i>
+      <h4>الأذن</h4>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> الأذن - يمين</label>
+        <div class="info-value">{{ exam.rightEar || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> الأذن - يسار</label>
+        <div class="info-value">{{ exam.leftEar || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> غشاء الطبل - يمين</label>
+        <div class="info-value">{{ exam.rightTympanicMembrane || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> غشاء الطبل - يسار</label>
+        <div class="info-value">{{ exam.leftTympanicMembrane || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <!-- Hearing Tests Section -->
+    <div class="section-header">
+      <i class="pi pi-volume-up"></i>
+      <h4>اختبارات السمع</h4>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-hear"></i> السمع - يمين R</label>
+        <div class="info-value">{{ exam.rightHearing || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-hear"></i> السمع - يسار</label>
+        <div class="info-value">{{ exam.leftHearing || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-comment"></i> اختبار الهمس - يمين</label>
+        <div class="info-value">{{ exam.rightWhisperTest || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-comment"></i> اختبار الهمس - يسار</label>
+        <div class="info-value">{{ exam.leftWhisperTest || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-megaphone"></i> الرنانات W</label>
+        <div class="info-value">{{ exam.resonators || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-triangle-fill"></i> ضخامة قرينات</label>
+        <div class="info-value">
+          يمين: {{ exam.isRightHugeMates ? 'نعم' : 'لا' }} | 
+          يسار: {{ exam.isLeftHugeMates ? 'نعم' : 'لا' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Nose Section -->
+    <div class="section-header">
+      <i class="pi pi-send"></i>
+      <h4>فحص الأنف</h4>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> الأنف - يمين</label>
+        <div class="info-value">{{ exam.rightNose || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> الأنف - يسار</label>
+        <div class="info-value">{{ exam.leftNose || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <!-- Voice and Mouth Section -->
+    <div class="section-header">
+      <i class="pi pi-microphone"></i>
+      <h4>الحبال الصوتية والفم</h4>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> الحبل الصوتي - يمين</label>
+        <div class="info-value">{{ exam.rightString || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-circle"></i> الحبل الصوتي - يسار</label>
+        <div class="info-value">{{ exam.leftString || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-briefcase"></i> الفم</label>
+        <div class="info-value">{{ exam.mouth || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-info-circle"></i> أمراض أخرى</label>
+        <div class="info-value">{{ exam.otherDiseases || 'غير محدد' }}</div>
+      </div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="section-header">
+      <i class="pi pi-check-circle"></i>
+      <h4>النتيجة</h4>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label><i class="pi pi-flag"></i> النتيجة</label>
+        <div class="info-value">{{ exam.result?.description || 'غير محدد' }}</div>
+      </div>
+      <div class="form-field">
+        <label><i class="pi pi-file-edit"></i> السبب</label>
+        <div class="info-value">{{ exam.reason || 'غير محدد' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer-professional">
+    <button 
+      type="button" 
+      class="btn btn-secondary" 
+      (click)="closeModal()">
+      <i class="pi pi-times me-2"></i>
+      إغلاق
+    </button>
+  </div>
+</div>
+

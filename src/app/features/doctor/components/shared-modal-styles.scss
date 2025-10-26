@@ -1,9 +1,19 @@
 /* ===========================================
-   UNIFIED MODAL STYLES - DOCTOR COMPONENTS
+   UNIFIED MODAL DIALOG SYSTEM
    =========================================== */
 
-/* Modal Backdrop */
-.modal-backdrop,
+/* ===========================================
+   DIALOG BACKDROP
+   =========================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1050;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
 .dialog-backdrop {
   position: fixed;
   inset: 0;
@@ -16,36 +26,100 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Modal Container */
+/* ===========================================
+   DIALOG CONTAINERS
+   =========================================== */
+/* Modal containers without backdrop wrapper */
 .professional-modal-container,
-.dialog-card,
-.modal-content {
+.modal-content:not(.dialog-card) {
   background: #EDEBE0;
   border-radius: 16px;
   max-width: 700px;
-  width: 90%;
+  width: 90% !important;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  animation: slideIn 0.3s ease;
+  position: fixed !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  z-index: 1051 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  opacity: 0;
+  animation: modalAppear 0.25s ease forwards !important;
+}
+
+/* Dialog cards inside backdrop */
+.dialog-backdrop .dialog-card,
+.dialog-backdrop .modal-content {
+  background: #EDEBE0;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 90% !important;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 1051;
   overflow: hidden;
+  animation: dialogAppear 0.25s ease forwards !important;
 }
 
-/* Modal Header */
+@keyframes modalAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes dialogAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Large Modal Variant */
+.modal-content.modal-lg {
+  max-width: 900px !important;
+  width: 90% !important;
+}
+
+/* Small Modal Variant */
+.modal-content.modal-sm {
+  max-width: 500px !important;
+  width: 90% !important;
+}
+
+/* ===========================================
+   DIALOG HEADER
+   =========================================== */
 .modal-header-professional,
-.modal-header {
+.modal-header,
+.dialog-header {
   background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
   padding: 1.5rem 2rem !important;
   display: flex;
+  flex-direction: row-reverse !important;
   justify-content: space-between;
   align-items: center;
   color: white !important;
   border-bottom: 2px solid #B9A779 !important;
   border-radius: 16px 16px 0 0 !important;
+  position: relative;
 
+  /* Header Content Wrapper */
   .header-content {
     display: flex;
     align-items: center;
@@ -57,6 +131,9 @@
       padding: 0.75rem;
       font-size: 1.5rem;
       color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .header-text,
@@ -66,70 +143,87 @@
       flex-direction: column;
       gap: 0.25rem;
 
-      .modal-title-professional,
-      h3,
-      h5 {
+      h3, h4, h5, h6, p, span {
         margin: 0 !important;
-        font-size: 1.5rem !important;
+        font-size: 1.75rem !important;
         font-weight: 700 !important;
         color: #ffffff !important;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
 
-      .modal-subtitle {
-        margin: 0;
-        font-size: 0.875rem;
+      .modal-subtitle,
+      p {
+        margin: 0 !important;
+        font-size: 1rem !important;
         color: #f0f0f0 !important;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        font-weight: 400 !important;
       }
     }
   }
 
+  /* Titles without wrapper */
+  .modal-title,
+  .modal-title-professional,
+  h3, h4, h5, h6 {
+    margin: 0 !important;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Close Button - Left Side */
   .btn-close-professional,
   .btn-close {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: none !important;
+    border-radius: 50% !important;
+    width: 3rem !important;
+    height: 3rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 1.8rem !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    order: -1 !important;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.3) !important;
+      transform: scale(1.05) !important;
     }
 
-    i {
-      font-size: 1.2rem;
+    &:active {
+      transform: scale(0.95) !important;
+    }
+
+    // Remove any icons or before content
+    i, span {
+      display: none !important;
+    }
+
+    &::before {
+      content: "×" !important;
+      display: block !important;
     }
   }
 }
 
-/* Dialog Header */
-.dialog-header {
-  background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
-  padding: 1.5rem 2rem !important;
-  border-radius: 12px 12px 0 0 !important;
-  border-bottom: 2px solid #B9A779 !important;
-  margin: -25px -30px 20px -30px;
-
-  h3 {
-    color: white !important;
-    font-size: 1.5rem !important;
-    font-weight: 700 !important;
-    text-align: center !important;
-  }
-}
-
-/* Modal Body */
+/* ===========================================
+   DIALOG BODY
+   =========================================== */
 .modal-body-professional,
 .modal-body,
-.dialog-card {
+.dialog-card form,
+.dialog-form {
   flex: 1;
   overflow-y: auto;
   padding: 2rem;
@@ -155,7 +249,9 @@
   }
 }
 
-/* Modal Footer */
+/* ===========================================
+   DIALOG FOOTER
+   =========================================== */
 .modal-footer-professional,
 .modal-footer,
 .form-actions {
@@ -175,6 +271,7 @@
     padding: 0.875rem 1.75rem;
     border-radius: 8px;
     font-weight: 600;
+    font-size: 1.1rem !important;
     font-family: 'Cairo', 'Segoe UI', sans-serif;
     display: inline-flex;
     align-items: center;
@@ -182,9 +279,10 @@
     gap: 0.5rem;
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    cursor: pointer;
 
     i {
-      font-size: 1rem;
+      font-size: 1.125rem !important;
     }
 
     &:hover:not(:disabled) {
@@ -222,7 +320,151 @@
   }
 }
 
-/* Animations */
+/* ===========================================
+   FORM STYLING
+   =========================================== */
+.dialog-form {
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: 767px) {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  label,
+  .form-label {
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    color: #374151 !important;
+    font-size: 1.05rem !important;
+
+    .required {
+      color: #dc3545;
+      margin-right: 0.25rem;
+    }
+  }
+
+  input[type="text"],
+  input[type="file"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea,
+  .form-control {
+    padding: 0.875rem 1.125rem !important;
+    border: 2px solid #d1d5db !important;
+    border-radius: 8px !important;
+    font-size: 1.05rem !important;
+    font-family: 'Cairo', 'Segoe UI', sans-serif !important;
+    background: white !important;
+    transition: all 0.3s ease !important;
+
+    &:focus {
+      outline: none !important;
+      border-color: #428177 !important;
+      box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1) !important;
+    }
+
+    &::placeholder {
+      color: #9ca3af !important;
+    }
+
+    &.is-invalid {
+      border-color: #dc3545 !important;
+    }
+
+    &:disabled,
+    &[readonly] {
+      background-color: #f3f4f6 !important;
+      cursor: not-allowed !important;
+    }
+  }
+
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem !important;
+  }
+}
+
+/* Preview Container */
+.preview-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 2px dashed #d1d5db;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+}
+
+/* ===========================================
+   SECTION STYLES
+   =========================================== */
+.section-title {
+  font-size: 1.375rem !important;
+  font-weight: 700 !important;
+  color: #054239 !important;
+  margin-bottom: 1rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 2px solid #B9A779 !important;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+
+    i {
+      font-size: 1.5rem;
+      color: #428177;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #054239;
+    }
+  }
+}
+
+/* Error Messages */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* ===========================================
+   ANIMATIONS
+   =========================================== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -232,23 +474,17 @@
   }
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-/* Responsive */
+
+/* ===========================================
+   RESPONSIVE DESIGN
+   =========================================== */
 @media (max-width: 768px) {
   .professional-modal-container,
   .dialog-card,
   .modal-content {
     max-width: 95%;
+    width: 95%;
     max-height: 90vh;
   }
 
@@ -256,16 +492,23 @@
   .modal-header,
   .dialog-header {
     padding: 1rem 1.5rem !important;
+    flex-direction: column;
+    gap: 1rem;
+
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
     .modal-title-professional,
-    h3,
-    h5 {
-      font-size: 1.25rem !important;
+    h3, h4, h5, h6 {
+      font-size: 1.4rem !important;
     }
   }
 
   .modal-body-professional,
-  .modal-body {
+  .modal-body,
+  .dialog-form {
     padding: 1.5rem;
   }
 
@@ -280,5 +523,54 @@
       min-width: 100%;
     }
   }
+
+  .dialog-form {
+    .form-row {
+      flex-direction: column;
+    }
+  }
+}
+
+/* ===========================================
+   UTILITY CLASSES
+   =========================================== */
+.text-center {
+  text-align: center !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.gap-2 {
+  gap: 0.5rem !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.justify-content-between {
+  justify-content: space-between !important;
+}
+
+.justify-content-end {
+  justify-content: flex-end !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.flex-grow-1 {
+  flex-grow: 1 !important;
 }
 
