@@ -10,7 +10,7 @@
       </div>
       <div class="ids">
         <div class="id"><span class="label">رقم الديوان</span><span class="value accent fw-bold">{{ archive?.applicantFileNumber || '-' }}</span></div>
-        <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant?.associateNumber || '-' }}</span></div>
+        <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant.associateNumber || '-' }}</span></div>
         <!-- <div class="id"><span class="label">رقم الملف</span><span class="value">{{ applicant?.fileNumber }}</span></div> -->
         <div class="id date"><span class="label">تاريخ الطباعة</span><span class="value">{{ (date | date:'yyyy/MM/dd') }}</span></div>
       </div>

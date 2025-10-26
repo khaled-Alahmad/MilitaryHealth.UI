@@ -3,6 +3,7 @@ export interface FinalDecisionModel {
   surgicalExamID: number;
   internalExamID: number;
   eyeExamID: number;
+  earClinicID?: number;  // معرف عيادة الأذن
   applicantFileNumber: string;
   resultID: number;
   reason?: string;

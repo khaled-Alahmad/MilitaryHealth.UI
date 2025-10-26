@@ -1,12 +1,11 @@
-import { Component,  } from '@angular/core';
-import {   RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { Topbar } from "./topbar/topbar";
 import { Sidebar } from "./sidebar/sidebar";
-import { Footer } from "./footer/footer";
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, Topbar, Sidebar, Footer ],
+  imports: [RouterOutlet, Topbar, Sidebar],
   templateUrl: './layout.html',
   styleUrl: './layout.scss'
 })

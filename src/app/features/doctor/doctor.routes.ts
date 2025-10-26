@@ -107,12 +107,40 @@ export const Doctor_ROUTES: Routes = [
       .then(m => m.SurgeryConsultationsList),
   canActivate: [authGuard]
 },
-{
-  path: 'surgery/investigations',
-  loadComponent: () =>
-    import('./components/surgery-doctor.component/surgery-investigations-list/surgery-investigations-list')
-      .then(m => m.SurgeryInvestigationsList),
-  canActivate: [authGuard]
-},
+  {
+    path: 'surgery/investigations',
+    loadComponent: () =>
+      import('./components/surgery-doctor.component/surgery-investigations-list/surgery-investigations-list')
+        .then(m => m.SurgeryInvestigationsList),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'ear',
+    loadComponent: () =>
+      import('./components/ear-doctor.component/ear-doctor.component')
+        .then(m => m.EarDoctorComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'ear/deferred',
+    loadComponent: () =>
+      import('./components/ear-doctor.component/deferred-ear-exams.component/deferred-ear-exams.component')
+        .then(m => m.DeferredEarExamsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'ear/consultations',
+    loadComponent: () =>
+      import('./components/ear-doctor.component/ear-consultations-list/ear-consultations-list')
+        .then(m => m.EarConsultationsList),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'ear/investigations',
+    loadComponent: () =>
+      import('./components/ear-doctor.component/ear-investigations-list/ear-investigations-list')
+        .then(m => m.EarInvestigationsList),
+    canActivate: [authGuard]
+  },
 { path: '**', loadComponent: () => import('./components/doctor-not-found-component/doctor-not-found-component').then(m => m.DoctorNotFoundComponent) }
 ];

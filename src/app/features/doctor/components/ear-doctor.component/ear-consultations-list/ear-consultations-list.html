@@ -1,0 +1,106 @@
+<div class="user-header-section p-3 container-fluid">
+  <h4 class="mb-3">طلبات الاستشارات الخارجية</h4>
+  <div class="mb-3 d-flex justify-content-start">
+    <div class="search-wrapper">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="ابحث عن رقم الملف أو النتيجة"
+        (input)="onFilterChange($event)"
+      />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+  </div>
+
+  <p-table
+    #table
+    [value]="filteredConsultations"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table my-3"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [loading]="loading"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="min-width:120px" class="text-center">رقم ملف المريض</th>
+        <th style="min-width:150px" class="text-center">نوع الاستشارة</th>
+        <th style="min-width:150px" class="text-center">الطبيب المحال إليه</th>
+        <th style="min-width:100px" class="text-center">النتيجة</th>
+        <th style="min-width:120px" class="text-center">اسم الطبيب</th>
+        <th style="min-width:120px" class="text-center">الملف المرفق</th>
+        <th style="min-width:100px" class="text-center">إجراءات</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-consultation>
+      <tr>
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ consultation.applicantFileNumber }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ consultation.consultationType || 'غير محدد' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ consultation.referredDoctor || 'غير محدد' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span [class]="getBadgeClass(consultation.result)">
+            {{ consultation.result || 'غير محدد' }}
+          </span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ consultation.doctor?.fullName || 'غير محدد' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <button 
+            *ngIf="consultation.attachment"
+            pButton 
+            type="button" 
+            icon="pi pi-download" 
+            class="p-button-sm p-button-outlined"
+            (click)="openFile(consultation.attachment)"
+            pTooltip="تحميل المرفق"
+          ></button>
+          <span *ngIf="!consultation.attachment" class="text-muted small">لا يوجد</span>
+        </td>
+               <td class="text-center align-middle">
+                 <button
+                   pButton
+                   type="button"
+                   icon="pi pi-eye"
+                   class="p-button-sm p-button-outlined me-1"
+                   pTooltip="عرض التفاصيل"
+                 ></button>
+                 <button
+                   pButton
+                   type="button"
+                   icon="pi pi-pencil"
+                   class="p-button-sm p-button-outlined"
+                   (click)="openEditConsultation(consultation)"
+                   pTooltip="إضافة نتيجة"
+                 ></button>
+               </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center py-4">
+          <div class="d-flex flex-column align-items-center">
+            <i class="pi pi-comments text-muted mb-2" style="font-size: 2rem;"></i>
+            <span class="text-muted">لا توجد استشارات</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  ></app-paginator>
+</div>

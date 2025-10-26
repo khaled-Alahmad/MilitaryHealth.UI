@@ -23,6 +23,7 @@ interface ItemWithId {
 }
 @Component({
   selector: 'app-generic-table',
+  standalone: true,
   imports: [TableModule,
     MultiSelectModule,
     SelectModule,
@@ -39,11 +40,10 @@ interface ItemWithId {
     RatingModule,
     RippleModule,
     IconFieldModule,
-    ToastModule,
     ToolbarModule,
   ],
   templateUrl: './generic-table.component.html',
-  styleUrl: './generic-table.component.scss'
+  styleUrls: ['./generic-table.component.scss']
 })
 export class GenericTableComponent<T> implements OnInit {
   @Input() data: ItemWithId[] = [];

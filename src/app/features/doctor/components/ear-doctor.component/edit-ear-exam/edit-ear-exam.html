@@ -1,0 +1,145 @@
+<div class="modal-header">
+  <h4 class="modal-title">تعديل فحص الأذن والأنف والحنجرة</h4>
+  <button type="button" class="btn-close" (click)="onCancel()"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <!-- فحص الأذن اليمنى -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">فحص الأذن اليمنى</label>
+        <input type="text" class="form-control" formControlName="rightEar" placeholder="أدخل نتيجة فحص الأذن اليمنى">
+      </div>
+
+      <!-- فحص الأذن اليسرى -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">فحص الأذن اليسرى</label>
+        <input type="text" class="form-control" formControlName="leftEar" placeholder="أدخل نتيجة فحص الأذن اليسرى">
+      </div>
+
+      <!-- طبلة الأذن اليمنى -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">طبلة الأذن اليمنى</label>
+        <input type="text" class="form-control" formControlName="rightTympanicMembrane" placeholder="أدخل حالة طبلة الأذن اليمنى">
+      </div>
+
+      <!-- طبلة الأذن اليسرى -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">طبلة الأذن اليسرى</label>
+        <input type="text" class="form-control" formControlName="leftTympanicMembrane" placeholder="أدخل حالة طبلة الأذن اليسرى">
+      </div>
+
+      <!-- السمع الأيمن -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">السمع الأيمن</label>
+        <input type="text" class="form-control" formControlName="rightHearing" placeholder="أدخل نتيجة السمع الأيمن">
+      </div>
+
+      <!-- السمع الأيسر -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">السمع الأيسر</label>
+        <input type="text" class="form-control" formControlName="leftHearing" placeholder="أدخل نتيجة السمع الأيسر">
+      </div>
+
+      <!-- الرنانات -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">الرنانات</label>
+        <input type="text" class="form-control" formControlName="resonators" placeholder="أدخل حالة الرنانات">
+      </div>
+
+      <!-- اختبار الهمس الأيمن -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">اختبار الهمس الأيمن</label>
+        <input type="text" class="form-control" formControlName="rightWhisperTest" placeholder="أدخل نتيجة اختبار الهمس الأيمن">
+      </div>
+
+      <!-- اختبار الهمس الأيسر -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">اختبار الهمس الأيسر</label>
+        <input type="text" class="form-control" formControlName="leftWhisperTest" placeholder="أدخل نتيجة اختبار الهمس الأيسر">
+      </div>
+
+      <!-- فحص الأنف الأيمن -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">فحص الأنف الأيمن</label>
+        <input type="text" class="form-control" formControlName="rightNose" placeholder="أدخل نتيجة فحص الأنف الأيمن">
+      </div>
+
+      <!-- فحص الأنف الأيسر -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">فحص الأنف الأيسر</label>
+        <input type="text" class="form-control" formControlName="leftNose" placeholder="أدخل نتيجة فحص الأنف الأيسر">
+      </div>
+
+      <!-- اللوزتان الأيمنتان -->
+      <div class="col-md-6 mb-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" formControlName="isRightHugeMates" id="isRightHugeMates">
+          <label class="form-check-label" for="isRightHugeMates">
+            اللوزتان الأيمنتان متضخمتان
+          </label>
+        </div>
+      </div>
+
+      <!-- اللوزتان الأيسرتان -->
+      <div class="col-md-6 mb-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" formControlName="isLeftHugeMates" id="isLeftHugeMates">
+          <label class="form-check-label" for="isLeftHugeMates">
+            اللوزتان الأيسرتان متضخمتان
+          </label>
+        </div>
+      </div>
+
+      <!-- الحبل الصوتي الأيمن -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">الحبل الصوتي الأيمن</label>
+        <input type="text" class="form-control" formControlName="rightString" placeholder="أدخل حالة الحبل الصوتي الأيمن">
+      </div>
+
+      <!-- الحبل الصوتي الأيسر -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">الحبل الصوتي الأيسر</label>
+        <input type="text" class="form-control" formControlName="leftString" placeholder="أدخل حالة الحبل الصوتي الأيسر">
+      </div>
+
+      <!-- فحص الفم -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">فحص الفم</label>
+        <input type="text" class="form-control" formControlName="mouth" placeholder="أدخل نتيجة فحص الفم">
+      </div>
+
+      <!-- أمراض أخرى -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">أمراض أخرى</label>
+        <input type="text" class="form-control" formControlName="otherDiseases" placeholder="أدخل أي أمراض أخرى">
+      </div>
+
+      <!-- النتيجة -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">النتيجة</label>
+        <select class="form-select" formControlName="resultID">
+          <option value="">اختر النتيجة</option>
+          <option *ngFor="let result of results" [value]="result.resultID">
+            {{ result.description }}
+          </option>
+        </select>
+      </div>
+
+      <!-- السبب -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">السبب (اختياري)</label>
+        <textarea class="form-control" formControlName="reason" rows="3" placeholder="أدخل السبب إذا لزم الأمر"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onCancel()">إلغاء</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="loading || examForm.invalid">
+    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+    {{ loading ? 'جاري الحفظ...' : 'حفظ التغييرات' }}
+  </button>
+</div>

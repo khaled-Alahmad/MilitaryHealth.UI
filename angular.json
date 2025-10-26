@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "MilitaryHealth.UI": {
+    "military-health.ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -63,10 +63,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "MilitaryHealth.UI:build:production"
+              "buildTarget": "military-health.ui:build:production"
             },
             "development": {
-              "buildTarget": "MilitaryHealth.UI:build:development"
+              "buildTarget": "military-health.ui:build:development"
             }
           },
           "defaultConfiguration": "development"

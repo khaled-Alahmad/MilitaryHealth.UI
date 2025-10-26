@@ -128,12 +128,30 @@
 
             <div class="col">
               <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.internalExam}">
+                [ngClass]="{'missing-exam': !applicant.orthopedicExamDto}">
                 <h6 class=" mb-2">فحص العظام</h6>
                 <ng-container *ngIf="applicant.orthopedicExamDto; else noData">
                   <div><strong>عضلي هيكلي:</strong> {{ applicant.orthopedicExamDto.musculoskeletal }}</div>
                   <div><strong>جراحة عصبية:</strong> {{ applicant.orthopedicExamDto.neurologicalSurgery }}</div>
                   <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.orthopedicExamDto.resultID) }}</div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="border rounded p-2 small compact-exam-card"
+                [ngClass]="{'missing-exam': !applicant.earClinic}">
+                <h6 class=" mb-2">فحص الأذن</h6>
+                <ng-container *ngIf="applicant.earClinic; else noData">
+                  <div><strong>الأذن اليمنى:</strong> {{ applicant.earClinic.rightEar }}</div>
+                  <div><strong>الأذن اليسرى:</strong> {{ applicant.earClinic.leftEar }}</div>
+                  <div><strong>السمع اليمين:</strong> {{ applicant.earClinic.rightHearing }}</div>
+                  <div><strong>السمع اليسار:</strong> {{ applicant.earClinic.leftHearing }}</div>
+                  <div><strong>الأنف اليمين:</strong> {{ applicant.earClinic.rightNose }}</div>
+                  <div><strong>الأنف اليسار:</strong> {{ applicant.earClinic.leftNose }}</div>
+                  <div><strong>الفم:</strong> {{ applicant.earClinic.mouth }}</div>
+                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.earClinic.resultID) }}</div>
+                  <div *ngIf="applicant.earClinic.reason"><strong>السبب:</strong> {{ applicant.earClinic.reason }}</div>
                 </ng-container>
               </div>
             </div>

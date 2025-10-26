@@ -1,0 +1,290 @@
+<!-- المودال -->
+<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- الهيدر -->
+    <div class="modal-header">
+      <h5 class="modal-title">إضافة فحص أذن وأنف وحنجرة</h5>
+      <button type="button" class="btn-close ms-0 me-auto" (click)="closeModal()"></button>
+    </div>
+    <!-- البودي -->
+    <div class="modal-body">
+      <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>
+        <!-- قسم الأذن -->
+        <h6 class="section-title">فحص الأذن</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">الأذن اليمنى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rightEar"
+              [class.is-invalid]="
+                examForm.get('rightEar')?.invalid && examForm.get('rightEar')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">الأذن اليسرى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="leftEar"
+              [class.is-invalid]="
+                examForm.get('leftEar')?.invalid && examForm.get('leftEar')?.touched
+              "
+            />
+          </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+          <div class="col-md-6">
+            <label class="form-label">طبلة الأذن اليمنى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rightTympanicMembrane"
+              [class.is-invalid]="
+                examForm.get('rightTympanicMembrane')?.invalid && examForm.get('rightTympanicMembrane')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">طبلة الأذن اليسرى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="leftTympanicMembrane"
+              [class.is-invalid]="
+                examForm.get('leftTympanicMembrane')?.invalid && examForm.get('leftTympanicMembrane')?.touched
+              "
+            />
+          </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+          <div class="col-md-6">
+            <label class="form-label">السمع اليمنى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rightHearing"
+              [class.is-invalid]="
+                examForm.get('rightHearing')?.invalid && examForm.get('rightHearing')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">السمع اليسرى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="leftHearing"
+              [class.is-invalid]="
+                examForm.get('leftHearing')?.invalid && examForm.get('leftHearing')?.touched
+              "
+            />
+          </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+          <div class="col-md-6">
+            <label class="form-label">اختبار الهمس اليمنى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rightWhisperTest"
+              [class.is-invalid]="
+                examForm.get('rightWhisperTest')?.invalid && examForm.get('rightWhisperTest')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">اختبار الهمس اليسرى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="leftWhisperTest"
+              [class.is-invalid]="
+                examForm.get('leftWhisperTest')?.invalid && examForm.get('leftWhisperTest')?.touched
+              "
+            />
+          </div>
+        </div>
+
+        <!-- قسم الأنف -->
+        <h6 class="section-title mt-4">فحص الأنف</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">الأنف اليمنى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rightNose"
+              [class.is-invalid]="
+                examForm.get('rightNose')?.invalid && examForm.get('rightNose')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">الأنف اليسرى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="leftNose"
+              [class.is-invalid]="
+                examForm.get('leftNose')?.invalid && examForm.get('leftNose')?.touched
+              "
+            />
+          </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+          <div class="col-md-6">
+            <label class="form-label">اللوزة اليمنى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rightString"
+              [class.is-invalid]="
+                examForm.get('rightString')?.invalid && examForm.get('rightString')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">اللوزة اليسرى <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="leftString"
+              [class.is-invalid]="
+                examForm.get('leftString')?.invalid && examForm.get('leftString')?.touched
+              "
+            />
+          </div>
+        </div>
+
+        <!-- قسم الحنجرة -->
+        <h6 class="section-title mt-4">فحص الحنجرة</h6>
+        <div class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">الفم والحنجرة <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="mouth"
+              [class.is-invalid]="
+                examForm.get('mouth')?.invalid && examForm.get('mouth')?.touched
+              "
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- قسم إضافي -->
+        <h6 class="section-title mt-4">بيانات إضافية</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">الرنانات</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="resonators"
+              [class.is-invalid]="
+                examForm.get('resonators')?.invalid && examForm.get('resonators')?.touched
+              "
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">أمراض أخرى</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="otherDiseases"
+            />
+          </div>
+        </div>
+
+        <!-- الخيارات -->
+        <div class="row g-3 mt-3">
+          <div class="col-md-6">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="isRightHugeMates"
+                id="isRightHugeMates"
+              />
+              <label class="form-check-label" for="isRightHugeMates">
+                لوزة يمنى متضخمة
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="isLeftHugeMates"
+                id="isLeftHugeMates"
+              />
+              <label class="form-check-label" for="isLeftHugeMates">
+                لوزة يسرى متضخمة
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- النتيجة والسبب -->
+        <h6 class="section-title mt-4">النتيجة</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">النتيجة <span class="text-danger">*</span></label>
+            <select
+              class="form-select"
+              formControlName="resultID"
+              [class.is-invalid]="
+                examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched
+              "
+            >
+              <option value="">اختر النتيجة</option>
+              <option *ngFor="let result of results" [value]="result.resultID">
+                {{ result.description }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">السبب</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="reason"
+            />
+          </div>
+        </div>
+
+        <!-- الأزرار -->
+        <div class="modal-footer mt-4">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+            إلغاء
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="examForm.invalid || loading"
+          >
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            حفظ الفحص
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

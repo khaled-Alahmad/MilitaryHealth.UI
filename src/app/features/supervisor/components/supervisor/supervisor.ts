@@ -95,17 +95,23 @@ export class Supervisor implements OnInit {
     });
   }
   private mapApplicantToDecision(applicant: ApplicantDetailsModel) {
+    console.log('🔍 Mapping Applicant to Decision');
+    console.log('🔍 EarClinic ID:', applicant.earClinic?.earClinicID);
+    
     this.decisionModel = {
       orthopedicExamID: applicant.orthopedicExamDto?.orthopedicExamID || 0,
       surgicalExamID: applicant.surgicalExam?.surgicalExamID || 0,
       internalExamID: applicant.internalExam?.internalExamID || 0,
       eyeExamID: applicant.eyeExam?.eyeExamID || 0,
+      earClinicID: applicant.earClinic?.earClinicID || 0,
       applicantFileNumber: applicant.fileNumber,
       resultID: 0,
       reason: '',
       postponeDuration: '',
       decisionDate: new Date().toISOString().split('T')[0]
     };
+    
+    console.log('🔍 Decision Model after mapping:', this.decisionModel);
   }
   onResultChange(selectedId: number) {
     if (selectedId === this.postponedId) {
@@ -122,6 +128,34 @@ export class Supervisor implements OnInit {
   }
 
   submitDecision() {
+    // 🔍 Debug: طباعة البيانات المرسلة
+    console.log('🔍 Decision Model:', this.decisionModel);
+    console.log('🔍 Decision Model Keys:', Object.keys(this.decisionModel));
+    console.log('🔍 Decision Model Values:', Object.values(this.decisionModel));
+    console.log('🔍 Applicant EarClinic:', this.applicant?.earClinic);
+    
+    // التحقق من وجود earClinicID في البيانات
+    if ('earClinicID' in this.decisionModel) {
+      console.log('✅ earClinicID exists in decisionModel:', this.decisionModel.earClinicID);
+    } else {
+      console.error('❌ earClinicID missing from decisionModel!');
+    }
+    
+    // التحقق من صحة البيانات قبل الإرسال
+    const requiredFields = ['orthopedicExamID', 'surgicalExamID', 'internalExamID', 'eyeExamID', 'applicantFileNumber', 'resultID', 'decisionDate'];
+    const missingFields = requiredFields.filter(field => !this.decisionModel[field as keyof typeof this.decisionModel]);
+    
+    if (missingFields.length > 0) {
+      console.error('❌ Missing required fields:', missingFields);
+      this.responseMessage = 'بيانات ناقصة: ' + missingFields.join(', ');
+      this.responseSuccess = false;
+      return;
+    }
+    
+    console.log('✅ All required fields present');
+    console.log('📤 Sending FinalDecision with earClinicID:', this.decisionModel.earClinicID);
+    
+    // ✅ إرسال earClinicID مع البيانات (الباك إند سيصلح المشكلة)
     this.decisionService.createFinalDecision(this.decisionModel)
       .subscribe({
         next: (res) => {
@@ -136,6 +170,14 @@ export class Supervisor implements OnInit {
           }
         },
         error: (err) => {
+          console.error('🔍 Error:', err);
+          console.error('🔍 Error Details:', err?.error);
+          console.error('🔍 Error Message:', err?.error?.message);
+          console.error('🔍 Error Errors:', err?.error?.errors);
+          console.error('🔍 Full Error Response:', err);
+          console.error('🔍 Error Status:', err.status);
+          console.error('🔍 Error StatusText:', err.statusText);
+          
           const serverMsg = err?.error?.errors?.detail?.join(', ') || err?.error?.message || 'حدث خطأ أثناء الاتصال بالسيرفر';
           this.responseMessage = serverMsg;
           this.responseSuccess = false;
@@ -152,7 +194,8 @@ hasAllExams(): boolean {
     this.applicant.eyeExam &&
     this.applicant.surgicalExam &&
     this.applicant.orthopedicExamDto &&
-    this.applicant.internalExam
+    this.applicant.internalExam &&
+    this.applicant.earClinic
   );
 }
 

@@ -1,0 +1,35 @@
+<div class="container mt-3">
+  <!-- البحث عن المريض -->
+  <div class="mb-3">
+    <app-search-applicant (applicantSelected)="onApplicantSelected($event)"></app-search-applicant>
+  </div>
+
+  <!-- أزرار الإضافة -->
+  <div *ngIf="selectedApplicant" class="button-group mb-3 d-flex gap-2">
+    <!-- يظهر فقط إذا ما عنده فحص سابق -->
+    <button 
+      *ngIf="!hasEarClinicExam" 
+      class="btn btn-outline-primary" 
+      (click)="addEarClinicExam()">إضافة فحص أذن وأنف وحنجرة
+    </button>
+
+    <button class="btn btn-outline-primary" (click)="addConsultation()">طلب استشارة</button>
+    <button class="btn btn-outline-primary" (click)="addInvestigation()">طلب تحليل</button>
+  </div>
+
+  <!-- المكونات -->
+  <app-ear-clinic-exam-form
+    *ngIf="selectedApplicant"
+    [applicantFileNumber]="selectedApplicant.fileNumber">
+  </app-ear-clinic-exam-form>
+
+  <app-consultation-form
+    *ngIf="selectedApplicant"
+    [applicantFileNumber]="selectedApplicant.fileNumber">
+  </app-consultation-form>
+
+  <app-investigation-form
+    *ngIf="selectedApplicant"
+    [applicantFileNumber]="selectedApplicant.fileNumber">
+  </app-investigation-form>
+</div>

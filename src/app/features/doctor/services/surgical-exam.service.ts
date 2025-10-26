@@ -7,6 +7,7 @@ import { SurgicalExam } from '../models/surgical-exam-post.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
 import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class SurgicalExamService {
   private consultationUrl = `${environment.apiUrl}/api/Consultations`;
   private investigationUrl = `${environment.apiUrl}/api/Investigations`;
   public uploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   // إضافة فحص جراحي جديد
   addSurgicalExam(exam: SurgicalExam): Observable<any> {
@@ -105,6 +106,8 @@ getAllSurgicalExams(page: number = 1,
     pageSize: number = 50,
     filter: string = ''
   ): Observable<PagedResponse<Consultation>> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -113,6 +116,11 @@ getAllSurgicalExams(page: number = 1,
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب التخصص باستخدام filterDict
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
   
     return this.http
       .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
@@ -120,20 +128,12 @@ getAllSurgicalExams(page: number = 1,
         headers: this.getAuthHeaders()
       })
       .pipe(
-        map(res => {
-          const data = res.data ?? {
-            items: [],
-            totalCount: 0,
-            page,
-            pageSize,
-            totalPages: 0
-          };
-          return {
-            ...data,
-            items: (data?.items || []).filter(
-              (c: Consultation) => c.doctor?.specializationID === 2 // جراحة عامة مثلاً
-            )
-          } as PagedResponse<Consultation>;
+        map(res => res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
         })
       );
   }

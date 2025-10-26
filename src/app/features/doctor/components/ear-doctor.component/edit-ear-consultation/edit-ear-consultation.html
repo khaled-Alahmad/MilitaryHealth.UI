@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h4 class="modal-title">إضافة نتيجة للاستشارة</h4>
+  <button type="button" class="btn-close" (click)="onCancel()"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <!-- معلومات الاستشارة (للعرض فقط) -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">رقم ملف المريض</label>
+        <input type="text" class="form-control" [value]="consultation.applicantFileNumber" readonly>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">نوع الاستشارة</label>
+        <input type="text" class="form-control" [value]="consultation.consultationType" readonly>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">الطبيب المحال إليه</label>
+        <input type="text" class="form-control" [value]="consultation.referredDoctor" readonly>
+      </div>
+
+      <!-- النتيجة (قابل للتعديل) -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">النتيجة <span class="text-danger">*</span></label>
+        <select class="form-select" formControlName="result">
+          <option value="">اختر النتيجة</option>
+          <option value="مقبول">مقبول</option>
+          <option value="مرفوض">مرفوض</option>
+          <option value="مؤجل">مؤجل</option>
+        </select>
+      </div>
+
+      <!-- المرفق الحالي -->
+      <div class="col-12 mb-3" *ngIf="consultation.attachment">
+        <label class="form-label">الملف المرفق الحالي</label>
+        <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-outline-primary btn-sm me-2" (click)="openFile(consultation.attachment)">
+            <i class="pi pi-download me-1"></i>
+            عرض الملف
+          </button>
+          <span class="text-muted small">{{ consultation.attachment }}</span>
+        </div>
+      </div>
+
+      <!-- رفع ملف جديد -->
+      <div class="col-12 mb-3">
+        <label class="form-label">رفع ملف جديد (اختياري)</label>
+        <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*,.pdf,.doc,.docx">
+        <div class="form-text">يمكنك رفع ملفات PDF، Word، أو الصور</div>
+        
+        <!-- معاينة الملف الجديد -->
+        <div *ngIf="previewUrl && previewUrl.startsWith('data:')" class="preview-container mt-3">
+          <img [src]="previewUrl" 
+               alt="معاينة المرفق" 
+               class="img-fluid rounded" 
+               style="max-height: 200px;">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onCancel()">إلغاء</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="loading || consultationForm.invalid">
+    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+    {{ loading ? 'جاري الحفظ...' : 'حفظ النتيجة' }}
+  </button>
+</div>

@@ -11,7 +11,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './investigation-form.html',
-    styleUrl: './investigation-form.scss'
+    styleUrls: ['./investigation-form.scss']
   })
   export class InvestigationForm {
  @Input() applicantFileNumber: string = '';

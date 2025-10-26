@@ -36,6 +36,7 @@ export interface ApplicantDetailsModel {
   surgicalExam?: SurgicalExam;
   orthopedicExamDto?: OrthopedicExam;
   internalExam?: InternalExam;
+  earClinic?: EarExam;
   consultation?: Consultation;
   investigation?: Investigation;
   finalDecision?: FinalDecision;
@@ -90,6 +91,42 @@ export interface InternalExam {
   hearing: string;
   skin: string;
   resultID: number;
+}
+
+export interface EarExam {
+  earClinicID: number;
+  applicantFileNumber: string;
+  doctorID: number;
+  rightEar: string;
+  leftEar: string;
+  rightTympanicMembrane: string;
+  leftTympanicMembrane: string;
+  rightHearing: string;
+  leftHearing: string;
+  resonators: string;
+  rightWhisperTest: string;
+  leftWhisperTest: string;
+  rightNose: string;
+  leftNose: string;
+  isRightHugeMates: boolean;
+  isLeftHugeMates: boolean;
+  rightString: string;
+  leftString: string;
+  mouth: string;
+  otherDiseases: string;
+  resultID: number;
+  reason: string;
+  doctor?: {
+    doctorID: number;
+    fullName: string;
+    specializationID: number;
+    code: string;
+  };
+  finalDecisions?: any[];
+  result?: {
+    resultID: number;
+    description: string;
+  };
 }
 
 export interface Consultation {

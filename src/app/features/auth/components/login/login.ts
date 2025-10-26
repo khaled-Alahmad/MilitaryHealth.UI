@@ -70,7 +70,7 @@ submitted = false;
                 const specialty = specialtyName.toLowerCase();
 
                 // خزّن التخصص بالاسم للعرض لاحقاً
-                this.authService.setDoctorSpecialty(specialty);
+                // this.authService.setDoctorSpecialty(specialty); // تم إزالة هذا السطر لأنه يستبدل القيمة الرقمية
 
             // ربط الدور مع التخصص للعرض في sidebar
             this.roleWithSpecialty = `Doctor_${specialty.charAt(0).toUpperCase() + specialty.slice(1)}`;

@@ -6,6 +6,7 @@ import { OrthopedicExam } from '../models/orthopedic-exam.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
 import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
+import { AuthService } from '../../auth/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +15,7 @@ export class OrthopedicExamService {
   private consultationUrl = `${environment.apiUrl}/api/Consultations`;
   private investigationUrl = `${environment.apiUrl}/api/Investigations`;
   public uploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   addOrthopedicExam(exam: OrthopedicExam): Observable<any> {
     const token = localStorage.getItem('token');
@@ -97,6 +98,8 @@ export class OrthopedicExamService {
     pageSize: number = 50,
     filter: string = ''
   ): Observable<PagedResponse<Consultation>> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -105,6 +108,11 @@ export class OrthopedicExamService {
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب التخصص باستخدام filterDict
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
   
     return this.http
       .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
@@ -112,20 +120,12 @@ export class OrthopedicExamService {
         headers: this.getAuthHeaders()
       })
       .pipe(
-        map(res => {
-          const data = res.data ?? {
-            items: [],
-            totalCount: 0,
-            page,
-            pageSize,
-            totalPages: 0
-          };
-          return {
-            ...data,
-            items: (data?.items || []).filter(
-              (c: Consultation) => c.doctor?.specializationID === 4
-            )
-          } as PagedResponse<Consultation>;
+        map(res => res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
         })
       );
   }
@@ -159,6 +159,8 @@ export class OrthopedicExamService {
     pageSize: number = 50,
     filter: string = ''
   ): Observable<PagedResponse<Investigation>> {
+    const currentDoctorId = this.authService.getDoctorId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -167,6 +169,11 @@ export class OrthopedicExamService {
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب doctorID للتحاليل
+    if (currentDoctorId) {
+      params = params.set('filterDict[doctorID]', currentDoctorId.toString());
+    }
   
     return this.http
       .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
@@ -174,20 +181,12 @@ export class OrthopedicExamService {
         headers: this.getAuthHeaders()
       })
       .pipe(
-        map(res => {
-          const data = res.data ?? {
-            items: [],
-            totalCount: 0,
-            page,
-            pageSize,
-            totalPages: 0
-          };
-          return {
-            ...data,
-            items: (data?.items || []).filter(
-              (i: Investigation) => i.doctor?.specializationID === 4
-            )
-          } as PagedResponse<Investigation>;
+        map(res => res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
         })
       );
   }
@@ -198,9 +197,10 @@ export class OrthopedicExamService {
     return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => {
         const items: OrthopedicExam[] = res.data?.items || [];
-        // 🔹 نبحث عن فحص سابق لنفس الملف ونفس عيادة العظام فقط (specializationID = 4)
+        const currentSpecializationId = this.authService.getSpecializationId();
+        // 🔹 نبحث عن فحص سابق لنفس الملف ونفس التخصص
         const exam = items.find(e =>
-          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 4
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === currentSpecializationId
         );
         return exam || null;
       })

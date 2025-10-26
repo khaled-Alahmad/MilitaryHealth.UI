@@ -6,6 +6,7 @@ import { InternalExam } from '../models/internal-exam.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
 import { ApiResponse, PagedResponse } from '../../applicants/models/api-response.model';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class InternalExamService {
   private investigationUrl = `${environment.apiUrl}/api/Investigations`;
   private consultationUrl = `${environment.apiUrl}/api/Consultations`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token') || '';
@@ -82,6 +83,8 @@ export class InternalExamService {
     pageSize: number = 10,
     filter: string = ''
   ): Observable<PagedResponse<Investigation>> {
+    const currentDoctorId = this.authService.getDoctorId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -92,9 +95,25 @@ export class InternalExamService {
       params = params.set('filter', filter);
     }
 
+    // إضافة فلترة حسب doctorID للتحاليل
+    if (currentDoctorId) {
+      params = params.set('filterDict[doctorID]', currentDoctorId.toString());
+    }
+
     return this.http
-      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { params })
-      .pipe(map(res => res.data));
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, { 
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
+        })
+      );
   }
 
 
@@ -119,6 +138,8 @@ export class InternalExamService {
     pageSize: number = 50,
     filter: string = ''
   ): Observable<PagedResponse<Consultation>> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -127,6 +148,11 @@ export class InternalExamService {
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب التخصص باستخدام filterDict
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
   
     return this.http
       .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
@@ -134,14 +160,12 @@ export class InternalExamService {
         headers: this.getAuthHeaders()
       })
       .pipe(
-        map(res => {
-          const data = res.data;
-          return {
-            ...data,
-            items: (data?.items || []).filter(
-              (c: Consultation) => c.doctor?.specializationID === 2
-            )
-          } as PagedResponse<Consultation>;
+        map(res => res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
         })
       );
   }
@@ -171,6 +195,8 @@ export class InternalExamService {
     pageSize: number = 50,
     filter: string = ''
   ): Observable<PagedResponse<Investigation>> {
+    const currentDoctorId = this.authService.getDoctorId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -179,6 +205,11 @@ export class InternalExamService {
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب doctorID للتحاليل
+    if (currentDoctorId) {
+      params = params.set('filterDict[doctorID]', currentDoctorId.toString());
+    }
   
     return this.http
       .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
@@ -186,20 +217,12 @@ export class InternalExamService {
         headers: this.getAuthHeaders()
       })
       .pipe(
-        map(res => {
-          const data = res.data ?? {
-            items: [],
-            totalCount: 0,
-            page,
-            pageSize,
-            totalPages: 0
-          };
-          return {
-            ...data,
-            items: (data?.items || []).filter(
-              (i: Investigation) => i.doctor?.specializationID === 2
-            )
-          } as PagedResponse<Investigation>;
+        map(res => res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
         })
       );
   }
@@ -226,6 +249,8 @@ export class InternalExamService {
     pageSize: number = 10,
     filter: string = ''
   ): Observable<PagedResponse<Consultation>> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -235,25 +260,22 @@ export class InternalExamService {
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب التخصص باستخدام filterDict
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
   
     return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
       headers: this.getAuthHeaders(),
       params
     }).pipe(
-      map(res => {
-        const data = res.data ?? {
-          items: [],
-          totalCount: 0,
-          page,
-          pageSize,
-          totalPages: 0
-        };
-        return {
-          ...data,
-          items: (data?.items || []).filter(
-            (c: Consultation) => c.doctor?.specializationID === 2 // 👈 ID الباطنة (عدّله حسب DB عندك)
-          )
-        } as PagedResponse<Consultation>;
+      map(res => res.data ?? {
+        items: [],
+        totalCount: 0,
+        page,
+        pageSize,
+        totalPages: 0
       }),
       catchError(() => of({
         items: [],
@@ -271,9 +293,10 @@ export class InternalExamService {
     return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
       map(res => {
         const items: InternalExam[] = res.data?.items || [];
-        // 🔹 نبحث عن فحص لنفس الملف ونفس التخصص (العيادة الداخلية specializationID = 2)
+        const currentSpecializationId = this.authService.getSpecializationId();
+        // 🔹 نبحث عن فحص لنفس الملف ونفس التخصص
         const exam = items.find(e =>
-          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === 2
+          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === currentSpecializationId
         );
         return exam || null;
       }),

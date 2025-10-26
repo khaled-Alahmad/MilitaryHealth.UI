@@ -13,6 +13,7 @@ import { DetailedEyeExam } from '../models/detailed-eye-exam.model';
 import { Consultation } from '../models/consultation.model';
 import { Investigation } from '../models/investigation.model';
 import { ApiResponse } from '../../applicants/models/api-response.model';
+import { AuthService } from '../../auth/services/auth.service';
 import { PagedResponse } from '../../../shared/models/paged-response.model';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class EyeExamService {
   private readonly resultsUrl = `${environment.apiUrl}/api/Results`;
   private readonly investigationUrl = `${environment.apiUrl}/api/Investigations`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -544,6 +545,8 @@ export class EyeExamService {
     pageSize: number = 20,
     filter: string = ''
   ): Observable<PagedResponse<Consultation>> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -552,25 +555,22 @@ export class EyeExamService {
     if (filter) {
       params = params.set('filter', filter);
     }
+
+    // إضافة فلترة حسب التخصص باستخدام filterDict
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
   
     return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
       headers: this.getAuthHeaders(),
       params
     }).pipe(
-      map(res => {
-        const data = res.data ?? {
-          items: [],
-          totalCount: 0,
-          page,
-          pageSize,
-          totalPages: 0
-        };
-        return {
-          ...data,
-          items: (data?.items || []).filter(
-            (c: Consultation) => c.doctor?.specializationID === 1 // 👈 رقم التخصص الخاص بالعيون
-          )
-        } as PagedResponse<Consultation>;
+      map(res => res.data ?? {
+        items: [],
+        totalCount: 0,
+        page,
+        pageSize,
+        totalPages: 0
       }),
       catchError(() => of({
         items: [],
@@ -645,6 +645,8 @@ getEyeClinicInvestigations(
   pageSize: number = 20,
   filter: string = ''
 ): Observable<PagedResponse<Investigation>> {
+  const currentDoctorId = this.authService.getDoctorId();
+  
   let params = new HttpParams()
     .set('page', page.toString())
     .set('pageSize', pageSize.toString())
@@ -654,24 +656,21 @@ getEyeClinicInvestigations(
     params = params.set('filter', filter);
   }
 
+  // إضافة فلترة حسب doctorID للتحاليل
+  if (currentDoctorId) {
+    params = params.set('filterDict[doctorID]', currentDoctorId.toString());
+  }
+
   return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
     headers: this.getAuthHeaders(),
     params
   }).pipe(
-    map(res => {
-      const data = res.data ?? {
-        items: [],
-        totalCount: 0,
-        page,
-        pageSize,
-        totalPages: 0
-      };
-      return {
-        ...data,
-        items: (data?.items || []).filter(
-          (i: Investigation) => i.doctor?.specializationID === 1 // 👈 ID تبع عيادة العيون
-        )
-      } as PagedResponse<Investigation>;
+    map(res => res.data ?? {
+      items: [],
+      totalCount: 0,
+      page,
+      pageSize,
+      totalPages: 0
     }),
     catchError(() => of({
       items: [],
