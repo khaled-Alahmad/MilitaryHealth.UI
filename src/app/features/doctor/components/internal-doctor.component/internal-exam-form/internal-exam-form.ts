@@ -18,18 +18,10 @@ export class InternalExamForm implements OnInit {
   results: any[] = [];
   showModal: boolean = false;
 
-  examFields = [
-    { label: '  امراض القلب والدوران', control: 'heart' },
-    { label: 'امراض الجهاز التنفسي', control: 'respiratory' },
-    { label: 'امراض الجهاز الهضمي', control: 'digestive' },
-    { label: 'امراض الغدد الصماء', control: 'endocrine' },
-    { label: 'امراض الجهاز العصبي', control: 'neurology' },
-    { label: 'امراض الدم', control: 'blood' },
-    { label: 'امراض المفاصل', control: 'joints' },
-    { label: 'امراض الكلى', control: 'kidney' },
-    { label: 'امراض السمع', control: 'hearing' },
-    { label: 'امراض الجلد', control: 'skin' },
-  ];
+  loading: boolean = false;
+  resultAccepted: number = 0;
+  resultRejected: number = 0;
+  resultPostponed: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -55,9 +47,28 @@ export class InternalExamForm implements OnInit {
     });
 
     this.examService.getResults().subscribe({
-      next: res => this.results = res.data.items,
+      next: res => {
+        this.results = res.data.items;
+      },
       error: () => this.toastr.error('❌ فشل جلب النتائج', 'خطأ')
     });
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
   }
 
   openModal() {
@@ -74,9 +85,10 @@ export class InternalExamForm implements OnInit {
       return;
     }
 
+    this.loading = true;
     const payload: InternalExam = {
       applicantFileNumber: this.applicantFileNumber,
-      doctorID: this.authService.getDoctorId(),
+      doctorID: Number(this.authService.getDoctorId()),
       ...this.examForm.value,
       resultID: Number(this.examForm.value.resultID)
     };
@@ -86,9 +98,11 @@ export class InternalExamForm implements OnInit {
         this.toastr.success('✅ تمت إضافة الفحص بنجاح', 'نجاح');
         this.examForm.reset();
         this.closeModal();
+        this.loading = false;
       },
       error: () => {
         this.toastr.error('❌ حدث خطأ أثناء إضافة الفحص', 'خطأ');
+        this.loading = false;
       }
     });
   }

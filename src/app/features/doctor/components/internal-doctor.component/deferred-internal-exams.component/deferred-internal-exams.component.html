@@ -13,53 +13,45 @@
     <ng-template pTemplate="header">
       <tr>
         <th>رقم الملف</th>
-        <th>القلب</th>
-        <th>التنفس</th>
-        <th>الجهاز الهضمي</th>
-        <th>الغدد الصماء</th>
-        <th>الأعصاب</th>
-        <th>الدم</th>
-        <th>المفاصل</th>
-        <th>الكلى</th>
-        <th>السمع</th>
-        <th>البشرة</th>
-        <th>السبب</th>
         <th>النتيجة</th>
+        <th>السبب</th>
         <th>إجراءات</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-exam>
       <tr>
         <td>{{ exam.applicantFileNumber }}</td>
-        <td>{{ exam.heart }}</td>
-        <td>{{ exam.respiratory }}</td>
-        <td>{{ exam.digestive }}</td>
-        <td>{{ exam.endocrine }}</td>
-        <td>{{ exam.neurology }}</td>
-        <td>{{ exam.blood }}</td>
-        <td>{{ exam.joints }}</td>
-        <td>{{ exam.kidney }}</td>
-        <td>{{ exam.hearing }}</td>
-        <td>{{ exam.skin }}</td>
-        <td>{{ exam.reason || '-' }}</td>
         <td>
-          <span [ngClass]="getBadgeClass(exam.result)">{{ exam.result?.description }}</span>
+          <span [ngClass]="getBadgeClass(exam.result)">
+            {{ exam.result?.description || 'غير محدد' }}
+          </span>
         </td>
+        <td>{{ exam.reason || '-' }}</td>
         <td class="text-center">
-          <button 
-            type="button" 
-            class="btn-icon-action" 
-            pTooltip="تعديل الفحص"
-            tooltipPosition="top"
-            (click)="openEditDialog(exam)">
-            <i class="pi pi-pen-to-square"></i>
-          </button>
+          <div class="action-buttons">
+            <button 
+              type="button" 
+              class="btn-icon-action" 
+              pTooltip="عرض التفاصيل"
+              tooltipPosition="top"
+              (click)="viewDetails(exam)">
+              <i class="pi pi-eye"></i>
+            </button>
+            <button 
+              type="button" 
+              class="btn-icon-action" 
+              pTooltip="تعديل الفحص"
+              tooltipPosition="top"
+              (click)="openEditDialog(exam)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="14" class="text-center">لا توجد فحوصات داخلية.</td>
+        <td colspan="4" class="text-center">لا توجد فحوصات داخلية.</td>
       </tr>
     </ng-template>
   </p-table>
@@ -73,5 +65,12 @@
   <!-- مودال التعديل -->
   <app-edit-internal-exam-component *ngIf="selectedExam" [exam]="selectedExam" (dialogClosed)="onDialogClose($event)">
   </app-edit-internal-exam-component>
+
+  <!-- مودال التفاصيل -->
+  <div class="modal-backdrop" *ngIf="selectedExamDetails" (click)="closeDetailsModal()">
+    <div class="modal-content-details" (click)="$event.stopPropagation()">
+      <app-internal-exam-details [exam]="selectedExamDetails" (close)="closeDetailsModal()"></app-internal-exam-details>
+    </div>
+  </div>
 
 </div>

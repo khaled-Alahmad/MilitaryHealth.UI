@@ -45,6 +45,7 @@ export class EyeExamForm implements OnInit {
       visionLeft: ['', Validators.required],
       colorTest: ['', Validators.required],
       colorTestLeft: ['', Validators.required],
+      refractiveError: ['', Validators.required],
       otherDiseases: [''],
       resultID: [null, Validators.required],
       reason: [''],
@@ -190,6 +191,7 @@ private buildExamData(doctorID: number) {
     visionLeft: this.examForm.value.visionLeft?.toString() || "",
     colorTestLeft: this.examForm.value.colorTestLeft?.trim() || "",
     colorTest: this.examForm.value.colorTest?.trim() || "",
+    refractiveError: this.examForm.value.refractiveError?.trim() || "",
     otherDiseases: (this.examForm.value.otherDiseases || '').trim(),
     resultID: Number(this.examForm.value.resultID) || 0,
     reason: (this.examForm.value.reason || '').trim()
@@ -248,5 +250,26 @@ private buildExamData(doctorID: number) {
     this.showLeftEye = false;
     this.loading = false;
     this.closeModal();
+  }
+
+  // ---------------------- VALIDATION HELPERS ----------------------
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
+  }
+
+  isFieldInvalid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
   }
 }

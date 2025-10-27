@@ -16,7 +16,8 @@ export class EditSurgicalExam implements OnInit {
   @Output() dialogClosed = new EventEmitter<boolean>(); 
 
   examForm!: FormGroup;
-  results: any[] = []; 
+  results: any[] = [];
+  loading: boolean = false; 
 
   constructor(
     private fb: FormBuilder,
@@ -25,11 +26,21 @@ export class EditSurgicalExam implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Parse existing values for "غير ذلك" option
+    const generalSurgery = this.parseSurgeryValue(this.exam?.generalSurgery || '');
+    const urinarySurgery = this.parseSurgeryValue(this.exam?.urinarySurgery || '');
+    const vascularSurgery = this.parseSurgeryValue(this.exam?.vascularSurgery || '');
+    const thoracicSurgery = this.parseSurgeryValue(this.exam?.thoracicSurgery || '');
+
     this.examForm = this.fb.group({
-      generalSurgery: [this.exam?.generalSurgery || '', Validators.required],
-      urinarySurgery: [this.exam?.urinarySurgery || '', Validators.required],
-      vascularSurgery: [this.exam?.vascularSurgery || '', Validators.required],
-      thoracicSurgery: [this.exam?.thoracicSurgery || '', Validators.required],
+      generalSurgery: [generalSurgery.displayValue, Validators.required],
+      generalSurgeryOther: [generalSurgery.otherValue || ''],
+      urinarySurgery: [urinarySurgery.displayValue, Validators.required],
+      urinarySurgeryOther: [urinarySurgery.otherValue || ''],
+      vascularSurgery: [vascularSurgery.displayValue, Validators.required],
+      vascularSurgeryOther: [vascularSurgery.otherValue || ''],
+      thoracicSurgery: [thoracicSurgery.displayValue, Validators.required],
+      thoracicSurgeryOther: [thoracicSurgery.otherValue || ''],
       resultID: [this.exam?.resultID || null, Validators.required], 
       reason: [this.exam?.reason || '']
     });
@@ -46,6 +57,31 @@ export class EditSurgicalExam implements OnInit {
     });
   }
 
+  // Helper method to parse surgery value
+  parseSurgeryValue(value: string): { displayValue: string; otherValue: string } {
+    if (!value || value === 'سليم' || value === 'غير سليم') {
+      return { displayValue: value || 'سليم', otherValue: '' };
+    }
+    return { displayValue: 'غير ذلك', otherValue: value };
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
+  }
+
   onSubmit() {
     if (!this.exam?.surgicalExamID) {
       this.toastr.error('❌ لا يمكن التحديث: لا يوجد ID للفحص');
@@ -57,22 +93,32 @@ export class EditSurgicalExam implements OnInit {
       return;
     }
 
+    const formData = this.examForm.value;
+    
     const updatedExam: SurgicalExam = {
       ...this.exam,
-      ...this.examForm.value,
-      resultID: Number(this.examForm.value.resultID) 
+      generalSurgery: formData.generalSurgery === 'غير ذلك' ? (formData.generalSurgeryOther || '') : formData.generalSurgery,
+      urinarySurgery: formData.urinarySurgery === 'غير ذلك' ? (formData.urinarySurgeryOther || '') : formData.urinarySurgery,
+      vascularSurgery: formData.vascularSurgery === 'غير ذلك' ? (formData.vascularSurgeryOther || '') : formData.vascularSurgery,
+      thoracicSurgery: formData.thoracicSurgery === 'غير ذلك' ? (formData.thoracicSurgeryOther || '') : formData.thoracicSurgery,
+      resultID: Number(formData.resultID) 
     };
 
     const examID: number = updatedExam.surgicalExamID!;
 
+    this.loading = true;
     this.examService.updateSurgicalExam(examID, updatedExam).subscribe({
       next: () => {
         this.toastr.success('✅ تم التحديث بنجاح');
         this.exam.result = this.results.find(r => r.resultID === updatedExam.resultID);
         this.exam.resultID = updatedExam.resultID; 
         this.dialogClosed.emit(true);
+        this.loading = false;
       },
-      error: () => this.toastr.error('❌ فشل التحديث، تحقق من ID أو الاتصال بالإنترنت')
+      error: () => {
+        this.toastr.error('❌ فشل التحديث، تحقق من ID أو الاتصال بالإنترنت');
+        this.loading = false;
+      }
     });
   }
 

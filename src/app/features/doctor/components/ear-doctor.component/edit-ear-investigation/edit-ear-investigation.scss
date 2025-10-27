@@ -1,5 +1,5 @@
 /* Import unified modal styles */
-@import '../../shared-modal-styles.scss';
+@use '../../shared-modal-styles.scss' as *;
 
 /* Override modal header to use brand colors */
 .modal-header {

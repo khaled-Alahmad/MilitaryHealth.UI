@@ -1,164 +1,208 @@
-/* اللون الأساسي */
-.bg-primary {
-  color: #ffffff !important;
+@use '../../../components/shared-modal-styles.scss' as *;
+
+.professional-modal-container {
+  max-width: 950px !important;
+  width: 100% !important;
 }
 
-/* النجاح */
-.bg-success {
-  background-color: #428177b7 !important;
-  color: #ffffff !important;
+.modal-body-professional {
+  padding: 2rem !important;
 }
 
-.fas {
-  color: #000000;
+// تحسين الهوامش والعرض
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  .form-field {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
-/* التحذير */
-.bg-warning {
-  background-color: #b9a77940 !important;
-  color: #000000 !important;
-}
-
-/* الثانوي */
-.bg-secondary {
-  background-color: #edebe0 !important;
-  color: #000000 !important;
-}
-
-/* الخطأ */
-.bg-danger {
-  background-color: #b33a3a !important;
-  color: #ffffff !important;
-}
-
-/* المعلومات */
-.bg-info {
-  background-color: #5bc0dea8 !important;
-  color: #000000 !important;
-}
-
-/* ===== تأثيرات Hover للأزرار والروابط ===== */
-a.bg-primary:hover, a.bg-primary:focus,
-button.bg-primary:hover, button.bg-primary:focus {
-  background-color: #033128 !important;
-}
-
-a.bg-success:hover, a.bg-success:focus,
-button.bg-success:hover, button.bg-success:focus {
-  background-color: #35685fb9 !important;
-}
-
-a.bg-warning:hover, a.bg-warning:focus,
-button.bg-warning:hover, button.bg-warning:focus {
-  background-color: #9f9465 !important;
-}
-
-a.bg-secondary:hover, a.bg-secondary:focus,
-button.bg-secondary:hover, button.bg-secondary:focus {
-  background-color: #d6d4c9 !important;
-}
-
-.modal-title {
-  color: black;
-}
-
-.btn-close {
-  color: black;
-}
-
-/* ===== تخصيص أقسام إضافية ===== */
-.modal-header .btn-close {
-  order: 1;
-  margin-right: 2rem; 
-  margin: 15px;
-  padding: 5px;
-}
-
-.btn-close-black {
-  filter: invert(0) brightness(0);
-}
-
-/* هيدر الكروت */
-.card-header {
-  background: #eeeeee !important;
-  font-weight: bold;
-}
-
-/* هيدر الجداول */
-.table thead {
-  background: #edebe0 !important;
-  color: #054239 !important;
-}
-
-/* الصفوف المتناوبة */
-.table tbody tr:nth-child(even) {
-  background: #f5f5f5 !important;
-}
-
-/* تحسينات التنسيق الجديدة */
-.form-label {
-  min-width: 120px;
-}
-
-.badge {
-  border-radius: 0.5rem;
-  min-width: 80px;
-  display: inline-flex;
-  justify-content: center;
+// تحسين شكل الـ label
+.form-field label {
+  display: flex;
   align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #495057;
+  
+  i {
+    color: #0d6efd;
+    font-size: 1rem;
+  }
 }
 
-.fs-6 {
-  font-size: 0.95rem !important;
-}
-
-.text-info { color: #5bc0de !important; }
-.text-success { color: #428177 !important; }
-.text-warning { color: #b9a779 !important; }
-.text-secondary { color: #6c757d !important; }
-
-.d-flex.align-items-center {
-  padding: 0.25rem 0;
-}
-/* تحسينات التباعد */
-.card-body.py-2 {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem !important;
-}
-
-.me-1 {
-  margin-left: 0.25rem !important;
-}
-
-/* تحسين حجم الخطوط */
-.fs-3 {
-  font-size: 0.875rem !important;
-}
-
-/* تحسين البادجات */
-.badge {
-  border-radius: 0.25rem;
-  min-width: 50px;
-  padding: 0.25rem 0.5rem;
+// تحسين شكل info-value
+.info-value {
+  background: #ffffff;
+  padding: 0.9375rem 1.125rem;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+  color: #212529;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
   font-weight: 500;
+  word-break: break-word;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: #c0c0c0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
 }
 
-/* إزالة التنسيقات غير الضرورية */
-.d-flex.align-items-center {
-  padding: 0;
-  min-height: auto;
+// تحسين section-header
+.section-header {
+  margin-top: 2rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e9ecef;
+  
+  &:first-child {
+    margin-top: 0;
+  }
+  
+  h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    i {
+      color: #0d6efd;
+      font-size: 1.25rem;
+    }
+  }
 }
 
-.form-label {
-  min-width: auto;
-  white-space: nowrap;
+// محتويات الانكسار
+.refraction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-/* تحسين الأيقونات */
-.fas {
-  font-size: 0.8rem;
+.refraction-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.refraction-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  
+  label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 140px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    i {
+      color: #0d6efd;
+    }
+  }
+  
+  .info-value {
+    flex: 1;
+    margin: 0;
+  }
+}
+
+.no-data-message {
+  background: #e7f3ff;
+  border: 1px solid #b8daff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #004085;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  
+  i {
+    font-size: 1.25rem;
+  }
+}
+
+// تحسين الفوتر
+.modal-footer-professional {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+  
+  .btn {
+    padding: 0.625rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &.btn-secondary {
+      background: #6c757d;
+      border-color: #6c757d;
+      
+      &:hover {
+        background: #5a6268;
+        border-color: #545b62;
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+// نتيجة الفحص
+.result-badge {
+  text-align: center !important;
+  justify-content: center !important;
+  
+  &.result-accepted {
+    background: #10b981 !important;
+    color: white !important;
+    font-weight: 600 !important;
+  }
+  
+  &.result-rejected {
+    background: #dc2626 !important;
+    color: white !important;
+    font-weight: 600 !important;
+  }
+  
+  &.result-postponed {
+    background: #f59e0b !important;
+    color: white !important;
+    font-weight: 600 !important;
+  }
+}
+
+// للموبايل
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .modal-body-professional {
+    padding: 1.5rem !important;
+  }
 }

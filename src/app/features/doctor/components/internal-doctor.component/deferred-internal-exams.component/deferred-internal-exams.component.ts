@@ -8,12 +8,13 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { EditInternalExamComponent } from '../edit-internal-exam-component/edit-internal-exam-component';
+import { InternalExamDetailsComponent } from '../exam-details/exam-details.component';
 import { ToastrService } from 'ngx-toastr';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-deferred-internal-exams.component',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, InternalExamDetailsComponent, PaginatorComponent],
   templateUrl: './deferred-internal-exams.component.html',
   styleUrl: './deferred-internal-exams.component.scss'
 })
@@ -23,6 +24,7 @@ export class DeferredInternalExamsComponent {
   globalFilter: string = '';
   loading = true;
   selectedExam: InternalExam | null = null;
+  selectedExamDetails: InternalExam | null = null;
   searchTerm: string = '';
 
   page = 1;
@@ -85,16 +87,27 @@ export class DeferredInternalExamsComponent {
       this.loadExams();
     }
   }
+
+  viewDetails(exam: InternalExam) {
+    this.selectedExamDetails = { ...exam };
+  }
+
+  closeDetailsModal() {
+    this.selectedExamDetails = null;
+  }
   getBadgeClass(result: any): string {
+    // إذا لم تكن النتيجة موجودة أو ليس لها description
     if (!result || !result.description) {
-      return 'badge';
+      return 'badge bg-secondary'; // رمادي للنتيجة غير المحددة
     }
+    
     switch (result.description) {
       case 'مقبول':
         return 'badge bg-success';
       case 'مرفوض':
         return 'badge bg-danger';
       case 'مؤجل':
+      case 'تأجيل':
         return 'badge bg-warning text-dark';
       default:
         return 'badge bg-secondary';

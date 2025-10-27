@@ -1,11 +1,129 @@
 /* Import unified modal styles */
-@import '../../shared-modal-styles.scss';
+@use '../../shared-modal-styles.scss' as *;
 
 /* Custom overrides for this component */
 .dialog-card {
   background: #EDEBE0 !important;
+  max-width: 800px !important;
 }
 
 .dialog-form {
   padding: 2rem;
+}
+
+/* Medical System Row Styling - Like Paper Form */
+.medical-system-row {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+
+  .system-label {
+    flex: 1;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1f2937;
+    min-width: 250px;
+  }
+
+  .system-options {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+
+      .form-check-input {
+        margin: 0;
+        width: 1.2rem;
+        height: 1.2rem;
+        border: 2px solid #6b7280;
+        cursor: pointer;
+
+        &:checked {
+          background-color: #054239;
+          border-color: #054239;
+        }
+      }
+
+      .form-check-label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #374151;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+/* Result Section Styling */
+.result-section {
+  padding: 1.5rem 1.5rem;
+  background: #f9fafb;
+  border-top: 2px solid #054239;
+  border-bottom: 2px solid #054239;
+  margin: 2rem 0 1rem 0;
+
+  .form-label {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #1f2937;
+  }
+
+  .form-select {
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+
+    &:focus {
+      border-color: #054239;
+      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+    }
+  }
+}
+
+/* Reason Section */
+.reason-section {
+  padding: 1.5rem 1.5rem;
+  margin-top: 1rem;
+
+  .form-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-control {
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+
+    &:focus {
+      border-color: #054239;
+      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+    }
+  }
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }

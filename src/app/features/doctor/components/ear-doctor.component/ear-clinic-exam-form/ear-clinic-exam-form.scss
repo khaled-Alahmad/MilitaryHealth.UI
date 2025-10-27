@@ -136,6 +136,82 @@
   border-radius: 0 0 16px;
 }
 
+// التحقق من البيانات - رسائل الخطأ والنجاح
+.invalid-feedback {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  
+  i {
+    margin-left: 0.25rem;
+  }
+}
+
+.form-control.is-valid,
+.form-select.is-valid {
+  border-color: #28a745 !important;
+  
+  &:focus {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+  }
+  
+  &::after {
+    content: '✓';
+    color: #28a745;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+}
+
+// تحسين Radio Buttons و Checkboxes
+.form-check {
+  margin-bottom: 0.5rem !important;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem !important; // تقليل المسافة
+  
+  .form-check-input {
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+    flex-shrink: 0;
+  }
+  
+  .form-check-label {
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    cursor: pointer;
+    font-weight: 500;
+    flex: 0 0 auto;
+  }
+}
+
+// تحسين المسافات في Radio Buttons inline
+.d-flex.gap-3 {
+  gap: 0.75rem !important;
+  
+  .form-check {
+    gap: 0.35rem !important;
+  }
+}
+
+// تحسين Checkboxes
+input[type="checkbox"] {
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

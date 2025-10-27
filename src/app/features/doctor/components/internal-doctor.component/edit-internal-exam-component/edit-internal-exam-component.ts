@@ -17,6 +17,10 @@ export class EditInternalExamComponent {
 
   examForm!: FormGroup;
   results: any[] = [];
+  loading: boolean = false;
+  resultAccepted: number = 0;
+  resultRejected: number = 0;
+  resultPostponed: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -43,12 +47,31 @@ export class EditInternalExamComponent {
     this.examService.getResults().subscribe({
       next: (res: any) => {
         this.results = res.data?.items || [];
+        
+        // بعد تحديد IDs، قم بتحديث قيم الـ form
         if (this.exam?.resultID) {
           this.examForm.patchValue({ resultID: this.exam.resultID });
         }
       },
       error: () => this.toastr.error('❌ فشل جلب قائمة النتائج', 'خطأ')
     });
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
   }
 
   onSubmit() {
@@ -62,6 +85,7 @@ export class EditInternalExamComponent {
       return;
     }
 
+    this.loading = true;
     const updatedExam: InternalExam = {
       ...this.exam,
       ...this.examForm.value,
@@ -75,8 +99,12 @@ export class EditInternalExamComponent {
         this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
         this.exam.resultID = updatedExam.resultID;
         this.dialogClosed.emit(true);
+        this.loading = false;
       },
-      error: () => this.toastr.error('❌ فشل التحديث، تحقق من ID أو الاتصال بالإنترنت', 'خطأ')
+      error: () => {
+        this.toastr.error('❌ فشل التحديث، تحقق من ID أو الاتصال بالإنترنت', 'خطأ');
+        this.loading = false;
+      }
     });
   }
 

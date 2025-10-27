@@ -207,3 +207,5 @@ Background: #EDEBE0 (بيج فاتح)
 **تاريخ الإصلاح:** ${new Date().toLocaleDateString('ar-SA')}
 **المطور:** AI Assistant
 **الحالة:** ✅ مكتمل
+
+

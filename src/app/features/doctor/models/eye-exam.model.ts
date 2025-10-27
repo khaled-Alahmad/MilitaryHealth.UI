@@ -6,10 +6,11 @@ export interface EyeExam {
     eyeExamID?: number;
     applicantFileNumber: string;
     doctorID: number;
-    vision: string;
-    visionLeft: string;
-    colorTest: string;
-    colorTestLeft: string;
+    vision: string; // القدرة البصرية اليمنى "R:" مثل "8" (لكتابة قبل /10)
+    visionLeft: string; // القدرة البصرية اليسرى "L:" 
+    colorTest: string; // اختبار الألوان اليمنى: "سليم" أو "غير سليم شذوذ"
+    colorTestLeft: string; // اختبار الألوان اليسرى
+    refractiveError: string; // أسواء الانكسار: "غير مهمة" أو "مهمة"
     otherDiseases?: string;
     resultID: number;
     applicantId?: number;

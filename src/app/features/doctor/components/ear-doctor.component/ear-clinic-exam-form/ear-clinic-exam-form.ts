@@ -36,8 +36,6 @@ export class EarClinicExamForm implements OnInit {
 
   private initForm() {
     this.examForm = this.fb.group({
-      rightEar: ['', Validators.required],
-      leftEar: ['', Validators.required],
       rightTympanicMembrane: ['', Validators.required],
       leftTympanicMembrane: ['', Validators.required],
       rightHearing: ['', Validators.required],
@@ -45,8 +43,6 @@ export class EarClinicExamForm implements OnInit {
       resonators: ['', Validators.required],
       rightWhisperTest: ['', Validators.required],
       leftWhisperTest: ['', Validators.required],
-      rightNose: ['', Validators.required],
-      leftNose: ['', Validators.required],
       isRightHugeMates: [false],
       isLeftHugeMates: [false],
       rightString: [''],
@@ -98,8 +94,6 @@ export class EarClinicExamForm implements OnInit {
       const examData: EarClinicExam = {
         applicantFileNumber: this.applicantFileNumber,
         doctorID: Number(this.authService.getDoctorId()) || 0,
-        rightEar: formData.rightEar,
-        leftEar: formData.leftEar,
         rightTympanicMembrane: formData.rightTympanicMembrane,
         leftTympanicMembrane: formData.leftTympanicMembrane,
         rightHearing: formData.rightHearing,
@@ -107,13 +101,12 @@ export class EarClinicExamForm implements OnInit {
         resonators: formData.resonators,
         rightWhisperTest: formData.rightWhisperTest,
         leftWhisperTest: formData.leftWhisperTest,
-        rightNose: formData.rightNose,
-        leftNose: formData.leftNose,
         isRightHugeMates: formData.isRightHugeMates,
         isLeftHugeMates: formData.isLeftHugeMates,
         rightString: formData.rightString || '',
         leftString: formData.leftString || '',
-        mouth: formData.mouth === 'أخرى' ? `أخرى: ${formData.mouthOther}` : formData.mouth,
+        mouth: formData.mouth === 'أخرى' ? (formData.mouthOther || '') : formData.mouth,
+        mouthOther: formData.mouth === 'أخرى' ? formData.mouthOther : '',
         otherDiseases: formData.otherDiseases || '',
         resultID: formData.resultID,
         reason: formData.reason || ''
@@ -164,5 +157,28 @@ export class EarClinicExamForm implements OnInit {
   closeModal() {
     this.showModal = false;
     this.examForm.reset();
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
+  }
+
+  // Helper method للتحقق من عدم صلاحية الحقل
+  isFieldInvalid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
   }
 }

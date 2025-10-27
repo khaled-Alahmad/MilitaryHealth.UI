@@ -29,14 +29,35 @@ export class SurgicalExamForm implements OnInit {
   ngOnInit(): void {
     this.examForm = this.fb.group({
       generalSurgery: ['سليم', Validators.required],
+      generalSurgeryOther: [''],
       urinarySurgery: ['سليم', Validators.required],
+      urinarySurgeryOther: [''],
       vascularSurgery: ['سليم', Validators.required],
+      vascularSurgeryOther: [''],
       thoracicSurgery: ['سليم', Validators.required],
+      thoracicSurgeryOther: [''],
       resultID: [null, Validators.required],
       reason: ['']
     });
 
     this.examService.getResults().subscribe(res => this.results = res.data?.items || res);
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
   }
 
   openModal() {
@@ -56,15 +77,17 @@ export class SurgicalExamForm implements OnInit {
       return;
     }
 
+    const formData = this.examForm.value;
+    
     const exam: SurgicalExam = {
       applicantFileNumber: this.applicantFileNumber,
       doctorID,
-      generalSurgery: this.examForm.value.generalSurgery,
-      urinarySurgery: this.examForm.value.urinarySurgery,
-      vascularSurgery: this.examForm.value.vascularSurgery,
-      thoracicSurgery: this.examForm.value.thoracicSurgery,
-      resultID: Number(this.examForm.value.resultID),
-      reason: this.examForm.value.reason || ''
+      generalSurgery: formData.generalSurgery === 'غير ذلك' ? (formData.generalSurgeryOther || '') : formData.generalSurgery,
+      urinarySurgery: formData.urinarySurgery === 'غير ذلك' ? (formData.urinarySurgeryOther || '') : formData.urinarySurgery,
+      vascularSurgery: formData.vascularSurgery === 'غير ذلك' ? (formData.vascularSurgeryOther || '') : formData.vascularSurgery,
+      thoracicSurgery: formData.thoracicSurgery === 'غير ذلك' ? (formData.thoracicSurgeryOther || '') : formData.thoracicSurgery,
+      resultID: Number(formData.resultID),
+      reason: formData.reason || ''
     };
 
     this.loading = true;

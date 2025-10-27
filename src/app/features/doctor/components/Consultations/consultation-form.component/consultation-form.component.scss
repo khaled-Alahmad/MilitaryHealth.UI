@@ -2,7 +2,7 @@
    Professional Modal Design - Unified
    =========================================== */
 
-@import '../../shared-modal-styles.scss';
+@use '../../shared-modal-styles.scss' as *;
 
 .professional-modal-container {
   background: #EDEBE0 !important;

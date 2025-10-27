@@ -10,23 +10,63 @@
 
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">القدرة البصرية اليمنى</label>
-          <input class="form-control" formControlName="vision" placeholder="أدخل حدة البصر اليمنى" />
+          <label class="form-label">القدرة البصرية R:</label>
+          <div class="input-group">
+            <input type="number" class="form-control" formControlName="vision" placeholder="أدخل الرقم" />
+            <span class="input-group-text">/10</span>
+          </div>
         </div>
         <div class="col-md-6">
-          <label class="form-label">القدرة البصرية اليسرى</label>
-          <input class="form-control" formControlName="visionLeft" placeholder="أدخل حدة البصر اليسرى" />
+          <label class="form-label">القدرة البصرية L:</label>
+          <div class="input-group">
+            <input type="number" class="form-control" formControlName="visionLeft" placeholder="أدخل الرقم" />
+            <span class="input-group-text">/10</span>
+          </div>
         </div>
       </div>
 
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">اختبار الألوان اليمنى</label>
-          <input class="form-control" formControlName="colorTest" placeholder="أدخل نتيجة اختبار الألوان اليمنى" />
+          <label class="form-label mb-2">اختبار الألوان R:</label>
+          <div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="colorTest" id="colorTestNormalEdit" value="سليم" />
+              <label class="form-check-label" for="colorTestNormalEdit">سليم</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="colorTest" id="colorTestAbnormalEdit" value="غير سليم شذوذ" />
+              <label class="form-check-label" for="colorTestAbnormalEdit">غير سليم شذوذ</label>
+            </div>
+          </div>
         </div>
         <div class="col-md-6">
-          <label class="form-label">اختبار الألوان اليسرى</label>
-          <input class="form-control" formControlName="colorTestLeft" placeholder="أدخل نتيجة اختبار الألوان اليسرى" />
+          <label class="form-label mb-2">اختبار الألوان L:</label>
+          <div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="colorTestLeft" id="colorTestLeftNormalEdit" value="سليم" />
+              <label class="form-check-label" for="colorTestLeftNormalEdit">سليم</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="colorTestLeft" id="colorTestLeftAbnormalEdit" value="غير سليم شذوذ" />
+              <label class="form-check-label" for="colorTestLeftAbnormalEdit">غير سليم شذوذ</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label class="form-label mb-2">أسواء الانكسار:</label>
+          <div class="ms-3">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="refractiveError" id="refractiveNotImportantEdit" value="غير مهمة" />
+              <label class="form-check-label" for="refractiveNotImportantEdit">غير مهمة</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="refractiveError" id="refractiveImportantEdit" value="مهمة" />
+              <label class="form-check-label" for="refractiveImportantEdit">مهمة</label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -135,8 +175,8 @@
 
       <!-- الأمراض الأخرى -->
       <div class="mb-3">
-        <label class="form-label">الأمراض الأخرى</label>
-        <input class="form-control" formControlName="otherDiseases" placeholder="إن وجدت" />
+        <label class="form-label">أمراض أخرى</label>
+        <textarea class="form-control" formControlName="otherDiseases" rows="3" placeholder="أدخل الأمراض الأخرى إن وجدت"></textarea>
       </div>
 
       <!-- النتيجة والسبب -->

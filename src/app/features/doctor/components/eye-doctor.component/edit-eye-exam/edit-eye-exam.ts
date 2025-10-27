@@ -42,6 +42,7 @@ export class EditEyeExam implements OnInit {
       visionLeft: [this.exam.visionLeft || '', Validators.required],
       colorTest: [this.exam.colorTest, Validators.required],
       colorTestLeft: [this.exam.colorTestLeft || '', Validators.required],
+      refractiveError: [(this.exam as any).refractiveError || '', Validators.required],
       otherDiseases: [this.exam.otherDiseases || ''],
       resultID: [this.exam.resultID, Validators.required],
       reason: [this.exam.reason || ''],
@@ -162,6 +163,7 @@ export class EditEyeExam implements OnInit {
     visionLeft: this.examForm.value.visionLeft || '',
     colorTest: this.examForm.value.colorTest,
     colorTestLeft: this.examForm.value.colorTestLeft || '',
+    refractiveError: this.examForm.value.refractiveError || '',
     otherDiseases: this.examForm.value.otherDiseases || '',
     resultID: Number(this.examForm.value.resultID),
     reason: this.examForm.value.reason || ''

@@ -130,21 +130,8 @@
       margin-bottom: 0.5rem;
       border: 1px solid transparent;
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        color: white !important;
-        transform: translateX(-4px);
-        border-color: rgba(255, 255, 255, 0.1);
-        
-        i {
-          transform: scale(1.2);
-          color: var(--accent-gold) !important;
-          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-        }
-      }
-
       &.active {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%) !important;
         color: var(--primary-dark) !important;
         font-weight: 600;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -164,6 +151,32 @@
         i {
           color: var(--primary-dark) !important;
           transform: scale(1.15);
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        // Keep white background even on hover
+        &:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%) !important;
+          color: var(--primary-dark) !important;
+          transform: translateX(-4px);
+          
+          i {
+            color: var(--primary-dark) !important;
+            transform: scale(1.2);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+          }
+        }
+      }
+
+      &:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: white !important;
+        transform: translateX(-4px);
+        border-color: rgba(255, 255, 255, 0.1);
+        
+        i {
+          transform: scale(1.2);
+          color: var(--accent-gold) !important;
           filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
       }

@@ -26,52 +26,40 @@
       <div class="form-row">
         <div class="form-field">
           <label>
-            <i class="pi pi-circle"></i>
-            فحص الأذن اليمنى
+            <i class="pi pi-shield"></i>
+            غشاء الطبل (يمين)
           </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="rightEar" 
-            placeholder="أدخل نتيجة فحص الأذن اليمنى">
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rightTympanicMembrane" 
+                id="rightTympanicHealthyEdit" value="سليم" formControlName="rightTympanicMembrane" />
+              <label class="form-check-label" for="rightTympanicHealthyEdit">سليم</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rightTympanicMembrane" 
+                id="rightTympanicUnhealthyEdit" value="غير سليم" formControlName="rightTympanicMembrane" />
+              <label class="form-check-label" for="rightTympanicUnhealthyEdit">غير سليم</label>
+            </div>
+          </div>
         </div>
 
         <div class="form-field">
           <label>
-            <i class="pi pi-circle"></i>
-            فحص الأذن اليسرى
+            <i class="pi pi-shield"></i>
+            غشاء الطبل (يسار)
           </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="leftEar" 
-            placeholder="أدخل نتيجة فحص الأذن اليسرى">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <label>
-            <i class="pi pi-circle"></i>
-            طبلة الأذن اليمنى
-          </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="rightTympanicMembrane" 
-            placeholder="أدخل حالة طبلة الأذن اليمنى">
-        </div>
-
-        <div class="form-field">
-          <label>
-            <i class="pi pi-circle"></i>
-            طبلة الأذن اليسرى
-          </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="leftTympanicMembrane" 
-            placeholder="أدخل حالة طبلة الأذن اليسرى">
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="leftTympanicMembrane" 
+                id="leftTympanicHealthyEdit" value="سليم" formControlName="leftTympanicMembrane" />
+              <label class="form-check-label" for="leftTympanicHealthyEdit">سليم</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="leftTympanicMembrane" 
+                id="leftTympanicUnhealthyEdit" value="غير سليم" formControlName="leftTympanicMembrane" />
+              <label class="form-check-label" for="leftTympanicUnhealthyEdit">غير سليم</label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -97,9 +85,37 @@
               formControlName="isLeftHugeMates" 
               id="isLeftHugeMates">
             <label class="form-check-label" for="isLeftHugeMates">
-              ضخامة قرينات - يسار
+              ضخامة قرينات (يسار)
             </label>
           </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>
+            <i class="pi pi-angle-right"></i>
+            الوتيرة - انحراف OL
+          </label>
+          <select class="form-select" formControlName="rightString">
+            <option value="">اختر درجة الانحراف</option>
+            <option value="بسيط">بسيط</option>
+            <option value="متوسط">متوسط</option>
+            <option value="شديد">شديد</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>
+            <i class="pi pi-angle-left"></i>
+            الوتيرة - انحراف OR
+          </label>
+          <select class="form-select" formControlName="leftString">
+            <option value="">اختر درجة الانحراف</option>
+            <option value="بسيط">بسيط</option>
+            <option value="متوسط">متوسط</option>
+            <option value="شديد">شديد</option>
+          </select>
         </div>
       </div>
 
@@ -113,7 +129,7 @@
         <div class="form-field">
           <label>
             <i class="pi pi-hear"></i>
-            السمع الأيمن
+            السمع (يمين) R
           </label>
           <input 
             type="text" 
@@ -125,7 +141,7 @@
         <div class="form-field">
           <label>
             <i class="pi pi-hear"></i>
-            السمع الأيسر
+            السمع (يسار) W
           </label>
           <input 
             type="text" 
@@ -139,7 +155,7 @@
         <div class="form-field">
           <label>
             <i class="pi pi-comment"></i>
-            اختبار الهمس الأيمن
+            اختبار الهمس (يمين)
           </label>
           <input 
             type="text" 
@@ -151,7 +167,7 @@
         <div class="form-field">
           <label>
             <i class="pi pi-comment"></i>
-            اختبار الهمس الأيسر
+            اختبار الهمس (يسار)
           </label>
           <input 
             type="text" 
@@ -175,68 +191,10 @@
         </div>
       </div>
 
-      <!-- Nose Section -->
-      <div class="section-header">
-        <i class="pi pi-send"></i>
-        <h4>فحص الأنف</h4>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <label>
-            <i class="pi pi-circle"></i>
-            فحص الأنف الأيمن
-          </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="rightNose" 
-            placeholder="أدخل نتيجة فحص الأنف الأيمن">
-        </div>
-
-        <div class="form-field">
-          <label>
-            <i class="pi pi-circle"></i>
-            فحص الأنف الأيسر
-          </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="leftNose" 
-            placeholder="أدخل نتيجة فحص الأنف الأيسر">
-        </div>
-      </div>
-
       <!-- Voice and Mouth Section -->
       <div class="section-header">
-        <i class="pi pi-microphone"></i>
-        <h4>الحبال الصوتية والفم</h4>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <label>
-            <i class="pi pi-circle"></i>
-            الحبل الصوتي الأيمن
-          </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="rightString" 
-            placeholder="أدخل حالة الحبل الصوتي الأيمن">
-        </div>
-
-        <div class="form-field">
-          <label>
-            <i class="pi pi-circle"></i>
-            الحبل الصوتي الأيسر
-          </label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="leftString" 
-            placeholder="أدخل حالة الحبل الصوتي الأيسر">
-        </div>
+        <i class="pi pi-briefcase"></i>
+        <h4>الفم</h4>
       </div>
 
       <div class="form-row">
@@ -272,21 +230,24 @@
               <label class="form-check-label" for="mouthOtherEdit">أخرى</label>
             </div>
             <div *ngIf="examForm.get('mouth')?.value === 'أخرى'" class="ms-4 mb-2">
-              <input type="text" class="form-control" placeholder="أدخل التفاصيل" />
+              <input type="text" class="form-control" formControlName="mouthOther" placeholder="أدخل التفاصيل" />
             </div>
           </div>
         </div>
 
+      </div>
+
+      <div class="form-row">
         <div class="form-field">
           <label>
             <i class="pi pi-info-circle"></i>
             أمراض أخرى
           </label>
-          <input 
-            type="text" 
+          <textarea 
             class="form-control" 
             formControlName="otherDiseases" 
-            placeholder="أدخل أي أمراض أخرى">
+            rows="3"
+            placeholder="أدخل أي أمراض أخرى"></textarea>
         </div>
       </div>
 
@@ -348,4 +309,5 @@
     </button>
   </div>
 </div>
+
 

@@ -30,12 +30,31 @@ export class OrthopedicExamFormComponent {
   ngOnInit(): void {
     this.examForm = this.fb.group({
       musculoskeletal: ['سليم', Validators.required],
+      musculoskeletalOther: [''],
       neurologicalSurgery: ['سليم', Validators.required],
+      neurologicalSurgeryOther: [''],
       resultID: [null, Validators.required],
       reason: ['']
     });
 
     this.examService.getResults().subscribe(res => this.results = res.data?.items || res);
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
   }
 
   openModal() {
@@ -55,13 +74,15 @@ export class OrthopedicExamFormComponent {
       return;
     }
 
+    const formData = this.examForm.value;
+
     const exam: OrthopedicExam = {
       applicantFileNumber: this.applicantFileNumber,
       doctorID: doctorID,
-      musculoskeletal: this.examForm.value.musculoskeletal,
-      neurologicalSurgery: this.examForm.value.neurologicalSurgery,
-      resultID: Number(this.examForm.value.resultID),
-      reason: this.examForm.value.reason || ''
+      musculoskeletal: formData.musculoskeletal === 'غير ذلك' ? (formData.musculoskeletalOther || '') : formData.musculoskeletal,
+      neurologicalSurgery: formData.neurologicalSurgery === 'غير ذلك' ? (formData.neurologicalSurgeryOther || '') : formData.neurologicalSurgery,
+      resultID: Number(formData.resultID),
+      reason: formData.reason || ''
     };
 
     this.loading = true;

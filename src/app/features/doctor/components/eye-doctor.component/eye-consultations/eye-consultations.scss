@@ -1,5 +1,5 @@
 /* Import Unified Eye Tables Styles */
-@import '../eye-tables-unified.scss';
+@use '../eye-tables-unified.scss' as *;
 
 .user-header-section {
   background: white !important;

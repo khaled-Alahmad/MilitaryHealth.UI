@@ -1,5 +1,5 @@
 /* Import unified modal styles */
-@import '../../shared-modal-styles.scss';
+@use '../../shared-modal-styles.scss' as *;
 
 /* Custom overrides for this component */
 .dialog-card {
@@ -8,4 +8,38 @@
 
 .dialog-form {
   padding: 2rem;
+}
+
+// تحسين Radio Buttons و Checkboxes
+.form-check {
+  margin-bottom: 0.5rem !important;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem !important;
+  
+  .form-check-input {
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+    flex-shrink: 0;
+  }
+  
+  .form-check-label {
+    margin: 0 !important;
+    padding: 0 !important;
+    cursor: pointer;
+    font-weight: 500;
+  }
+}
+
+.form-check-inline {
+  margin-left: 0;
+  margin-right: 1rem;
+  
+  &:last-child {
+    margin-right: 0;
+  }
 }

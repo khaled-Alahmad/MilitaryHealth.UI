@@ -56,9 +56,13 @@ export class EditEarExamComponent implements OnInit {
   }
 
   private initForm() {
+    // Handle mouth parsing if it contains "أخرى:"
+    const mouthValue = this.exam.mouth || '';
+    const isOtherMouth = mouthValue.startsWith('أخرى');
+    const displayMouth = isOtherMouth ? 'أخرى' : mouthValue;
+    const mouthOther = isOtherMouth && mouthValue.includes(':') ? mouthValue.split(':')[1].trim() : '';
+
     this.examForm = this.fb.group({
-      rightEar: [this.exam.rightEar || '', Validators.required],
-      leftEar: [this.exam.leftEar || '', Validators.required],
       rightTympanicMembrane: [this.exam.rightTympanicMembrane || '', Validators.required],
       leftTympanicMembrane: [this.exam.leftTympanicMembrane || '', Validators.required],
       rightHearing: [this.exam.rightHearing || '', Validators.required],
@@ -66,13 +70,12 @@ export class EditEarExamComponent implements OnInit {
       resonators: [this.exam.resonators || '', Validators.required],
       rightWhisperTest: [this.exam.rightWhisperTest || '', Validators.required],
       leftWhisperTest: [this.exam.leftWhisperTest || '', Validators.required],
-      rightNose: [this.exam.rightNose || '', Validators.required],
-      leftNose: [this.exam.leftNose || '', Validators.required],
       isRightHugeMates: [this.exam.isRightHugeMates || false],
       isLeftHugeMates: [this.exam.isLeftHugeMates || false],
       rightString: [this.exam.rightString || ''],
       leftString: [this.exam.leftString || ''],
-      mouth: [this.exam.mouth || '', Validators.required],
+      mouth: [displayMouth, Validators.required],
+      mouthOther: [mouthOther],
       otherDiseases: [this.exam.otherDiseases || ''],
       resultID: [this.exam.resultID || '', Validators.required],
       reason: [this.exam.reason || '']
@@ -87,9 +90,25 @@ export class EditEarExamComponent implements OnInit {
 
     this.loading = true;
 
+    const formData = this.examForm.value;
     const updatedExam: EarClinicExam = {
       ...this.exam,
-      ...this.examForm.value
+      rightTympanicMembrane: formData.rightTympanicMembrane,
+      leftTympanicMembrane: formData.leftTympanicMembrane,
+      rightHearing: formData.rightHearing,
+      leftHearing: formData.leftHearing,
+      resonators: formData.resonators,
+      rightWhisperTest: formData.rightWhisperTest,
+      leftWhisperTest: formData.leftWhisperTest,
+      isRightHugeMates: formData.isRightHugeMates,
+      isLeftHugeMates: formData.isLeftHugeMates,
+      rightString: formData.rightString || '',
+      leftString: formData.leftString || '',
+      mouth: formData.mouth === 'أخرى' ? (formData.mouthOther || '') : formData.mouth,
+      mouthOther: formData.mouth === 'أخرى' ? formData.mouthOther : '',
+      otherDiseases: formData.otherDiseases || '',
+      resultID: formData.resultID,
+      reason: formData.reason || ''
     };
 
     this.examService.updateEarClinicExam(this.exam.earClinicID!, updatedExam).subscribe({
@@ -109,5 +128,28 @@ export class EditEarExamComponent implements OnInit {
 
   onCancel() {
     this.activeModal.dismiss();
+  }
+
+  // Helper method لتحديد رسالة الخطأ
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+    }
+    return '';
+  }
+
+  // Helper method للتحقق من صلاحية الحقل
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
+  }
+
+  // Helper method للتحقق من عدم صلاحية الحقل
+  isFieldInvalid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
   }
 }

@@ -4,67 +4,105 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <!-- الهيدر -->
     <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()">
+        <i class="pi pi-times"></i>
+      </button>
       <h5 class="modal-title">إضافة فحص عيني</h5>
-      <button type="button" class="btn-close ms-0 me-auto" (click)="closeModal()"></button>
     </div>
     <!-- البودي -->
     <div class="modal-body">
-      <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>
+      <form [formGroup]="examForm" novalidate>
         <!-- القسم الأول -->
-        <h6 class="section-title">البيانات الطبية</h6>
+        <h6 class="section-title">القدرة البصرية</h6>
         <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label">القدرة البصر اليمنى <span class="text-danger">*</span></label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="vision"
-              [class.is-invalid]="
-                examForm.get('vision')?.invalid && examForm.get('vision')?.touched
-              "
-            />
+            <label class="form-label">R: <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                formControlName="vision"
+                placeholder="أدخل الرقم"
+                [class.is-invalid]="examForm.get('vision')?.invalid && examForm.get('vision')?.touched"
+                [class.is-valid]="isFieldValid('vision')"
+              />
+              <span class="input-group-text">/10</span>
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="getErrorMessage('vision')">
+              <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('vision') }}
+            </div>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">القدرة البصر اليسرى <span class="text-danger">*</span></label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="visionLeft"
-              [class.is-invalid]="
-                examForm.get('visionLeft')?.invalid && examForm.get('visionLeft')?.touched
-              "
-            />
+            <label class="form-label">L: <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                formControlName="visionLeft"
+                placeholder="أدخل الرقم"
+                [class.is-invalid]="examForm.get('visionLeft')?.invalid && examForm.get('visionLeft')?.touched"
+                [class.is-valid]="isFieldValid('visionLeft')"
+              />
+              <span class="input-group-text">/10</span>
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="getErrorMessage('visionLeft')">
+              <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('visionLeft') }}
+            </div>
           </div>
         </div>
 
-        <div class="row g-3 mt-3">
+        <h6 class="section-title mt-4">اختبار الألوان</h6>
+        <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label"
-              >اختبار الألوان اليمنى <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control"
-              formControlName="colorTest"
-              [class.is-invalid]="
-                examForm.get('colorTest')?.invalid && examForm.get('colorTest')?.touched
-              "
-            />
+            <label class="form-label mb-2">R: <span class="text-danger">*</span></label>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="colorTest" 
+                  id="colorTestNormal" value="سليم" />
+                <label class="form-check-label" for="colorTestNormal">سليم</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="colorTest" 
+                  id="colorTestAbnormal" value="غير سليم شذوذ" />
+                <label class="form-check-label" for="colorTestAbnormal">غير سليم شذوذ</label>
+              </div>
+            </div>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label"
-              >اختبار الألوان اليسرى <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control"
-              formControlName="colorTestLeft"
-              [class.is-invalid]="
-                examForm.get('colorTestLeft')?.invalid && examForm.get('colorTestLeft')?.touched
-              "
-            />
+            <label class="form-label mb-2">L: <span class="text-danger">*</span></label>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="colorTestLeft" 
+                  id="colorTestLeftNormal" value="سليم" />
+                <label class="form-check-label" for="colorTestLeftNormal">سليم</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="colorTestLeft" 
+                  id="colorTestLeftAbnormal" value="غير سليم شذوذ" />
+                <label class="form-check-label" for="colorTestLeftAbnormal">غير سليم شذوذ</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="section-title mt-4">أسواء الانكسار</h6>
+        <div class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label mb-2">أسواء الانكسار <span class="text-danger">*</span></label>
+            <div class="ms-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="refractiveError" 
+                  id="refractiveNotImportant" value="غير مهمة" />
+                <label class="form-check-label" for="refractiveNotImportant">غير مهمة</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="refractiveError" 
+                  id="refractiveImportant" value="مهمة" />
+                <label class="form-check-label" for="refractiveImportant">مهمة</label>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -215,26 +253,34 @@
         }
 
         <div class="row g-3 mt-3">
-          <div class="col-md-6">
+          <div class="col-12">
             <label class="form-label">أمراض أخرى</label>
-            <input type="text" class="form-control" formControlName="otherDiseases" />
+            <textarea class="form-control" formControlName="otherDiseases" rows="3"></textarea>
           </div>
+        </div>
 
+        <h6 class="section-title mt-4">النتيجة</h6>
+        <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label">نتيجة الفحص <span class="text-danger">*</span></label>
+            <label class="form-label mb-2">النتيجة <span class="text-danger">*</span></label>
             <select
               class="form-select"
               formControlName="resultID"
               [class.is-invalid]="
                 examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched
               "
+              [class.is-valid]="isFieldValid('resultID')"
             >
+              <option value="">اختر النتيجة</option>
               @for (r of results; track r.resultID) {
               <option [value]="r.resultID">
                 {{ r.description }}
               </option>
               }
             </select>
+            <div class="invalid-feedback d-block" *ngIf="getErrorMessage('resultID')">
+              <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('resultID') }}
+            </div>
           </div>
         </div>
 
@@ -244,18 +290,25 @@
             <textarea class="form-control" formControlName="reason" rows="2"></textarea>
           </div>
         </div>
-
-        <!-- زر الحفظ -->
-        <div class="d-flex gap-2 mt-4">
-          <button
-            type="submit"
-            class="btn btn-success px-4"
-            [disabled]="examForm.invalid || loading"
-          >
-            <i class="pi pi-save me-2 ms-2"></i> حفظ فحص العيون
-          </button>
-        </div>
       </form>
+    </div>
+
+    <!-- الأزرار -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">
+        <i class="pi pi-times me-2"></i> إلغاء
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="onSubmit()"
+        [disabled]="examForm.invalid || loading"
+      >
+        @if (loading) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        <i class="pi pi-save me-2"></i> حفظ فحص العيون
+      </button>
     </div>
   </div>
 </div>
