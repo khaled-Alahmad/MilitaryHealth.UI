@@ -3,7 +3,7 @@
    =========================================== */
 
 .sidebar {
-  width: clamp(240px, 22vw, 280px);
+  width: clamp(240px, 24vw, 300px);
   min-height: 100vh;
   height: 100vh;
   background: linear-gradient(180deg, #054239 0%, #042e26 100%);
@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;
   transition: all var(--transition-normal);
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
   position: sticky;
@@ -18,30 +19,80 @@
   align-self: flex-start;
 
   &.collapsed {
-    width: 90px;
+    width: 70px;
+    overflow-x: hidden;
     
     .sidebar-header {
-      padding: 1rem;
+      padding: 0.75rem 0.5rem;
+      justify-content: center;
       
       .logo-img {
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
       }
     }
     
     .menu {
+      padding: var(--spacing-xs) 0.25rem;
+      overflow-x: hidden;
+      
       li {
-        padding: 1rem 0.5rem;
+        padding: 0.5rem 0.25rem;
         justify-content: center;
+        margin: 0 0.125rem 0.125rem 0.125rem;
+        position: relative;
+        width: calc(100% - 0.25rem);
+        min-width: auto;
+        max-width: 100%;
         
         span {
           display: none;
         }
         
         i {
-          font-size: 1.5rem;
-          width: 2.5rem;
-          height: 2.5rem;
+          font-size: 1.25rem;
+          width: 2rem;
+          height: 2rem;
+          margin: 0;
+        }
+        
+        /* Tooltip when collapsed */
+        &::after {
+          content: attr(data-tooltip);
+          position: absolute;
+          right: calc(100% + 12px);
+          top: 50%;
+          transform: translateY(-50%);
+          background: var(--primary-dark);
+          color: white;
+          padding: 0.5rem 0.75rem;
+          border-radius: var(--radius-md);
+          font-size: 0.875rem;
+          white-space: nowrap;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity var(--transition-fast);
+          z-index: 1000;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        &::before {
+          content: '';
+          position: absolute;
+          right: calc(100% + 6px);
+          top: 50%;
+          transform: translateY(-50%);
+          border: 6px solid transparent;
+          border-right-color: var(--primary-dark);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity var(--transition-fast);
+          z-index: 1001;
+        }
+        
+        &:hover::after,
+        &:hover::before {
+          opacity: 1;
         }
       }
     }
@@ -89,12 +140,14 @@
   .menu {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     padding: var(--spacing-sm);
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     list-style: none;
     margin: 0;
+    width: 100%;
 
     /* Custom scrollbar */
     &::-webkit-scrollbar {
@@ -119,16 +172,19 @@
       position: relative;
       display: flex;
       align-items: center;
-      padding: 1.25rem 1.5rem;
-      border-radius: var(--radius-lg);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-md);
       cursor: pointer;
       transition: all var(--transition-fast);
       color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
       font-weight: 500;
-      gap: 1.25rem;
-      margin-bottom: 0.5rem;
+      gap: 0.75rem;
+      margin-bottom: 0.125rem;
       border: 1px solid transparent;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
 
       &.active {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%) !important;
@@ -182,22 +238,22 @@
       }
 
       i {
-        font-size: 1.75rem;
-        width: 2.5rem;
-        height: 2.5rem;
+        font-size: 1.25rem;
+        width: 2rem;
+        height: 2rem;
         display: flex;
         align-items: center;
         justify-content: center;
         color: inherit;
         transition: all var(--transition-fast);
         flex-shrink: 0;
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         background: rgba(255, 255, 255, 0.05);
       }
 
       span {
         flex: 1;
-        font-size: 1rem;
+        font-size: 0.875rem;
         font-weight: inherit;
         white-space: nowrap;
         overflow: hidden;

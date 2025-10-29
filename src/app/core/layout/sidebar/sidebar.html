@@ -9,11 +9,11 @@
 
     <!-- Reception -->
     @if (role === 'Receptionist') {
-      <li routerLink="/reception/applicants/add" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="/reception/applicants/add" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'إضافة منتسب' : null">
         <i class="pi pi-user-plus"></i>
         <span>إضافة منتسب</span>
       </li>
-      <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'قائمة المنتسبين' : null">
         <i class="pi pi-list-check"></i>
         <span>قائمة المنتسبين</span>
       </li>
@@ -22,37 +22,37 @@
 
     <!-- Admin -->
     @if (role === 'Admin') {
-      <li routerLink="admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الإحصائيات' : null">
         <i class="pi pi-chart-bar"></i>
         <span>الإحصائيات</span>
       </li>
-      <li routerLink="admin/final" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="admin/final" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'قائمة المنتسبين' : null">
         <i class="pi pi-list"></i>
         <span>قائمة المنتسبين</span>
       </li>
     }
 
     @if (role === 'Diwan') {
-      <li routerLink="archive" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="archive" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الديوان' : null">
         <i class="pi pi-inbox"></i>
         <span> الديوان</span>
       </li>
     }
     <!-- Doctor Eye -->
     @if (role === 'Doctor_Eye') {
-      <li routerLink="/doctor/eye" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="/doctor/eye" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'إجراءات الفحص العيني' : null">
         <i class="pi pi-file-edit"></i>
         <span>إجراءات الفحص العيني</span>
       </li>
-      <li routerLink="/doctor/eye/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="/doctor/eye/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الفحوصات' : null">
         <i class="pi pi-clock"></i>
         <span>الفحوصات </span>
       </li>
-       <li routerLink="/doctor/eye/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+       <li routerLink="/doctor/eye/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستشارات التخصصية' : null">
         <i class="pi pi-comments"></i>
         <span>الاستشارات التخصصية</span>
       </li>
-       <li routerLink="/doctor/eye/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+       <li routerLink="/doctor/eye/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستقصاءات الشعاعية والمخبرية' : null">
         <i class="pi pi-id-card"></i>
         <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
       </li>
@@ -61,19 +61,19 @@
 
     <!-- Doctor Internal -->
     @if (role === 'Doctor_Internal') {
-      <li routerLink="/doctor/internal" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="/doctor/internal" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'إجراءات الفحوصات الباطنية' : null">
         <i class="pi pi-file-edit"></i>
         <span>إجراءات الفحوصات الباطنية</span>
       </li>
-      <li routerLink="/doctor/internal/medications" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="/doctor/internal/medications" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الفحوصات' : null">
         <i class="pi pi-clock"></i>
         <span>الفحوصات </span>
       </li>
-       <li routerLink="/doctor/internal/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+       <li routerLink="/doctor/internal/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستشارات التخصصية' : null">
     <i class="pi pi-comments"></i>
     <span>الاستشارات التخصصية</span>
   </li>
-  <li routerLink="/doctor/internal/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/internal/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستقصاءات الشعاعية والمخبرية' : null">
     <i class="pi pi-id-card"></i>
     <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
@@ -81,19 +81,19 @@
 
    <!-- Doctor Orthopedics -->
 @if (role === 'Doctor_Orthopedics') {
-  <li routerLink="/doctor/orthopedics" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/orthopedics" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'إجراءات الجراحة العظمية' : null">
     <i class="pi pi-file-edit"></i>
     <span>إجراءات الجراحة العظمية</span>
   </li>
-  <li routerLink="/doctor/orthopedics/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/orthopedics/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الفحوصات' : null">
     <i class="pi pi-clock"></i>
     <span>الفحوصات </span>
   </li>
-  <li routerLink="/doctor/orthopedics/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/orthopedics/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستشارات التخصصية' : null">
     <i class="pi pi-comments"></i>
     <span>الاستشارات التخصصية</span>
   </li>
-  <li routerLink="/doctor/orthopedics/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/orthopedics/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستقصاءات الشعاعية والمخبرية' : null">
     <i class="pi pi-id-card"></i>
     <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
@@ -102,19 +102,19 @@
 
 <!-- Doctor Surgery -->
 @if (role === 'Doctor_Surgery') {
-  <li routerLink="/doctor/surgery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/surgery" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'إجراءات الفحوصات الجراحية' : null">
     <i class="pi pi-file-edit"></i>
     <span>إجراءات الفحوصات الجراحية</span>
   </li>
-  <li routerLink="/doctor/surgery/records" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/surgery/records" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الفحوصات' : null">
     <i class="pi pi-clock"></i>
     <span>الفحوصات </span>
   </li>
-  <li routerLink="/doctor/surgery/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/surgery/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستشارات التخصصية' : null">
     <i class="pi pi-comments"></i>
     <span>الاستشارات التخصصية</span>
   </li>
-  <li routerLink="/doctor/surgery/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/surgery/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستقصاءات الشعاعية والمخبرية' : null">
     <i class="pi pi-id-card"></i>
     <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
@@ -122,19 +122,19 @@
 
 <!-- Doctor Ear -->
 @if (role === 'Doctor_Ear') {
-  <li routerLink="/doctor/ear" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/ear" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'إجراءات الفحص' : null">
     <i class="pi pi-file-edit"></i>
     <span>إجراءات الفحص</span>
   </li>
-  <li routerLink="/doctor/ear/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/ear/deferred" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الفحوصات' : null">
     <i class="pi pi-clock"></i>
     <span>الفحوصات</span>
   </li>
-  <li routerLink="/doctor/ear/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/ear/consultations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستشارات التخصصية' : null">
     <i class="pi pi-comments"></i>
     <span>الاستشارات التخصصية</span>
   </li>
-  <li routerLink="/doctor/ear/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+  <li routerLink="/doctor/ear/investigations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الاستقصاءات الشعاعية والمخبرية' : null">
     <i class="pi pi-id-card"></i>
     <span class="menu-label-investigations">الاستقصاءات الشعاعية والمخبرية</span>
   </li>
@@ -144,11 +144,11 @@
     <!-- Supervisor -->
     @if (role === 'Supervisor') {
       
-      <li routerLink="supervisor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li routerLink="supervisor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'تقييم المنتسب' : null">
         <i class="pi pi-verified"></i>
         <span>تقييم المنتسب</span>
       </li>
-       <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+       <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'قائمة المنتسبين' : null">
         <i class="pi pi-users"></i>
         <span>قائمة المنتسبين</span>
       </li>
