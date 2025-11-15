@@ -23,7 +23,7 @@ declare const html2pdf: any;
   styleUrl: './applicant-profile.scss'
 })
 export class ApplicantProfile implements OnInit, OnDestroy {
-  applicant!: ApplicantDetailsModel;
+  applicant?: ApplicantDetailsModel;
   decisionModel!: FinalDecisionModel;
   results: Result[] = [];
   maritalStatuses: MaritalStatus[] = [];

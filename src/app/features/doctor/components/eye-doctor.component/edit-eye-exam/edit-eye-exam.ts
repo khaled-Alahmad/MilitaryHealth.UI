@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import { EyeExam } from '../../../models/eye-exam.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, normalizeHealthStatus, resolveHealthStatusValue } from '../../../constants/health-status-options';
 
 @Component({
   selector: 'app-edit-eye-exam',
@@ -28,6 +29,12 @@ export class EditEyeExam implements OnInit {
 
   showLeftEye = false;
   showRightEye = false;
+  readonly healthStatusOptions = HEALTH_STATUS_OPTIONS;
+  readonly otherOptionValue = OTHER_OPTION_VALUE;
+  private readonly colorTestFields = [
+    { control: 'colorTest', otherControl: 'colorTestOther' },
+    { control: 'colorTestLeft', otherControl: 'colorTestLeftOther' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -37,11 +44,16 @@ export class EditEyeExam implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const colorTestNormalized = normalizeHealthStatus(this.exam.colorTest);
+    const colorTestLeftNormalized = normalizeHealthStatus(this.exam.colorTestLeft);
+
     this.examForm = this.fb.group({
       vision: [this.exam.vision, Validators.required],
       visionLeft: [this.exam.visionLeft || '', Validators.required],
-      colorTest: [this.exam.colorTest, Validators.required],
-      colorTestLeft: [this.exam.colorTestLeft || '', Validators.required],
+      colorTest: [colorTestNormalized.status, Validators.required],
+      colorTestOther: [colorTestNormalized.other],
+      colorTestLeft: [colorTestLeftNormalized.status, Validators.required],
+      colorTestLeftOther: [colorTestLeftNormalized.other],
       refractiveError: [(this.exam as any).refractiveError || '', Validators.required],
       otherDiseases: [this.exam.otherDiseases || ''],
       resultID: [this.exam.resultID, Validators.required],
@@ -161,8 +173,14 @@ export class EditEyeExam implements OnInit {
     ...this.exam,
     vision: this.examForm.value.vision,
     visionLeft: this.examForm.value.visionLeft || '',
-    colorTest: this.examForm.value.colorTest,
-    colorTestLeft: this.examForm.value.colorTestLeft || '',
+    colorTest: resolveHealthStatusValue(
+      this.examForm.value.colorTest,
+      this.examForm.value.colorTestOther
+    ),
+    colorTestLeft: resolveHealthStatusValue(
+      this.examForm.value.colorTestLeft,
+      this.examForm.value.colorTestLeftOther
+    ),
     refractiveError: this.examForm.value.refractiveError || '',
     otherDiseases: this.examForm.value.otherDiseases || '',
     resultID: Number(this.examForm.value.resultID),

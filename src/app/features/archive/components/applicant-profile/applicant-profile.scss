@@ -119,9 +119,42 @@
 }
 
 .actions {
-  margin-top: 12px;
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  padding: 20px 0;
+}
+
+.btn-print-professional {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #054239 0%, #428177 100%);
+  color: white;
+  border: 2px solid #054239;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Cairo', 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(5, 66, 57, 0.2);
+  
+  i {
+    font-size: 1.25rem;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #428177 0%, #054239 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(5, 66, 57, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(5, 66, 57, 0.2);
+  }
 }
 
 .only-print {
@@ -154,14 +187,15 @@ html[dir="rtl"] .field {
 
 @media print {
   .no-print {
-    display: none;
+    display: none !important;
   }
   body {
     margin: 0;
+    background: #fff;
   }
   @page {
     size: A4;
-    margin: 8mm;
+    margin: 15mm 10mm;
   }
   .only-print {
     display: block;
@@ -169,6 +203,8 @@ html[dir="rtl"] .field {
   .report-container {
     padding: 0;
     font-size: 11px !important;
+    background: #fff;
+    max-width: 100%;
   }
   .print-header .org {
     display: flex;
@@ -250,5 +286,142 @@ html[dir="rtl"] .field {
   }
   .org-name {
     font-size: 12px !important;
+  }
+  
+  // تصميم القرار النهائي مثل Word
+  .final-decision-section {
+    border: 3px solid #000;
+    background: #fff;
+    margin-top: 20px;
+    page-break-inside: avoid;
+    
+    .decision-title {
+      background: linear-gradient(to bottom, #e8e8e8, #d0d0d0);
+      border-bottom: 3px solid #000;
+      font-weight: 700;
+      text-align: center;
+      padding: 14px;
+      font-size: 15px !important;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .decision-body {
+      padding: 20px;
+      background: #fff;
+    }
+    
+    .decision-content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    
+    .decision-field {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 2px dotted #666;
+      min-height: 30px;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    
+    .decision-label {
+      font-weight: 700;
+      color: #000;
+      min-width: 140px;
+      font-size: 12px !important;
+      text-align: right;
+      padding-right: 8px;
+    }
+    
+    .decision-value {
+      flex: 1;
+      color: #000;
+      font-size: 12px !important;
+      line-height: 1.8;
+      padding-right: 8px;
+      border-right: 1px solid #ddd;
+      
+      &.highlight {
+        font-weight: 700;
+        font-size: 14px !important;
+        color: #054239;
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  // قسم النتائج والأسباب
+  .print-results-section {
+    border: 1px solid #000;
+    background: #fafafa;
+    
+    .subcard-title {
+      background: #e8e8e8;
+      padding: 8px 12px;
+      border-bottom: 1px solid #000;
+      font-weight: 700;
+      font-size: 12px !important;
+    }
+    
+    .results-reasons-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    
+    .result-item {
+      padding: 8px 12px;
+      border-left: 3px solid #054239;
+      background: #fff;
+      margin-bottom: 4px;
+      
+      .result-label {
+        font-weight: 600;
+        color: #000;
+        font-size: 10px !important;
+        margin-bottom: 4px;
+      }
+      
+      .result-value {
+        color: #054239;
+        font-weight: 600;
+        font-size: 10px !important;
+        margin-bottom: 4px;
+      }
+      
+      .reason-value {
+        color: #333;
+        font-size: 9px !important;
+        padding-right: 8px;
+        font-style: italic;
+      }
+    }
+  }
+  
+  // تحسين عرض التحاليل والاستشارات
+  .subcard {
+    border: 1px solid #000;
+    background: #fff;
+    
+    .subcard-title {
+      background: #f5f5f5;
+      border-bottom: 1px solid #000;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 11px !important;
+    }
+    
+    .field.full {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dotted #ccc;
+    }
   }
 }

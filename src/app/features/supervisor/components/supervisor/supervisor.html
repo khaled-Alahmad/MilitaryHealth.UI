@@ -1,227 +1,836 @@
 <div class="supervisor-page container-fluid">
-  <div class="row justify-content-center mb-3">
-    <div class="col-12 col-md-6">
+  <!-- Search Section -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8">
       <div class="search-wrapper">
-        <button class="btn btn-sm search-btn" (click)="loadApplicants()">
+        <input type="text" 
+               class="form-control search-input" 
+               placeholder="ابحث عن رقم الملف..." 
+               dir="rtl"
+               [(ngModel)]="searchValue"
+               (keyup.enter)="loadApplicants()">
+        <button class="btn search-btn" (click)="loadApplicants()" [disabled]="loading">
           <i class="fas fa-search"></i>
           <span>ابحث</span>
         </button>
-        <input type="text" class="form-control search-input" placeholder="ابحث عن رقم الملف..." dir="rtl"
-          [(ngModel)]="searchValue">
       </div>
       <div *ngIf="applicant && !hasAllExams()" class="alert alert-danger mt-3" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
         الفحوصات الطبية غير مكتملة
       </div>
     </div>
   </div>
 
-  <div class="row g-2 mt-2" *ngIf="applicant">
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">جاري التحميل...</span>
+    </div>
+  </div>
+
+  <!-- Applicant Data -->
+  <div *ngIf="applicant && !loading" class="row g-4">
+    <!-- Personal Information Card -->
     <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-custom text-white d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">البيانات الشخصية والطبية</h5>
-          <span class="badge bg-light text-dark">ملف: {{ applicant.fileNumber }}</span>
-        </div>
-        <div class="card-body py-2">
-          <div class="row row-cols-2 row-cols-md-4 g-3 compact-grid">
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">رقم الملف</div>
-              <div class="fw-semibold">{{ applicant.fileNumber }}</div>
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <div class="d-flex align-items-center gap-2">
+              <i class="pi pi-user"></i>
+              <h5 class="mb-0">البيانات الشخصية والطبية</h5>
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">الاسم</div>
-              <div class="fw-semibold">{{ applicant.fullName }}</div>
+            <p-tag [value]="'ملف: ' + applicant.fileNumber" severity="info" styleClass="file-badge"></p-tag>
+          </div>
+        </ng-template>
+        
+        <div class="personal-info-grid">
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-id-card"></i>
+              رقم الملف
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">الحالة الاجتماعية</div>
-              <div class="fw-semibold">{{ getMaritalStatusDescription(applicant.maritalStatusID) }}</div>
+            <div class="info-value">{{ applicant.fileNumber }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-user"></i>
+              الاسم الكامل
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">الوظيفة</div>
-              <div class="fw-semibold">{{ applicant.job }}</div>
+            <div class="info-value">{{ applicant.fullName }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-heart"></i>
+              الحالة الاجتماعية
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">الطول</div>
-              <div class="fw-semibold">{{ applicant.height }} سم</div>
+            <div class="info-value">{{ getMaritalStatusDescription(applicant.maritalStatusID) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-briefcase"></i>
+              الوظيفة
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">الوزن</div>
-              <div class="fw-semibold">{{ applicant.weight }} كجم</div>
+            <div class="info-value">{{ applicant.job }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-arrows-v"></i>
+              الطول
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">BMI</div>
-              <div class="fw-semibold">{{ applicant.bmi }}</div>
+            <div class="info-value">{{ applicant.height }} سم</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-chart-line"></i>
+              الوزن
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">ضغط الدم</div>
-              <div class="fw-semibold">{{ applicant.bloodPressure }}</div>
+            <div class="info-value">{{ applicant.weight }} كجم</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-calculator"></i>
+              BMI
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">النبض</div>
-              <div class="fw-semibold">{{ applicant.pulse }}</div>
+            <div class="info-value">{{ applicant.bmi }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-heart"></i>
+              ضغط الدم
             </div>
-            <div class="col-6 col-md-3">
-              <div class="text-muted small">وشم</div>
-              <div class="fw-semibold">{{ applicant.tattoo ? 'يوجد' : 'لا يوجد' }}</div>
+            <div class="info-value">{{ applicant.bloodPressure }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-pulse"></i>
+              النبض
             </div>
-            <div class="col-12">
-              <div class="text-muted small">علامات مميزة</div>
-              <div class="fw-semibold">{{ applicant.distinctiveMarks || 'لا توجد' }}</div>
+            <div class="info-value">{{ applicant.pulse }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-info-circle"></i>
+              وشم
+            </div>
+            <div class="info-value">
+              <p-tag [value]="applicant.tattoo ? 'يوجد' : 'لا يوجد'" 
+                     [severity]="applicant.tattoo ? 'warn' : 'success'"></p-tag>
             </div>
           </div>
+          <div class="info-item col-12">
+            <div class="info-label">
+              <i class="pi pi-tag"></i>
+              علامات مميزة
+            </div>
+            <div class="info-value">{{ applicant.distinctiveMarks || 'لا توجد' }}</div>
+          </div>
         </div>
-      </div>
+      </p-card>
     </div>
 
-    <div class="col-12 mt-4">
-      <div class="card shadow-sm">
-        <div class="card-header bg-custom text-white">
-          <h5 class="mb-0">الفحوصات الطبية</h5>
-        </div>
-        <div class="card-body py-2">
-          <div class="row row-cols-1 row-cols-md-2 g-2">
-            <div class="col">
-              <div class="border rounded p-2 small compact-exam-card" [ngClass]="{'missing-exam': !applicant.eyeExam}">
-                <h6 class="mb-2">فحص العيون</h6>
-                <ng-container *ngIf="applicant.eyeExam; ">
-                  <div><strong>النظر:</strong> {{ applicant.eyeExam.vision }}</div>
-                  <div><strong>الألوان:</strong> {{ applicant.eyeExam.colorTest }}</div>
-                  <div><strong>قيمة الانكسار:</strong> {{ applicant.eyeExam.refractionValue }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.eyeExam.resultID) }}</div>
-                </ng-container>
+    <!-- Clinics Cards -->
+    <div class="col-12" *ngFor="let clinic of clinicsData">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="clinic-header">
+            <div class="d-flex align-items-center gap-2">
+              <i [class]="clinic.icon" class="clinic-icon"></i>
+              <h5 class="mb-0">{{ clinic.name }}</h5>
+            </div>
+            <p-tag [value]="clinic.exam ? 'تم الفحص' : 'لم يتم الفحص'" 
+                   [severity]="clinic.exam ? 'success' : 'danger'"
+                   styleClass="exam-status-badge"></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="clinic-content">
+          <!-- Exam Section -->
+          <div class="section-block" *ngIf="clinic.exam">
+            <div class="section-title">
+              <i class="pi pi-file-edit"></i>
+              <span>الفحص الطبي</span>
+            </div>
+            <div class="exam-details">
+              <ng-container [ngSwitch]="clinic.name">
+                <!-- Eye Exam -->
+                <div *ngSwitchCase="'عيادة العيون'" class="exam-data">
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-eye"></i>
+                      <span>النظر</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.vision || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-palette"></i>
+                      <span>الألوان</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.colorTest || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-calculator"></i>
+                      <span>قيمة الانكسار</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.refractionValue || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row result-row">
+                    <div class="data-label">
+                      <i class="pi pi-check-circle"></i>
+                      <span>النتيجة</span>
+                    </div>
+                    <div class="data-value">
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
+                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Internal Exam -->
+                <div *ngSwitchCase="'عيادة الباطنة'" class="exam-data">
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-heart"></i>
+                      <span>القلب</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.heart || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-wind"></i>
+                      <span>الجهاز التنفسي</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.respiratory || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-apple"></i>
+                      <span>الجهاز الهضمي</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.digestive || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-cog"></i>
+                      <span>الغدد الصماء</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.endocrine || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-brain"></i>
+                      <span>الأعصاب</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.neurology || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-tint"></i>
+                      <span>الدم</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.blood || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-link"></i>
+                      <span>المفاصل</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.joints || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-filter"></i>
+                      <span>الكلى</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.kidney || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-volume-up"></i>
+                      <span>السمع</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.hearing || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-circle"></i>
+                      <span>الجلد</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.skin || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row result-row">
+                    <div class="data-label">
+                      <i class="pi pi-check-circle"></i>
+                      <span>النتيجة</span>
+                    </div>
+                    <div class="data-value">
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
+                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Surgical Exam -->
+                <div *ngSwitchCase="'عيادة الجراحة'" class="exam-data">
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-briefcase"></i>
+                      <span>عام</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.generalSurgery || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-filter"></i>
+                      <span>المسالك البولية</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.urinarySurgery || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-heart"></i>
+                      <span>الأوعية الدموية</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.vascularSurgery || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-wind"></i>
+                      <span>الصدر</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.thoracicSurgery || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row result-row">
+                    <div class="data-label">
+                      <i class="pi pi-check-circle"></i>
+                      <span>النتيجة</span>
+                    </div>
+                    <div class="data-value">
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
+                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Orthopedic Exam -->
+                <div *ngSwitchCase="'عيادة العظمية'" class="exam-data">
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-bone"></i>
+                      <span>عضلي هيكلي</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.musculoskeletal || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-cog"></i>
+                      <span>جراحة عصبية</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.neurologicalSurgery || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row result-row">
+                    <div class="data-label">
+                      <i class="pi pi-check-circle"></i>
+                      <span>النتيجة</span>
+                    </div>
+                    <div class="data-value">
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
+                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                    </div>
+                  </div>
+                  <div class="data-row" *ngIf="clinic.exam.reason">
+                    <div class="data-label">
+                      <i class="pi pi-info-circle"></i>
+                      <span>السبب</span>
+                    </div>
+                    <div class="data-value reason-text">{{ clinic.exam.reason }}</div>
+                  </div>
+                </div>
+                
+                <!-- Ear Exam -->
+                <div *ngSwitchCase="'عيادة الأذنية'" class="exam-data">
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-volume-up"></i>
+                      <span>الأذن اليمنى</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.rightEar || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-volume-down"></i>
+                      <span>الأذن اليسرى</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.leftEar || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-volume-up"></i>
+                      <span>السمع اليمين</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.rightHearing || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-volume-down"></i>
+                      <span>السمع اليسار</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.leftHearing || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-wind"></i>
+                      <span>الأنف اليمين</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.rightNose || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-wind"></i>
+                      <span>الأنف اليسار</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.leftNose || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-comment"></i>
+                      <span>الفم</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.mouth || 'غير محدد' }}</div>
+                  </div>
+                  <div class="data-row result-row">
+                    <div class="data-label">
+                      <i class="pi pi-check-circle"></i>
+                      <span>النتيجة</span>
+                    </div>
+                    <div class="data-value">
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
+                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                    </div>
+                  </div>
+                  <div class="data-row" *ngIf="clinic.exam.reason">
+                    <div class="data-label">
+                      <i class="pi pi-info-circle"></i>
+                      <span>السبب</span>
+                    </div>
+                    <div class="data-value reason-text">{{ clinic.exam.reason }}</div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="section-block" *ngIf="!clinic.exam">
+            <div class="no-data-message">
+              <i class="pi pi-info-circle"></i>
+              <span>لم يتم إجراء الفحص الطبي</span>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Consultations Section -->
+          <div class="section-block">
+            <div class="section-title">
+              <div class="d-flex align-items-center gap-2">
+                <i class="pi pi-comments"></i>
+                <span>الاستشارات الخارجية</span>
+                <p-tag [value]="clinic.consultations.length + ' استشارة'" 
+                       severity="info" 
+                       styleClass="ms-2 count-badge"></p-tag>
+              </div>
+              <p-button 
+                icon="pi pi-plus" 
+                label="إضافة استشارة" 
+                styleClass="p-button-sm p-button-outlined"
+                (click)="openAddConsultationModal(clinic.name, getSpecializationId(clinic.name))"
+                [disabled]="!applicant"></p-button>
+            </div>
+            <div *ngIf="clinic.consultations.length > 0; else noConsultations" class="consultations-list">
+              <div *ngFor="let consultation of clinic.consultations" class="consultation-card">
+                <div class="consultation-main">
+                  <div class="consultation-info">
+                    <div class="consultation-type">
+                      <i class="pi pi-comment"></i>
+                      <strong>{{ consultation.consultationType }}</strong>
+                    </div>
+                    <div class="consultation-doctor">
+                      <i class="pi pi-user"></i>
+                      <span>{{ consultation.referredDoctor }}</span>
+                    </div>
+                  </div>
+                  <div class="consultation-actions">
+                    <p-button 
+                      icon="pi pi-pencil" 
+                      label="تعديل" 
+                      styleClass="p-button-sm p-button-outlined"
+                      (onClick)="openEditConsultationModal(consultation)"
+                      [disabled]="loading"></p-button>
+                    <button *ngIf="consultation.attachment" class="btn-attachment" (click)="openFile(consultation.attachment)" title="عرض المرفق">
+                      <i class="pi pi-file"></i>
+                      <span>عرض المرفق</span>
+                    </button>
+                    <div *ngIf="!consultation.attachment" class="no-attachment">
+                      <span class="text-muted">
+                        <i class="pi pi-times-circle"></i>
+                        لا يوجد مرفق
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="consultation-result" *ngIf="consultation.result">
+                  <div class="result-header">
+                    <i class="pi pi-check-circle"></i>
+                    <span>النتيجة</span>
+                  </div>
+                  <div class="result-content">{{ consultation.result }}</div>
+                </div>
               </div>
             </div>
+            <ng-template #noConsultations>
+              <div class="no-data-message">
+                <i class="pi pi-info-circle"></i>
+                <span>لا توجد استشارات</span>
+              </div>
+            </ng-template>
+          </div>
 
-            <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.surgicalExam}">
-                <h6 class=" mb-2">الفحص الجراحي</h6>
-                <ng-container *ngIf="applicant.surgicalExam; else noData">
-                  <div><strong>عام:</strong> {{ applicant.surgicalExam.generalSurgery }}</div>
-                  <div><strong>المسالك البولية:</strong> {{ applicant.surgicalExam.urinarySurgery }}</div>
-                  <div><strong>الأوعية الدموية:</strong> {{ applicant.surgicalExam.vascularSurgery }}</div>
-                  <div><strong>الصدر:</strong> {{ applicant.surgicalExam.thoracicSurgery }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.surgicalExam.resultID) }}</div>
-                </ng-container>
+          <p-divider></p-divider>
+
+          <!-- Investigations Section -->
+          <div class="section-block">
+            <div class="section-title">
+              <div class="d-flex align-items-center gap-2">
+                <i class="pi pi-file"></i>
+                <span>التحاليل المخبرية والشعاعية</span>
+                <p-tag [value]="clinic.investigations.length + ' تحليل'" 
+                       severity="info" 
+                       styleClass="ms-2 count-badge"></p-tag>
+              </div>
+              <p-button 
+                icon="pi pi-plus" 
+                label="إضافة تحليل" 
+                styleClass="p-button-sm p-button-outlined"
+                (onClick)="openAddInvestigationModal(clinic.name, getSpecializationId(clinic.name))"
+                [disabled]="!applicant"></p-button>
+            </div>
+            <div *ngIf="clinic.investigations.length > 0; else noInvestigations" class="investigations-list">
+              <div *ngFor="let investigation of clinic.investigations" class="investigation-card">
+                <div class="investigation-main">
+                  <div class="investigation-info">
+                    <div class="investigation-type">
+                      <i class="pi pi-file"></i>
+                      <strong>{{ investigation.type }}</strong>
+                    </div>
+                    <div class="investigation-meta">
+                      <p-tag [value]="investigation.status || 'غير محدد'" 
+                             [severity]="getStatusSeverity(investigation.status)"
+                             styleClass="status-badge"></p-tag>
+                    </div>
+                  </div>
+                  <div class="investigation-actions">
+                    <p-button 
+                      icon="pi pi-pencil" 
+                      label="تعديل" 
+                      styleClass="p-button-sm p-button-outlined"
+                      (onClick)="openEditInvestigationModal(investigation)"
+                      [disabled]="loading"></p-button>
+                    <button *ngIf="investigation.attachment" class="btn-attachment" (click)="openFile(investigation.attachment)" title="عرض المرفق">
+                      <i class="pi pi-file"></i>
+                      <span>عرض المرفق</span>
+                    </button>
+                    <div *ngIf="!investigation.attachment" class="no-attachment">
+                      <span class="text-muted">
+                        <i class="pi pi-times-circle"></i>
+                        لا يوجد مرفق
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="investigation-result" *ngIf="investigation.result">
+                  <div class="result-header">
+                    <i class="pi pi-check-circle"></i>
+                    <span>النتيجة</span>
+                  </div>
+                  <div class="result-content">{{ investigation.result }}</div>
+                </div>
               </div>
             </div>
-
-            <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.orthopedicExamDto}">
-                <h6 class=" mb-2">الفحص الباطني</h6>
-                <ng-container *ngIf="applicant.internalExam; else noData">
-                  <div><strong>القلب:</strong> {{ applicant.internalExam.heart }}</div>
-                  <div><strong>الجهاز التنفسي:</strong> {{ applicant.internalExam.respiratory }}</div>
-                  <div><strong>الجهاز الهضمي:</strong> {{ applicant.internalExam.digestive }}</div>
-                  <div><strong>الغدد الصماء:</strong> {{ applicant.internalExam.endocrine }}</div>
-                  <div><strong>الأعصاب:</strong> {{ applicant.internalExam.neurology }}</div>
-                  <div><strong>الدم:</strong> {{ applicant.internalExam.blood }}</div>
-                  <div><strong>المفاصل:</strong> {{ applicant.internalExam.joints }}</div>
-                  <div><strong>الكلى:</strong> {{ applicant.internalExam.kidney }}</div>
-                  <div><strong>السمع:</strong> {{ applicant.internalExam.hearing }}</div>
-                  <div><strong>الجلد:</strong> {{ applicant.internalExam.skin }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.internalExam.resultID) }}</div>
-                </ng-container>
+            <ng-template #noInvestigations>
+              <div class="no-data-message">
+                <i class="pi pi-info-circle"></i>
+                <span>لا توجد تحاليل</span>
               </div>
-            </div>
-
-            <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.orthopedicExamDto}">
-                <h6 class=" mb-2">فحص العظام</h6>
-                <ng-container *ngIf="applicant.orthopedicExamDto; else noData">
-                  <div><strong>عضلي هيكلي:</strong> {{ applicant.orthopedicExamDto.musculoskeletal }}</div>
-                  <div><strong>جراحة عصبية:</strong> {{ applicant.orthopedicExamDto.neurologicalSurgery }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.orthopedicExamDto.resultID) }}</div>
-                </ng-container>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="border rounded p-2 small compact-exam-card"
-                [ngClass]="{'missing-exam': !applicant.earClinic}">
-                <h6 class=" mb-2">فحص الأذن</h6>
-                <ng-container *ngIf="applicant.earClinic; else noData">
-                  <div><strong>الأذن اليمنى:</strong> {{ applicant.earClinic.rightEar }}</div>
-                  <div><strong>الأذن اليسرى:</strong> {{ applicant.earClinic.leftEar }}</div>
-                  <div><strong>السمع اليمين:</strong> {{ applicant.earClinic.rightHearing }}</div>
-                  <div><strong>السمع اليسار:</strong> {{ applicant.earClinic.leftHearing }}</div>
-                  <div><strong>الأنف اليمين:</strong> {{ applicant.earClinic.rightNose }}</div>
-                  <div><strong>الأنف اليسار:</strong> {{ applicant.earClinic.leftNose }}</div>
-                  <div><strong>الفم:</strong> {{ applicant.earClinic.mouth }}</div>
-                  <div><strong>النتيجة:</strong> {{ getResultDescription(applicant.earClinic.resultID) }}</div>
-                  <div *ngIf="applicant.earClinic.reason"><strong>السبب:</strong> {{ applicant.earClinic.reason }}</div>
-                </ng-container>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="border rounded p-2 small compact-exam-card">
-                <h6 class=" mb-2">الاستشارة</h6>
-                <ng-container *ngIf="applicant.consultation; else noData">
-                  <div><strong>النوع:</strong> {{ applicant.consultation.consultationType }}</div>
-                  <div><strong>الطبيب:</strong> {{ applicant.consultation.referredDoctor }}</div>
-                </ng-container>
-              </div>
-            </div>
-
-            <ng-template #noData>
-              <div class="text-muted">لا يوجد بيانات</div>
             </ng-template>
           </div>
         </div>
-      </div>
+      </p-card>
     </div>
 
-    <div class="col-12 mt-4">
-      <div class="card shadow-sm">
-        <div class="card-header bg-custom text-white">
-          <h5 class="mb-0">القرار النهائي</h5>
-        </div>
-        <div class="card-body py-2">
-          <form #decisionForm="ngForm">
-            <div class="mb-3">
-              <label class="form-label">النتيجة</label>
-              <ng-select [items]="results" bindLabel="description" bindValue="resultID"
-                [(ngModel)]="decisionModel.resultID" name="resultID" (ngModelChange)="onResultChange($event)"
-                placeholder="اختر النتيجة" [appendTo]="'body'" [disabled]="!hasAllExams()">
-              </ng-select>
+    <!-- Final Decision Card -->
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <div class="d-flex align-items-center gap-2">
+              <i class="pi pi-check-circle"></i>
+              <h5 class="mb-0">القرار النهائي</h5>
             </div>
+          </div>
+        </ng-template>
+        
+        <form #decisionForm="ngForm" name="decisionForm">
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="pi pi-list"></i>
+              النتيجة
+            </label>
+            <ng-select [items]="results" 
+                       bindLabel="description" 
+                       bindValue="resultID"
+                       [(ngModel)]="decisionModel.resultID" 
+                       name="resultID" 
+                       (ngModelChange)="onResultChange($event)"
+                       [appendTo]="'body'" 
+                       [disabled]="!hasAllExams()">
+            </ng-select>
+          </div>
 
-            <div class="mb-3">
-              @if(isAccept){
-              <label class="form-label">التوصية</label>
-              }
-              @else {
-              <label class="form-label">السبب</label>
-              }
-
-              <textarea class="form-control" [(ngModel)]="decisionModel.reason" name="reason"
-                [disabled]="!hasAllExams()"></textarea>
+          <div class="mb-3">
+            <label class="form-label" *ngIf="isAccept">
+              <i class="pi pi-thumbs-up"></i>
+              التوصية
+            </label>
+            <label class="form-label" *ngIf="!isAccept">
+              <i class="pi pi-info-circle"></i>
+              السبب
+            </label>
+            <textarea class="form-control" 
+                      [(ngModel)]="decisionModel.reason" 
+                      name="reason"
+                      rows="3"
+                      [disabled]="!hasAllExams()"></textarea>
+          </div>
+          
+          <div class="mb-3" *ngIf="!isApproved">
+            <label class="form-label">
+              <i class="pi pi-clock"></i>
+              مدة التأجيل
+            </label>
+            <input type="text" 
+                   class="form-control" 
+                   [(ngModel)]="decisionModel.postponeDuration"
+                   name="postponeDuration" />
+          </div>
+          
+          <div class="text-end">
+            <p-button label="إرسال" 
+                      icon="pi pi-send" 
+                      (onClick)="submitDecision()"
+                      [disabled]="!hasAllExams() || loading"></p-button>
+          </div>
+          
+          <div *ngIf="responseMessage" class="mt-3">
+            <div class="alert" 
+                 [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
+                 role="alert">
+              <i [class]="responseSuccess ? 'pi pi-check-circle' : 'pi pi-exclamation-triangle'" class="me-2"></i>
+              {{ responseMessage }}
             </div>
-            @if(!isApproved){
-            <div class="mb-3">
-              <label class="form-label">مدة التأجيل</label>
-              <input type="text" class="form-control" [(ngModel)]="decisionModel.postponeDuration"
-                name="postponeDuration" />
-            </div>
-            }
-            <div class="text-end">
-              <button type="button" class="btn btn-primary" (click)="submitDecision()"
-                [disabled]="!hasAllExams()">
-              <i class="fas fa-paper-plane"></i> إرسال
-            </button>
-            </div>
-            <div *ngIf="responseMessage" class="mt-3">
-              <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
-                role="alert">
-                {{ responseMessage }}
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+          </div>
+        </form>
+      </p-card>
     </div>
   </div>
+
+  <!-- Consultation Modal -->
+  <p-dialog 
+    [(visible)]="showConsultationModal" 
+    [modal]="true" 
+    [dismissableMask]="false"
+    [style]="{width: '600px'}"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeConsultationModal()"
+    [header]="(selectedConsultation?.consultationID ?? 0) > 0 ? 'تعديل الاستشارة' : 'إضافة استشارة جديدة'">
+    
+    <form [formGroup]="consultationForm" *ngIf="consultationForm" (ngSubmit)="saveConsultation()">
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-comment"></i>
+          نوع الاستشارة
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          formControlName="consultationType"
+          [readonly]="(selectedConsultation?.consultationID ?? 0) > 0"
+          placeholder="أدخل نوع الاستشارة">
+      </div>
+
+      <div class="form-group mb-3" *ngIf="(selectedConsultation?.consultationID ?? 0) === 0">
+        <label class="form-label">
+          <i class="pi pi-user"></i>
+          الطبيب المحال إليه
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          formControlName="referredDoctor"
+          placeholder="أدخل اسم الطبيب">
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-file-edit"></i>
+          النتيجة <span class="text-danger">*</span>
+        </label>
+        <textarea 
+          class="form-control" 
+          formControlName="result" 
+          rows="5"
+          placeholder="أدخل نتيجة الاستشارة"></textarea>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-file"></i>
+          ملف مرفق
+        </label>
+        <input 
+          type="file" 
+          class="form-control" 
+          accept="image/*,.pdf"
+          (change)="onConsultationFileSelected($event)"
+          [disabled]="uploadingFile">
+        <small class="text-muted" *ngIf="uploadingFile">
+          <i class="pi pi-spin pi-spinner"></i>
+          جاري رفع الملف...
+        </small>
+      </div>
+
+      <div *ngIf="previewUrl" class="preview-container mb-3">
+        <img *ngIf="previewUrl.startsWith('data:') || previewUrl.includes('.jpg') || previewUrl.includes('.png')" 
+             [src]="previewUrl" 
+             alt="معاينة المرفق" 
+             class="img-fluid rounded" 
+             style="max-height: 200px;">
+        <div *ngIf="previewUrl.includes('.pdf')" class="alert alert-info">
+          <i class="pi pi-file-pdf"></i>
+          ملف PDF: {{ previewUrl }}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <p-button 
+          label="إلغاء" 
+          icon="pi pi-times" 
+          styleClass="p-button-secondary"
+          (onClick)="closeConsultationModal()"
+          [disabled]="loading"></p-button>
+        <p-button 
+          label="حفظ" 
+          icon="pi pi-check" 
+          type="submit"
+          [disabled]="consultationForm.invalid || loading || uploadingFile"></p-button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <!-- Investigation Modal -->
+  <p-dialog 
+    [(visible)]="showInvestigationModal" 
+    [modal]="true" 
+    [dismissableMask]="false"
+    [style]="{width: '600px'}"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeInvestigationModal()"
+    [header]="(selectedInvestigation?.investigationID ?? 0) > 0 ? 'تعديل التحليل' : 'إضافة تحليل جديد'">
+    
+    <form [formGroup]="investigationForm" *ngIf="investigationForm" (ngSubmit)="saveInvestigation()">
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-file"></i>
+          نوع التحليل <span class="text-danger">*</span>
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          formControlName="type"
+          [readonly]="(selectedInvestigation?.investigationID ?? 0) > 0"
+          placeholder="أدخل نوع التحليل">
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-file-edit"></i>
+          النتيجة <span class="text-danger">*</span>
+        </label>
+        <textarea 
+          class="form-control" 
+          formControlName="result" 
+          rows="5"
+          placeholder="أدخل نتيجة التحليل"></textarea>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-info-circle"></i>
+          الحالة <span class="text-danger">*</span>
+        </label>
+        <select class="form-control" formControlName="status">
+          <option value="مكتمل">مكتمل</option>
+          <option value="مؤجل">مؤجل</option>
+          <option value="قيد الانتظار">قيد الانتظار</option>
+        </select>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">
+          <i class="pi pi-file"></i>
+          ملف مرفق
+        </label>
+        <input 
+          type="file" 
+          class="form-control" 
+          accept="image/*,.pdf"
+          (change)="onInvestigationFileSelected($event)"
+          [disabled]="uploadingFile">
+        <small class="text-muted" *ngIf="uploadingFile">
+          <i class="pi pi-spin pi-spinner"></i>
+          جاري رفع الملف...
+        </small>
+      </div>
+
+      <div *ngIf="previewUrl" class="preview-container mb-3">
+        <img *ngIf="previewUrl.startsWith('data:') || previewUrl.includes('.jpg') || previewUrl.includes('.png')" 
+             [src]="previewUrl" 
+             alt="معاينة المرفق" 
+             class="img-fluid rounded" 
+             style="max-height: 200px;">
+        <div *ngIf="previewUrl.includes('.pdf')" class="alert alert-info">
+          <i class="pi pi-file-pdf"></i>
+          ملف PDF: {{ previewUrl }}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <p-button 
+          label="إلغاء" 
+          icon="pi pi-times" 
+          styleClass="p-button-secondary"
+          (onClick)="closeInvestigationModal()"
+          [disabled]="loading"></p-button>
+        <p-button 
+          label="حفظ" 
+          icon="pi pi-check" 
+          type="submit"
+          [disabled]="investigationForm.invalid || loading || uploadingFile"></p-button>
+      </div>
+    </form>
+  </p-dialog>
 </div>

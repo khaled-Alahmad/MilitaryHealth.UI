@@ -2,13 +2,23 @@
   <div class="mb-3 d-flex justify-content-end">
     <div class="search-wrapper">
       <input type="text" class="form-control" placeholder="ابحث عن رقم الملف" (input)="onFilterChange($event)" />
+      <i class="fas fa-search search-icon"></i>
     </div>
   </div>
 </div>
 
 <div class="container-fluid">
-  <p-table #table [value]="decisions" [rows]="10" [sortMode]="'multiple'" [scrollable]="true"
-           [showCurrentPageReport]="true">
+  <p-table 
+    #table 
+    [value]="decisions" 
+    [rows]="10" 
+    [sortMode]="'multiple'" 
+    [scrollable]="true"
+    [scrollHeight]="tableHeight"
+    [loading]="loading"
+    [showCurrentPageReport]="true"
+    responsiveLayout="scroll"
+    class="custom-table">
 
     <ng-template pTemplate="header">
       <tr>
@@ -62,7 +72,10 @@
             <span class="badge bg-danger">{{ decision.result?.description }}</span>
           }
           @else if (decision.result?.description === 'مؤجل') {
-            <span class="badge bg-warning text-dark">{{ decision.result?.description }}</span>
+            <span class="badge bg-warning">{{ decision.result?.description }}</span>
+          }
+          @else {
+            <span class="text-muted">-</span>
           }
         </td>
 
@@ -82,7 +95,19 @@
           }
         </td>
 
-        <td>{{ decision.decisionDate | date:'yyyy/MM/dd' }}</td>
+        <td>
+          <span class="fw-bold">{{ decision.decisionDate | date:'yyyy/MM/dd' }}</span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-4">
+          <div class="d-flex flex-column align-items-center">
+            <i class="pi pi-inbox text-muted mb-2" style="font-size: 2rem;"></i>
+            <span class="text-muted">لا توجد قرارات</span>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>

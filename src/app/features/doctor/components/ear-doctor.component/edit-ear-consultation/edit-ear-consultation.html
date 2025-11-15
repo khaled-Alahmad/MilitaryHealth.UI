@@ -26,10 +26,9 @@
       <div class="col-md-6 mb-3">
         <label class="form-label">النتيجة <span class="text-danger">*</span></label>
         <select class="form-select" formControlName="result">
-          <option value="">اختر النتيجة</option>
-          <option value="مقبول">مقبول</option>
-          <option value="مرفوض">مرفوض</option>
-          <option value="مؤجل">مؤجل</option>
+          <option *ngFor="let r of results" [value]="r.description">
+            {{ r.description }}
+          </option>
         </select>
       </div>
 

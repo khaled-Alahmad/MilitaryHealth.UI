@@ -10,7 +10,7 @@
       </div>
       <div class="ids">
         <div class="id"><span class="label">رقم الديوان</span><span class="value accent fw-bold">{{ archive?.applicantFileNumber || '-' }}</span></div>
-        <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant.associateNumber || '-' }}</span></div>
+        <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant?.associateNumber || '-' }}</span></div>
         <!-- <div class="id"><span class="label">رقم الملف</span><span class="value">{{ applicant?.fileNumber }}</span></div> -->
         <div class="id date"><span class="label">تاريخ الطباعة</span><span class="value">{{ (date | date:'yyyy/MM/dd') }}</span></div>
       </div>
@@ -86,8 +86,9 @@
             @if(a.consultation){
               <div class="field"><span class="label">النوع</span><span class="value">{{ a.consultation.consultationType || '-' }}</span></div>
               <div class="field"><span class="label">الطبيب</span><span class="value">{{ a.consultation.referredDoctor || '-' }}</span></div>
+              <div class="field full"><span class="label">النتيجة</span><span class="value">{{ a.consultation.result || '-' }}</span></div>
             }@else {
-              <div class="label">لا يوجد تحاليل</div>
+              <div class="field full"><span class="label">لا توجد استشارات</span></div>
             }
           </div>
         </div>
@@ -97,28 +98,89 @@
           <div class="two-col">
             @if(a.investigation){
               <div class="field"><span class="label">النوع</span><span class="value">{{ a.investigation.type || '-' }}</span></div>
-              <div class="field"><span class="label">النتيجة</span><span class="value">{{ a.investigation.result || '-' }}</span></div>
               <div class="field"><span class="label">الحالة</span><span class="value">{{ a.investigation.status || '-' }}</span></div>
-  
+              <div class="field full"><span class="label">النتيجة</span><span class="value">{{ a.investigation.result || '-' }}</span></div>
             }@else {
-              <div class="label">لا يوجد تحاليل</div>
+              <div class="field full"><span class="label">لا توجد تحاليل</span></div>
+            }
+          </div>
+        </div>
+        
+        <!-- عرض النتائج والأسباب لكل فحص -->
+        <div class="subcard avoid-break print-results-section">
+          <div class="subcard-title">النتائج والأسباب</div>
+          <div class="results-reasons-grid">
+            @if(a.eyeExam?.resultID){
+              <div class="result-item">
+                <div class="result-label">فحص العيون:</div>
+                <div class="result-value">{{ getResultDescription(a.eyeExam?.resultID) }}</div>
+              </div>
+            }
+            @if(a.surgicalExam?.resultID){
+              <div class="result-item">
+                <div class="result-label">الفحص الجراحي:</div>
+                <div class="result-value">{{ getResultDescription(a.surgicalExam?.resultID) }}</div>
+              </div>
+            }
+            @if(a.internalExam?.resultID){
+              <div class="result-item">
+                <div class="result-label">الفحص الباطني:</div>
+                <div class="result-value">{{ getResultDescription(a.internalExam?.resultID) }}</div>
+              </div>
+            }
+            @if(a.orthopedicExamDto?.resultID){
+              <div class="result-item">
+                <div class="result-label">فحص العظام:</div>
+                <div class="result-value">{{ getResultDescription(a.orthopedicExamDto?.resultID) }}</div>
+                @if(a.orthopedicExamDto?.reason){
+                  <div class="reason-value">السبب: {{ a.orthopedicExamDto?.reason }}</div>
+                }
+              </div>
+            }
+            @if(a.earClinic?.resultID){
+              <div class="result-item">
+                <div class="result-label">فحص الأذن والأنف والحنجرة:</div>
+                <div class="result-value">{{ getResultDescription(a.earClinic?.resultID) }}</div>
+                @if(a.earClinic?.reason){
+                  <div class="reason-value">السبب: {{ a.earClinic?.reason }}</div>
+                }
+              </div>
             }
           </div>
         </div>
       </div>
     </section>
 
-    <section class="card avoid-break">
-      <h5 class="card-title">القرار النهائي</h5>
-      <div class="card-body two-col">
-        <div class="field"><span class="label">النتيجة</span><span class="value">{{ a.finalDecision?.result?.description || getResultDescription(a.finalDecision?.resultID) }}</span></div>
-        @if(a.finalDecision?.resultID ==1){
-          <div class="field"><span class="label">التوصية</span><span class="value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span></div>
-        }@else{
-          <div class="field"><span class="label">السبب</span><span class="value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span></div>
-          <div class="field"><span class="label">مدة التأجيل</span><span class="value">{{ a.finalDecision?.postponeDuration || '-' }}</span></div>
-        }  
-        <div class="field"><span class="label">تاريخ القرار</span><span class="value">{{ a.finalDecision?.decisionDate || '-' }}</span></div>
+    <section class="card avoid-break final-decision-section">
+      <h5 class="card-title decision-title">القرار النهائي</h5>
+      <div class="card-body decision-body">
+        <div class="decision-content">
+          <div class="decision-field">
+            <span class="decision-label">النتيجة:</span>
+            <span class="decision-value highlight">{{ a.finalDecision?.result?.description || getResultDescription(a.finalDecision?.resultID) || '-' }}</span>
+          </div>
+          @if(a.finalDecision?.resultID == 1){
+            <div class="decision-field">
+              <span class="decision-label">التوصية:</span>
+              <span class="decision-value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span>
+            </div>
+          }@else{
+            <div class="decision-field">
+              <span class="decision-label">السبب:</span>
+              <span class="decision-value">{{ a.finalDecision?.reason || 'لا يوجد' }}</span>
+            </div>
+            @if(a.finalDecision?.postponeDuration){
+              <div class="decision-field">
+                <span class="decision-label">مدة التأجيل:</span>
+                <span class="decision-value">{{ a.finalDecision?.postponeDuration }}</span>
+              </div>
+            }
+          }  
+          <div class="decision-field">
+            <span class="decision-label">تاريخ القرار:</span>
+            <span class="decision-value">{{ a.finalDecision?.decisionDate || '-' }}</span>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -131,9 +193,9 @@
   </ng-template>
 
   <div class="actions no-print">
-    <button class="btn btn-primary" (click)="printProfile()">
-      <i class="fas fa-print"></i>
-      طباعة
+    <button class="btn-print-professional" (click)="printProfile()">
+      <i class="pi pi-print"></i>
+      <span>طباعة القرار</span>
     </button>
   </div>
 </div>

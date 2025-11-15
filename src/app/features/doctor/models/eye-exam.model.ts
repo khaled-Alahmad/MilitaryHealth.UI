@@ -8,8 +8,8 @@ export interface EyeExam {
     doctorID: number;
     vision: string; // القدرة البصرية اليمنى "R:" مثل "8" (لكتابة قبل /10)
     visionLeft: string; // القدرة البصرية اليسرى "L:" 
-    colorTest: string; // اختبار الألوان اليمنى: "سليم" أو "غير سليم شذوذ"
-    colorTestLeft: string; // اختبار الألوان اليسرى
+    colorTest: string; // اختبار الألوان اليمنى: "سليم" أو "غير سليم" أو "غير ذلك"
+    colorTestLeft: string; // اختبار الألوان اليسرى: "سليم" أو "غير سليم" أو "غير ذلك"
     refractiveError: string; // أسواء الانكسار: "غير مهمة" أو "مهمة"
     otherDiseases?: string;
     resultID: number;

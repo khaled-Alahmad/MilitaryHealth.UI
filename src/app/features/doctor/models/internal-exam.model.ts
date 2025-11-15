@@ -21,7 +21,6 @@ export interface InternalExam {
   blood: string;
   joints: string;
   kidney: string;
-  hearing: string;
   skin: string;
   resultID: number;
   reason?: string;

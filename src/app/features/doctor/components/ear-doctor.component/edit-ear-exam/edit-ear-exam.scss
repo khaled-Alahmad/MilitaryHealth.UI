@@ -475,3 +475,210 @@
 .me-2 {
   margin-left: 0.5rem;
 }
+
+/* ===========================================
+   Professional Radio Buttons Styling
+   Matching Visual Identity
+   =========================================== */
+
+.form-check {
+  margin-bottom: 0.5rem !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem !important;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: rgba(66, 129, 119, 0.05);
+  }
+  
+  .form-check-input {
+    margin: 0 !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    border: 2px solid var(--primary-medium) !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    background-color: white;
+    position: relative;
+    
+    &:hover {
+      border-color: var(--primary-dark) !important;
+      transform: scale(1.1);
+    }
+    
+    &:checked {
+      background-color: var(--primary-dark) !important;
+      border-color: var(--primary-dark) !important;
+      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.2);
+      
+      &::after {
+        background-color: white;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        transform: scale(1);
+      }
+    }
+    
+    &:focus {
+      border-color: var(--primary-dark) !important;
+      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.15) !important;
+      outline: none;
+    }
+  }
+  
+  .form-check-label {
+    margin: 0 !important;
+    padding: 0 !important;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    color: var(--neutral-dark);
+    flex: 0 0 auto;
+    user-select: none;
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: var(--primary-dark);
+    }
+  }
+  
+  // عندما يكون Radio محدد
+  &:has(.form-check-input:checked) {
+    background-color: rgba(5, 66, 57, 0.08);
+    
+    .form-check-label {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+  }
+}
+
+// تحسين المسافات في Radio Buttons inline
+.d-flex.gap-3 {
+  gap: 0.75rem !important;
+  
+  .form-check {
+    gap: 0.5rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+}
+
+// تحسين Checkboxes
+input[type="checkbox"] {
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ===========================================
+   Resonator Selector Styles
+   =========================================== */
+
+.resonator-selector {
+  .input-group {
+    display: flex;
+    align-items: stretch;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    .resonator-nav-btn {
+      background: var(--primary-dark) !important;
+      border: none !important;
+      color: white !important;
+      padding: 0.75rem 1rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 50px;
+      
+      &:hover:not(:disabled) {
+        background: var(--primary-medium) !important;
+        transform: scale(1.05);
+      }
+      
+      &:active:not(:disabled) {
+        transform: scale(0.95);
+      }
+      
+      i {
+        font-size: 1.1rem;
+      }
+    }
+    
+    .resonator-input {
+      flex: 1;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: white;
+      border: 2px solid var(--primary-medium);
+      border-left: none;
+      border-right: none;
+      padding: 0.75rem 1rem;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      &:focus {
+        border-color: var(--primary-medium);
+        box-shadow: none;
+        outline: none;
+      }
+      
+      &.is-valid {
+        border-color: #28a745;
+        background-color: rgba(40, 167, 69, 0.05);
+      }
+      
+      &.is-invalid {
+        border-color: #dc3545;
+        background-color: rgba(220, 53, 69, 0.05);
+      }
+    }
+  }
+  
+  .resonator-options {
+    .resonator-option-btn {
+      background: white;
+      border: 2px solid var(--primary-medium);
+      color: var(--primary-dark);
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      
+      &:hover:not(.active) {
+        background: rgba(66, 129, 119, 0.1);
+        border-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      &.active {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+        border-color: var(--primary-dark);
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(5, 66, 57, 0.3);
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HEALTH_STATUS_VALUES } from '../../../constants/health-status-options';
 
 @Component({
   selector: 'app-edit-orthopedic-exam',
@@ -56,7 +57,7 @@ export class EditOrthopedicExamComponent implements OnInit {
 
   // Helper method to parse value
   parseValue(value: string): { displayValue: string; otherValue: string } {
-    if (!value || value === 'سليم' || value === 'غير سليم') {
+    if (!value || HEALTH_STATUS_VALUES.includes(value)) {
       return { displayValue: value || 'سليم', otherValue: '' };
     }
     return { displayValue: 'غير ذلك', otherValue: value };

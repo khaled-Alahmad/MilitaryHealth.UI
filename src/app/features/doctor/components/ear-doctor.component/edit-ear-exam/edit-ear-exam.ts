@@ -22,6 +22,17 @@ export class EditEarExamComponent implements OnInit {
   examForm!: FormGroup;
   results: any[] = [];
   loading = false;
+  
+  // قيم الرنانات الشائعة - بأشكال أسهم
+  readonly resonatorOptions = [
+    '→', '←', '=', '→→', '←←', '↑', '↓', '→↑', '←↑', '→↓', '←↓',
+    '↔', '↗', '↖', '↘', '↙', '✓', '✗', '○', '●'
+  ];
+  
+  currentResonatorIndex = 0;
+  
+  // خيارات الفم
+  readonly mouthOptions = ['سوي', 'سوء إطباق', 'طَقّة مفصل', 'تحت خلع مفصل فكي'];
 
   constructor(
     private fb: FormBuilder,
@@ -56,29 +67,110 @@ export class EditEarExamComponent implements OnInit {
   }
 
   private initForm() {
-    // Handle mouth parsing if it contains "أخرى:"
+    // معالجة غشاء الطبل - تحويل "غير سليم" إلى "غير ذلك" إذا لزم الأمر
+    const rightTympanicValue = this.exam.rightTympanicMembrane || 'سليم';
+    const leftTympanicValue = this.exam.leftTympanicMembrane || 'سليم';
+    const rightTympanicStatus = rightTympanicValue === 'سليم' ? 'سليم' : 'غير ذلك';
+    const leftTympanicStatus = leftTympanicValue === 'سليم' ? 'سليم' : 'غير ذلك';
+    const rightTympanicOther = rightTympanicValue !== 'سليم' ? rightTympanicValue : '';
+    const leftTympanicOther = leftTympanicValue !== 'سليم' ? leftTympanicValue : '';
+    
+    // معالجة اختبار الهمس
+    const rightWhisperValue = this.exam.rightWhisperTest || '';
+    const leftWhisperValue = this.exam.leftWhisperTest || '';
+    const rightWhisperStatus = rightWhisperValue === 'جيدة' ? 'جيدة' : (rightWhisperValue ? 'غير ذلك' : '');
+    const leftWhisperStatus = leftWhisperValue === 'جيدة' ? 'جيدة' : (leftWhisperValue ? 'غير ذلك' : '');
+    const rightWhisperOther = rightWhisperStatus === 'غير ذلك' ? rightWhisperValue : '';
+    const leftWhisperOther = leftWhisperStatus === 'غير ذلك' ? leftWhisperValue : '';
+    
+    // معالجة ضخامة القرينات - نحتاج إلى تحويل من boolean إلى string
+    // إذا كان isRightHugeMates = true، نستخدم قيمة افتراضية "بسيطة"
+    // إذا كان false، نستخدم "لا يوجد"
+    const rightHugeMates = this.exam.isRightHugeMates ? 'بسيطة' : 'لا يوجد';
+    const leftHugeMates = this.exam.isLeftHugeMates ? 'بسيطة' : 'لا يوجد';
+    
+    // معالجة الوتيرة (الانحراف)
+    const rightString = this.exam.rightString || 'لا يوجد';
+    const leftString = this.exam.leftString || 'لا يوجد';
+    
+    // معالجة الرنانات
+    const resonatorsValue = this.exam.resonators || '';
+    const resonatorIndex = this.resonatorOptions.indexOf(resonatorsValue);
+    this.currentResonatorIndex = resonatorIndex !== -1 ? resonatorIndex : 0;
+    
+    // معالجة الفم - تحويل من string إلى array
     const mouthValue = this.exam.mouth || '';
-    const isOtherMouth = mouthValue.startsWith('أخرى');
-    const displayMouth = isOtherMouth ? 'أخرى' : mouthValue;
-    const mouthOther = isOtherMouth && mouthValue.includes(':') ? mouthValue.split(':')[1].trim() : '';
 
     this.examForm = this.fb.group({
-      rightTympanicMembrane: [this.exam.rightTympanicMembrane || '', Validators.required],
-      leftTympanicMembrane: [this.exam.leftTympanicMembrane || '', Validators.required],
+      rightTympanicMembrane: [rightTympanicStatus, Validators.required],
+      rightTympanicMembraneOther: [rightTympanicOther],
+      leftTympanicMembrane: [leftTympanicStatus, Validators.required],
+      leftTympanicMembraneOther: [leftTympanicOther],
       rightHearing: [this.exam.rightHearing || '', Validators.required],
       leftHearing: [this.exam.leftHearing || '', Validators.required],
-      resonators: [this.exam.resonators || '', Validators.required],
-      rightWhisperTest: [this.exam.rightWhisperTest || '', Validators.required],
-      leftWhisperTest: [this.exam.leftWhisperTest || '', Validators.required],
-      isRightHugeMates: [this.exam.isRightHugeMates || false],
-      isLeftHugeMates: [this.exam.isLeftHugeMates || false],
-      rightString: [this.exam.rightString || ''],
-      leftString: [this.exam.leftString || ''],
-      mouth: [displayMouth, Validators.required],
-      mouthOther: [mouthOther],
+      resonators: [resonatorsValue, Validators.required],
+      rightWhisperTest: [rightWhisperStatus, Validators.required],
+      rightWhisperTestOther: [rightWhisperOther],
+      leftWhisperTest: [leftWhisperStatus, Validators.required],
+      leftWhisperTestOther: [leftWhisperOther],
+      rightHugeMates: [rightHugeMates],
+      leftHugeMates: [leftHugeMates],
+      rightString: [rightString],
+      leftString: [leftString],
+      mouth: [mouthValue],
       otherDiseases: [this.exam.otherDiseases || ''],
       resultID: [this.exam.resultID || '', Validators.required],
       reason: [this.exam.reason || '']
+    });
+    
+    // تحديث الفهرس عند تغيير القيمة
+    this.examForm.get('resonators')?.valueChanges.subscribe(value => {
+      const index = this.resonatorOptions.indexOf(value);
+      if (index !== -1) {
+        this.currentResonatorIndex = index;
+      }
+    });
+    
+    // إضافة التحقق من حقول "غير ذلك" - غشاء الطبل
+    this.examForm.get('rightTympanicMembrane')?.valueChanges.subscribe(value => {
+      if (value === 'غير ذلك') {
+        this.examForm.get('rightTympanicMembraneOther')?.setValidators([Validators.required]);
+      } else {
+        this.examForm.get('rightTympanicMembraneOther')?.clearValidators();
+        this.examForm.get('rightTympanicMembraneOther')?.setValue('');
+      }
+      this.examForm.get('rightTympanicMembraneOther')?.updateValueAndValidity({ emitEvent: false });
+    });
+    
+    this.examForm.get('leftTympanicMembrane')?.valueChanges.subscribe(value => {
+      if (value === 'غير ذلك') {
+        this.examForm.get('leftTympanicMembraneOther')?.setValidators([Validators.required]);
+      } else {
+        this.examForm.get('leftTympanicMembraneOther')?.clearValidators();
+        this.examForm.get('leftTympanicMembraneOther')?.setValue('');
+      }
+      this.examForm.get('leftTympanicMembraneOther')?.updateValueAndValidity({ emitEvent: false });
+    });
+    
+    // إضافة التحقق من حقول "غير ذلك" - اختبار الهمس
+    this.examForm.get('rightWhisperTest')?.valueChanges.subscribe(value => {
+      if (value === 'غير ذلك') {
+        this.examForm.get('rightWhisperTestOther')?.setValidators([Validators.required]);
+      } else {
+        this.examForm.get('rightWhisperTestOther')?.clearValidators();
+        this.examForm.get('rightWhisperTestOther')?.setValue('');
+      }
+      this.examForm.get('rightWhisperTestOther')?.updateValueAndValidity({ emitEvent: false });
+    });
+    
+    this.examForm.get('leftWhisperTest')?.valueChanges.subscribe(value => {
+      if (value === 'غير ذلك') {
+        this.examForm.get('leftWhisperTestOther')?.setValidators([Validators.required]);
+      } else {
+        this.examForm.get('leftWhisperTestOther')?.clearValidators();
+        this.examForm.get('leftWhisperTestOther')?.setValue('');
+      }
+      this.examForm.get('leftWhisperTestOther')?.updateValueAndValidity({ emitEvent: false });
     });
   }
 
@@ -91,21 +183,31 @@ export class EditEarExamComponent implements OnInit {
     this.loading = true;
 
     const formData = this.examForm.value;
+    const rightTympanicMembrane = formData.rightTympanicMembrane === 'غير ذلك' 
+      ? (formData.rightTympanicMembraneOther || '') 
+      : formData.rightTympanicMembrane;
+    const leftTympanicMembrane = formData.leftTympanicMembrane === 'غير ذلك' 
+      ? (formData.leftTympanicMembraneOther || '') 
+      : formData.leftTympanicMembrane;
+    
     const updatedExam: EarClinicExam = {
       ...this.exam,
-      rightTympanicMembrane: formData.rightTympanicMembrane,
-      leftTympanicMembrane: formData.leftTympanicMembrane,
+      rightTympanicMembrane,
+      leftTympanicMembrane,
       rightHearing: formData.rightHearing,
       leftHearing: formData.leftHearing,
       resonators: formData.resonators,
-      rightWhisperTest: formData.rightWhisperTest,
-      leftWhisperTest: formData.leftWhisperTest,
-      isRightHugeMates: formData.isRightHugeMates,
-      isLeftHugeMates: formData.isLeftHugeMates,
-      rightString: formData.rightString || '',
-      leftString: formData.leftString || '',
-      mouth: formData.mouth === 'أخرى' ? (formData.mouthOther || '') : formData.mouth,
-      mouthOther: formData.mouth === 'أخرى' ? formData.mouthOther : '',
+      rightWhisperTest: formData.rightWhisperTest === 'غير ذلك' 
+        ? (formData.rightWhisperTestOther || '') 
+        : formData.rightWhisperTest,
+      leftWhisperTest: formData.leftWhisperTest === 'غير ذلك' 
+        ? (formData.leftWhisperTestOther || '') 
+        : formData.leftWhisperTest,
+      isRightHugeMates: formData.rightHugeMates !== 'لا يوجد',
+      isLeftHugeMates: formData.leftHugeMates !== 'لا يوجد',
+      rightString: formData.rightString === 'لا يوجد' ? '' : formData.rightString,
+      leftString: formData.leftString === 'لا يوجد' ? '' : formData.leftString,
+      mouth: formData.mouth || '',
       otherDiseases: formData.otherDiseases || '',
       resultID: formData.resultID,
       reason: formData.reason || ''
@@ -151,5 +253,54 @@ export class EditEarExamComponent implements OnInit {
   isFieldInvalid(controlName: string): boolean {
     const control = this.examForm.get(controlName);
     return !!(control?.invalid && control?.touched);
+  }
+
+  // التنقل بين قيم الرنانات
+  navigateResonator(direction: 'prev' | 'next') {
+    if (direction === 'next') {
+      this.currentResonatorIndex = (this.currentResonatorIndex + 1) % this.resonatorOptions.length;
+    } else {
+      this.currentResonatorIndex = this.currentResonatorIndex === 0 
+        ? this.resonatorOptions.length - 1 
+        : this.currentResonatorIndex - 1;
+    }
+    this.examForm.patchValue({ resonators: this.resonatorOptions[this.currentResonatorIndex] });
+  }
+  
+  // تحديد قيمة الرنانات مباشرة
+  selectResonator(value: string) {
+    this.currentResonatorIndex = this.resonatorOptions.indexOf(value);
+    if (this.currentResonatorIndex === -1) {
+      this.currentResonatorIndex = 0;
+    }
+    this.examForm.patchValue({ resonators: value });
+  }
+
+  // التحقق من اختيار خيار معين في الفم
+  isMouthOptionSelected(option: string): boolean {
+    const currentValue = this.examForm.get('mouth')?.value || '';
+    if (!currentValue) return false;
+    const selectedOptions = currentValue.split(',').map((s: string) => s.trim());
+    return selectedOptions.includes(option);
+  }
+
+  // تبديل اختيار خيار في الفم
+  toggleMouthOption(option: string, event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    const currentValue = this.examForm.get('mouth')?.value || '';
+    let selectedOptions = currentValue ? currentValue.split(',').map((s: string) => s.trim()).filter((s: string) => s) : [];
+
+    if (checkbox.checked) {
+      // إضافة الخيار إذا لم يكن موجوداً
+      if (!selectedOptions.includes(option)) {
+        selectedOptions.push(option);
+      }
+    } else {
+      // إزالة الخيار
+      selectedOptions = selectedOptions.filter((opt: string) => opt !== option);
+    }
+
+    const newValue = selectedOptions.join(', ');
+    this.examForm.patchValue({ mouth: newValue });
   }
 }

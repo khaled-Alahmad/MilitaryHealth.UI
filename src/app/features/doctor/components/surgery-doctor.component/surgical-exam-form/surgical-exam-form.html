@@ -1,6 +1,6 @@
 
 <!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()">
+<div class="modal-backdrop" *ngIf="showModal">
   <div class="modal-content" (click)="$event.stopPropagation()">
 
     <!-- الهيدر -->
@@ -107,7 +107,6 @@
           <select class="form-select" formControlName="resultID"
                   [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
                   [class.is-valid]="isFieldValid('resultID')">
-            <option value="">اختر النتيجة</option>
             <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
           </select>
           <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">

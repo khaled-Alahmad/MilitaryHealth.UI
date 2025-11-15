@@ -4,6 +4,7 @@ import { InternalExam } from '../../../models/internal-exam.model';
 import { InternalExamService } from '../../../services/internal-exam.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, normalizeHealthStatus, resolveHealthStatusValue } from '../../../constants/health-status-options';
 
 @Component({
   selector: 'app-edit-internal-exam-component',
@@ -21,6 +22,19 @@ export class EditInternalExamComponent {
   resultAccepted: number = 0;
   resultRejected: number = 0;
   resultPostponed: number = 0;
+  readonly healthStatusOptions = HEALTH_STATUS_OPTIONS;
+  readonly otherOptionValue = OTHER_OPTION_VALUE;
+  readonly statusSections = [
+    { control: 'heart', otherControl: 'heartOther', label: 'جهاز القلب والدوران' },
+    { control: 'respiratory', otherControl: 'respiratoryOther', label: 'الجهاز التنفسي' },
+    { control: 'digestive', otherControl: 'digestiveOther', label: 'أمراض جهاز الهضم' },
+    { control: 'endocrine', otherControl: 'endocrineOther', label: 'أمراض الغدد الصم والتغذية' },
+    { control: 'neurology', otherControl: 'neurologyOther', label: 'الأمراض العصبية' },
+    { control: 'blood', otherControl: 'bloodOther', label: 'أمراض الدم' },
+    { control: 'joints', otherControl: 'jointsOther', label: 'أمراض المفاصل' },
+    { control: 'kidney', otherControl: 'kidneyOther', label: 'أمراض الكلية' },
+    { control: 'skin', otherControl: 'skinOther', label: 'الأمراض الجلدية' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -29,20 +43,16 @@ export class EditInternalExamComponent {
   ) {}
 
   ngOnInit(): void {
-    this.examForm = this.fb.group({
-      heart: [this.exam?.heart || '', Validators.required],
-      respiratory: [this.exam?.respiratory || '', Validators.required],
-      digestive: [this.exam?.digestive || '', Validators.required],
-      endocrine: [this.exam?.endocrine || ''],
-      neurology: [this.exam?.neurology || ''],
-      blood: [this.exam?.blood || ''],
-      joints: [this.exam?.joints || ''],
-      kidney: [this.exam?.kidney || ''],
-      hearing: [this.exam?.hearing || ''],
-      skin: [this.exam?.skin || ''],
-      resultID: [this.exam?.resultID || null, Validators.required],
-      reason: [this.exam?.reason || '']
+    const controlsConfig: Record<string, any> = {};
+    this.statusSections.forEach(section => {
+      const normalized = normalizeHealthStatus((this.exam as any)?.[section.control]);
+      controlsConfig[section.control] = [normalized.status, Validators.required];
+      controlsConfig[section.otherControl] = [normalized.other];
     });
+    controlsConfig['resultID'] = [this.exam?.resultID || null, Validators.required];
+    controlsConfig['reason'] = [this.exam?.reason || ''];
+
+    this.examForm = this.fb.group(controlsConfig);
 
     this.examService.getResults().subscribe({
       next: (res: any) => {
@@ -88,7 +98,7 @@ export class EditInternalExamComponent {
     this.loading = true;
     const updatedExam: InternalExam = {
       ...this.exam,
-      ...this.examForm.value,
+      ...this.buildStatusPayload(),
       resultID: Number(this.examForm.value.resultID)
     };
 
@@ -110,5 +120,23 @@ export class EditInternalExamComponent {
 
   onCancel() {
     this.dialogClosed.emit(false);
+  }
+
+  trackBySection(_: number, section: { control: string }): string {
+    return section.control;
+  }
+
+  trackByStatusOption(_: number, option: { value: string }): string {
+    return option.value;
+  }
+
+  private buildStatusPayload(): Record<string, string> {
+    return this.statusSections.reduce((acc, section) => {
+      acc[section.control] = resolveHealthStatusValue(
+        this.examForm.value[section.control],
+        this.examForm.value[section.otherControl]
+      );
+      return acc;
+    }, {} as Record<string, string>);
   }
 }

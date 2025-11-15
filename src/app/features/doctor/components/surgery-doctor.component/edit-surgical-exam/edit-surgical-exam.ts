@@ -4,6 +4,7 @@ import { SurgicalExam } from '../../../models/surgical-exam-post.model';
 import { CommonModule } from '@angular/common';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { ToastrService } from 'ngx-toastr';
+import { HEALTH_STATUS_VALUES } from '../../../constants/health-status-options';
 
 @Component({
   selector: 'app-edit-surgical-exam',
@@ -59,7 +60,7 @@ export class EditSurgicalExam implements OnInit {
 
   // Helper method to parse surgery value
   parseSurgeryValue(value: string): { displayValue: string; otherValue: string } {
-    if (!value || value === 'سليم' || value === 'غير سليم') {
+    if (!value || HEALTH_STATUS_VALUES.includes(value)) {
       return { displayValue: value || 'سليم', otherValue: '' };
     }
     return { displayValue: 'غير ذلك', otherValue: value };

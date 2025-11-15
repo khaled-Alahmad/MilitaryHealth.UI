@@ -67,7 +67,7 @@
   </app-edit-internal-exam-component>
 
   <!-- مودال التفاصيل -->
-  <div class="modal-backdrop" *ngIf="selectedExamDetails" (click)="closeDetailsModal()">
+  <div class="modal-backdrop" *ngIf="selectedExamDetails">
     <div class="modal-content-details" (click)="$event.stopPropagation()">
       <app-internal-exam-details [exam]="selectedExamDetails" (close)="closeDetailsModal()"></app-internal-exam-details>
     </div>

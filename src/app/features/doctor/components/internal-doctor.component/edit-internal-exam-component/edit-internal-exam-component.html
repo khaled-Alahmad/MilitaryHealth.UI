@@ -1,188 +1,69 @@
-<div class="dialog-backdrop" (click)="onCancel()">
+<div class="dialog-backdrop">
   <div class="dialog-card" (click)="$event.stopPropagation()">
     <div class="dialog-header">
       <h3>تعديل الفحص الداخلي</h3>
-      <button type="button" class="btn-close" (click)="onCancel()">
-        ×
-      </button>
+      <button type="button" class="btn-close" (click)="onCancel()">×</button>
     </div>
 
     <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="dialog-form">
-      <!-- جهاز القلب والدوران -->
+      @for (section of statusSections; track section.control; let sectionIndex = $index) {
       <div class="medical-system-row">
-        <div class="system-label">جهاز القلب والدوران</div>
+        <div class="system-label">{{ section.label }}</div>
         <div class="system-options">
+          @for (option of healthStatusOptions; track option.value; let optionIndex = $index) {
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="heart" id="heart_healthy_edit" value="سليم" formControlName="heart">
-            <label class="form-check-label" for="heart_healthy_edit">سليم</label>
+            <input
+              class="form-check-input"
+              type="radio"
+              [name]="section.control"
+              [id]="section.control + '_edit_' + optionIndex"
+              [value]="option.value"
+              [formControlName]="section.control">
+            <label class="form-check-label" [for]="section.control + '_edit_' + optionIndex">
+              {{ option.label }}
+            </label>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="heart" id="heart_unhealthy_edit" value="غير سليم" formControlName="heart">
-            <label class="form-check-label" for="heart_unhealthy_edit">غير سليم</label>
-          </div>
+          }
         </div>
       </div>
-
-      <!-- الجهاز التنفسي -->
-      <div class="medical-system-row">
-        <div class="system-label">الجهاز التنفسي</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="respiratory" id="respiratory_healthy_edit" value="سليم" formControlName="respiratory">
-            <label class="form-check-label" for="respiratory_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="respiratory" id="respiratory_unhealthy_edit" value="غير سليم" formControlName="respiratory">
-            <label class="form-check-label" for="respiratory_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
+      @if (examForm.get(section.control)?.value === otherOptionValue) {
+      <div class="other-input-row">
+        <input
+          type="text"
+          class="form-control"
+          [formControlName]="section.otherControl"
+          placeholder="أدخل التفاصيل">
       </div>
+      }
+      }
 
-      <!-- أمراض جهاز الهضم -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض جهاز الهضم</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="digestive" id="digestive_healthy_edit" value="سليم" formControlName="digestive">
-            <label class="form-check-label" for="digestive_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="digestive" id="digestive_unhealthy_edit" value="غير سليم" formControlName="digestive">
-            <label class="form-check-label" for="digestive_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- أمراض الغدد الصم والتغذية -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الغدد الصم والتغذية</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="endocrine" id="endocrine_healthy_edit" value="سليم" formControlName="endocrine">
-            <label class="form-check-label" for="endocrine_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="endocrine" id="endocrine_unhealthy_edit" value="غير سليم" formControlName="endocrine">
-            <label class="form-check-label" for="endocrine_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- الأمراض العصبية -->
-      <div class="medical-system-row">
-        <div class="system-label">الأمراض العصبية</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="neurology" id="neurology_healthy_edit" value="سليم" formControlName="neurology">
-            <label class="form-check-label" for="neurology_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="neurology" id="neurology_unhealthy_edit" value="غير سليم" formControlName="neurology">
-            <label class="form-check-label" for="neurology_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- أمراض الدم -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الدم</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="blood" id="blood_healthy_edit" value="سليم" formControlName="blood">
-            <label class="form-check-label" for="blood_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="blood" id="blood_unhealthy_edit" value="غير سليم" formControlName="blood">
-            <label class="form-check-label" for="blood_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- أمراض المفاصل -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض المفاصل</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="joints" id="joints_healthy_edit" value="سليم" formControlName="joints">
-            <label class="form-check-label" for="joints_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="joints" id="joints_unhealthy_edit" value="غير سليم" formControlName="joints">
-            <label class="form-check-label" for="joints_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- أمراض الكلية -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الكلية</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="kidney" id="kidney_healthy_edit" value="سليم" formControlName="kidney">
-            <label class="form-check-label" for="kidney_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="kidney" id="kidney_unhealthy_edit" value="غير سليم" formControlName="kidney">
-            <label class="form-check-label" for="kidney_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- الأمراض الجلدية -->
-      <div class="medical-system-row">
-        <div class="system-label">الأمراض الجلدية</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="skin" id="skin_healthy_edit" value="سليم" formControlName="skin">
-            <label class="form-check-label" for="skin_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="skin" id="skin_unhealthy_edit" value="غير سليم" formControlName="skin">
-            <label class="form-check-label" for="skin_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- السمع -->
-      <div class="medical-system-row">
-        <div class="system-label">السمع</div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="hearing" id="hearing_healthy_edit" value="سليم" formControlName="hearing">
-            <label class="form-check-label" for="hearing_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="hearing" id="hearing_unhealthy_edit" value="غير سليم" formControlName="hearing">
-            <label class="form-check-label" for="hearing_unhealthy_edit">غير سليم</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- النتيجة -->
       <div class="result-section">
         <label class="form-label mb-3">النتيجة <span class="text-danger">*</span></label>
-        <select class="form-select" formControlName="resultID"
-                [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
-                [class.is-valid]="isFieldValid('resultID')">
-          <option value="">اختر النتيجة</option>
+        <select
+          class="form-select"
+          formControlName="resultID"
+          [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
+          [class.is-valid]="isFieldValid('resultID')">
           <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
         </select>
-        <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">
+        @if (getErrorMessage('resultID')) {
+        <div class="invalid-feedback">
           <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('resultID') }}
         </div>
+        }
       </div>
 
-      <!-- السبب -->
       <div class="reason-section">
         <label class="form-label">السبب (إن وجد)</label>
         <textarea class="form-control" formControlName="reason" rows="3" placeholder="يمكنك كتابة السبب إن وجد"></textarea>
       </div>
 
-      <!-- الأزرار -->
       <div class="modal-footer mt-4">
         <button type="button" class="btn btn-secondary" (click)="onCancel()">إلغاء</button>
         <button type="submit" class="btn btn-success" [disabled]="examForm.invalid || loading">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          @if (loading) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          }
           حفظ
         </button>
       </div>

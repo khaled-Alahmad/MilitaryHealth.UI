@@ -132,14 +132,6 @@ resetForm() {
 
   onSubmit() {
     this.submitted = true;
-    if (this.applicantForm.invalid) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'تحذير',
-        detail: 'يرجى ملء جميع الحقول المطلوبة'
-      });
-      return;
-    }
 
     const applicantModel: ApplicantModel = this.applicantForm.getRawValue();
     this.loading = true;
@@ -154,8 +146,9 @@ resetForm() {
               detail: 'تمت إضافة منتسب بنجاح'
             });
             this.success = true;
-            this.applicantId = res.data.applicantID;
-            this.router.navigate(['reception/applicants/', res.data.applicantID]);
+            this.loading = false;
+            this.resetForm();
+            this.router.navigate(['reception/applicants/add']);
           })
         )
         .subscribe({

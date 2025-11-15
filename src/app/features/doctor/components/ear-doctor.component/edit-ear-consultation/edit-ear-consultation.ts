@@ -23,6 +23,7 @@ export class EditEarConsultationComponent implements OnInit {
   uploadedPath: string | null = null;
   previewUrl: string | null = null;
   loading = false;
+  results: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -33,6 +34,8 @@ export class EditEarConsultationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadResults();
+    
     this.consultationForm = this.fb.group({
       consultationType: [this.consultation.consultationType], // مخفي
       referredDoctor: [this.consultation.referredDoctor], // مخفي
@@ -44,6 +47,26 @@ export class EditEarConsultationComponent implements OnInit {
       this.uploadedPath = this.consultation.attachment;
       this.previewUrl = this.uploadedPath;
     }
+  }
+
+  private loadResults() {
+    this.service.getResults().subscribe({
+      next: (response: any) => {
+        if (response.data && response.data.items) {
+          this.results = response.data.items;
+        } else if (Array.isArray(response)) {
+          this.results = response;
+        } else if (response.items) {
+          this.results = response.items;
+        } else {
+          this.results = [];
+        }
+      },
+      error: (error: any) => {
+        console.error('Error loading results:', error);
+        this.results = [];
+      }
+    });
   }
 
   onFileSelected(event: any) {

@@ -5,6 +5,13 @@ import { InternalExam } from '../../../models/internal-exam.model';
 import { InternalExamService } from '../../../services/internal-exam.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, resolveHealthStatusValue } from '../../../constants/health-status-options';
+
+interface StatusSection {
+  control: string;
+  otherControl: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-internal-exam-form',
@@ -16,12 +23,26 @@ export class InternalExamForm implements OnInit {
   @Input() applicantFileNumber: string = '';
   examForm!: FormGroup;
   results: any[] = [];
-  showModal: boolean = false;
+  showModal = false;
 
-  loading: boolean = false;
-  resultAccepted: number = 0;
-  resultRejected: number = 0;
-  resultPostponed: number = 0;
+  loading = false;
+  resultAccepted = 0;
+  resultRejected = 0;
+  resultPostponed = 0;
+
+  readonly healthStatusOptions = HEALTH_STATUS_OPTIONS;
+  readonly otherOptionValue = OTHER_OPTION_VALUE;
+  readonly statusSections: StatusSection[] = [
+    { control: 'heart', otherControl: 'heartOther', label: 'جهاز القلب والدوران' },
+    { control: 'respiratory', otherControl: 'respiratoryOther', label: 'الجهاز التنفسي' },
+    { control: 'digestive', otherControl: 'digestiveOther', label: 'أمراض جهاز الهضم' },
+    { control: 'endocrine', otherControl: 'endocrineOther', label: 'أمراض الغدد الصم والتغذية' },
+    { control: 'neurology', otherControl: 'neurologyOther', label: 'الأمراض العصبية' },
+    { control: 'blood', otherControl: 'bloodOther', label: 'أمراض الدم' },
+    { control: 'joints', otherControl: 'jointsOther', label: 'أمراض المفاصل' },
+    { control: 'kidney', otherControl: 'kidneyOther', label: 'أمراض الكلية' },
+    { control: 'skin', otherControl: 'skinOther', label: 'الأمراض الجلدية' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -31,20 +52,15 @@ export class InternalExamForm implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.examForm = this.fb.group({
-      heart: ['سليم', Validators.required],
-      respiratory: ['سليم', Validators.required],
-      digestive: ['سليم', Validators.required],
-      endocrine: ['سليم', Validators.required],
-      neurology: ['سليم', Validators.required],
-      blood: ['سليم', Validators.required],
-      joints: ['سليم', Validators.required],
-      kidney: ['سليم', Validators.required],
-      hearing: ['سليم', Validators.required],
-      skin: ['سليم', Validators.required],
-      resultID: [null, Validators.required],
-      reason: ['']
+    const controlsConfig: Record<string, any> = {};
+    this.statusSections.forEach(section => {
+      controlsConfig[section.control] = ['سليم', Validators.required];
+      controlsConfig[section.otherControl] = [''];
     });
+    controlsConfig['resultID'] = [null, Validators.required];
+    controlsConfig['reason'] = [''];
+
+    this.examForm = this.fb.group(controlsConfig);
 
     this.examService.getResults().subscribe({
       next: res => {
@@ -54,7 +70,6 @@ export class InternalExamForm implements OnInit {
     });
   }
 
-  // Helper method لتحديد رسالة الخطأ
   getErrorMessage(controlName: string): string {
     const control = this.examForm.get(controlName);
     if (control?.invalid && control?.touched) {
@@ -65,7 +80,6 @@ export class InternalExamForm implements OnInit {
     return '';
   }
 
-  // Helper method للتحقق من صلاحية الحقل
   isFieldValid(controlName: string): boolean {
     const control = this.examForm.get(controlName);
     return !!(control?.valid && control?.touched);
@@ -86,17 +100,18 @@ export class InternalExamForm implements OnInit {
     }
 
     this.loading = true;
-    const payload: InternalExam = {
+    const payload: Partial<InternalExam> = {
       applicantFileNumber: this.applicantFileNumber,
       doctorID: Number(this.authService.getDoctorId()),
-      ...this.examForm.value,
-      resultID: Number(this.examForm.value.resultID)
+      ...this.buildStatusPayload(),
+      resultID: Number(this.examForm.value.resultID),
+      reason: this.examForm.value.reason
     };
 
-    this.examService.addInternalExam(payload).subscribe({
+    this.examService.addInternalExam(payload as InternalExam).subscribe({
       next: () => {
         this.toastr.success('✅ تمت إضافة الفحص بنجاح', 'نجاح');
-        this.examForm.reset();
+        this.examForm.reset(this.getDefaultFormValues());
         this.closeModal();
         this.loading = false;
       },
@@ -105,5 +120,31 @@ export class InternalExamForm implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  trackBySection(_: number, section: StatusSection): string {
+    return section.control;
+  }
+
+  trackByStatusOption(_: number, option: { value: string }): string {
+    return option.value;
+  }
+
+  private buildStatusPayload(): Record<string, string> {
+    return this.statusSections.reduce((acc, section) => {
+      acc[section.control] = resolveHealthStatusValue(
+        this.examForm.value[section.control],
+        this.examForm.value[section.otherControl]
+      );
+      return acc;
+    }, {} as Record<string, string>);
+  }
+
+  private getDefaultFormValues(): Record<string, unknown> {
+    return this.statusSections.reduce((acc, section) => {
+      acc[section.control] = 'سليم';
+      acc[section.otherControl] = '';
+      return acc;
+    }, { resultID: null, reason: '' } as Record<string, unknown>);
   }
 }

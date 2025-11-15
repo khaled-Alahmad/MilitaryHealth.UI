@@ -9,6 +9,7 @@ import { AuthService } from '../../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, resolveHealthStatusValue } from '../../../constants/health-status-options';
 
 @Component({
   selector: 'app-eye-exam-form',
@@ -25,6 +26,12 @@ export class EyeExamForm implements OnInit {
   loading = false;
   showModal = false;
   showLeftEye = false;
+  readonly healthStatusOptions = HEALTH_STATUS_OPTIONS;
+  readonly otherOptionValue = OTHER_OPTION_VALUE;
+  private readonly colorTestFields = [
+    { control: 'colorTest', otherControl: 'colorTestOther' },
+    { control: 'colorTestLeft', otherControl: 'colorTestLeftOther' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -43,8 +50,10 @@ export class EyeExamForm implements OnInit {
     this.examForm = this.fb.group({
       vision: ['', Validators.required],
       visionLeft: ['', Validators.required],
-      colorTest: ['', Validators.required],
-      colorTestLeft: ['', Validators.required],
+      colorTest: ['سليم', Validators.required],
+      colorTestOther: [''],
+      colorTestLeft: ['سليم', Validators.required],
+      colorTestLeftOther: [''],
       refractiveError: ['', Validators.required],
       otherDiseases: [''],
       resultID: [null, Validators.required],
@@ -189,8 +198,14 @@ private buildExamData(doctorID: number) {
     doctorID,
     vision: this.examForm.value.vision?.toString() || "",
     visionLeft: this.examForm.value.visionLeft?.toString() || "",
-    colorTestLeft: this.examForm.value.colorTestLeft?.trim() || "",
-    colorTest: this.examForm.value.colorTest?.trim() || "",
+      colorTestLeft: resolveHealthStatusValue(
+        this.examForm.value.colorTestLeft,
+        this.examForm.value.colorTestLeftOther
+      ).trim(),
+      colorTest: resolveHealthStatusValue(
+        this.examForm.value.colorTest,
+        this.examForm.value.colorTestOther
+      ).trim(),
     refractiveError: this.examForm.value.refractiveError?.trim() || "",
     otherDiseases: (this.examForm.value.otherDiseases || '').trim(),
     resultID: Number(this.examForm.value.resultID) || 0,
@@ -246,7 +261,28 @@ private buildExamData(doctorID: number) {
 
   // ---------------------- RESET ----------------------
   private resetForm() {
-    this.examForm.reset();
+    this.examForm.reset({
+      vision: '',
+      visionLeft: '',
+      colorTest: 'سليم',
+      colorTestOther: '',
+      colorTestLeft: 'سليم',
+      colorTestLeftOther: '',
+      refractiveError: '',
+      otherDiseases: '',
+      resultID: null,
+      reason: ''
+    });
+
+    const leftEyeRefractions = this.examForm.get('leftEye.refractions') as FormArray;
+    const rightEyeRefractions = this.examForm.get('rightEye.refractions') as FormArray;
+    while (leftEyeRefractions.length) {
+      leftEyeRefractions.removeAt(0);
+    }
+    while (rightEyeRefractions.length) {
+      rightEyeRefractions.removeAt(0);
+    }
+
     this.showLeftEye = false;
     this.loading = false;
     this.closeModal();

@@ -42,17 +42,18 @@
                     <span class="small">{{applicant.maritalStatus?.description || '-'}}</span>
                 </td>
                 <td class="text-center align-middle">
-                    <input type="checkbox" [checked]="applicant.tattoo" style="pointer-events: none;" />
+                    <p-tag 
+                      [value]="applicant.tattoo ? 'نعم' : 'لا'" 
+                      [severity]="applicant.tattoo ? 'warn' : 'success'"
+                      styleClass="ms-2"></p-tag>
                 </td>
                 <td class="text-center align-middle">
-                    <button 
-                        type="button" 
-                        class="btn btn-sm btn-outline-secondary" 
-                        title="عرض التفاصيل"
-                        (click)="viewApplicant(applicant.applicantID)">
-                        <i class="fas fa-eye me-1"></i>
-                        عرض
-                    </button>
+                    <p-button 
+                        icon="pi pi-eye" 
+                        label="عرض" 
+                        styleClass="p-button-sm p-button-outlined"
+                        (onClick)="viewApplicant(applicant)"
+                        title="عرض التفاصيل"></p-button>
                 </td>
             </tr>
         </ng-template>

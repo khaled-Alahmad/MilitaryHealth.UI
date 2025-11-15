@@ -6,10 +6,12 @@ import { ApplicantService } from '../../services/applicant.service';
 import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
+import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-applicants-list',
-  imports: [TableModule, CommonModule, PaginatorComponent],
+  imports: [TableModule, CommonModule, PaginatorComponent, TagModule, ButtonModule],
   templateUrl: './applicants-list.html',
   styleUrl: './applicants-list.scss'
 })
@@ -85,7 +87,7 @@ onFilterChange(event: Event) {
 
     this.tableHeight = (screenHeight - reservedSpace) + 'px';
   }
-  viewApplicant(id: number) {
-  this.router.navigate(['reception/applicants/', id]);
+  viewApplicant(applicant: ApplicantModel) {
+  this.router.navigate(['/applicants', applicant.fileNumber]);
 }
 }
