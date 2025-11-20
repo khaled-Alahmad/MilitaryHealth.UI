@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { EditInvestigation } from '../../Investigations/edit-investigation/edit-investigation';
@@ -7,14 +7,15 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-surgery-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './surgery-investigations-list.html',
   styleUrls: ['./surgery-investigations-list.scss']
 })
@@ -30,6 +31,8 @@ export class SurgeryInvestigationsList implements OnInit {
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: SurgicalExamService,
@@ -119,5 +122,18 @@ export class SurgeryInvestigationsList implements OnInit {
       default:
         return 'badge bg-secondary';
     }
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadInvestigations();
   }
 }

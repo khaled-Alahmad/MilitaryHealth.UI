@@ -10,15 +10,45 @@
       </div>
       <div class="ids">
         <div class="id"><span class="label">رقم الديوان</span><span class="value accent fw-bold">{{ archive?.applicantFileNumber || '-' }}</span></div>
-        <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant?.associateNumber || '-' }}</span></div>
         <!-- <div class="id"><span class="label">رقم الملف</span><span class="value">{{ applicant?.fileNumber }}</span></div> -->
         <div class="id date"><span class="label">تاريخ الطباعة</span><span class="value">{{ date | gregorianDate:'yyyy/MM/dd' }}</span></div>
       </div>
     </div>
   </div>
+  <div class="print-banner only-print">
+    <div class="official-heading">
+      <div class="official-line">الجمهورية العربية السورية</div>
+      <div class="official-line">وزارة الدفاع – مديرية الصحة العسكرية</div>
+      <div class="official-line highlight">ديوان الأرشيف </div>
+    </div>
+    <div class="banner-divider"></div>
+    <div class="banner-title">
+      بيانات المنتسب
+      <span class="banner-name">{{ applicant?.fullName || 'غير محدد' }}</span>
+      إلى التجنيد
+    </div>
+    <div class="banner-meta">
+      <span>رقم الديوان: <strong>{{ archive?.applicantFileNumber || '-' }}</strong></span>
+      <!-- <span>رقم التجنيد: <strong>{{ applicant?.associateNumber || '-' }}</strong></span> -->
+      <span>تاريخ الطباعة: <strong>{{ date | gregorianDate:'yyyy/MM/dd' }}</strong></span>
+    </div>
+  </div>
 
   <ng-container *ngIf="applicant as a; else loadingTpl">
   <div class="grid">
+    <section class="card avoid-break archive-summary">
+      <h5 class="card-title">ملخص بيانات الديوان والأرشفة</h5>
+      <div class="card-body three-col">
+        <div class="field"><span class="label">تاريخ الإدخال</span><span class="value">{{ a.createdAt | gregorianDate:'yyyy/MM/dd' }}</span></div>
+        <!-- <div class="field"><span class="label">رقم التجنيد</span><span class="value">{{ a.associateNumber || '-' }}</span></div> -->
+        <div class="field"><span class="label">تاريخ الأرشفة</span><span class="value">{{ archive?.archiveDate | gregorianDate:'yyyy/MM/dd' }}</span></div>
+        <div class="field"><span class="label"> قرار المشرف</span><span class="value">{{ a.finalDecision?.result?.description || '-' }}</span></div>
+        <div class="field"><span class="label">حالة التصدير للتجنيد</span><span class="value badge" [class.badge-success]="a.finalDecision?.isExportedToRecruitment" [class.badge-muted]="!a.finalDecision?.isExportedToRecruitment">
+          {{ a.finalDecision?.isExportedToRecruitment ? 'مصدّر' : 'غير مصدّر' }}</span></div>
+        <div class="field"><span class="label">تاريخ التصدير</span><span class="value">{{ a.finalDecision?.exportedAt | gregorianDate:'yyyy/MM/dd' }}</span></div>
+      </div>
+    </section>
+
     <section class="card avoid-break">
       <h5 class="card-title">البيانات الشخصية</h5>
       <div class="card-body two-col">
@@ -37,6 +67,39 @@
         <div class="field"><span class="label">النبض</span><span class="value">{{ a.pulse || '-' }}</span></div>
         <div class="field"><span class="label">وشم</span><span class="value">{{ a.tattoo ? 'يوجد' : 'لا يوجد' }}</span></div>
         <div class="field full"><span class="label">علامات مميزة</span><span class="value">{{ a.distinctiveMarks || 'لا توجد' }}</span></div>
+      </div>
+    </section>
+
+    <section class="card avoid-break attachments-card" *ngIf="hasAttachments()">
+      <h5 class="card-title">المرفقات والوثائق المرفوعة</h5>
+      <div class="card-body attachments-list">
+        <div class="attachment-item" *ngFor="let attachment of attachments">
+          <div class="attachment-header">
+            <div class="attachment-info">
+              <span class="attachment-source">{{ attachment.source }}</span>
+              <span class="attachment-label">{{ attachment.label }}</span>
+            </div>
+            <button class="attachment-action no-print" type="button" (click)="openAttachment(attachment.path)">
+              <i class="pi pi-external-link"></i>
+              <span>عرض / طباعة</span>
+            </button>
+          </div>
+          
+          <!-- عرض الصور مباشرة عند الطباعة -->
+          <div class="attachment-preview only-print" *ngIf="getFileType(attachment.path) === 'image'">
+            <img [src]="getAttachmentUrl(attachment.path)" [alt]="attachment.label" class="print-image" />
+          </div>
+          
+          <!-- عرض PDFs عند الطباعة -->
+          <div class="attachment-preview only-print" *ngIf="getFileType(attachment.path) === 'pdf'">
+            <iframe [src]="getAttachmentUrl(attachment.path)" class="print-pdf" frameborder="0"></iframe>
+          </div>
+          
+          <!-- للملفات الأخرى، عرض المسار فقط عند الطباعة -->
+          <div class="attachment-path only-print" *ngIf="getFileType(attachment.path) === 'other'">
+            <strong>مسار الملف:</strong> {{ attachment.path }}
+          </div>
+        </div>
       </div>
     </section>
 
@@ -82,6 +145,21 @@
             <div class="field"><span class="label">عضلي هيكلي</span><span class="value">{{ a.orthopedicExamDto?.musculoskeletal || '-' }}</span></div>
             <div class="field"><span class="label">جراحة عصبية</span><span class="value">{{ a.orthopedicExamDto?.neurologicalSurgery || '-' }}</span></div>
             <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.orthopedicExamDto?.resultID) }}</span></div>
+          </div>
+        </div>
+
+        <div class="subcard avoid-break">
+          <div class="subcard-title">فحص الأذن والأنف والحنجرة</div>
+          <div class="two-col">
+            <div class="field"><span class="label">الأذن اليمنى</span><span class="value">{{ a.earClinic?.rightEar || '-' }}</span></div>
+            <div class="field"><span class="label">الأذن اليسرى</span><span class="value">{{ a.earClinic?.leftEar || '-' }}</span></div>
+            <div class="field"><span class="label">طبلة الأذن اليمنى</span><span class="value">{{ a.earClinic?.rightTympanicMembrane || '-' }}</span></div>
+            <div class="field"><span class="label">طبلة الأذن اليسرى</span><span class="value">{{ a.earClinic?.leftTympanicMembrane || '-' }}</span></div>
+            <div class="field"><span class="label">السمع اليمنى/اليسرى</span><span class="value">{{ a.earClinic?.rightHearing || '-' }} / {{ a.earClinic?.leftHearing || '-' }}</span></div>
+            <div class="field"><span class="label">الرنين</span><span class="value">{{ a.earClinic?.resonators || '-' }}</span></div>
+            <div class="field"><span class="label">اختبار الهمس</span><span class="value">{{ a.earClinic?.rightWhisperTest || '-' }} / {{ a.earClinic?.leftWhisperTest || '-' }}</span></div>
+            <div class="field"><span class="label">الفم</span><span class="value">{{ a.earClinic?.mouth || '-' }}</span></div>
+            <div class="field"><span class="label">النتيجة</span><span class="value">{{ getResultDescription(a.earClinic?.resultID) }}</span></div>
           </div>
         </div>
 
@@ -157,6 +235,28 @@
       </div>
     </section>
 
+    <section class="card avoid-break timeline-card" *ngIf="a.finalDecision">
+      <h5 class="card-title">خط زمني لاعتمادات المشرف</h5>
+      <div class="card-body timeline-grid">
+        <div class="timeline-item">
+          <span class="label">إدخال الاستقبال</span>
+          <span class="value">{{ a.finalDecision.receptionAddedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+        </div>
+        <div class="timeline-item">
+          <span class="label">اعتماد المشرف</span>
+          <span class="value">{{ a.finalDecision.supervisorAddedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+        </div>
+        <div class="timeline-item">
+          <span class="label">آخر تعديل للمشرف</span>
+          <span class="value">{{ a.finalDecision.supervisorLastModifiedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+        </div>
+        <div class="timeline-item">
+          <span class="label">تاريخ التصدير</span>
+          <span class="value">{{ a.finalDecision.exportedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+        </div>
+      </div>
+    </section>
+
     <section class="card avoid-break final-decision-section">
       <h5 class="card-title decision-title">القرار النهائي</h5>
       <div class="card-body decision-body">
@@ -186,6 +286,16 @@
             <span class="decision-label">تاريخ القرار:</span>
             <span class="decision-value">{{ a.finalDecision?.decisionDate || '-' }}</span>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card avoid-break notes-card" *ngIf="notes.length">
+      <h5 class="card-title">ملاحظات وتوصيات</h5>
+      <div class="card-body notes-grid">
+        <div class="note-item" *ngFor="let note of notes">
+          <span class="note-title">{{ note.title }}</span>
+          <p class="note-value">{{ note.value }}</p>
         </div>
       </div>
     </section>

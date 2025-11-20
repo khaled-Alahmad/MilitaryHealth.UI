@@ -1,14 +1,17 @@
 <div class="orthopedic-exams-page deferred-exams-page container mt-4">
 
-  <div class="mb-3 d-flex justify-content-end">
-    <div class="search-wrapper">
-      <input type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-        (input)="onFilterChange($event)" />
-      <i class="fas fa-search search-icon"></i>
+  <div class="table-toolbar mb-3">
+    <div class="filter-reset-wrapper">
+      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
+      <div class="search-wrapper">
+        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)" />
+        <i class="fas fa-search search-icon"></i>
+      </div>
     </div>
   </div>
 
-  <p-table [value]="filteredExams" [rows]="rowsPerPage" [sortMode]="'multiple'" [scrollable]="true" class="custom-table"
+  <p-table #table [value]="filteredExams" [rows]="rowsPerPage" [sortMode]="'multiple'" [scrollable]="true" class="custom-table"
     [totalRecords]="totalRecords">
 
     <ng-template pTemplate="header">

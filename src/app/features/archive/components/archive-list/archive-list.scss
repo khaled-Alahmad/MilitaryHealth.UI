@@ -1,174 +1,224 @@
-.user-header-section {
-    .breadcrumb {
-        font-size: 0.85rem;
-        margin-bottom: 0.3rem;
-    }
+@use '../../../../shared/styles/mixins' as *;
+
+.archive-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+.archive-hero {
+  @include page-header;
+  & {
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    color: #fff;
+    position: relative;
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--spacing-xl);
 
     h2 {
-        font-size: 1.4rem;
-        font-weight: 600;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff !important;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
     }
 
-    .btn {
-        font-weight: 500;
-        padding: 6px 14px;
+    p {
+      margin-top: var(--spacing-sm);
+      font-size: var(--font-size-base);
+      color: #fff !important;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
     }
+  }
 
-    .btn-primary {
-        background-color: #007BFF;
-        border: none;
-    }
-}
-
-::ng-deep .p-datatable {
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    font-family: "Segoe UI", sans-serif;
-}
-
-::ng-deep .p-datatable .p-datatable-thead>tr>th {
-    background-color: #f0f2f5;
-    color: #333;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px 12px;
-    text-align: left;
-    white-space: nowrap;
-    border-bottom: 1px solid #dee2e6;
-}
-
-::ng-deep .p-datatable .p-datatable-tbody>tr>td {
-    padding: 8px 12px;
-    font-size: 13.5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-::ng-deep .p-datatable .p-datatable-tbody>tr:hover {
-    background-color: #f9f9f9;
-}
-
-::ng-deep .p-datatable .p-datatable-tbody>tr {
-    height: 36px;
-}
-
-.badge {
-    font-size: 12px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 500;
-    display: inline-block;
-    text-align: center;
-}
-
-.bg-success {
-    background-color: #28a745 !important;
-    color: white;
-}
-
-.bg-secondary {
-    background-color: #6c757d !important;
-    color: white;
-}
-
-::ng-deep .p-datatable .p-datatable-thead>tr>th:last-child,
-::ng-deep .p-datatable .p-datatable-tbody>tr>td:last-child {
-    border-right: none;
-}
-
-.search-wrapper {
+  .hero-stats {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
     position: relative;
-    width: 350px;
+    z-index: 1;
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-md) var(--spacing-lg);
+      min-width: 180px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+
+      span {
+        display: block;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 0.3rem;
+      }
+
+      strong {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #fff;
+      }
+    }
+  }
 }
 
-.search-input {
-    width: 100%;
-    padding: 6px 12px;
-    padding-right: 35px;
-    font-size: 0.875rem;
-    border: 1px solid #ddd;
-    border-radius: 0.375rem;
-    background-color: #f9f9f9;
-    color: #111;
-    transition: border-color 0.2s ease-in-out;
-    outline: none;
+.toolbar-card {
+  border-radius: var(--radius-xl);
+  background: #fff;
+  box-shadow: 0 8px 26px rgba(5, 66, 57, 0.12);
+  border: 1px solid rgba(5, 66, 57, 0.08);
 }
 
-.search-input:focus {
-    border-color: #0d6efd;
-    outline: none;
+.table-card {
+  @include table-container;
+  padding: 0;
 }
 
-.search-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-    pointer-events: none;
-}
-::ng-deep .p-datatable {
-    direction: rtl; 
-}
+:host ::ng-deep .archive-table {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  font-size: 0.75rem;
+  background: #fff;
 
-::ng-deep .p-datatable .p-datatable-thead>tr>th,
-::ng-deep .p-datatable .p-datatable-tbody>tr>td {
+  .p-datatable-thead > tr > th {
+    background: var(--primary-dark) !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 0.5rem 0.6rem;
     text-align: center;
-    vertical-align: middle;
+    font-size: 0.68rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .p-datatable-tbody > tr {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+    &:hover {
+      background: rgba(5, 66, 57, 0.05);
+      transform: scale(1.005);
+      box-shadow: 0 8px 16px rgba(5, 66, 57, 0.09);
+    }
+
+    > td {
+      padding: 0.45rem 0.6rem;
+      font-size: 0.68rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(5, 66, 57, 0.08);
+      border-right: 1px solid rgba(5, 66, 57, 0.08);
+      color: #2f3d4c;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
 }
 
-.search-wrapper {
-    position: relative;
-    width: 350px;
-    margin-left: auto;
+.queue-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(5, 66, 57, 0.12);
+  color: #054239;
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 
-.search-input {
-    width: 100%;
-    padding: 6px 12px;
-    padding-right: 35px;
-    font-size: 0.875rem;
-    border: 1px solid #ddd;
-    border-radius: 0.375rem;
-    background-color: #f9f9f9;
-    color: #111;
-    transition: border-color 0.2s ease-in-out;
-    outline: none;
-}
-
-.search-input:focus {
-    border-color: #0d6efd;
-    outline: none;
-}
-
-.search-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-    pointer-events: none;
+.text-strong {
+  font-weight: 600;
+  color: #0f2f2f;
 }
 
 .btn-modern-view {
-    color: #ffffff; /* لون النص أبيض */
-    background-color: #428177; /* لون الخلفية الرئيسي */
-    border: 1px solid #428177; /* حدود بنفس لون الخلفية */
-    font-weight: 500;
-    border-radius: 8px;
-    padding: 6px 14px;
-    transition: all 0.3s ease; /* انتقال سلس */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-lg);
+  border: none;
+  background: linear-gradient(135deg, #054239, #1f6b61);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(5, 66, 57, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(5, 66, 57, 0.25);
+    color: #fff;
   }
-  
-  .btn-modern-view:hover {
-    color: #ffffff; /* يبقى النص أبيض */
-    background-color: #054239; /* لون أغمق عند التمرير */
-    border-color: #054239; /* حدود أغمق عند التمرير */
+}
+
+.archive-paginator {
+  margin-top: var(--spacing-md);
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+}
+
+.search-wrapper {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+
+  .search-input {
+    width: 100%;
+    padding: 0.55rem 2.4rem 0.55rem 0.8rem;
+    border: 1.5px solid rgba(5, 66, 57, 0.25);
+    border-radius: var(--radius-lg);
+    font-size: 0.85rem;
+    background: #fff;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: var(--primary-medium);
+      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.12);
+      outline: none;
+    }
   }
 
+  .search-icon {
+    position: absolute;
+    right: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-medium);
+  }
+}
+
+@media (max-width: 768px) {
+  .archive-hero {
+    padding: var(--spacing-xl);
+  }
+
+  .table-card {
+    padding: 0;
+  }
+
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
 

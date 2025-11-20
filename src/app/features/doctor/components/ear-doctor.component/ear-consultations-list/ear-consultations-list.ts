@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { ToastrService } from 'ngx-toastr';
@@ -11,11 +11,12 @@ import { EarClinicExamService } from '../../../services/ear-clinic-exam.service'
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarConsultationComponent } from '../edit-ear-consultation/edit-ear-consultation';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-ear-consultations-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule, TooltipModule, PaginatorComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, TooltipModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './ear-consultations-list.html',
   styleUrls: ['./ear-consultations-list.scss']
 })
@@ -27,6 +28,8 @@ export class EarConsultationsList implements OnInit {
   rowsPerPage = 10
   totalRecords = 0
   loading = false
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EarClinicExamService,
@@ -118,5 +121,18 @@ export class EarConsultationsList implements OnInit {
         this.loadConsultations();
       }
     });
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadConsultations();
   }
 }

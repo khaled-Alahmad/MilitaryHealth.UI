@@ -2,6 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { throwError, switchMap, catchError, timeout } from 'rxjs';
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('access_token');
@@ -27,7 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return throwError(() => err);
         }
 
-        return http.post<{ accessToken: string }>('api/auth/refresh', { refreshToken }).pipe(
+        return http.post<{ accessToken: string }>(`${environment.apiUrl}/api/auth/refresh`, { refreshToken }).pipe(
           timeout(10000), // 10 second timeout for refresh
           switchMap(res => {
             localStorage.setItem('access_token', res.accessToken);

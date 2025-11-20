@@ -18,6 +18,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { ColumnDef } from '../../models/column-def.model';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ResetFiltersButtonComponent } from '../reset-filters-button/reset-filters-button.component';
 
 interface ItemWithId {
   id: string | number;
@@ -45,7 +46,8 @@ interface ItemWithId {
     RippleModule,
     IconFieldModule,
     ToolbarModule,
-    TooltipModule
+    TooltipModule,
+    ResetFiltersButtonComponent
   ],
   templateUrl: './generic-table.component.html',
   styleUrls: ['./generic-table.component.scss']

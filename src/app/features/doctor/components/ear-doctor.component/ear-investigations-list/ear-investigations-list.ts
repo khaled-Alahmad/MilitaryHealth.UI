@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { ToastrService } from 'ngx-toastr';
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarInvestigationComponent } from '../edit-ear-investigation/edit-ear-investigation';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-ear-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './ear-investigations-list.html',
   styleUrls: ['./ear-investigations-list.scss']
 })
@@ -26,6 +27,8 @@ export class EarInvestigationsList implements OnInit {
   rowsPerPage = 10
   totalRecords = 0
   loading = false
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EarClinicExamService,
@@ -67,6 +70,19 @@ export class EarInvestigationsList implements OnInit {
   onFilterChange(event: any) {
     this.globalFilter = event.target.value;
     this.page = 1; // إعادة تعيين الصفحة إلى الأولى عند البحث
+    this.loadInvestigations();
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
     this.loadInvestigations();
   }
 

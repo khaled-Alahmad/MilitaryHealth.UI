@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { TableModule } from 'primeng/table';
@@ -28,6 +28,8 @@ import { FinalDecisionModel } from '../../models/final-decision.model';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TextareaModule } from 'primeng/textarea';
+import { Table } from 'primeng/table';
+import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 interface ApplicantTimeline {
   event: string;
@@ -50,7 +52,8 @@ interface ApplicantTimeline {
     DividerModule,
     GregorianDatePipe,
     FormsModule,
-    NgSelectModule
+    NgSelectModule,
+    ResetFiltersButtonComponent
   ],
   templateUrl: './applicants-list-supervisor.html',
   styleUrl: './applicants-list-supervisor.scss'
@@ -102,6 +105,8 @@ export class ApplicantsListSupervisor implements OnInit {
   isEditingDecision: boolean = false;
   updatingDecision: boolean = false;
   readonly POSTPONED_RESULT_ID = 3; // ID للنتيجة "مؤجل"
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private applicantService: ApplicantService,
@@ -152,6 +157,19 @@ export class ApplicantsListSupervisor implements OnInit {
         this.toastr.error('حدث خطأ أثناء جلب قائمة المنتسبين', 'خطأ');
       }
     });
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadApplicants();
   }
 
   onPageChange(event: TableLazyLoadEvent): void {

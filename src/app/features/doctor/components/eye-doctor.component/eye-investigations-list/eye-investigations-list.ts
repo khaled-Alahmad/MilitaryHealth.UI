@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Investigation } from '../../../models/investigation.model';
 import { FormsModule } from '@angular/forms';
@@ -6,17 +6,18 @@ import { CommonModule } from '@angular/common';
 import { EditInvestigation } from '../../Investigations/edit-investigation/edit-investigation';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-eye-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './eye-investigations-list.html',
   styleUrl: './eye-investigations-list.scss'
 })
@@ -33,6 +34,8 @@ export class EyeInvestigationsList implements OnInit {
   selectedInvestigation: Investigation | null = null;
   searchText = '';
   environment = environment;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EyeExamService,
@@ -127,4 +130,16 @@ export class EyeInvestigationsList implements OnInit {
       });
     }
     
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadInvestigations();
+  }
 }

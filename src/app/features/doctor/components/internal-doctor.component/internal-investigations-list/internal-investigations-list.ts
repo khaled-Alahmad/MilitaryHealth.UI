@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { InternalExamService } from '../../../services/internal-exam.service';
 import { EditInvestigation } from '../../Investigations/edit-investigation/edit-investigation';
@@ -8,12 +8,13 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-internal-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './internal-investigations-list.html',
   styleUrl: './internal-investigations-list.scss'
 })
@@ -27,6 +28,8 @@ export class InternalInvestigationsList implements OnInit {
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   constructor(
     private service: InternalExamService,
     private toastr: ToastrService,
@@ -66,6 +69,19 @@ export class InternalInvestigationsList implements OnInit {
     this.page = 1;
     this.loadInvestigations();
 
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadInvestigations();
   }
 
   openEditDialog(inv: Investigation) {

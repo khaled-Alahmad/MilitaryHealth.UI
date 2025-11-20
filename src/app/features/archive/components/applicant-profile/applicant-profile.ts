@@ -8,11 +8,8 @@ import { ApplicantDetailsModel } from '../../../reception/models/applicant.model
 import { MaritalStatus } from '../../../reception/models/marital-status.model';
 import { ApplicantService } from '../../../reception/services/applicant.service';
 import { MaritalStatusService } from '../../../reception/services/marital-status.service';
-import { FinalDecisionModel } from '../../../supervisor/models/final-decision.model';
-import { DecisionService } from '../../../supervisor/services/decision.service';
-import { ArchiveService } from '../../services/archive';
-import { DataSharingService } from '../../../../shared/services/data-sharing';
 import { ArchiveModel } from '../../models/archive.model';
+import { environment } from '../../../../../environments/environment';
 import { Subject } from 'rxjs';
 declare const printJS: any;
 declare const html2pdf: any;
@@ -25,10 +22,11 @@ declare const html2pdf: any;
 })
 export class ApplicantProfile implements OnInit, OnDestroy {
   applicant?: ApplicantDetailsModel;
-  decisionModel!: FinalDecisionModel;
   results: Result[] = [];
   maritalStatuses: MaritalStatus[] = [];
   archive: ArchiveModel | null = null;
+  attachments: AttachmentItem[] = [];
+  notes: NotesItem[] = [];
   private destroy$ = new Subject<void>();
   date: Date = new Date();
 
@@ -42,9 +40,6 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     const navigation = this.router.getCurrentNavigation();
     const state: any = navigation?.extras?.state ?? history.state ?? {};
     this.archive = state['archive'] ?? state['archiveData'] ?? null;
-    if (this.archive) {
-      console.log('Archive loaded in constructor:', this.archive);
-    }
   }
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -55,7 +50,6 @@ export class ApplicantProfile implements OnInit, OnDestroy {
     const state: any = history.state ?? {};
     if (!this.archive && (state.archive || state.archiveData)) {
       this.archive = state.archive ?? state.archiveData;
-      console.log('Archive loaded in ngOnInit from history.state:', this.archive);
     }
     const fileNumber = this.route.snapshot.paramMap.get('fileNumber')!;
     this.loadApplicant(fileNumber);
@@ -67,8 +61,9 @@ export class ApplicantProfile implements OnInit, OnDestroy {
   private loadApplicant(fileNumber: string) {
     this.applicantService.getApplicantByFileNumber$(fileNumber).subscribe({
       next: (data) => {
-        console.log(data);
         this.applicant = data;
+        this.buildAttachmentList(data);
+        this.collectNotes(data);
       },
       error: () => {
         console.error('فشل في تحميل بيانات المنتسب');
@@ -105,4 +100,132 @@ export class ApplicantProfile implements OnInit, OnDestroy {
   printProfile() {
     window.print();
   }
+
+  openAttachment(path: string) {
+    if (!path) {
+      return;
+    }
+    const url = this.resolveAttachmentUrl(path);
+    window.open(url, '_blank');
+  }
+
+  hasAttachments(): boolean {
+    return this.attachments.length > 0;
+  }
+
+  private buildAttachmentList(applicant: ApplicantDetailsModel) {
+    const items: AttachmentItem[] = [];
+    const addItem = (label: string, source: string, path?: string | null) => {
+      if (!path) {
+        return;
+      }
+      items.push({
+        label,
+        source,
+        path: path.trim()
+      });
+    };
+
+    addItem('النسخة الرقمية للملف', 'الأرشيف', this.archive?.digitalCopy);
+    addItem('مرفق الاستشارة الطبية', 'الاستشارات', applicant.consultation?.attachment);
+    addItem('مرفق التحاليل المخبرية', 'المخبر', applicant.investigation?.attachment);
+
+    this.attachments = items;
+  }
+
+  private collectNotes(applicant: ApplicantDetailsModel) {
+    const notes: NotesItem[] = [];
+
+    if (applicant.consultation?.result) {
+      notes.push({
+        title: 'ملاحظات الاستشارة',
+        value: applicant.consultation.result
+      });
+    }
+
+    if (applicant.investigation?.result) {
+      notes.push({
+        title: 'نتيجة التحليل المخبري',
+        value: applicant.investigation.result
+      });
+    }
+
+    if (applicant.finalDecision?.reason) {
+      notes.push({
+        title: 'توصية المشرف / سبب القرار',
+        value: applicant.finalDecision.reason
+      });
+    }
+
+    if (applicant.orthopedicExamDto?.reason) {
+      notes.push({
+        title: 'سبب قرار فحص العظام',
+        value: applicant.orthopedicExamDto.reason
+      });
+    }
+
+    if (applicant.eyeExam?.reason) {
+      notes.push({
+        title: 'سبب قرار فحص العيون',
+        value: applicant.eyeExam.reason
+      });
+    }
+
+    if (applicant.eyeExam?.otherDiseases) {
+      notes.push({
+        title: 'أمراض أخرى (فحص العيون)',
+        value: applicant.eyeExam.otherDiseases
+      });
+    }
+
+    if (applicant.earClinic?.otherDiseases) {
+      notes.push({
+        title: 'ملاحظات اختصاص الأذن والأنف والحنجرة',
+        value: applicant.earClinic.otherDiseases
+      });
+    }
+
+    this.notes = notes;
+  }
+
+  private resolveAttachmentUrl(path: string): string {
+    if (/^https?:\/\//i.test(path)) {
+      return path;
+    }
+    const normalized = path.replace(/^\/+/, '');
+    return `${environment.apiUrl}/${normalized}`;
+  }
+
+  getAttachmentUrl(path: string): string {
+    return this.resolveAttachmentUrl(path);
+  }
+
+  isImageFile(path: string): boolean {
+    if (!path) return false;
+    const ext = path.toLowerCase().split('.').pop() || '';
+    return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext);
+  }
+
+  isPdfFile(path: string): boolean {
+    if (!path) return false;
+    const ext = path.toLowerCase().split('.').pop() || '';
+    return ext === 'pdf';
+  }
+
+  getFileType(path: string): 'image' | 'pdf' | 'other' {
+    if (this.isImageFile(path)) return 'image';
+    if (this.isPdfFile(path)) return 'pdf';
+    return 'other';
+  }
+}
+
+interface AttachmentItem {
+  label: string;
+  source: string;
+  path: string;
+}
+
+interface NotesItem {
+  title: string;
+  value: string;
 }

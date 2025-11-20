@@ -68,11 +68,5 @@ export class Sidebar implements OnInit  {
     } else {
       this.role = userRole;
     }
-    
-    // Debug: طباعة القيم للتأكد
-    console.log('User Role:', userRole);
-    console.log('User Name:', userName);
-    console.log('Specialty ID:', specialtyId);
-    console.log('Final Role:', this.role);
   }
 }

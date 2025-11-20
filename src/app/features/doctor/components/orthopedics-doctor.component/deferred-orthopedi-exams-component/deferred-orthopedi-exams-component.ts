@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
@@ -6,14 +6,15 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
 import { ToastrService } from 'ngx-toastr';
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 import { TooltipModule } from 'primeng/tooltip';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-deferred-orthopedi-exams-component',
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent, TooltipModule],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
   templateUrl: './deferred-orthopedi-exams-component.html',
   styleUrl: './deferred-orthopedi-exams-component.scss'
 })
@@ -27,6 +28,8 @@ export class DeferredOrthopediExamsComponent implements OnInit {
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private examService: OrthopedicExamService, private toastr: ToastrService,
     private modalService: NgbModal
@@ -90,5 +93,18 @@ export class DeferredOrthopediExamsComponent implements OnInit {
     modalRef.componentInstance.OrthopedicExamUpdated.subscribe(() => {
       this.loadExams();
     });
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadExams();
   }
 }

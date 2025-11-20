@@ -1,50 +1,86 @@
-<div class="user-header-section px-1 pt-1 container-fluid">
-  <div class="mb-3 d-flex justify-content-end">
-    <div class="search-wrapper">
-      <input type="text" class="form-control" placeholder="ابحث عن رقم الملف" (input)="onFilterChange($event)" />
+<div class="archive-page container-fluid">
+  <section class="archive-hero">
+    <div class="hero-content">
+      <div>
+        <h2>ديوان الأرشيف</h2>
+        <p>متابعة جميع الملفات المؤرشفة.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span>إجمالي الملفات</span>
+          <strong>{{ totalRecords | number }}</strong>
+        </div>
+        <div class="stat-card">
+          <span>نتائج الصفحة الحالية</span>
+          <strong>{{ archives.length || 0 }}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="table-toolbar toolbar-card">
+    <div class="filter-reset-wrapper">
+      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
+      <div class="search-wrapper">
+        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم" (input)="onFilterChange($event)" />
+        <i class="fas fa-search search-icon"></i>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="container-fluid">
-  <p-table #table [value]="archives" [rows]="10" [sortMode]="'multiple'" [scrollable]="true"
-    [showCurrentPageReport]="true" responsiveLayout="scroll">
+  <div class="table-card">
+    <p-table
+      class="archive-table"
+      #table
+      [value]="archives"
+      [rows]="10"
+      [sortMode]="'multiple'"
+      [scrollable]="true"
+      [showCurrentPageReport]="true"
+      responsiveLayout="scroll"
+      currentPageReportTemplate="عرض {first} إلى {last} من {totalRecords} ملف">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>رقم الدور</th>
+          <th>رقم الأرشيف</th>
+          <th>رقم ملف المنتسب</th>
+          <th>الاسم</th>
+          <th>الوظيفة</th>
+          <th>الطول / الوزن</th>
+          <th>ضغط الدم</th>
+          <th>تاريخ الأرشفة</th>
+          <th>إجراءات</th>
+        </tr>
+      </ng-template>
 
-    <ng-template pTemplate="header">
-      <tr>
-        <th>رقم الدور</th>
-        <th>رقم الأرشيف</th>
-        <th>رقم ملف المنتسب</th>
-        <th >الاسم</th>
-        <th>الوظيفة</th>
-        <th>الطول / الوزن</th>
-        <th>ضغط الدم</th>
-        <th>تاريخ الأرشفة</th>
-        <th>إجراءات</th>
-      </tr>
-    </ng-template>
+      <ng-template pTemplate="body" let-archive>
+        <tr>
+          <td><span class="queue-tag">{{ archive.applicant?.queueNumber || '-' }}</span></td>
+          <td><span class="text-strong">{{ archive.fileNumber }}</span></td>
+          <td>{{ archive.applicant?.fileNumber }}</td>
+          <td>{{ archive.applicant?.fullName }}</td>
+          <td>{{ archive.applicant?.job || 'غير محدد' }}</td>
+          <td>{{ archive.applicant?.height || '-' }} سم / {{ archive.applicant?.weight || '-' }} كجم</td>
+          <td>{{ archive.applicant?.bloodPressure || '-' }}</td>
+          <td>{{ archive.archiveDate | gregorianDate:'yyyy/MM/dd' }}</td>
+          <td class="text-center">
+            <button title="عرض بيانات المنتسب" class="btn btn-sm btn-modern-view" (click)="openArchiveDetails(archive)">
+              <i class="fas fa-eye"></i>
+              <span>عرض</span>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 
-    <ng-template pTemplate="body" let-archive>
-      <tr>
-        <td><span class="fw-bold badge bg-primary text-white">{{ archive.applicant?.queueNumber || '-' }}</span></td>
-        <td><span class="fw-bold">{{ archive.fileNumber }}</span></td>
-        <td>{{ archive.applicant?.fileNumber }}</td>
-        <td>{{ archive.applicant?.fullName }}</td>
-        <td>{{ archive.applicant?.job }}</td>
-        <td>{{ archive.applicant?.height }} سم / {{ archive.applicant?.weight }} كجم</td>
-        <td>{{ archive.applicant?.bloodPressure }}</td>
-        <td>{{ archive.archiveDate | gregorianDate:'yyyy/MM/dd' }}</td>
-        <td class="text-center">
-          <button title="عرض بيانات المنتسب" class="btn btn-sm btn-modern-view" (click)="openArchiveDetails(archive)">
-            <i class="fas fa-eye"></i> عرض
-          </button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <!-- مكون الصفحات -->
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
-  </app-paginator>
+  <div class="archive-paginator">
+    <app-paginator
+      [totalRecords]="totalRecords"
+      [pageSize]="rowsPerPage"
+      [currentPage]="page"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)">
+    </app-paginator>
+  </div>
 </div>

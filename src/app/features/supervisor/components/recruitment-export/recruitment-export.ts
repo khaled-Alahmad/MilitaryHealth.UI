@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApplicantService } from '../../../reception/services/applicant.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-recruitment-export',
@@ -28,7 +29,8 @@ import { catchError, map } from 'rxjs/operators';
     ToastModule,
     TagModule,
     ProgressBarModule,
-    GregorianDatePipe
+    GregorianDatePipe,
+    ResetFiltersButtonComponent
   ],
   templateUrl: './recruitment-export.html',
   styleUrls: ['./recruitment-export.scss'],
@@ -41,6 +43,8 @@ export class RecruitmentExportComponent implements OnInit {
   exporting = false;
   globalFilter = '';
   tableHeight = '600px';
+  @ViewChild('exportTable') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private exportService: RecruitmentExportService,
@@ -53,10 +57,22 @@ export class RecruitmentExportComponent implements OnInit {
     this.loadPendingExports();
   }
 
-  onGlobalFilter(event: Event, table: Table): void {
+  onGlobalFilter(event: Event): void {
     const value = (event.target as HTMLInputElement)?.value || '';
     this.globalFilter = value;
-    table.filterGlobal(value, 'contains');
+    this.table?.filterGlobal(value, 'contains');
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadPendingExports();
   }
 
   loadPendingExports(): void {

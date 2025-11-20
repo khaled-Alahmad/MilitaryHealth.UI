@@ -19,8 +19,8 @@ export class LoadingService {
 
   hide(): void {
      this.ngZone.run(() => {
-      this.activeRequests=Math.max(this.activeRequests - 1);
-      setTimeout(() => { this.updateLoadingState(),0 });
+      this.activeRequests = Math.max(this.activeRequests - 1, 0);
+      setTimeout(() => { this.updateLoadingState(); }, 0);
     });
   }
   private updateLoadingState(): void {

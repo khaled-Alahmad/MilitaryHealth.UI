@@ -51,13 +51,7 @@
 
     <ng-template #end>
       <div class="toolbar-filters">
-        <p-button 
-          label="مسح الفلاتر" 
-          icon="pi pi-filter-slash" 
-          severity="secondary" 
-          class="filter-btn"
-          outlined
-          (onClick)="clear(dt1)" />
+        <app-reset-filters-button (reset)="clear(dt1)"></app-reset-filters-button>
         <div class="search-container">
           <p-iconfield iconPosition="right">
             <p-inputicon>

@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EarClinicExam } from '../../../models/ear-clinic-exam.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
@@ -12,11 +12,12 @@ import { PagedResponse } from '../../../../../shared/models/paged-response.model
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarExamComponent } from '../edit-ear-exam/edit-ear-exam';
 import { ExamDetailsComponent } from '../exam-details/exam-details';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-deferred-ear-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
   templateUrl: './deferred-ear-exams.component.html',
   styleUrls: ['./deferred-ear-exams.component.scss']
 })
@@ -28,6 +29,8 @@ export class DeferredEarExamsComponent implements OnInit {
   rowsPerPage = 10;
   totalRecords = 0;
   loading = false;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private examService: EarClinicExamService,
@@ -42,11 +45,9 @@ export class DeferredEarExamsComponent implements OnInit {
 
   loadEarExams() {
     this.loading = true;
-    console.log('Loading ear exams...');
     const filter = this.globalFilter || '';
     this.examService.getDeferredEarClinicExamsPaged(this.page, this.rowsPerPage, filter).subscribe({
       next: (res: any) => {
-        console.log('Received exams:', res);
         this.exams = res.items;
         this.filteredExams = res.items;
         this.totalRecords = res.totalCount;
@@ -56,8 +57,7 @@ export class DeferredEarExamsComponent implements OnInit {
           this.toastr.warning('لا توجد فحوصات');
         }
       },
-      error: (err) => {
-        console.error('Error loading exams:', err);
+      error: () => {
         this.toastr.error('❌ فشل تحميل الفحوصات', 'خطأ');
         this.loading = false;
       }
@@ -122,5 +122,18 @@ export class DeferredEarExamsComponent implements OnInit {
     });
     
     modalRef.componentInstance.exam = exam;
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadEarExams();
   }
 }

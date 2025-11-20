@@ -1,5 +1,5 @@
 // components/deferred-eye-exams/deferred-eye-exams.component.ts
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { EyeExam } from '../../../models/eye-exam.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,18 +8,19 @@ import { EditEyeExam } from '../edit-eye-exam/edit-eye-exam';
 import { EyeExamDetails } from '../eye-exam-details/eye-exam-details';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin, of, switchMap, map } from 'rxjs';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApplicantService } from '../../../../reception/services/applicant.service';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })
@@ -35,6 +36,8 @@ export class DeferredEyeExamsComponent implements OnInit {
   selectedExam: EyeExam | null = null;
   applicantsCache: Map<string, any> = new Map();
   refractionTypes: any[] = [];
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private examService: EyeExamService,
@@ -100,6 +103,19 @@ export class DeferredEyeExamsComponent implements OnInit {
     const screenHeight = window.innerHeight;
     const reservedSpace = 220;
     this.tableHeight = `${screenHeight - reservedSpace}px`;
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadEyeExams();
   }
 
   getBadgeClass(result: any): string {

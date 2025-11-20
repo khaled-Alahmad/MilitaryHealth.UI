@@ -2,6 +2,8 @@
   background: #fff;
   padding: 20px;
   font-family: "Tahoma", sans-serif;
+  line-height: 1.55;
+  color: #0f172a;
 }
 
 .report-header {
@@ -36,6 +38,68 @@
   color: #334155;
 }
 
+.print-banner {
+  display: none;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  border: 2px solid rgba(5, 66, 57, 0.2);
+  border-radius: 12px;
+  background: rgba(248, 250, 252, 0.95);
+  box-shadow: 0 8px 24px rgba(5, 66, 57, 0.08);
+
+  .official-heading {
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+    font-size: 1.05rem;
+
+    .official-line {
+      margin: 2px 0;
+    }
+
+    .highlight {
+      color: #054239;
+    }
+  }
+
+  .banner-divider {
+    height: 1px;
+    background: rgba(5, 66, 57, 0.2);
+    margin: 10px 0;
+  }
+
+  .banner-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+
+    .banner-name {
+      color: #054239;
+    }
+  }
+
+  .banner-meta {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 18px;
+    font-size: 0.85rem;
+
+    span {
+      display: inline-flex;
+      gap: 4px;
+      align-items: baseline;
+    }
+  }
+}
+
 .ids {
   display: grid;
   grid-auto-flow: column;
@@ -57,6 +121,12 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px 18px;
 }
 
 .card {
@@ -165,6 +235,165 @@
   break-inside: avoid;
 }
 
+.attachments-card {
+  .attachments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .attachment-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    background: #f8fafc;
+  }
+
+  .attachment-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .attachment-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+  }
+
+  .attachment-source {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .attachment-label {
+    color: #475569;
+    font-size: 0.82rem;
+  }
+
+  .attachment-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #054239, #428177);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(5, 66, 57, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(5, 66, 57, 0.25);
+    }
+  }
+
+  .attachment-preview {
+    margin-top: 12px;
+    page-break-inside: avoid;
+  }
+
+  .print-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto;
+    page-break-inside: avoid;
+  }
+
+  .print-pdf {
+    width: 100%;
+    min-height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    page-break-inside: avoid;
+  }
+
+  .attachment-path {
+    font-size: 0.75rem;
+    color: #475569;
+    width: 100%;
+    border-top: 1px dashed #cbd5f5;
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+}
+
+.timeline-card {
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .timeline-item {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.notes-card {
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .note-item {
+    border: 1px dashed rgba(5, 66, 57, 0.3);
+    border-radius: 10px;
+    padding: 12px;
+    background: #fbfdfa;
+  }
+
+  .note-title {
+    font-weight: 600;
+    color: #054239;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .note-value {
+    margin: 0;
+    color: #1f2937;
+    line-height: 1.6;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: rgba(5, 66, 57, 0.15);
+  color: #054239;
+}
+
+.badge-muted {
+  background: rgba(148, 163, 184, 0.2);
+  color: #475569;
+}
+
 .table {
   width: 100%;
   font-size: 14px;
@@ -192,6 +421,9 @@ html[dir="rtl"] .field {
   body {
     margin: 0;
     background: #fff;
+    font-family: "Tahoma", sans-serif;
+    line-height: 1.6;
+    color: #0f172a;
   }
   @page {
     size: A4;
@@ -199,6 +431,19 @@ html[dir="rtl"] .field {
   }
   .only-print {
     display: block;
+  }
+  .print-banner {
+    display: block;
+    border-color: #000;
+    background: #fff;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+  .banner-title {
+    font-size: 1.1rem !important;
+  }
+  .report-header {
+    display: none;
   }
   .report-container {
     padding: 0;
@@ -422,6 +667,66 @@ html[dir="rtl"] .field {
       margin-top: 8px;
       padding-top: 8px;
       border-top: 1px dotted #ccc;
+    }
+  }
+
+  // تنسيقات المرفقات عند الطباعة
+  .attachments-card {
+    .attachment-item {
+      border: 1px solid #000;
+      background: #fff;
+      page-break-inside: avoid;
+      margin-bottom: 12px;
+    }
+
+    .attachment-header {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .attachment-info {
+      .attachment-source {
+        font-size: 11px !important;
+        font-weight: 700;
+      }
+      .attachment-label {
+        font-size: 10px !important;
+      }
+    }
+
+    .attachment-preview {
+      margin-top: 12px;
+      page-break-inside: avoid;
+    }
+
+    .print-image {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #000;
+      border-radius: 4px;
+      display: block;
+      margin: 8px auto;
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+
+    .print-pdf {
+      width: 100%;
+      min-height: 500px;
+      max-height: 800px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+
+    .attachment-path {
+      font-size: 9px !important;
+      color: #000;
+      border-top: 1px dashed #999;
+      padding-top: 8px;
+      margin-top: 8px;
     }
   }
 }

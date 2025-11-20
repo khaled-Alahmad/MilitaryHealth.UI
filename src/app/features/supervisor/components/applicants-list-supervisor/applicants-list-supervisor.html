@@ -10,20 +10,27 @@
         <p class="page-subtitle">عرض وإدارة جميع المنتسبين في النظام</p>
       </div>
     </div>
+    <div class="table-toolbar">
+      <div class="filter-reset-wrapper">
+        <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
     <div class="search-wrapper">
       <i class="fas fa-search search-icon"></i>
       <input 
+            #searchInput
         type="text" 
         class="search-input" 
         placeholder="ابحث عن رقم الملف أو الاسم..."
         (input)="onFilterChange($event)"
         [value]="globalFilter">
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Table Section -->
   <div class="table-container">
     <p-table 
+      #table
       [value]="applicants" 
       [loading]="loading"
       [paginator]="true"

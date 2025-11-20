@@ -29,6 +29,6 @@ export const RECEPTION_ROUTES: Routes = [
     loadComponent: () =>
       import('./components/add-edit-applicant/add-edit-applicant').then(m => m.AddEditApplicant),
     canActivate: [authGuard],
-    data: { roles: [UserRoles.Receptionist,,UserRoles.Supervisor] }
+    data: { roles: [UserRoles.Receptionist, UserRoles.Supervisor] }
   }
 ];

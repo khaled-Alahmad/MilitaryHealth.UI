@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SurgicalExam } from '../../../models/surgical-exam-post.model';
@@ -6,14 +6,15 @@ import { EditSurgicalExam } from '../edit-surgical-exam/edit-surgical-exam';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-deferred-surgical-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule, TableModule, PaginatorComponent, TooltipModule],
+  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
   templateUrl: './deferred-surgical-exams.component.html',
   styleUrls: ['./deferred-surgical-exams.component.scss']
 })
@@ -28,6 +29,8 @@ export class DeferredSurgicalExamsComponent implements OnInit {
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private examService: SurgicalExamService,
@@ -99,5 +102,18 @@ export class DeferredSurgicalExamsComponent implements OnInit {
       default:
         return 'badge bg-secondary';
     }
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadExams();
   }
 }

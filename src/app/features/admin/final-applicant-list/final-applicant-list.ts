@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
 import { TableModule } from "primeng/table";
 import { FinalDecision } from '../dashboard/models/result.model';
@@ -7,10 +7,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FinalDecisionsResponse } from '../dashboard/models/final-decisions-response.model';
 import { GregorianDatePipe } from '../../../shared/pipes/gregorian-date.pipe';
+import { Table } from 'primeng/table';
+import { ResetFiltersButtonComponent } from '../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-final-applicant-list',
-  imports: [PaginatorComponent, TableModule, CommonModule, GregorianDatePipe],
+  imports: [PaginatorComponent, TableModule, CommonModule, GregorianDatePipe, ResetFiltersButtonComponent],
   templateUrl: './final-applicant-list.html',
   styleUrl: './final-applicant-list.scss'
 })
@@ -24,6 +26,8 @@ export class FinalApplicantList {
   rowsPerPage = 10;
   totalRecords = 0;
   tableHeight = '300px';
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   constructor(private finalDecisionsService: FinalDecisionsService, private cdr: ChangeDetectorRef,
     private router: Router) { }
 
@@ -83,5 +87,18 @@ export class FinalApplicantList {
     const reservedSpace = 220;
 
     this.tableHeight = (screenHeight - reservedSpace) + 'px';
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadDecisions();
   }
 }

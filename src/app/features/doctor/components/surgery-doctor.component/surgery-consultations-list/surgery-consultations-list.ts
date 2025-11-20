@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditConsultation } from '../../Consultations/edit-consultation/edit-consultation';
 import { Consultation } from '../../../models/consultation.model';
@@ -7,14 +7,15 @@ import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-surgery-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './surgery-consultations-list.html',
   styleUrls: ['./surgery-consultations-list.scss']
 })
@@ -28,6 +29,8 @@ export class SurgeryConsultationsList implements OnInit {
   rowsPerPage = 10;
   totalRecords = 0;
   globalFilter: string = '';
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   constructor(
     private service: SurgicalExamService,
     private toastr: ToastrService,
@@ -100,5 +103,18 @@ export class SurgeryConsultationsList implements OnInit {
     modalRef.componentInstance.consultationUpdated.subscribe(() => {
       this.loadConsultations();
     });
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadConsultations();
   }
 }

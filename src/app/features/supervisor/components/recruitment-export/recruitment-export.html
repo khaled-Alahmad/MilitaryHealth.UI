@@ -10,14 +10,20 @@
         <p class="page-subtitle">إدارة وتصدير المنتسبين الجاهزين لمركز التجنيد</p>
       </div>
     </div>
-    <div class="search-wrapper">
-      <i class="pi pi-search search-icon"></i>
-      <input 
-        type="text" 
-        class="search-input" 
-        placeholder="ابحث عن رقم الملف أو الاسم..."
-        [value]="globalFilter"
-        (input)="onGlobalFilter($event, exportTable)">
+    <div class="table-toolbar">
+      <div class="filter-reset-wrapper">
+        <app-reset-filters-button   class="reset-filters-button"  (reset)="resetFilters()"></app-reset-filters-button>
+        <div class="search-wrapper">
+          <i class="pi pi-search search-icon"></i>
+          <input 
+            #searchInput
+            type="text" 
+            class="search-input" 
+            placeholder="ابحث عن رقم الملف أو الاسم..."
+            [value]="globalFilter"
+            (input)="onGlobalFilter($event)">
+        </div>
+      </div>
     </div>
   </div>
 

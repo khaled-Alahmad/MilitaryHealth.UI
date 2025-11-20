@@ -1,23 +1,24 @@
 import { environment } from './../../../../../../environments/environment';
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EditConsultation } from '../../Consultations/edit-consultation/edit-consultation';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 
 @Component({
   selector: 'app-eye-consultations',
   standalone: true,
-  imports: [CommonModule, ButtonModule ,FormsModule, TableModule, PaginatorComponent],
+  imports: [CommonModule, ButtonModule ,FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './eye-consultations.html',
   styleUrls: ['./eye-consultations.scss']
 })
@@ -30,6 +31,8 @@ export class EyeConsultations implements OnInit {
   totalRecords = 0;
   loading = false;
   tableHeight = '360px';
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   // selectedConsultation: Consultation | null = null;
   // searchText: string = '';
@@ -141,5 +144,18 @@ export class EyeConsultations implements OnInit {
     modalRef.componentInstance.consultationUpdated.subscribe(() => {
       this.loadConsultations();
     });
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadConsultations();
   }
 }

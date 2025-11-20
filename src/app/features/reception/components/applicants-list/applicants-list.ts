@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ApplicantModel } from '../../models/applicant.model';
@@ -13,6 +13,8 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
 import { MessageService } from 'primeng/api';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
+import { Table } from 'primeng/table';
+import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-applicants-list',
@@ -23,7 +25,8 @@ import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe'
     TagModule, 
     ButtonModule,
     EditApplicantDialogComponent,
-    GregorianDatePipe
+    GregorianDatePipe,
+    ResetFiltersButtonComponent
   ],
   templateUrl: './applicants-list.html',
   styleUrl: './applicants-list.scss',
@@ -43,6 +46,8 @@ export class ApplicantsList implements OnInit,AfterViewInit  {
   // Edit Dialog
   editDialogVisible = false;
   selectedApplicant: ApplicantModel | null = null;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   
   constructor(
     private applicantService: ApplicantService,
@@ -168,5 +173,18 @@ onFilterChange(event: Event) {
         detail: 'لا يمكن طباعة الإيصال - بيانات ناقصة'
       });
     }
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadApplicants();
   }
 }

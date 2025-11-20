@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -14,9 +14,11 @@ import { Result } from '../../../../shared/models/result.model';
 import { EditArchive } from '../edit-archive/edit-archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
+import { Table } from 'primeng/table';
+import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
 @Component({
   selector: 'app-archive-list',
-  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule, GregorianDatePipe],
+  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule, GregorianDatePipe, ResetFiltersButtonComponent],
   templateUrl: './archive-list.html',
   styleUrl: './archive-list.scss'
 })
@@ -29,6 +31,8 @@ archives: ArchiveModel[] = [];
   rowsPerPage = 10;
   totalRecords = 0;
   tableHeight = '300px';
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private archiveService: ArchiveService,
@@ -111,5 +115,18 @@ archives: ArchiveModel[] = [];
     const screenHeight = window.innerHeight;
     const reservedSpace = 220;
     this.tableHeight = (screenHeight - reservedSpace) + 'px';
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadArchives();
   }
 }

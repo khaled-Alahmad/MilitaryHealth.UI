@@ -1,5 +1,5 @@
 import { ToastModule } from 'primeng/toast';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
@@ -9,15 +9,16 @@ import { environment } from '../../../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { TableModule } from "primeng/table";
+import { Table, TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-orthopedic-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule],
+  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule, ResetFiltersButtonComponent],
   templateUrl: './orthopedic-consultations-list.html',
   styleUrls: ['./orthopedic-consultations-list.scss'] // ✅ صحيح: styleUrls وليس styleUrl
 })
@@ -32,6 +33,8 @@ export class OrthopedicConsultationsList implements OnInit {
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private service: OrthopedicExamService, private toastr: ToastrService,
     private modalService: NgbModal
@@ -109,5 +112,18 @@ export class OrthopedicConsultationsList implements OnInit {
       case 'مؤجل': return 'badge bg-warning text-dark';
       default: return 'badge bg-secondary';
     }
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadConsultations();
   }
 }

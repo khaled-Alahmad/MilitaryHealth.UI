@@ -1,24 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { InternalExam } from '../../../models/internal-exam.model';
 import { InternalExamService } from '../../../services/internal-exam.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { EditInternalExamComponent } from '../edit-internal-exam-component/edit-internal-exam-component';
 import { InternalExamDetailsComponent } from '../exam-details/exam-details.component';
 import { ToastrService } from 'ngx-toastr';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
   selector: 'app-deferred-internal-exams.component',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, InternalExamDetailsComponent, PaginatorComponent],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, InternalExamDetailsComponent, PaginatorComponent, ResetFiltersButtonComponent],
   templateUrl: './deferred-internal-exams.component.html',
   styleUrl: './deferred-internal-exams.component.scss'
 })
-export class DeferredInternalExamsComponent {
+export class DeferredInternalExamsComponent implements OnInit {
   exams: InternalExam[] = [];
   filteredExams: InternalExam[] = [];
   globalFilter: string = '';
@@ -30,6 +31,8 @@ export class DeferredInternalExamsComponent {
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
+  @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private examService: InternalExamService,
@@ -112,5 +115,18 @@ export class DeferredInternalExamsComponent {
       default:
         return 'badge bg-secondary';
     }
+  }
+
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadExams();
   }
 }
