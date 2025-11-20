@@ -10,7 +10,9 @@ export interface EyeExam {
     visionLeft: string; // القدرة البصرية اليسرى "L:" 
     colorTest: string; // اختبار الألوان اليمنى: "سليم" أو "غير سليم" أو "غير ذلك"
     colorTestLeft: string; // اختبار الألوان اليسرى: "سليم" أو "غير سليم" أو "غير ذلك"
-    refractiveError: string; // أسواء الانكسار: "غير مهمة" أو "مهمة"
+    refractiveError?: string; // أسواء الانكسار (قديم - للتوافق مع البيانات القديمة)
+    worstRefractionRight?: string; // أسوأ انكسار العين اليمنى: "مهمة" أو "غير مهمة"
+    worstRefractionLeft?: string; // أسوأ انكسار العين اليسرى: "مهمة" أو "غير مهمة"
     otherDiseases?: string;
     resultID: number;
     applicantId?: number;

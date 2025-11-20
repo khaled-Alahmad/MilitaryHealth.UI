@@ -23,7 +23,7 @@
       <tr>
         <th style="min-width:120px" class="text-center">رقم ملف المريض</th>
         <th style="min-width:150px" class="text-center">نوع الاستشارة</th>
-        <th style="min-width:150px" class="text-center">الطبيب المحال إليه</th>
+        <th style="min-width:150px" class="text-center">سبب الإحالة</th>
         <th style="min-width:100px" class="text-center">النتيجة</th>
         <th style="min-width:120px" class="text-center">اسم الطبيب</th>
         <th style="min-width:120px" class="text-center">الملف المرفق</th>
@@ -40,7 +40,7 @@
           <span class="small">{{ consultation.consultationType || 'غير محدد' }}</span>
         </td>
         <td class="text-center align-middle">
-          <span class="small">{{ consultation.referredDoctor || 'غير محدد' }}</span>
+          <span class="small">{{ consultation.referralReason || 'غير محدد' }}</span>
         </td>
         <td class="text-center align-middle">
           <span [class]="getBadgeClass(consultation.result)">

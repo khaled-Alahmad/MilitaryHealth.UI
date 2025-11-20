@@ -5,7 +5,7 @@
   </div>
 
   <!-- أزرار الإضافة -->
-  <div *ngIf="selectedApplicant" class="button-group me-3 mb-3 d-flex gap-2">
+  <div *ngIf="selectedApplicant && !checkingEyeExam" class="button-group me-3 mb-3 d-flex gap-2">
     <!-- يظهر فقط إذا ما عنده فحص سابق -->
     <button 
       *ngIf="!hasEyeExam" 
@@ -21,7 +21,8 @@
   <!-- المكونات -->
   <app-eye-exam-form
     *ngIf="selectedApplicant"
-    [applicantFileNumber]="selectedApplicant.fileNumber">
+    [applicantFileNumber]="selectedApplicant.fileNumber"
+    (examAdded)="onEyeExamAdded()">
   </app-eye-exam-form>
 
   <app-consultation-form

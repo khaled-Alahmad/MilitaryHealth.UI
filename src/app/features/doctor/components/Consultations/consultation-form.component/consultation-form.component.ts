@@ -33,7 +33,8 @@ export class ConsultationFormComponent {
   ngOnInit(): void {
     this.consultationForm = this.fb.group({
       consultationType: ['', Validators.required],
-      referredDoctor: ['', Validators.required],
+      // referredDoctor: ['', Validators.required], // ❌ تم حذفه حسب التقرير
+      referralReason: [''], // ✅ جديد - سبب الإحالة (اختياري)
       result: [null],
       attachment: [null]
     });
@@ -91,7 +92,8 @@ export class ConsultationFormComponent {
       doctorID,
       applicantFileNumber: this.applicantFileNumber,
       consultationType: this.consultationForm.value.consultationType,
-      referredDoctor: this.consultationForm.value.referredDoctor,
+      // referredDoctor: this.consultationForm.value.referredDoctor, // ❌ تم حذفه
+      referralReason: this.consultationForm.value.referralReason, // ✅ جديد
       result: this.consultationForm.value.result,
       attachment: this.uploadedPath ?? ''
     };

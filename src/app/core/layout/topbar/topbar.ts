@@ -70,8 +70,7 @@ export class Topbar {
         this.auth.clearStorage();
         this.router.navigate(['/login']);
       },
-      error: (err) => {
-        console.error('Logout failed:', err);
+      error: () => {
         this.auth.clearStorage();
         this.router.navigate(['/login']);
       }

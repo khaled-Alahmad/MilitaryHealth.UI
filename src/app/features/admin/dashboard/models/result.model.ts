@@ -24,7 +24,7 @@ export interface InternalExam {
   blood: string;
   joints: string;
   kidney: string;
-  hearing: string;
+  // hearing: string; // ❌ تم حذفه حسب التقرير
   skin: string;
   resultID: number;
   result: Result;
@@ -51,6 +51,12 @@ export interface FinalDecision {
   reason: string;
   postponeDuration: string;
   decisionDate: string;
+  // ✅ حقول جديدة من التقرير
+  receptionAddedAt?: Date | string;
+  supervisorAddedAt?: Date | string;
+  supervisorLastModifiedAt?: Date | string;
+  isExportedToRecruitment?: boolean;
+  exportedAt?: Date | string;
   eyeExam: EyeExam;
   internalExam: InternalExam;
   orthopedicExam: OrthopedicExam;

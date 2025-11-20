@@ -5,18 +5,18 @@
 
 .user-header-section {
   .breadcrumb {
-    font-size: 0.85rem;
-    margin-bottom: 0.3rem;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: var(--font-size-xl);
     font-weight: 600;
   }
 
   .btn {
     font-weight: 500;
-    padding: 6px 14px;
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
   .btn-primary {
@@ -27,10 +27,10 @@
 
 ::ng-deep .p-datatable {
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  font-family: "Segoe UI", sans-serif;
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-family-primary);
 }
 
 /* إصلاح مشكلة اتساع الجدول */
@@ -50,98 +50,98 @@
 }
 
 ::ng-deep .p-datatable .p-datatable-thead>tr>th {
-  background: #054239 !important;
-  color: #ffffff !important;
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  padding: 0.75rem 1rem !important;
-  text-align: center !important;
+  background: var(--primary-dark);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: center;
   white-space: nowrap;
-  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  position: relative !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
   
   &:first-child {
-    border-top-right-radius: 15px !important;
+    border-top-right-radius: var(--radius-lg);
   }
   
   &:last-child {
-    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-top-left-radius: 15px !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-top-left-radius: var(--radius-lg);
   }
   
   .p-sortable-column-icon {
-    color: white !important;
-    margin-right: 0.25rem;
+    color: white;
+    margin-right: var(--spacing-xs);
   }
 }
 
 ::ng-deep .p-datatable .p-datatable-tbody>tr {
-  background: #ffffff !important;
-  transition: all 0.2s ease !important;
-  border-bottom: 1px solid #e0e0e0 !important;
+  background: white;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   
   &:nth-child(even) {
-    background: #f8f9fa !important;
+    background: var(--neutral-light);
   }
   
   &:hover {
-    background: #e8ecef !important;
+    background: rgba(5, 66, 57, 0.05);
     
     td {
-      font-weight: 500 !important;
+      font-weight: 500;
     }
   }
 }
 
 ::ng-deep .p-datatable .p-datatable-tbody>tr>td {
-  padding: 0.75rem 1rem !important;
-  font-size: 0.75rem !important;
-  font-weight: 400 !important;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-xs);
+  font-weight: 400;
   white-space: nowrap;
-  vertical-align: middle !important;
-  border-bottom: 2px solid #e0e0e0 !important;
-  border-right: 1px solid #e0e0e0 !important;
-  text-align: center !important;
-  line-height: 1.5 !important;
-  color: #34495e !important;
+  vertical-align: middle;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+  line-height: 1.5;
+  color: var(--neutral-dark);
   
   &:last-child {
-    border-right: 1px solid #e0e0e0 !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
   }
   
   small {
     display: block;
-    font-size: 0.6875rem;
-    color: #3D3A3B;
+    font-size: var(--font-size-xs);
+    color: var(--neutral-medium);
     line-height: 1.5;
-    margin-top: 0.25rem;
+    margin-top: var(--spacing-xs);
   }
 }
 
 .badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
   font-weight: 500;
   display: inline-block;
   text-align: center;
 }
 
 .bg-success {
-  background-color: #28a745 !important;
+  background-color: var(--primary-dark);
   color: white;
 }
 
 .bg-danger {
-  background-color: #dc3545 !important;
+  background-color: var(--status-danger);
   color: white;
 }
 
 .bg-warning {
-  background-color: #ffc107 !important;
-  color: #212529 !important;
+  background-color: var(--accent-gold);
+  color: var(--neutral-dark);
 }
 
 ::ng-deep .p-datatable .p-datatable-thead>tr>th:last-child,
@@ -158,14 +158,14 @@
 .search-input,
 .form-control {
   width: 100%;
-  padding: 6px 12px;
-  padding-right: 35px;
-  font-size: 0.875rem;
-  border: 1px solid #ddd;
-  border-radius: 0.375rem;
-  background-color: #f9f9f9;
-  color: #111;
-  transition: border-color 0.2s ease-in-out;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-right: 2.25rem;
+  font-size: var(--font-size-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-light);
+  color: var(--neutral-dark);
+  transition: border-color var(--transition-fast);
   outline: none;
 }
 

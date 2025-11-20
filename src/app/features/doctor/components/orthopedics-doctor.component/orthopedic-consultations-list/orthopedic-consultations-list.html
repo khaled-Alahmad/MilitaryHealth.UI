@@ -21,7 +21,7 @@
       <tr>
         <th>رقم الملف</th>
         <th>نوع الاستشارة</th>
-        <th>الطبيب المحال إليه</th>
+        <th>سبب الإحالة</th>
         <th>اسم الطبيب</th>
         <th>النتيجة</th>
         <th>الملف المرفق</th> 
@@ -33,7 +33,7 @@
       <tr>
         <td>{{ c.applicantFileNumber || '-' }}</td>
         <td>{{ c.consultationType || '-' }}</td>
-        <td>{{ c.referredDoctor || '-' }}</td>
+        <td>{{ c.referralReason || '-' }}</td>
         <td>{{ c.doctor.fullName || '-' }}</td>
         <td>
           <span [ngClass]="getBadgeClass(c.result)">{{ c.result || '-' }}</span>

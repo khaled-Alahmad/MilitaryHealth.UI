@@ -1,0 +1,382 @@
+@use '../../../../shared/styles/mixins' as *;
+
+.recruitment-export-container {
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  margin: 0 auto var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 200px);
+
+  .page-header {
+    @include page-header;
+  }
+
+  .actions-toolbar {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  .table-container {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .progress-container {
+    background: white;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .summary-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    .summary-content {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+
+      .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: #f8f9fa;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 0.85rem 1.5rem;
+        min-width: 220px;
+
+        i {
+          font-size: 1.4rem;
+          color: #054239;
+        }
+
+        p {
+          margin: 0;
+          color: #6c757d;
+          font-size: 0.9rem;
+        }
+
+        strong {
+          display: block;
+          color: #054239;
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+}
+
+/* ===========================================
+   TABLE + PAGINATOR ALIGNMENT
+   =========================================== */
+
+::ng-deep .recruitment-export-container .p-datatable-wrapper,
+::ng-deep .recruitment-export-container .p-datatable-scrollable-wrapper,
+::ng-deep .recruitment-export-container .p-datatable-table-wrapper {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+}
+
+::ng-deep .recruitment-export-container .p-datatable {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family-primary);
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .recruitment-export-container .p-datatable .p-datatable-thead > tr > th {
+  background: #054239 !important;
+  color: #ffffff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 0.75rem !important;
+  text-align: center !important;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+
+  &:first-child {
+    border-top-right-radius: 15px !important;
+  }
+
+  &:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-top-left-radius: 15px !important;
+  }
+}
+
+::ng-deep .recruitment-export-container .p-datatable .p-datatable-tbody > tr {
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  cursor: pointer;
+
+  &:nth-child(even) {
+    background: #f8f9fa !important;
+  }
+
+  &:hover {
+    background: #e8ecef !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    td {
+      font-weight: 500 !important;
+    }
+  }
+
+  // تنسيق الصف المحدد
+  &.row-selected {
+    background: linear-gradient(90deg, rgba(5, 66, 57, 0.1) 0%, rgba(5, 66, 57, 0.05) 100%) !important;
+    border-left: 4px solid #054239 !important;
+    border-right: 4px solid #054239 !important;
+    box-shadow: 0 2px 8px rgba(5, 66, 57, 0.2) !important;
+    transform: translateX(-2px);
+
+    td {
+      font-weight: 600 !important;
+      color: #054239 !important;
+    }
+
+    &:hover {
+      background: linear-gradient(90deg, rgba(5, 66, 57, 0.15) 0%, rgba(5, 66, 57, 0.08) 100%) !important;
+    }
+  }
+}
+
+::ng-deep .recruitment-export-container .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.4rem 0.6rem !important;
+  font-size: 0.65rem !important;
+  font-weight: 400 !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  max-width: 150px !important;
+  vertical-align: middle !important;
+  border-bottom: 2px solid #e0e0e0 !important;
+  border-right: 1px solid #e0e0e0 !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+  color: #34495e !important;
+
+  &:last-child {
+    border-right: none !important;
+  }
+}
+
+::ng-deep .recruitment-export-container .p-datatable .p-datatable-emptymessage {
+  padding: 2rem !important;
+  text-align: center !important;
+  color: var(--neutral-medium) !important;
+
+  td {
+    border: none !important;
+  }
+}
+
+::ng-deep .recruitment-export-container .p-paginator {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .recruitment-export-container .p-paginator .p-dropdown {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 0.85rem;
+
+  .p-inputtext {
+    padding: 0.35rem 0.75rem;
+  }
+}
+
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-pages .p-paginator-page,
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-first,
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-prev,
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-next,
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-last {
+  border-radius: 8px;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid #d1d9e0;
+  color: #054239;
+  margin: 0 0.1rem;
+  font-weight: 600;
+  background: white;
+  transition: all 0.2s ease;
+
+  &:hover:not(.p-highlight):not(.p-disabled) {
+    background: #054239;
+    color: white;
+    border-color: #054239;
+  }
+}
+
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-pages .p-highlight {
+  background: linear-gradient(135deg, #054239 0%, #428177 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(5, 66, 57, 0.15);
+}
+
+::ng-deep .recruitment-export-container .p-paginator .p-paginator-element.p-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===========================================
+   CHECKBOX STYLING
+   =========================================== */
+
+::ng-deep .recruitment-export-container .p-checkbox {
+  .p-checkbox-box {
+    border: 2px solid #054239 !important;
+    border-radius: 4px !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      border-color: #428177 !important;
+      background: rgba(5, 66, 57, 0.05) !important;
+    }
+
+    &.p-highlight {
+  background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
+      border-color: #054239 !important;
+      box-shadow: 0 2px 6px rgba(5, 66, 57, 0.3) !important;
+    }
+
+    .p-checkbox-icon {
+  color: white !important;
+      font-size: 0.75rem !important;
+      font-weight: 700 !important;
+    }
+  }
+}
+
+/* ===========================================
+   BUTTONS & LOADING
+   =========================================== */
+
+::ng-deep .recruitment-export-container .p-button {
+  font-family: var(--font-family-primary) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.65rem 1.5rem !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+  }
+
+  &.p-button-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    border: none !important;
+    color: white !important;
+  }
+
+  &.p-button-info {
+    background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
+    border: none !important;
+    color: white !important;
+  }
+
+  &.p-button-secondary {
+    border: 2px solid #054239 !important;
+    color: #054239 !important;
+    background: white !important;
+
+    &:hover:not(:disabled) {
+      background: #054239 !important;
+      color: white !important;
+      border-color: #054239 !important;
+    }
+  }
+}
+
+/* ===========================================
+   TOOLBAR BUTTONS ENHANCEMENT
+   =========================================== */
+
+.recruitment-export-container .actions-toolbar {
+  .toolbar-left .p-button,
+  .toolbar-right .p-button {
+    min-width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+
+    .p-button-icon {
+      font-size: 1rem;
+    }
+  }
+}
+
+::ng-deep .recruitment-export-container .actions-toolbar .export-btn .p-button-label,
+::ng-deep .recruitment-export-container .actions-toolbar .export-btn .p-button-icon {
+  color: #fff !important;
+}
+
+::ng-deep .recruitment-export-container .p-progressbar {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+

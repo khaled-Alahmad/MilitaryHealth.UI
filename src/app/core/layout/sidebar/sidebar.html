@@ -148,9 +148,13 @@
         <i class="pi pi-verified"></i>
         <span>تقييم المنتسب</span>
       </li>
-       <li routerLink="/reception/applicants" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'قائمة المنتسبين' : null">
+       <li routerLink="supervisor/list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'قائمة المنتسبين' : null">
         <i class="pi pi-users"></i>
         <span>قائمة المنتسبين</span>
+      </li>
+      <li routerLink="supervisor/export" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'تصدير للتجنيد' : null">
+        <i class="pi pi-file-export"></i>
+        <span>تصدير للتجنيد</span>
       </li>
      
     }

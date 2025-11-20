@@ -5,6 +5,11 @@ export interface ApplicantModel{
   applicantID:number;
   fileNumber:string;
   fullName: string;
+  motherName?: string; // ✅ جديد
+  dateOfBirth?: Date | string; // ✅ جديد
+  recruitmentCenter?: string; // ✅ جديد
+  bloodType?: string; // ✅ جديد
+  queueNumber?: number; // ✅ جديد (يتم توليده تلقائياً)
   maritalStatusID: number;
   job: string;
   height: number;
@@ -16,13 +21,21 @@ export interface ApplicantModel{
   distinctiveMarks: string;
   maritalStatus: MaritalStatus;
   associateNumber:string;
+  createdAt?: Date | string; // ✅ تاريخ الإنشاء
 }
 export interface ApplicantDetailsModel {
   applicantID: number;
   fileNumber: string;
   fullName: string;
+  motherName?: string; // ✅ جديد
+  dateOfBirth?: Date | string; // ✅ جديد
+  recruitmentCenter?: string; // ✅ جديد
+  bloodType?: string; // ✅ جديد
+  queueNumber?: number; // ✅ جديد
   associateNumber?: string;
+  createdAt?: Date | string; // ✅ تاريخ الإضافة
   maritalStatusID: number;
+  maritalStatus?: MaritalStatus; // ✅ الحالة الاجتماعية
   job: string;
   height: number;
   weight: number;
@@ -48,11 +61,15 @@ export interface EyeExam {
   applicantFileNumber: string;
   doctorID: number;
   vision: string;
+  visionLeft?: string; // ✅ القدرة البصرية اليسرى
   colorTest: string;
+  colorTestLeft?: string; // ✅ اختبار الألوان اليسرى
   refractionTypeID: number;
   refractionValue: number;
   resultID: number;
   refractions: Refraction[];
+  otherDiseases?: string; // ✅ أمراض أخرى
+  reason?: string; // ✅ السبب
 }
 
 export interface SurgicalExam {
@@ -88,7 +105,7 @@ export interface InternalExam {
   blood: string;
   joints: string;
   kidney: string;
-  hearing: string;
+  // hearing: string; // ❌ تم حذفه حسب التقرير
   skin: string;
   resultID: number;
 }
@@ -134,7 +151,8 @@ export interface Consultation {
   doctorID: number;
   applicantFileNumber: string;
   consultationType: string;
-  referredDoctor: string;
+  // referredDoctor: string; // ❌ تم حذفه حسب التقرير
+  referralReason?: string; // ✅ جديد - سبب الإحالة
   result: string;
   attachment: string;
 }
@@ -143,6 +161,7 @@ export interface Investigation {
   investigationID: number;
   applicantFileNumber: string;
   type: string;
+  investigationReason?: string; // ✅ جديد - سبب التحليل
   result: string;
   attachment: string;
   status: string;
@@ -161,6 +180,12 @@ export interface FinalDecision {
   postponeDuration: string;
   decisionDate: string;
   result: Result;
+  // ✅ حقول جديدة من التقرير
+  receptionAddedAt?: Date | string;
+  supervisorAddedAt?: Date | string;
+  supervisorLastModifiedAt?: Date | string;
+  isExportedToRecruitment?: boolean;
+  exportedAt?: Date | string;
 }
 
 export interface Refraction {

@@ -17,7 +17,8 @@ export class ApplicantService {
    * جلب Applicant كامل عن طريق رقم الملف
    */
   getApplicantByFileNumber(fileNumber: string): Observable<Applicant> {
-    return this.http.get<ApiResponse<Applicant>>(`${this.apiUrl}/${fileNumber}`)
+    const url = `${this.apiUrl}/Details/${fileNumber}`;
+    return this.http.get<ApiResponse<Applicant>>(url)
         .pipe(
           map(response => response.data)
         );

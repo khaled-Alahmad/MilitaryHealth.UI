@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: "http://localhost:5000",
+  apiUrl: "https://devdef-1.runasp.net",
 };

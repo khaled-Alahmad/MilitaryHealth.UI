@@ -1,0 +1,359 @@
+/* ===========================================
+   Shared Mixins - Reusable Styles
+   =========================================== */
+
+/* Page Header Mixin - Unified Design */
+@mixin page-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  color: white;
+  margin-bottom: var(--spacing-2xl);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(5, 66, 57, 0.9) 0%, rgba(66, 129, 119, 0.9) 100%);
+    z-index: 0;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    position: relative;
+    z-index: 1;
+    flex: 1;
+
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+      i {
+        font-size: var(--font-size-2xl);
+        color: var(--accent-gold);
+      }
+    }
+
+    .header-text {
+      .page-title {
+        margin: 0;
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .page-subtitle {
+        margin: var(--spacing-sm) 0 0 0;
+        opacity: 0.9;
+        font-size: var(--font-size-base);
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 400;
+      }
+    }
+  }
+
+  .search-wrapper {
+    position: relative;
+    width: 400px;
+    max-width: 100%;
+    z-index: 1;
+
+    .search-icon {
+      position: absolute;
+      right: var(--spacing-md);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-gold);
+      font-size: var(--font-size-base);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--spacing-sm) 2.5rem var(--spacing-sm) var(--spacing-lg);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-family: var(--font-family-primary);
+      transition: all var(--transition-fast);
+      background-color: rgba(255, 255, 255, 0.95);
+      color: var(--neutral-dark);
+      
+      &::placeholder {
+        color: var(--neutral-medium);
+      }
+      
+      &:focus {
+        border-color: var(--accent-gold);
+        box-shadow: 0 0 0 3px rgba(185, 167, 121, 0.2);
+        outline: none;
+        background-color: white;
+      }
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    padding: var(--spacing-xl);
+    gap: var(--spacing-lg);
+
+    .header-content {
+      gap: var(--spacing-lg);
+
+      .header-icon {
+        width: 50px;
+        height: 50px;
+
+        i {
+          font-size: var(--font-size-xl);
+        }
+      }
+
+      .header-text .page-title {
+        font-size: var(--font-size-xl);
+      }
+    }
+
+    .search-wrapper {
+      width: 100%;
+      margin-top: var(--spacing-md);
+    }
+  }
+}
+
+/* Card Container Mixin */
+@mixin card-container {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: var(--spacing-xl);
+}
+
+/* Table Container Mixin */
+@mixin table-container {
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Button Primary Mixin - Unified Design */
+@mixin button-primary {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-sm);
+  min-height: 2.5rem;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.2);
+    outline: none;
+  }
+}
+
+/* Button Secondary Mixin - Unified Design */
+@mixin button-secondary {
+  background: var(--neutral-medium);
+  color: white;
+  border: 2px solid var(--neutral-medium);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-sm);
+  min-height: 2.5rem;
+
+  &:hover:not(:disabled) {
+    background: var(--neutral-dark);
+    border-color: var(--neutral-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(61, 58, 59, 0.2);
+    outline: none;
+  }
+}
+
+/* Input Field Mixin */
+@mixin input-field {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--neutral-dark);
+  transition: all var(--transition-fast);
+  background: white;
+
+  &:focus {
+    border-color: var(--primary-medium);
+    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+    outline: none;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--primary-medium);
+  }
+
+  &.invalid,
+  &.is-invalid {
+    border-color: var(--status-danger);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(107, 31, 42, 0.1);
+    }
+  }
+}
+
+/* Responsive Breakpoints */
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: 480px) {
+      @content;
+    }
+  }
+  @if $breakpoint == tablet {
+    @media (max-width: 768px) {
+      @content;
+    }
+  }
+  @if $breakpoint == desktop-small {
+    @media (max-width: 1024px) {
+      @content;
+    }
+  }
+  @if $breakpoint == desktop-medium {
+    @media (max-width: 1200px) {
+      @content;
+    }
+  }
+  @if $breakpoint == desktop-large {
+    @media (min-width: 1201px) {
+      @content;
+    }
+  }
+}
+
+/* Sticky Table Header Mixin */
+@mixin sticky-table-header {
+  ::ng-deep .p-datatable {
+    .p-datatable-thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      
+      > tr > th {
+        background: var(--primary-dark);
+        position: sticky;
+        top: 0;
+      }
+    }
+  }
+}
+
+/* Scroll to Top Button Mixin */
+@mixin scroll-to-top {
+  .scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    i {
+      font-size: var(--font-size-xl);
+    }
+  }
+}
+

@@ -35,6 +35,7 @@ export class EditInvestigation {
   ngOnInit(): void {
   this.investigationForm = this.fb.group({
     type: [this.investigation.type], // مخفي ولا يمكن تعديله
+    investigationReason: [this.investigation.investigationReason || ''], // ✅ جديد
     result: [this.investigation.result || ''],
     status: [this.investigation.result ? 'مكتمل' : 'مؤجل', Validators.required],
     attachment: [this.investigation.attachment || null]
@@ -86,6 +87,7 @@ export class EditInvestigation {
       doctorID,
       applicantFileNumber: this.investigation.applicantFileNumber,
       type: this.investigationForm.value.type,
+      investigationReason: this.investigationForm.value.investigationReason, // ✅ جديد
       result: this.investigationForm.value.result,
       status: this.investigationForm.value.status,
       attachment: this.uploadedPath ?? ''

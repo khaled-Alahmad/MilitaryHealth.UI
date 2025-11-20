@@ -102,7 +102,8 @@ export class EditSurgicalExam implements OnInit {
       urinarySurgery: formData.urinarySurgery === 'غير ذلك' ? (formData.urinarySurgeryOther || '') : formData.urinarySurgery,
       vascularSurgery: formData.vascularSurgery === 'غير ذلك' ? (formData.vascularSurgeryOther || '') : formData.vascularSurgery,
       thoracicSurgery: formData.thoracicSurgery === 'غير ذلك' ? (formData.thoracicSurgeryOther || '') : formData.thoracicSurgery,
-      resultID: Number(formData.resultID) 
+      resultID: Number(formData.resultID),
+      reason: (formData.reason || '').trim() // ✅ إضافة حقل السبب
     };
 
     const examID: number = updatedExam.surgicalExamID!;
@@ -113,6 +114,7 @@ export class EditSurgicalExam implements OnInit {
         this.toastr.success('✅ تم التحديث بنجاح');
         this.exam.result = this.results.find(r => r.resultID === updatedExam.resultID);
         this.exam.resultID = updatedExam.resultID; 
+        this.exam.reason = updatedExam.reason; // ✅ تحديث حقل السبب
         this.dialogClosed.emit(true);
         this.loading = false;
       },

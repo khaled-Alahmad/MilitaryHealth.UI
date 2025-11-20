@@ -15,7 +15,7 @@
           <tr>
               <th pSortableColumn="applicantFileNumber">رقم ملف المريض</th>
               <th pSortableColumn="consultationType">نوع الاستشارة</th>
-              <th pSortableColumn="referredDoctor">الطبيب المحال إليه</th>
+              <th pSortableColumn="referralReason">سبب الإحالة</th>
               <th pSortableColumn="result">النتيجة</th>
               <th pSortableColumn="doctor.fullName">اسم الطبيب</th>
               <th>الملف المرفق</th>
@@ -27,7 +27,7 @@
           <tr>
               <td>{{ c.applicantFileNumber || '-' }}</td>
               <td>{{ c.consultationType || '-' }}</td>
-              <td>{{ c.referredDoctor || '-' }}</td>
+              <td>{{ c.referralReason || '-' }}</td>
               <td>
                   <span [ngClass]="{
                       'badge bg-success': c.result === 'مقبول',

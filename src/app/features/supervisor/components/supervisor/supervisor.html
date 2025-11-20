@@ -1,19 +1,8 @@
 <div class="supervisor-page container-fluid">
-  <!-- Search Section -->
+  <!-- ✅ Search Section - استخدام مكون البحث المتقدم -->
   <div class="row justify-content-center mb-4">
-    <div class="col-12 col-md-8">
-      <div class="search-wrapper">
-        <input type="text" 
-               class="form-control search-input" 
-               placeholder="ابحث عن رقم الملف..." 
-               dir="rtl"
-               [(ngModel)]="searchValue"
-               (keyup.enter)="loadApplicants()">
-        <button class="btn search-btn" (click)="loadApplicants()" [disabled]="loading">
-          <i class="fas fa-search"></i>
-          <span>ابحث</span>
-        </button>
-      </div>
+    <div class="col-12">
+      <app-search-applicant [hideApplicantDetails]="true" (applicantDetailsSelected)="onApplicantDetailsSelected($event)"></app-search-applicant>
       <div *ngIf="applicant && !hasAllExams()" class="alert alert-danger mt-3" role="alert">
         <i class="fas fa-exclamation-triangle me-2"></i>
         الفحوصات الطبية غير مكتملة
@@ -58,6 +47,54 @@
             </div>
             <div class="info-value">{{ applicant.fullName }}</div>
           </div>
+            <div class="info-item">
+              <div class="info-label">
+                <i class="pi pi-user-edit"></i>
+                اسم الأم
+              </div>
+            <div class="info-value">{{ applicant.motherName || 'غير محدد' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">
+                <i class="pi pi-calendar"></i>
+                تاريخ المواليد
+              </div>
+            <div class="info-value">{{ applicant.dateOfBirth | gregorianDate:'yyyy/MM/dd' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">
+                <i class="pi pi-heart"></i>
+                زمرة الدم
+              </div>
+              <div class="info-value">
+              <span *ngIf="applicant.bloodType" class="badge bg-info text-white">{{ applicant.bloodType }}</span>
+              <span *ngIf="!applicant.bloodType" class="text-muted">غير محدد</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">
+                <i class="pi pi-building"></i>
+                مركز التجنيد
+              </div>
+            <div class="info-value">{{ applicant.recruitmentCenter || 'غير محدد' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">
+                <i class="pi pi-sort-numeric-up"></i>
+                رقم الدور
+              </div>
+              <div class="info-value">
+              <span *ngIf="applicant.queueNumber" class="badge bg-primary text-white">{{ applicant.queueNumber }}</span>
+              <span *ngIf="!applicant.queueNumber" class="text-muted">غير محدد</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">
+                <i class="pi pi-calendar-plus"></i>
+                تاريخ الإضافة
+              </div>
+            <div class="info-value">{{ applicant.createdAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</div>
+            </div>
           <div class="info-item">
             <div class="info-label">
               <i class="pi pi-heart"></i>
@@ -157,24 +194,89 @@
                   <div class="data-row">
                     <div class="data-label">
                       <i class="pi pi-eye"></i>
-                      <span>النظر</span>
+                      <span>القدرة البصرية (يمين)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.vision || 'غير محدد' }}</div>
+                    <div class="data-value">{{ getVisionRight(clinic.exam) }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-eye"></i>
+                      <span>القدرة البصرية (يسار)</span>
+                    </div>
+                    <div class="data-value">{{ getVisionLeft(clinic.exam) }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
                       <i class="pi pi-palette"></i>
-                      <span>الألوان</span>
+                      <span>اختبار الألوان (يمين)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.colorTest || 'غير محدد' }}</div>
+                    <div class="data-value">{{ getColorTestRight(clinic.exam) }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
-                      <i class="pi pi-calculator"></i>
-                      <span>قيمة الانكسار</span>
+                      <i class="pi pi-palette"></i>
+                      <span>اختبار الألوان (يسار)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.refractionValue || 'غير محدد' }}</div>
+                    <div class="data-value">{{ getColorTestLeft(clinic.exam) }}</div>
                   </div>
+                  
+                  <!-- الانكسارات - العين اليمنى -->
+                  <div class="data-row" *ngIf="getRightEyeRefractions(clinic.exam).length > 0">
+                    <div class="data-label">
+                      <i class="pi pi-angle-right"></i>
+                      <span>الانكسارات (يمين)</span>
+                    </div>
+                    <div class="data-value">
+                      <div class="refractions-display d-flex flex-wrap gap-2">
+                        <span *ngFor="let ref of getRightEyeRefractions(clinic.exam)" 
+                              class="badge bg-info text-white">
+                          {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- الانكسارات - العين اليسرى -->
+                  <div class="data-row" *ngIf="getLeftEyeRefractions(clinic.exam).length > 0">
+                    <div class="data-label">
+                      <i class="pi pi-angle-left"></i>
+                      <span>الانكسارات (يسار)</span>
+                    </div>
+                    <div class="data-value">
+                      <div class="refractions-display d-flex flex-wrap gap-2">
+                        <span *ngFor="let ref of getLeftEyeRefractions(clinic.exam)" 
+                              class="badge bg-secondary text-white">
+                          {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- رسالة إذا لم توجد انكسارات -->
+                  <div class="data-row" *ngIf="getRightEyeRefractions(clinic.exam).length === 0 && getLeftEyeRefractions(clinic.exam).length === 0">
+                    <div class="data-label">
+                      <i class="pi pi-info-circle"></i>
+                      <span>الانكسارات</span>
+                    </div>
+                    <div class="data-value text-muted">لا توجد انكسارات مسجلة</div>
+                  </div>
+                  
+                  <div class="data-row" *ngIf="clinic.exam.otherDiseases">
+                    <div class="data-label">
+                      <i class="pi pi-exclamation-triangle"></i>
+                      <span>أمراض أخرى</span>
+                    </div>
+                    <div class="data-value">{{ clinic.exam.otherDiseases }}</div>
+                  </div>
+                  
+                  <div class="data-row" *ngIf="clinic.exam.reason">
+                    <div class="data-label">
+                      <i class="pi pi-info-circle"></i>
+                      <span>السبب</span>
+                    </div>
+                    <div class="data-value reason-text">{{ clinic.exam.reason }}</div>
+                  </div>
+                  
                   <div class="data-row result-row">
                     <div class="data-label">
                       <i class="pi pi-check-circle"></i>
@@ -244,13 +346,6 @@
                       <span>الكلى</span>
                     </div>
                     <div class="data-value">{{ clinic.exam.kidney || 'غير محدد' }}</div>
-                  </div>
-                  <div class="data-row">
-                    <div class="data-label">
-                      <i class="pi pi-volume-up"></i>
-                      <span>السمع</span>
-                    </div>
-                    <div class="data-value">{{ clinic.exam.hearing || 'غير محدد' }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
@@ -353,16 +448,16 @@
                   <div class="data-row">
                     <div class="data-label">
                       <i class="pi pi-volume-up"></i>
-                      <span>الأذن اليمنى</span>
+                      <span>الأذن اليمنى (الغشاء الطبلي)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.rightEar || 'غير محدد' }}</div>
+                    <div class="data-value">{{ clinic.exam.rightTympanicMembrane || clinic.exam.rightEar || 'غير محدد' }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
                       <i class="pi pi-volume-down"></i>
-                      <span>الأذن اليسرى</span>
+                      <span>الأذن اليسرى (الغشاء الطبلي)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.leftEar || 'غير محدد' }}</div>
+                    <div class="data-value">{{ clinic.exam.leftTympanicMembrane || clinic.exam.leftEar || 'غير محدد' }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
@@ -381,16 +476,23 @@
                   <div class="data-row">
                     <div class="data-label">
                       <i class="pi pi-wind"></i>
-                      <span>الأنف اليمين</span>
+                      <span>الرنانات</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.rightNose || 'غير محدد' }}</div>
+                    <div class="data-value">{{ clinic.exam.resonators || 'غير محدد' }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
-                      <i class="pi pi-wind"></i>
-                      <span>الأنف اليسار</span>
+                      <i class="pi pi-angle-right"></i>
+                      <span>الوتيرة - انحراف OL (يمين)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.leftNose || 'غير محدد' }}</div>
+                    <div class="data-value">{{ getEarExamField(clinic.exam, 'rightString') }}</div>
+                  </div>
+                  <div class="data-row">
+                    <div class="data-label">
+                      <i class="pi pi-angle-left"></i>
+                      <span>الوتيرة - انحراف OR (يسار)</span>
+                    </div>
+                    <div class="data-value">{{ getEarExamField(clinic.exam, 'leftString') }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
@@ -448,16 +550,29 @@
                 [disabled]="!applicant"></p-button>
             </div>
             <div *ngIf="clinic.consultations.length > 0; else noConsultations" class="consultations-list">
-              <div *ngFor="let consultation of clinic.consultations" class="consultation-card">
+              <div *ngFor="let consultation of clinic.consultations; trackBy: trackByConsultationId" class="consultation-card">
                 <div class="consultation-main">
                   <div class="consultation-info">
+                    <div class="consultation-header">
                     <div class="consultation-type">
                       <i class="pi pi-comment"></i>
-                      <strong>{{ consultation.consultationType }}</strong>
+                        <strong>{{ consultation.consultationType || 'غير محدد' }}</strong>
                     </div>
-                    <div class="consultation-doctor">
-                      <i class="pi pi-user"></i>
-                      <span>{{ consultation.referredDoctor }}</span>
+                      <p-tag [value]="'#' + consultation.consultationID" severity="info" styleClass="consultation-id-badge"></p-tag>
+                    </div>
+                    <div class="consultation-meta">
+                      <div class="meta-item" *ngIf="consultation.doctor">
+                        <i class="pi pi-user-md"></i>
+                        <span>{{ consultation.doctor.fullName || 'غير محدد' }}</span>
+                      </div>
+                      <div class="meta-item" *ngIf="consultation.referralReason">
+                      <i class="pi pi-info-circle"></i>
+                        <span class="referral-reason">{{ consultation.referralReason }}</span>
+                      </div>
+                      <div class="meta-item" *ngIf="!consultation.referralReason">
+                        <i class="pi pi-info-circle"></i>
+                        <span class="text-muted">لا يوجد سبب إحالة</span>
+                      </div>
                     </div>
                   </div>
                   <div class="consultation-actions">
@@ -516,17 +631,34 @@
                 [disabled]="!applicant"></p-button>
             </div>
             <div *ngIf="clinic.investigations.length > 0; else noInvestigations" class="investigations-list">
-              <div *ngFor="let investigation of clinic.investigations" class="investigation-card">
+              <div *ngFor="let investigation of clinic.investigations; trackBy: trackByInvestigationId" class="investigation-card">
                 <div class="investigation-main">
                   <div class="investigation-info">
+                    <div class="investigation-header">
                     <div class="investigation-type">
                       <i class="pi pi-file"></i>
-                      <strong>{{ investigation.type }}</strong>
+                        <strong>{{ investigation.type || 'غير محدد' }}</strong>
+                      </div>
+                      <p-tag [value]="'#' + investigation.investigationID" severity="info" styleClass="investigation-id-badge"></p-tag>
                     </div>
                     <div class="investigation-meta">
+                      <div class="meta-item">
                       <p-tag [value]="investigation.status || 'غير محدد'" 
                              [severity]="getStatusSeverity(investigation.status)"
                              styleClass="status-badge"></p-tag>
+                      </div>
+                      <div class="meta-item" *ngIf="investigation.doctor">
+                        <i class="pi pi-user-md"></i>
+                        <span>{{ investigation.doctor.fullName || 'غير محدد' }}</span>
+                      </div>
+                      <div class="meta-item" *ngIf="investigation.investigationReason">
+                        <i class="pi pi-info-circle"></i>
+                        <span class="investigation-reason">{{ investigation.investigationReason }}</span>
+                      </div>
+                      <div class="meta-item" *ngIf="!investigation.investigationReason">
+                        <i class="pi pi-info-circle"></i>
+                        <span class="text-muted">لا يوجد سبب</span>
+                      </div>
                     </div>
                   </div>
                   <div class="investigation-actions">
@@ -571,75 +703,332 @@
     <!-- Final Decision Card -->
     <div class="col-12">
       <p-card>
-        <ng-template pTemplate="header">
+        <!-- <ng-template pTemplate="header">
           <div class="card-header-custom">
             <div class="d-flex align-items-center gap-2">
               <i class="pi pi-check-circle"></i>
               <h5 class="mb-0">القرار النهائي</h5>
             </div>
           </div>
-        </ng-template>
+        </ng-template> -->
         
-        <form #decisionForm="ngForm" name="decisionForm">
-          <div class="mb-3">
-            <label class="form-label">
-              <i class="pi pi-list"></i>
-              النتيجة
-            </label>
-            <ng-select [items]="results" 
-                       bindLabel="description" 
-                       bindValue="resultID"
-                       [(ngModel)]="decisionModel.resultID" 
-                       name="resultID" 
-                       (ngModelChange)="onResultChange($event)"
-                       [appendTo]="'body'" 
-                       [disabled]="!hasAllExams()">
-            </ng-select>
-          </div>
+        <!-- ✅ معلومات القرار النهائي الحالي (إن وجد) -->
+        @if (applicant && applicant.finalDecision) {
+          @let finalDecision = applicant.finalDecision;
+          <div class="final-decision-card">
+            <!-- Header Section -->
+            <div class="decision-card-header">
+              <div class="header-content">
+                <div class="header-icon-wrapper">
+                  <i class="pi pi-check-circle"></i>
+                </div>
+                <div class="header-text">
+                  <h4 class="header-title">
+                    <i class="pi pi-file-check header-title-icon"></i>
+                    القرار النهائي
+                  </h4>
+                  <p class="header-subtitle">
+                    <i class="pi pi-info-circle header-subtitle-icon"></i>
+                    معلومات تفصيلية عن القرار النهائي المسجل
+                  </p>
+                </div>
+              </div>
+            </div>
 
-          <div class="mb-3">
-            <label class="form-label" *ngIf="isAccept">
-              <i class="pi pi-thumbs-up"></i>
-              التوصية
-            </label>
-            <label class="form-label" *ngIf="!isAccept">
-              <i class="pi pi-info-circle"></i>
-              السبب
-            </label>
-            <textarea class="form-control" 
-                      [(ngModel)]="decisionModel.reason" 
-                      name="reason"
-                      rows="3"
-                      [disabled]="!hasAllExams()"></textarea>
-          </div>
-          
-          <div class="mb-3" *ngIf="!isApproved">
-            <label class="form-label">
-              <i class="pi pi-clock"></i>
-              مدة التأجيل
-            </label>
-            <input type="text" 
-                   class="form-control" 
-                   [(ngModel)]="decisionModel.postponeDuration"
-                   name="postponeDuration" />
-          </div>
-          
-          <div class="text-end">
-            <p-button label="إرسال" 
-                      icon="pi pi-send" 
-                      (onClick)="submitDecision()"
-                      [disabled]="!hasAllExams() || loading"></p-button>
-          </div>
-          
-          <div *ngIf="responseMessage" class="mt-3">
-            <div class="alert" 
-                 [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
-                 role="alert">
-              <i [class]="responseSuccess ? 'pi pi-check-circle' : 'pi pi-exclamation-triangle'" class="me-2"></i>
-              {{ responseMessage }}
+            <!-- Content Section -->
+            <div class="decision-card-body">
+              <!-- التواريخ Section -->
+              <div class="decision-info-section dates-section">
+                <div class="section-header">
+                  <div class="section-icon">
+                    <i class="pi pi-calendar"></i>
+                  </div>
+                  <h6 class="section-title">التواريخ والأوقات</h6>
+                </div>
+                <div class="info-list">
+                  <div class="info-item">
+                    <div class="info-item-icon">
+                      <i class="pi pi-calendar-plus"></i>
+                    </div>
+                    <div class="info-item-content">
+                      <div class="info-item-label">تاريخ الإضافة من الريسبشن</div>
+                      <div class="info-item-value">
+                        @if (finalDecision.receptionAddedAt) {
+                          <span class="value-text">{{ finalDecision.receptionAddedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+                        } @else {
+                          <span class="value-empty">غير محدد</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-item-icon">
+                      <i class="pi pi-user-plus"></i>
+                    </div>
+                    <div class="info-item-content">
+                      <div class="info-item-label">تاريخ الإضافة من المشرف</div>
+                      <div class="info-item-value">
+                        @if (finalDecision.supervisorAddedAt) {
+                          <span class="value-text">{{ finalDecision.supervisorAddedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+                        } @else {
+                          <span class="value-empty">غير محدد</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="info-item">
+                    <div class="info-item-icon">
+                      <i class="pi pi-pencil"></i>
+                    </div>
+                    <div class="info-item-content">
+                      <div class="info-item-label">تاريخ آخر تعديل من المشرف</div>
+                      <div class="info-item-value">
+                        @if (finalDecision.supervisorLastModifiedAt) {
+                          <span class="value-text">{{ finalDecision.supervisorLastModifiedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+                        } @else {
+                          <span class="value-empty">غير محدد</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="info-item info-item-featured">
+                    <div class="info-item-icon info-item-icon-featured">
+                      <i class="pi pi-calendar-check"></i>
+                    </div>
+                    <div class="info-item-content">
+                      <div class="info-item-label">تاريخ القرار</div>
+                      <div class="info-item-value">
+                        @if (finalDecision.decisionDate) {
+                          <span class="value-text value-text-featured">{{ finalDecision.decisionDate | gregorianDate:'yyyy/MM/dd' }}</span>
+                        } @else {
+                          <span class="value-empty">غير محدد</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  @if (finalDecision.isExportedToRecruitment && finalDecision.exportedAt) {
+                    <div class="info-item info-item-exported">
+                      <div class="info-item-icon info-item-icon-exported">
+                        <i class="pi pi-upload"></i>
+                      </div>
+                      <div class="info-item-content">
+                        <div class="info-item-label">تاريخ التصدير للتجنيد</div>
+                        <div class="info-item-value">
+                          <span class="value-text value-text-exported">{{ finalDecision.exportedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- الحالة والنتيجة Section -->
+              <div class="decision-info-section status-section">
+                <div class="section-header">
+                  <div class="section-icon status-section-icon">
+                    <i class="pi pi-check-circle"></i>
+                  </div>
+                  <h6 class="section-title">الحالة والنتيجة</h6>
+                </div>
+                <div class="info-list status-list">
+                  <div class="info-item status-item">
+                    <div class="info-item-icon status-icon">
+                      <i class="pi pi-file-export"></i>
+                    </div>
+                    <div class="info-item-content">
+                      <div class="info-item-label">حالة التصدير للتجنيد</div>
+                      <div class="info-item-value">
+                        <p-tag 
+                          [value]="(finalDecision.isExportedToRecruitment ?? false) ? 'تم التصدير' : 'لم يتم التصدير'" 
+                          [severity]="(finalDecision.isExportedToRecruitment ?? false) ? 'success' : 'warn'"
+                          styleClass="status-badge">
+                        </p-tag>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="info-item result-item">
+                    <div class="info-item-icon result-icon">
+                      <i class="pi pi-flag"></i>
+                    </div>
+                    <div class="info-item-content">
+                      <div class="info-item-label">النتيجة النهائية</div>
+                      <div class="info-item-value">
+                        <p-tag 
+                          [value]="finalDecision.result ? finalDecision.result.description : '-'" 
+                          [severity]="getResultSeverity(finalDecision.resultID)"
+                          styleClass="result-badge">
+                        </p-tag>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </form>
+        }
+        
+        <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود -->
+        @if (applicant && applicant.finalDecision) {
+          <div class="decision-locked-message">
+            <div class="locked-icon">
+              <i class="pi pi-lock"></i>
+            </div>
+            <div class="locked-content">
+              <h6 class="locked-title">
+                <i class="pi pi-info-circle"></i>
+                القرار النهائي مسجل مسبقاً
+              </h6>
+              <p class="locked-text">
+                تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
+                يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
+              </p>
+            </div>
+          </div>
+        } @else if (previousDecisionLocked) {
+          <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود (من checkExistingDecision) -->
+          <div class="decision-locked-message">
+            <div class="locked-icon">
+              <i class="pi pi-lock"></i>
+            </div>
+            <div class="locked-content">
+              <h6 class="locked-title">
+                <i class="pi pi-info-circle"></i>
+                القرار النهائي مسجل مسبقاً
+              </h6>
+              <p class="locked-text">
+                تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
+                يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
+              </p>
+            </div>
+          </div>
+        } @else {
+          <!-- ✅ نموذج إضافة قرار نهائي جديد -->
+          <form #decisionForm="ngForm" name="decisionForm" class="decision-form">
+            <div class="form-section-header">
+              <div class="section-icon-small">
+                <i class="pi pi-plus-circle"></i>
+              </div>
+              <h6 class="section-title-small">إضافة قرار نهائي جديد</h6>
+            </div>
+
+            <div class="form-fields">
+              <div class="form-field-group">
+                <label class="form-label-enhanced">
+                  <i class="pi pi-list"></i>
+                  النتيجة <span class="required-star">*</span>
+                </label>
+                <ng-select 
+                  [items]="results" 
+                  bindLabel="description" 
+                  bindValue="resultID"
+                  [(ngModel)]="decisionModel.resultID" 
+                  name="resultID" 
+                  (ngModelChange)="onResultChange($event)"
+                  [appendTo]="'body'" 
+                  [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked"
+                  placeholder="اختر النتيجة"
+                  class="enhanced-select">
+                </ng-select>
+                @if (!hasAllExams()) {
+                  <small class="form-hint">
+                    <i class="pi pi-exclamation-triangle"></i>
+                    يجب إكمال جميع الفحوصات الطبية أولاً
+                  </small>
+                }
+              </div>
+
+              <div class="form-field-group" *ngIf="canEditDecision && !previousDecisionLocked">
+                <label class="form-label-enhanced" *ngIf="isAccept">
+                  <i class="pi pi-thumbs-up"></i>
+                  التوصية
+                </label>
+                <label class="form-label-enhanced" *ngIf="!isAccept">
+                  <i class="pi pi-info-circle"></i>
+                  السبب
+                </label>
+                <textarea 
+                  class="form-control-enhanced" 
+                  [(ngModel)]="decisionModel.reason" 
+                  name="reason"
+                  rows="4"
+                  placeholder="أدخل التوصية أو السبب..."
+                  [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked">
+                </textarea>
+              </div>
+              
+              <!-- ✅ عرض السبب/التوصية للقراءة فقط عند وجود نتيجة نهائية -->
+              <div class="form-field-group" *ngIf="previousDecisionLocked">
+                <label class="form-label-enhanced">
+                  <i class="pi pi-info-circle"></i>
+                  {{ isAccept ? 'التوصية' : 'السبب' }}
+                </label>
+                <textarea 
+                  class="form-control-enhanced" 
+                  [value]="decisionModel.reason || 'لا يوجد'"
+                  rows="4"
+                  readonly
+                  style="background-color: var(--neutral-light); cursor: not-allowed;">
+                </textarea>
+              </div>
+              
+              <div class="form-field-group" *ngIf="!isApproved && canEditDecision && !previousDecisionLocked">
+                <label class="form-label-enhanced">
+                  <i class="pi pi-clock"></i>
+                  مدة التأجيل
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control-enhanced" 
+                  [(ngModel)]="decisionModel.postponeDuration"
+                  name="postponeDuration"
+                  placeholder="أدخل مدة التأجيل..."
+                  [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked">
+              </div>
+
+              <!-- ✅ عرض مدة التأجيل للقراءة فقط عند وجود نتيجة نهائية -->
+              <div class="form-field-group" *ngIf="previousDecisionLocked && decisionModel.postponeDuration">
+                <label class="form-label-enhanced">
+                  <i class="pi pi-clock"></i>
+                  مدة التأجيل
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control-enhanced" 
+                  [value]="decisionModel.postponeDuration"
+                  readonly
+                  style="background-color: var(--neutral-light); cursor: not-allowed;">
+              </div>
+            </div>
+            
+            <div class="form-actions" *ngIf="canEditDecision && !previousDecisionLocked">
+              <p-button 
+                label="إرسال القرار النهائي" 
+                icon="pi pi-check" 
+                severity="success"
+                (onClick)="submitDecision()"
+                [disabled]="!hasAllExams() || loading || !canEditDecision || previousDecisionLocked"
+                [loading]="loading"
+                styleClass="submit-decision-btn">
+              </p-button>
+            </div>
+
+            @if (responseMessage) {
+              <div class="response-message">
+                <div class="alert" 
+                     [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
+                     role="alert">
+                  <i [class]="responseSuccess ? 'pi pi-check-circle' : 'pi pi-exclamation-triangle'" class="me-2"></i>
+                  {{ responseMessage }}
+                </div>
+              </div>
+            }
+          </form>
+        }
       </p-card>
     </div>
   </div>
@@ -672,14 +1061,15 @@
 
       <div class="form-group mb-3" *ngIf="(selectedConsultation?.consultationID ?? 0) === 0">
         <label class="form-label">
-          <i class="pi pi-user"></i>
-          الطبيب المحال إليه
+          <i class="pi pi-info-circle"></i>
+          سبب الإحالة
         </label>
-        <input 
+        <textarea 
           type="text" 
           class="form-control" 
-          formControlName="referredDoctor"
-          placeholder="أدخل اسم الطبيب">
+          formControlName="referralReason"
+          rows="3"
+          placeholder="أدخل سبب الإحالة (اختياري)"></textarea>
       </div>
 
       <div class="form-group mb-3">

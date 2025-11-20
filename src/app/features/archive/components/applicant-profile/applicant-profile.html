@@ -12,7 +12,7 @@
         <div class="id"><span class="label">رقم الديوان</span><span class="value accent fw-bold">{{ archive?.applicantFileNumber || '-' }}</span></div>
         <div class="id"><span class="label">رقم التجنيد</span><span class="value fw-bold">{{ applicant?.associateNumber || '-' }}</span></div>
         <!-- <div class="id"><span class="label">رقم الملف</span><span class="value">{{ applicant?.fileNumber }}</span></div> -->
-        <div class="id date"><span class="label">تاريخ الطباعة</span><span class="value">{{ (date | date:'yyyy/MM/dd') }}</span></div>
+        <div class="id date"><span class="label">تاريخ الطباعة</span><span class="value">{{ date | gregorianDate:'yyyy/MM/dd' }}</span></div>
       </div>
     </div>
   </div>
@@ -23,7 +23,12 @@
       <h5 class="card-title">البيانات الشخصية</h5>
       <div class="card-body two-col">
         <div class="field"><span class="label">رقم الملف</span><span class="value">{{ a.fileNumber || '-' }}</span></div>
+        <div class="field"><span class="label">رقم الدور</span><span class="value">{{ a.queueNumber || '-' }}</span></div>
         <div class="field"><span class="label">الاسم</span><span class="value">{{ a.fullName || '-' }}</span></div>
+        <div class="field"><span class="label">اسم الأم</span><span class="value">{{ a.motherName || '-' }}</span></div>
+        <div class="field"><span class="label">تاريخ المواليد</span><span class="value">{{ a.dateOfBirth | gregorianDate:'yyyy/MM/dd' }}</span></div>
+        <div class="field"><span class="label">زمرة الدم</span><span class="value">{{ a.bloodType || '-' }}</span></div>
+        <div class="field"><span class="label">مركز التجنيد</span><span class="value">{{ a.recruitmentCenter || '-' }}</span></div>
         <div class="field"><span class="label">الحالة الاجتماعية</span><span class="value">{{ getMaritalStatusDescription(a.maritalStatusID) }}</span></div>
         <div class="field"><span class="label">الوظيفة</span><span class="value">{{ a.job || '-' }}</span></div>
         <div class="field"><span class="label">الطول / الوزن</span><span class="value">{{ a.height || '-' }} سم / {{ a.weight || '-' }} كجم</span></div>
@@ -85,7 +90,7 @@
           <div class="two-col">
             @if(a.consultation){
               <div class="field"><span class="label">النوع</span><span class="value">{{ a.consultation.consultationType || '-' }}</span></div>
-              <div class="field"><span class="label">الطبيب</span><span class="value">{{ a.consultation.referredDoctor || '-' }}</span></div>
+              <div class="field"><span class="label">سبب الإحالة</span><span class="value">{{ a.consultation.referralReason || '-' }}</span></div>
               <div class="field full"><span class="label">النتيجة</span><span class="value">{{ a.consultation.result || '-' }}</span></div>
             }@else {
               <div class="field full"><span class="label">لا توجد استشارات</span></div>
@@ -98,6 +103,7 @@
           <div class="two-col">
             @if(a.investigation){
               <div class="field"><span class="label">النوع</span><span class="value">{{ a.investigation.type || '-' }}</span></div>
+              <div class="field"><span class="label">سبب التحليل</span><span class="value">{{ a.investigation.investigationReason || '-' }}</span></div>
               <div class="field"><span class="label">الحالة</span><span class="value">{{ a.investigation.status || '-' }}</span></div>
               <div class="field full"><span class="label">النتيجة</span><span class="value">{{ a.investigation.result || '-' }}</span></div>
             }@else {

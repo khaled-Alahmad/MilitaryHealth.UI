@@ -62,7 +62,6 @@ export class EarClinicExamForm implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.loadResults();
-    console.log('EarClinicExamForm initialized');
   }
 
   private initForm() {
@@ -140,10 +139,8 @@ export class EarClinicExamForm implements OnInit {
   }
 
   private loadResults() {
-    console.log('Loading results...');
     this.examService.getResults().subscribe({
       next: (response) => {
-        console.log('Results response:', response);
         // معالجة الاستجابة بناءً على الهيكل المطلوب
         if (response.data && response.data.items) {
           this.results = response.data.items;
@@ -154,14 +151,12 @@ export class EarClinicExamForm implements OnInit {
         } else {
           this.results = [];
         }
-        console.log('Loaded results:', this.results);
         
         if (this.results.length === 0) {
           this.toastr.warning('لم يتم العثور على نتائج متاحة');
         }
       },
       error: (error) => {
-        console.error('Error loading results:', error);
         this.toastr.error('خطأ في تحميل النتائج');
         this.results = [];
       }
@@ -173,7 +168,6 @@ export class EarClinicExamForm implements OnInit {
       this.loading = true;
       
       const formData = this.examForm.value;
-      console.log('Form Data:', formData);
       const rightTympanicMembrane = formData.rightTympanicMembrane === 'غير ذلك' 
         ? (formData.rightTympanicMembraneOther || '') 
         : formData.rightTympanicMembrane;
@@ -205,28 +199,24 @@ export class EarClinicExamForm implements OnInit {
         reason: formData.reason || ''
       };
 
-      console.log('Sending Exam Data:', examData);
       
       this.examService.addEarClinicExam(examData).subscribe({
         next: (response) => {
-          console.log('Exam saved successfully:', response);
           this.toastr.success('تم حفظ فحص الأذن والأنف والحنجرة بنجاح');
           this.resetForm();
           this.showModal = false;
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error saving exam:', error);
           this.toastr.error('خطأ في حفظ الفحص');
           this.loading = false;
         }
       });
     } else {
-      console.log('Form is invalid');
       Object.keys(this.examForm.controls).forEach(key => {
         const control = this.examForm.get(key);
         if (control?.invalid) {
-          console.log('Invalid field:', key, control.errors);
+          // Form validation error
         }
       });
       this.toastr.error('يرجى ملء جميع الحقول المطلوبة');
@@ -244,7 +234,6 @@ export class EarClinicExamForm implements OnInit {
 
   openModal() {
     this.showModal = true;
-    console.log('Modal opened');
   }
 
   closeModal() {
@@ -297,7 +286,7 @@ export class EarClinicExamForm implements OnInit {
   }
 
   // خيارات الفم
-  readonly mouthOptions = ['سوي', 'سوء إطباق', 'طَقّة مفصل', 'تحت خلع مفصل فكي'];
+  readonly mouthOptions = ['لا يوجد', 'سوي', 'سوء إطباق', 'طَقّة مفصل', 'تحت خلع مفصل فكي'];
 
   // التحقق من اختيار خيار معين في الفم
   isMouthOptionSelected(option: string): boolean {
@@ -327,9 +316,19 @@ export class EarClinicExamForm implements OnInit {
     this.examForm.patchValue({ mouth: newValue });
     
     // تحديث التحقق - الحقل مطلوب إذا لم يتم اختيار أي خيار
+    // إذا تم اختيار "لا يوجد" فقط، لا نحتاج إلى خيارات أخرى
     if (selectedOptions.length === 0) {
       this.examForm.get('mouth')?.setValidators([Validators.required]);
+    } else if (selectedOptions.length === 1 && selectedOptions[0] === 'لا يوجد') {
+      // إذا تم اختيار "لا يوجد" فقط، نزيل باقي الخيارات ونحتفظ بـ "لا يوجد" فقط
+      this.examForm.get('mouth')?.clearValidators();
     } else {
+      // إذا تم اختيار خيارات أخرى، نزيل "لا يوجد" إذا كان موجوداً
+      if (selectedOptions.includes('لا يوجد')) {
+        selectedOptions = selectedOptions.filter((opt: string) => opt !== 'لا يوجد');
+        const newValue = selectedOptions.join(', ');
+        this.examForm.patchValue({ mouth: newValue });
+      }
       this.examForm.get('mouth')?.clearValidators();
     }
     this.examForm.get('mouth')?.updateValueAndValidity({ emitEvent: false });

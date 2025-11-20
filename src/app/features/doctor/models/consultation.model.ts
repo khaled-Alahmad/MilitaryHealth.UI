@@ -11,7 +11,8 @@ export interface Consultation {
   doctorID: number;
   applicantFileNumber: string;
   consultationType: string;
-  referredDoctor: string;
+  // referredDoctor: string; // ❌ تم حذفه حسب التقرير
+  referralReason?: string; // ✅ جديد - سبب الإحالة
   result: string;
   attachment?: string;
   doctor?: Doctor;

@@ -64,7 +64,6 @@ export class AuthService {
         return response;
       }),
       catchError(err => {
-        console.log(err);
         this.toastr.error(err?.error?.errors?.detail[0] || 'Login failed');
         return throwError(() => err);
       })

@@ -1,0 +1,141 @@
+<div class="applicant-details-container">
+  <div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="page-title">
+        <i class="pi pi-user me-2"></i>
+        تفاصيل المنتسب
+      </h2>
+      <div class="action-buttons">
+        <p-button 
+          label="رجوع" 
+          icon="pi pi-arrow-right" 
+          severity="secondary"
+          (onClick)="goBack()"
+          styleClass="me-2">
+        </p-button>
+        <p-button 
+          label="طباعة الإيصال" 
+          icon="pi pi-print" 
+          severity="info"
+          (onClick)="printReceipt()"
+          [disabled]="!applicant || loading"
+          styleClass="me-2">
+        </p-button>
+        <p-button 
+          label="تعديل" 
+          icon="pi pi-pencil" 
+          severity="success"
+          (onClick)="openEditDialog()"
+          [disabled]="!applicant || loading">
+        </p-button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading && !applicant" class="text-center py-5">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+      <p class="mt-3">جاري تحميل البيانات...</p>
+    </div>
+
+    <!-- Applicant Details Card -->
+    <p-card *ngIf="applicant && !loading" styleClass="details-card">
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <div class="header-content">
+            <div class="applicant-icon">
+              <i class="pi pi-user"></i>
+            </div>
+            <div class="header-text">
+              <h3 class="applicant-name">{{ applicant.fullName }}</h3>
+              <p class="applicant-file-number">رقم الملف: {{ applicant.fileNumber }}</p>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <div class="card-body">
+        <!-- Personal Information Section -->
+        <div class="info-section">
+          <h4 class="section-title">
+            <i class="pi pi-id-card me-2"></i>
+            البيانات الشخصية
+          </h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">رقم الدور:</span>
+              <span class="info-value">
+                <p-tag [value]="applicant.queueNumber?.toString() || '-'" severity="info"></p-tag>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">الاسم الكامل:</span>
+              <span class="info-value">{{ applicant.fullName || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">اسم الأم:</span>
+              <span class="info-value">{{ applicant.motherName || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">تاريخ المواليد:</span>
+              <span class="info-value">
+                {{ applicant.dateOfBirth | gregorianDate:'yyyy/MM/dd' }}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">زمرة الدم:</span>
+              <span class="info-value">
+                <p-tag [value]="applicant.bloodType || '-'" severity="danger"></p-tag>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">مركز التجنيد:</span>
+              <span class="info-value">{{ applicant.recruitmentCenter || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">الحالة الاجتماعية:</span>
+              <span class="info-value">{{ getMaritalStatusDescription(applicant.maritalStatusID) || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">العمل:</span>
+              <span class="info-value">{{ applicant.job || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">رقم المنتسب:</span>
+              <span class="info-value">{{ applicant.associateNumber || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">وجود وشم:</span>
+              <span class="info-value">
+                <p-tag 
+                  [value]="applicant.tattoo ? 'نعم' : 'لا'" 
+                  [severity]="applicant.tattoo ? 'warn' : 'success'">
+                </p-tag>
+              </span>
+            </div>
+            <div class="info-item full-width">
+              <span class="info-label">العلامات المميزة:</span>
+              <span class="info-value">{{ applicant.distinctiveMarks || '-' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- No Data -->
+    <div *ngIf="!applicant && !loading" class="text-center py-5">
+      <i class="pi pi-exclamation-triangle text-muted" style="font-size: 3rem;"></i>
+      <p class="mt-3 text-muted">لم يتم العثور على بيانات المنتسب</p>
+    </div>
+  </div>
+
+  <!-- Edit Dialog -->
+  <app-edit-applicant-dialog
+    [(visible)]="editDialogVisible"
+    [applicant]="applicant"
+    (onSave)="onEditSave()">
+  </app-edit-applicant-dialog>
+
+  <p-toast></p-toast>
+</div>
+

@@ -9,10 +9,11 @@ export interface Doctor {
 export interface Investigation {
   investigationID?: number;
   applicantFileNumber: string;
-  type: string;            // النوع الجديد
+  type: string;
+  investigationReason?: string; // ✅ جديد - سبب التحليل
   result: string;
   attachment?: string;
-  status: string;          // جديد
+  status: string;
   doctorID: number;
   doctor?: Doctor;
 }

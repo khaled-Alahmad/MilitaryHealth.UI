@@ -2,21 +2,22 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { tap, switchMap, of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 // PrimeNG Components
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+// import { Calendar } from 'primeng/calendar'; // TODO: PrimeNG 20 Calendar - سيتم إضافته لاحقاً
 
 // Models and Services
 import { MaritalStatus } from '../../models/marital-status.model';
 import { MaritalStatusService } from '../../services/marital-status.service';
 import { ApplicantModel } from '../../models/applicant.model';
 import { ApplicantService } from '../../services/applicant.service';
+import { BarcodePrintService } from '../../services/barcode-print.service';
 import { ApiResponse } from '../../../../shared/models/paged-response.model';
 
 @Component({
@@ -29,11 +30,10 @@ import { ApiResponse } from '../../../../shared/models/paged-response.model';
     InputTextModule,
     CheckboxModule,
     ButtonModule,
-    ToastModule
+    // Calendar // TODO: PrimeNG 20 Calendar
   ],
   templateUrl: './add-edit-applicant.html',
-  styleUrl: './add-edit-applicant.scss',
-  providers: [MessageService]
+  styleUrl: './add-edit-applicant.scss'
 })
 export class AddEditApplicant implements OnInit {
     applicantForm!: FormGroup;
@@ -51,7 +51,8 @@ export class AddEditApplicant implements OnInit {
     private applicantService: ApplicantService,
     private route: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService
+    private toastr: ToastrService,
+    private barcodePrintService: BarcodePrintService
   ) {}
 
   ngOnInit(): void {
@@ -70,15 +71,20 @@ export class AddEditApplicant implements OnInit {
   loadForm() {
     this.applicantForm = this.fb.group({
       fullName: ['', Validators.required],
+      motherName: [''], // ✅ جديد - اختياري
+      dateOfBirth: [null], // ✅ جديد - اختياري
+      recruitmentCenter: [''], // ✅ جديد - اختياري
+      bloodType: [''], // ✅ جديد - اختياري
       maritalStatusID: [null, Validators.required],
       job: ['', Validators.required],
-      height: [null, Validators.required],
-      weight: [null, Validators.required],
-      bmi: [null, Validators.required],
-      bloodPressure: ['', Validators.required],
-      pulse: [null, Validators.required],
-      tattoo: [false, Validators.required],
-      distinctiveMarks: ['', Validators.required],
+      // ✅ البيانات الطبية غير مطلوبة
+      height: [null], // تم إزالة Validators.required
+      weight: [null], // تم إزالة Validators.required
+      bmi: [null], // تم إزالة Validators.required
+      bloodPressure: [''], // تم إزالة Validators.required
+      pulse: [null], // تم إزالة Validators.required
+      tattoo: [false], // تم إزالة Validators.required
+      distinctiveMarks: [''], // ✅ تم إزالة Validators.required
       associateNumber: ['', Validators.required]
     });
   }
@@ -87,12 +93,7 @@ export class AddEditApplicant implements OnInit {
     this.maritalStatusService.getMaritalStatus().subscribe({
       next: (data) => (this.maritalStatuses = data),
       error: (err) => {
-        console.error('Error fetching marital statuses', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'خطأ',
-          detail: 'فشل في تحميل الحالات الاجتماعية'
-        });
+        this.toastr.error('فشل في تحميل الحالات الاجتماعية', 'خطأ');
       }
     });
   }
@@ -104,12 +105,7 @@ export class AddEditApplicant implements OnInit {
         this.fileNumber = applicant.fileNumber;
       },
       error: () => {
-        console.error('Error fetching applicant data');
-        this.messageService.add({
-          severity: 'error',
-          summary: 'خطأ',
-          detail: 'فشل في تحميل بيانات المنتسب'
-        });
+        this.toastr.error('فشل في تحميل بيانات المنتسب', 'خطأ');
       }
     });
   }
@@ -120,46 +116,97 @@ preventMinus(event: KeyboardEvent) {
   }
 }
 
-resetForm() {
+resetForm(showMessage: boolean = true) {
   this.applicantForm.reset();
   this.submitted = false;
-  this.messageService.add({
-    severity: 'info',
-    summary: 'تم',
-    detail: 'تم إعادة تعيين النموذج'
-  });
+  if (showMessage) {
+    this.toastr.info('تم إعادة تعيين النموذج', 'تم');
+  }
 }
 
   onSubmit() {
     this.submitted = true;
 
-    const applicantModel: ApplicantModel = this.applicantForm.getRawValue();
+    if (this.applicantForm.invalid) {
+      this.toastr.warning('يرجى ملء جميع الحقول المطلوبة', 'تحذير');
+      return;
+    }
+
+    const formValue = this.applicantForm.getRawValue();
+    
+    // ✅ تحويل البيانات إلى الأنواع الصحيحة قبل الإرسال
+    // ملاحظة: لا نرسل maritalStatus ككائن، فقط maritalStatusID
+    const applicantModel: any = {
+      applicantID: 0,
+      fileNumber: '',
+      fullName: (formValue.fullName || '').trim(),
+      motherName: formValue.motherName ? (formValue.motherName as string).trim() : null,
+      dateOfBirth: formValue.dateOfBirth ? new Date(formValue.dateOfBirth).toISOString() : null,
+      recruitmentCenter: formValue.recruitmentCenter ? (formValue.recruitmentCenter as string).trim() : null,
+      bloodType: formValue.bloodType ? (formValue.bloodType as string).trim() : null,
+      maritalStatusID: Number(formValue.maritalStatusID), // ✅ تحويل إلى رقم
+      job: (formValue.job || '').trim(),
+      height: formValue.height ? Number(formValue.height) : null,
+      weight: formValue.weight ? Number(formValue.weight) : null,
+      bmi: formValue.bmi ? Number(formValue.bmi) : null,
+      bloodPressure: formValue.bloodPressure ? (formValue.bloodPressure as string).trim() : null,
+      pulse: formValue.pulse ? Number(formValue.pulse) : null,
+      tattoo: Boolean(formValue.tattoo) || false,
+      distinctiveMarks: formValue.distinctiveMarks ? (formValue.distinctiveMarks as string).trim() : null,
+      associateNumber: (formValue.associateNumber || '').trim()
+      // ❌ لا نرسل maritalStatus - الـ backend يحتاج فقط maritalStatusID
+    };
+    
     this.loading = true;
 
     if (!this.applicantId) {
-      this.applicantService.createApplicant(applicantModel)
+      this.applicantService.createApplicant(applicantModel as ApplicantModel)
         .pipe(
-          tap((res: ApiResponse<ApplicantModel>) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'نجح',
-              detail: 'تمت إضافة منتسب بنجاح'
+          // ✅ جلب بيانات المنتسب الكاملة بعد الإنشاء
+          switchMap((res: ApiResponse<ApplicantModel>) => {
+            this.toastr.success('تمت إضافة منتسب بنجاح', 'نجاح', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center'
             });
             this.success = true;
             this.loading = false;
-            this.resetForm();
-            this.router.navigate(['reception/applicants/add']);
+            
+            // جلب البيانات الكاملة إذا كان applicantID موجوداً
+            if (res.data && res.data.applicantID) {
+              return this.applicantService.getApplicantById$(res.data.applicantID);
+            } else {
+              // إرجاع البيانات المتوفرة
+              return of(res.data!);
+            }
+          }),
+          tap(async (fullApplicantData: ApplicantModel) => {
+            
+            // ✅ طباعة الباركود تلقائياً بعد إنشاء المنتسب
+            if (fullApplicantData) {
+              try {
+                await this.barcodePrintService.printBarcodeReceipt(fullApplicantData);
+              } catch (error) {
+                this.toastr.warning('تمت إضافة المنتسب بنجاح، لكن فشلت طباعة الباركود', 'تحذير');
+              }
+            }
+            
+            this.resetForm(false); // ✅ إعادة تعيين النموذج بدون رسالة
+            // ✅ البقاء في نفس الصفحة لإضافة منتسب جديد
           })
         )
         .subscribe({
           error: (err) => {
             this.success = false;
             this.loading = false;
-            this.messageService.add({
-              severity: 'error',
-              summary: 'خطأ',
-              detail: 'فشل في إضافة المنتسب'
-            });
+            let errorMsg = 'فشل في إضافة المنتسب';
+            if (err?.error?.message) {
+              errorMsg = err.error.message;
+            } else if (err?.error?.errors) {
+              errorMsg = Array.isArray(err.error.errors) 
+                ? err.error.errors.join(', ') 
+                : err.error.errors;
+            }
+            this.toastr.error(errorMsg, 'خطأ');
           }
         });
     } else {
@@ -167,20 +214,23 @@ resetForm() {
         next: () => {
           this.success = true;
           this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'نجح',
-            detail: 'تم تحديث بيانات المنتسب بنجاح'
+          this.toastr.success('تم تحديث بيانات المنتسب بنجاح', 'نجاح', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center'
           });
         },
         error: (err) => {
           this.success = false;
           this.loading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'خطأ',
-            detail: 'فشل في تحديث بيانات المنتسب'
-          });
+          let errorMsg = 'فشل في تحديث بيانات المنتسب';
+          if (err?.error?.message) {
+            errorMsg = err.error.message;
+          } else if (err?.error?.errors) {
+            errorMsg = Array.isArray(err.error.errors) 
+              ? err.error.errors.join(', ') 
+              : err.error.errors;
+          }
+          this.toastr.error(errorMsg, 'خطأ');
         }
       });
     }

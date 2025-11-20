@@ -21,9 +21,10 @@ export interface InternalExam {
   blood: string;
   joints: string;
   kidney: string;
+  // hearing: string; // ❌ تم حذفه حسب التقرير
   skin: string;
   resultID: number;
   reason?: string;
   result?: Result;
-  doctor?: Doctor;   // ✅ أضفنا doctor هون
+  doctor?: Doctor;
 }

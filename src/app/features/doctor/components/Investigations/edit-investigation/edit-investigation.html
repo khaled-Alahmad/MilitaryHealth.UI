@@ -8,6 +8,20 @@
   <div class="modal-body">
     <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()">
 
+      <!-- سبب التحليل -->
+      <div class="mb-3">
+        <label class="form-label">
+          <i class="pi pi-info-circle me-2"></i>
+          سبب التحليل
+        </label>
+        <textarea 
+          class="form-control" 
+          formControlName="investigationReason" 
+          rows="3" 
+          placeholder="أدخل سبب التحليل (اختياري)">
+        </textarea>
+      </div>
+
       <!-- النتيجة -->
       <div class="mb-3">
         <label class="form-label">النتيجة</label>

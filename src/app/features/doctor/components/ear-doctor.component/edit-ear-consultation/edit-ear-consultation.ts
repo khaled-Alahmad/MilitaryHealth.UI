@@ -38,7 +38,8 @@ export class EditEarConsultationComponent implements OnInit {
     
     this.consultationForm = this.fb.group({
       consultationType: [this.consultation.consultationType], // مخفي
-      referredDoctor: [this.consultation.referredDoctor], // مخفي
+      // referredDoctor: [this.consultation.referredDoctor], // ❌ تم حذفه
+      referralReason: [this.consultation.referralReason || ''], // ✅ جديد
       result: [this.consultation.result || '', Validators.required],
       attachment: [this.consultation.attachment || null]
     });
@@ -103,6 +104,7 @@ export class EditEarConsultationComponent implements OnInit {
 
     const updatedConsultation: Consultation = {
       ...this.consultation,
+      referralReason: this.consultationForm.value.referralReason, // ✅ جديد
       result: this.consultationForm.value.result,
       attachment: this.uploadedPath || this.consultation.attachment
     };

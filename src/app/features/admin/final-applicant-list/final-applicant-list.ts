@@ -6,10 +6,11 @@ import { FinalDecisionsService } from '../services/final-decisions.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FinalDecisionsResponse } from '../dashboard/models/final-decisions-response.model';
+import { GregorianDatePipe } from '../../../shared/pipes/gregorian-date.pipe';
 
 @Component({
   selector: 'app-final-applicant-list',
-  imports: [PaginatorComponent, TableModule, CommonModule],
+  imports: [PaginatorComponent, TableModule, CommonModule, GregorianDatePipe],
   templateUrl: './final-applicant-list.html',
   styleUrl: './final-applicant-list.scss'
 })

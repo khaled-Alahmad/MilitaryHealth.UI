@@ -461,6 +461,15 @@
                 <input 
                   class="form-check-input" 
                   type="checkbox" 
+                  id="mouthNone"
+                  [checked]="isMouthOptionSelected('لا يوجد')"
+                  (change)="toggleMouthOption('لا يوجد', $event)" />
+                <label class="form-check-label" for="mouthNone">لا يوجد</label>
+              </div>
+              <div class="form-check mb-2">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
                   id="mouthNormal"
                   [checked]="isMouthOptionSelected('سوي')"
                   (change)="toggleMouthOption('سوي', $event)" />

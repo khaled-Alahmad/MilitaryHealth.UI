@@ -15,51 +15,75 @@
         [scrollable]="true" 
         [scrollHeight]="tableHeight"
         [globalFilterFields]="['fileNumber','fullName']"
+        [sortMode]="'single'"
         responsiveLayout="scroll"
         class="custom-table">
         <ng-template pTemplate="header">
             <tr>
-                <th>رقم الملف</th>
-                <th>الاسم الكامل</th>
-                <th>العمل</th>
+                <th pSortableColumn="queueNumber">رقم الدور <p-sortIcon field="queueNumber"></p-sortIcon></th>
+                <th pSortableColumn="fileNumber">رقم الملف <p-sortIcon field="fileNumber"></p-sortIcon></th>
+                <th pSortableColumn="fullName">الاسم الكامل <p-sortIcon field="fullName"></p-sortIcon></th>
+                <th pSortableColumn="job">العمل <p-sortIcon field="job"></p-sortIcon></th>
                 <th>الحالة الاجتماعية</th>
                 <th>وشم</th>
+                <th pSortableColumn="createdAt">تاريخ الإضافة <p-sortIcon field="createdAt"></p-sortIcon></th>
                 <th>إجراءات</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-applicant>
             <tr>
                 <td class="text-center align-middle">
-                    <span class="fw-bold small">{{applicant.fileNumber || '-'}}</span>
+                    <span class="fw-bold badge bg-primary text-white" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">{{applicant.queueNumber || '-'}}</span>
                 </td>
                 <td class="text-center align-middle">
-                    <span class="small">{{applicant.fullName || '-'}}</span>
+                    <span class="fw-bold" style="font-size: 0.65rem;">{{applicant.fileNumber || '-'}}</span>
                 </td>
                 <td class="text-center align-middle">
-                    <span class="small">{{applicant.job || '-'}}</span>
+                    <span style="font-size: 0.65rem;">{{applicant.fullName || '-'}}</span>
                 </td>
                 <td class="text-center align-middle">
-                    <span class="small">{{applicant.maritalStatus?.description || '-'}}</span>
+                    <span style="font-size: 0.65rem;">{{applicant.job || '-'}}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span style="font-size: 0.65rem;">{{applicant.maritalStatus?.description || '-'}}</span>
                 </td>
                 <td class="text-center align-middle">
                     <p-tag 
                       [value]="applicant.tattoo ? 'نعم' : 'لا'" 
                       [severity]="applicant.tattoo ? 'warn' : 'success'"
-                      styleClass="ms-2"></p-tag>
+                      styleClass="ms-2"
+                      style="font-size: 0.65rem;"></p-tag>
                 </td>
                 <td class="text-center align-middle">
+                    <span style="font-size: 0.65rem;">{{applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <div class="d-flex gap-1 justify-content-center">
                     <p-button 
                         icon="pi pi-eye" 
-                        label="عرض" 
+                        label="" 
                         styleClass="p-button-sm p-button-outlined"
                         (onClick)="viewApplicant(applicant)"
                         title="عرض التفاصيل"></p-button>
+                        <p-button 
+                            icon="pi pi-pencil" 
+                            label="" 
+                            styleClass="p-button-sm p-button-success"
+                            (onClick)="openEditDialog(applicant)"
+                            title="تعديل المنتسب"></p-button>
+                        <p-button 
+                            icon="pi pi-print" 
+                            label="" 
+                            styleClass="p-button-sm p-button-info"
+                            (onClick)="printApplicant(applicant)"
+                            title="طباعة الباركود"></p-button>
+                    </div>
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr>
-                <td colspan="6" class="text-center py-4">
+                <td colspan="8" class="text-center py-4">
                     <div class="d-flex flex-column align-items-center">
                         <i class="fas fa-users text-muted mb-2" style="font-size: 2rem;"></i>
                         <span class="text-muted">لا يوجد متقدمين</span>
@@ -76,4 +100,11 @@
         (pageChange)="onPageChange($event)" 
         (pageSizeChange)="onPageSizeChange($event)">
     </app-paginator>
+
+    <!-- Edit Dialog -->
+    <app-edit-applicant-dialog
+        [(visible)]="editDialogVisible"
+        [applicant]="selectedApplicant"
+        (onSave)="onEditSave()">
+    </app-edit-applicant-dialog>
 </div>

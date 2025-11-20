@@ -34,6 +34,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
   ngOnInit(): void {
     this.investigationForm = this.fb.group({
       type: [this.investigationToEdit?.type || '', Validators.required],
+      investigationReason: [this.investigationToEdit?.investigationReason || ''], // ✅ جديد - سبب التحليل
       result: [null],
       attachment: [null],
       status: [null]
@@ -86,6 +87,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
       doctorID,
       applicantFileNumber: this.applicantFileNumber,
       type: this.investigationForm.value.type,
+      investigationReason: this.investigationForm.value.investigationReason, // ✅ جديد
       result: this.investigationForm.value.result,
       status: this.investigationForm.value.status,
       attachment: this.uploadedPath ?? ''

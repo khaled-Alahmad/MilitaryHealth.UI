@@ -17,8 +17,8 @@
   align-items: center;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #054239 0%, #428177 100%);
-  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  border-radius: var(--radius-xl);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
 }
 
@@ -36,20 +36,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #B9A779;
+  border: 2px solid var(--accent-gold);
 
   i {
-    font-size: 1.5rem;
-    color: #B9A779;
+    font-size: var(--font-size-2xl);
+    color: var(--accent-gold);
   }
 }
 
 .header-text {
   .form-title {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
     font-weight: 700;
     margin: 0;
-    color: white;
+    color: white !important;
   }
 
   .form-subtitle {
@@ -159,6 +159,72 @@
     background: #EDEBE0;
     border-radius: 8px;
     border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  /* ✅ تحسين شكل checkbox الوشم */
+  .tattoo-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 2px solid rgba(5, 66, 57, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      border-color: rgba(5, 66, 57, 0.3);
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      box-shadow: 0 4px 12px rgba(5, 66, 57, 0.1);
+    }
+
+    .tattoo-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      color: #054239;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0;
+      flex: 1;
+
+      i {
+        font-size: 1.25rem;
+        color: #B9A779;
+      }
+
+      span {
+        user-select: none;
+      }
+    }
+
+    ::ng-deep .p-checkbox {
+      .p-checkbox-box {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        border: 2px solid #054239 !important;
+        border-radius: 6px !important;
+        transition: all 0.3s ease !important;
+        background: white !important;
+
+        &:hover {
+          border-color: #428177 !important;
+          box-shadow: 0 0 0 4px rgba(5, 66, 57, 0.1) !important;
+        }
+
+        &.p-highlight {
+          background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
+          border-color: #054239 !important;
+
+          .p-checkbox-icon {
+            color: white !important;
+            font-size: 1rem !important;
+          }
+        }
+      }
+    }
   }
 }
 

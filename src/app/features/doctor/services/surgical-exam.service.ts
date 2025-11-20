@@ -57,14 +57,36 @@ getAllSurgicalExams(page: number = 1,
   let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortBy', 'surgicalExamID') // ✅ ترتيب حسب معرف الفحص
+      .set('sortDesc', 'true'); // ✅ ترتيب تنازلي (الأحدث أولاً)
 
     if (filter) {
       params = params.set('filter', filter);
     }
     return this.http
       .get<ApiResponse<PagedResponse<SurgicalExam>>>(this.apiUrl, { params })
-      .pipe(map(res => res.data));
+      .pipe(
+        map(res => {
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
+          
+          // ✅ ترتيب إضافي محلياً للتأكد (الأحدث أولاً حسب surgicalExamID)
+          if (data.items && data.items.length > 0) {
+            data.items = data.items.sort((a, b) => {
+              const idA = a.surgicalExamID || 0;
+              const idB = b.surgicalExamID || 0;
+              return idB - idA; // ترتيب تنازلي
+            });
+          }
+          
+          return data;
+        })
+      );
 }
 
   // جلب نتائج الفحوص
@@ -111,7 +133,8 @@ getAllSurgicalExams(page: number = 1,
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', true)
+      .set('sortBy', 'consultationID') // ✅ ترتيب حسب معرف الاستشارة
+      .set('sortDesc', 'true'); // ✅ ترتيب تنازلي (الأحدث أولاً)
   
     if (filter) {
       params = params.set('filter', filter);
@@ -128,12 +151,25 @@ getAllSurgicalExams(page: number = 1,
         headers: this.getAuthHeaders()
       })
       .pipe(
-        map(res => res.data ?? {
+        map(res => {
+          const data = res.data ?? {
           items: [],
           totalCount: 0,
           page,
           pageSize,
           totalPages: 0
+          };
+          
+          // ✅ ترتيب إضافي محلياً للتأكد (الأحدث أولاً حسب consultationID)
+          if (data.items && data.items.length > 0) {
+            data.items = data.items.sort((a, b) => {
+              const idA = a.consultationID || 0;
+              const idB = b.consultationID || 0;
+              return idB - idA; // ترتيب تنازلي
+            });
+          }
+          
+          return data;
         })
       );
   }
@@ -146,13 +182,14 @@ getAllSurgicalExams(page: number = 1,
     });
   }
 
-  getSurgicalInvestigations(page: number = 1, pageSize: number = 50, filter: string = ''): Observable<Investigation[]> {
+  getSurgicalInvestigations(page: number = 1, pageSize: number = 50, filter: string = ''): Observable<PagedResponse<Investigation>> {
     const currentSpecializationId = this.authService.getSpecializationId();
     
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', 'true');
+      .set('sortBy', 'investigationID') // ✅ ترتيب حسب معرف التحليل
+      .set('sortDesc', 'true'); // ✅ ترتيب تنازلي (الأحدث أولاً)
 
     if (filter) {
       params = params.set('filter', filter);
@@ -167,7 +204,26 @@ getAllSurgicalExams(page: number = 1,
       headers: this.getAuthHeaders(),
       params
     }).pipe(
-      map(res => res.data?.items ?? [])
+      map(res => {
+        const data = res.data ?? {
+          items: [],
+          totalCount: 0,
+          page,
+          pageSize,
+          totalPages: 0
+        };
+        
+        // ✅ ترتيب إضافي محلياً للتأكد (الأحدث أولاً حسب investigationID)
+        if (data.items && data.items.length > 0) {
+          data.items = data.items.sort((a, b) => {
+            const idA = a.investigationID || 0;
+            const idB = b.investigationID || 0;
+            return idB - idA; // ترتيب تنازلي
+          });
+        }
+        
+        return data;
+      })
     );
   }
   private getAuthHeaders(): HttpHeaders {

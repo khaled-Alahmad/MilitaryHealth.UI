@@ -1,0 +1,1520 @@
+@use '../../../../shared/styles/mixins' as *;
+
+/* ===========================================
+   PROFESSIONAL TABLE DESIGN - SUPERVISOR APPLICANTS LIST
+   =========================================== */
+
+.applicants-list-supervisor {
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  margin: 0 auto var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 200px);
+
+  /* Page Header - Using shared mixin */
+  .page-header {
+    @include page-header;
+  }
+
+  /* Table Container */
+  .table-container {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+        width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+        }
+  }
+}
+
+/* ===========================================
+   REQUESTS DIALOG STYLING
+   =========================================== */
+
+.requests-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .requests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-lg);
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+
+    h5 {
+      margin: 0;
+      color: #054239;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0.25rem 0 0 0;
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+  }
+
+  .requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .requests-section {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid #e9ecef;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(5, 66, 57, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+          color: #054239;
+        }
+      }
+
+      h3 {
+        margin: 0;
+        color: #054239;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+    }
+
+    .request-card {
+      border: 1px solid #e9ecef;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      background: #fdfdfd;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: #B9A779;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+
+        .request-title {
+          font-weight: 600;
+          color: #054239;
+        }
+      }
+
+      .card-body {
+        color: #5c636a;
+        font-size: 0.95rem;
+
+        p {
+          margin: 0.25rem 0;
+
+          strong {
+            color: #054239;
+          }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    border: 1px dashed #ced4da;
+    border-radius: var(--radius-md);
+
+    i {
+      font-size: 2rem;
+      color: #B9A779;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+/* إصلاح مشكلة اتساع الجدول */
+::ng-deep .p-datatable-wrapper {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+}
+
+::ng-deep .p-datatable-table-wrapper {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+}
+
+::ng-deep .p-datatable-scrollable-wrapper {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+}
+
+/* ===========================================
+   PROFESSIONAL TABLE STYLING
+   =========================================== */
+
+::ng-deep .applicants-list-supervisor .p-datatable {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family-primary);
+  direction: rtl;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-thead>tr>th {
+  background: #054239 !important;
+  color: #ffffff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 0.6rem !important;
+  text-align: center !important;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+  position: relative !important;
+  line-height: 1.4 !important;
+  
+  &:first-child {
+    border-top-right-radius: 15px !important;
+  }
+  
+  &:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-top-left-radius: 15px !important;
+  }
+  
+  // ✅ تحسين حجم أيقونة الترتيب
+  .p-sortable-column-icon {
+    font-size: 0.65rem !important;
+    margin-right: 0.25rem !important;
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr {
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  
+  &:nth-child(even) {
+    background: #f8f9fa !important;
+  }
+  
+  &:hover {
+    background: #e8ecef !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    td {
+      font-weight: 500 !important;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td {
+  padding: 0.4rem 0.6rem !important;
+  font-size: 0.65rem !important;
+  font-weight: 400 !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  max-width: 150px !important;
+  vertical-align: middle !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  border-right: 1px solid #e0e0e0 !important;
+  text-align: center !important;
+  line-height: 1.4 !important;
+  color: #34495e !important;
+  
+  &:last-child {
+    border-right: none !important;
+  }
+  
+  // ✅ تحسين حجم النصوص داخل الخلايا
+  span, .small, .badge {
+    font-size: 0.65rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  .badge {
+    padding: 0.25rem 0.5rem !important;
+    font-weight: 600 !important;
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+/* ===========================================
+   SEARCH INPUT STYLING (for table search if needed)
+   =========================================== */
+
+/* ===========================================
+   BUTTON STYLING
+   =========================================== */
+
+:host ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td .p-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border-radius: 4px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: auto;
+  border: 1px solid;
+  cursor: pointer;
+  font-family: var(--font-family-primary);
+  
+  i, .pi {
+    font-size: 0.7rem;
+    margin: 0;
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+:host ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td .p-button-sm {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.65rem;
+  
+  i, .pi {
+    font-size: 0.7rem;
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+:host ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td .p-button-outlined {
+  border-color: #3D3A3B;
+  color: #3D3A3B;
+  background-color: transparent;
+  
+  &:hover:not(:disabled) {
+    background-color: #3D3A3B;
+    color: white;
+    border-color: #3D3A3B;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+:host ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td .p-button .p-button-label {
+  font-weight: 500;
+  margin: 0;
+}
+
+:host ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td .p-button .p-button-icon {
+  margin: 0;
+  margin-left: 0.25rem;
+}
+
+/* ===========================================
+   PAGINATOR STYLING - PROFESSIONAL DESIGN
+   =========================================== */
+
+::ng-deep .applicants-list-supervisor .p-paginator {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-top: 2px solid #e9ecef;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  font-size: 0.75rem;
+  font-family: var(--font-family-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  
+  // ✅ معلومات الصفحة
+  .p-paginator-current {
+    color: var(--neutral-dark);
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border-radius: var(--radius-md);
+    border: 1px solid #e9ecef;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  // ✅ Dropdown لعدد الصفوف
+  .p-paginator-rpp-options {
+    .p-dropdown {
+      border-radius: var(--radius-md);
+      border: 1px solid #ced4da;
+      font-size: 0.75rem;
+      min-width: 80px;
+      
+      .p-inputtext {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+      }
+      
+      &:hover {
+        border-color: var(--primary-medium);
+      }
+      
+      &.p-focus {
+        border-color: var(--primary-dark);
+        box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+      }
+    }
+  }
+  
+  // ✅ أزرار التنقل
+  .p-paginator-pages,
+  .p-paginator-first,
+  .p-paginator-prev,
+  .p-paginator-next,
+  .p-paginator-last {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .p-paginator-pages .p-paginator-page,
+  .p-paginator-first,
+  .p-paginator-prev,
+  .p-paginator-next,
+  .p-paginator-last {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: 1px solid #d1d9e0;
+    color: var(--primary-dark);
+    margin: 0 0.15rem;
+    background: white;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    
+    &:hover:not(.p-disabled):not(.p-highlight) {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+      color: white;
+      border-color: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    &.p-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: #f8f9fa;
+      color: #adb5bd;
+      border-color: #e9ecef;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+::ng-deep .applicants-list-supervisor .p-paginator .p-paginator-pages .p-paginator-page {
+  border-radius: var(--radius-md);
+  min-width: 2.25rem;
+  height: 2.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  
+  &.p-highlight {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+    color: white;
+    border-color: var(--primary-dark);
+    box-shadow: 0 2px 4px rgba(5, 66, 57, 0.2);
+    transform: scale(1.05);
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+/* ===========================================
+   EMPTY MESSAGE STYLING
+   =========================================== */
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-emptymessage {
+  padding: 2rem !important;
+  text-align: center !important;
+  color: var(--neutral-medium) !important;
+}
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-emptymessage td {
+  border: none !important;
+}
+
+/* ===========================================
+   LOADING STATE
+   =========================================== */
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-loading-overlay {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2px);
+}
+
+::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-loading-icon {
+  color: var(--primary-dark);
+  font-size: 2rem;
+}
+
+/* ===========================================
+   DIALOG STYLING
+   =========================================== */
+
+/* إزالة الخلفية الشفافة من Dialog */
+::ng-deep .applicants-list-supervisor .p-dialog-mask {
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: none !important;
+}
+
+::ng-deep .applicants-list-supervisor .p-dialog {
+  background: white !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+
+  .p-dialog-header {
+    background: linear-gradient(135deg, #054239 0%, #428177 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px 12px 0 0;
+
+    .p-dialog-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .p-dialog-header-icon {
+      color: white;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .p-dialog-content {
+    padding: 2rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: white !important;
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+/* ===========================================
+   PROFESSIONAL DETAILS DIALOG STYLING
+   =========================================== */
+
+.applicants-list-supervisor {
+  .applicant-details {
+    padding: 0;
+
+    /* Details Section */
+    .details-section {
+      margin-bottom: 2rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #e9ecef;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      /* ✅ قسم تعديل القرار النهائي - تصميم محسّن */
+      &.edit-decision-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border: 2px solid var(--accent-gold, #d4af37);
+        border-radius: var(--radius-xl, 12px);
+        padding: var(--spacing-xl, 1.5rem);
+        margin-top: var(--spacing-xl, 1.5rem);
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+
+        .edit-section-header {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-lg, 1rem);
+          margin-bottom: var(--spacing-lg, 1rem);
+          padding-bottom: var(--spacing-md, 1rem);
+          border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+
+          .edit-section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-gold, #d4af37) 0%, #b8941f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+
+            i {
+              font-size: 1.5rem;
+              color: white;
+            }
+          }
+
+          .section-title-wrapper {
+            flex: 1;
+
+            .section-title {
+              margin: 0 0 0.25rem 0;
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: var(--primary-dark, #054239);
+            }
+
+            .section-subtitle {
+              margin: 0;
+              font-size: 0.9rem;
+              color: #6c757d;
+            }
+          }
+        }
+
+        .edit-decision-info {
+          .info-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius-lg, 8px);
+            padding: var(--spacing-lg, 1rem);
+            margin-bottom: var(--spacing-lg, 1rem);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md, 0.75rem);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+            .info-icon {
+              width: 40px;
+              height: 40px;
+              background: #e3f2fd;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+
+              i {
+                font-size: 1.25rem;
+                color: #2196f3;
+              }
+            }
+
+            .info-content {
+              flex: 1;
+
+              .info-title {
+                margin: 0 0 0.5rem 0;
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--primary-dark, #054239);
+              }
+
+              .info-text {
+                margin: 0;
+                font-size: 0.9rem;
+                color: #6c757d;
+                line-height: 1.5;
+              }
+            }
+          }
+
+          .edit-action-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: var(--spacing-md, 1rem);
+          }
+        }
+
+        .edit-decision-form {
+          .form-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius-lg, 8px);
+            padding: var(--spacing-xl, 1.5rem);
+            margin-bottom: var(--spacing-lg, 1rem);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+            .form-group {
+              margin-bottom: var(--spacing-lg, 1.5rem);
+
+              &:last-child {
+                margin-bottom: 0;
+              }
+
+              .form-label-enhanced {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+                color: var(--primary-dark, #054239);
+                margin-bottom: 0.5rem;
+                font-size: 0.95rem;
+
+                i {
+                  color: var(--accent-gold, #d4af37);
+                }
+
+                .required-star {
+                  color: #dc3545;
+                }
+              }
+
+              .enhanced-select {
+                width: 100%;
+                border: 1px solid #ced4da;
+                border-radius: var(--radius-md, 6px);
+                transition: all 0.3s ease;
+
+                &:hover {
+                  border-color: var(--accent-gold, #d4af37);
+                }
+
+                &:focus-within {
+                  border-color: var(--accent-gold, #d4af37);
+                  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+                }
+              }
+
+              .form-control-enhanced {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ced4da;
+                border-radius: var(--radius-md, 6px);
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+                resize: vertical;
+
+                &:focus {
+                  outline: none;
+                  border-color: var(--accent-gold, #d4af37);
+                  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+                }
+              }
+
+              .form-hint {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+                margin-top: 0.5rem;
+                font-size: 0.85rem;
+                color: #6c757d;
+
+                i {
+                  font-size: 0.75rem;
+                }
+              }
+            }
+          }
+
+          .form-actions {
+            display: flex;
+            gap: var(--spacing-md, 0.75rem);
+            justify-content: flex-end;
+            padding-top: var(--spacing-lg, 1.5rem);
+            border-top: 2px solid rgba(212, 175, 55, 0.15);
+            margin-top: var(--spacing-md, 1rem);
+          }
+        }
+
+        // ✅ تحسين الأزرار - تصميم محسّن
+        ::ng-deep {
+          .edit-start-btn {
+            min-width: 160px;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-lg, 8px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+            &:hover:not(:disabled) {
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+          }
+
+          .enhanced-save-btn {
+            min-width: 180px;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.875rem 2rem;
+            border-radius: var(--radius-lg, 8px);
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+            border: none !important;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s ease;
+
+            .p-button-label {
+              font-weight: 700;
+              letter-spacing: 0.5px;
+            }
+
+            .p-button-icon {
+              font-size: 1.1rem;
+              margin-left: 0.5rem;
+            }
+
+            &:hover:not(:disabled) {
+              transform: translateY(-3px);
+              box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+              background: linear-gradient(135deg, #218838 0%, #1ea080 100%) !important;
+            }
+
+            &:active:not(:disabled) {
+              transform: translateY(-1px);
+            }
+
+            &:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
+          }
+
+          .enhanced-cancel-btn {
+            min-width: 160px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius-lg, 8px);
+            background: #ffffff !important;
+            color: #6c757d !important;
+            border: 2px solid #dee2e6 !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+
+            .p-button-label {
+              font-weight: 600;
+            }
+
+            .p-button-icon {
+              font-size: 1rem;
+              margin-left: 0.5rem;
+            }
+
+            &:hover:not(:disabled) {
+              transform: translateY(-2px);
+              background: #f8f9fa !important;
+              border-color: #adb5bd !important;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+              color: #495057 !important;
+            }
+
+            &:active:not(:disabled) {
+              transform: translateY(0);
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+
+      /* Section Header */
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+
+        .section-icon {
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, #054239 0%, #428177 100%);
+          border-radius: var(--radius-md);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: var(--shadow-md);
+
+          i {
+            color: white;
+            font-size: 1.25rem;
+          }
+        }
+
+        .section-title {
+          margin: 0;
+          color: #054239;
+          font-weight: 700;
+          font-size: 1.25rem;
+        }
+      }
+
+      /* Personal Info Section */
+      &.personal-info-section {
+        .details-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.5rem;
+
+          .detail-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: #e9ecef;
+              transform: translateY(-2px);
+              box-shadow: var(--shadow-sm);
+            }
+
+            .detail-label {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              margin-bottom: 0.5rem;
+              color: #054239;
+              font-weight: 600;
+              font-size: 0.875rem;
+
+              i {
+                color: #B9A779;
+                font-size: 1rem;
+              }
+            }
+
+            .detail-value {
+              color: #34495e;
+              font-size: 1rem;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+      /* Timeline Section */
+      &.timeline-section {
+        .timeline-container {
+          position: relative;
+          padding: 1rem 0 0 0;
+
+          &::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #054239 0%, #428177 50%, #B9A779 100%);
+            border-radius: 2px;
+          }
+
+          .timeline-item {
+            position: relative;
+            padding-right: 60px;
+            margin-bottom: 2rem;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            .timeline-marker {
+              position: absolute;
+              right: 8px;
+              top: 0;
+              width: 28px;
+              height: 28px;
+              background: white;
+              border: 3px solid #054239;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 10;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+              i {
+                font-size: 0.875rem;
+                color: #054239;
+              }
+
+              /* Marker Colors by Type */
+              &.marker-entry {
+                border-color: #428177;
+                background: #428177;
+                i { color: white; }
+              }
+
+              &.marker-exam {
+                border-color: #B9A779;
+                background: #B9A779;
+                i { color: white; }
+              }
+
+              &.marker-consultation {
+                border-color: #66b5a8;
+                background: #66b5a8;
+                i { color: white; }
+              }
+
+              &.marker-investigation {
+                border-color: #428177;
+                background: #428177;
+                i { color: white; }
+              }
+
+              &.marker-decision {
+                border-color: #054239;
+                background: #054239;
+                i { color: white; }
+              }
+
+              &.marker-exit {
+                border-color: #6B1F2A;
+                background: #6B1F2A;
+                i { color: white; }
+              }
+            }
+
+            .timeline-content {
+              background: white;
+              padding: 1.25rem;
+              border-radius: var(--radius-md);
+              border: 1px solid #e9ecef;
+              box-shadow: var(--shadow-sm);
+              transition: all 0.2s ease;
+
+              &:hover {
+                box-shadow: var(--shadow-md);
+                transform: translateX(-4px);
+              }
+
+              .timeline-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.75rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+
+                .timeline-event-title {
+                  margin: 0;
+                  color: #054239;
+                  font-weight: 700;
+                  font-size: 1rem;
+                }
+
+                .timeline-date {
+                  font-size: 0.75rem;
+                }
+              }
+
+              .timeline-description {
+                color: #6c757d;
+                font-size: 0.9rem;
+                line-height: 1.6;
+                margin: 0;
+              }
+            }
+          }
+
+          .timeline-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+
+            i {
+              font-size: 2rem;
+              margin-bottom: 0.5rem;
+              display: block;
+              color: #B9A779;
+            }
+
+            span {
+              display: block;
+              font-size: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN - MOBILE & TABLET
+   =========================================== */
+
+@media (max-width: 1200px) {
+  ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-thead>tr>th {
+    font-size: 0.6rem !important;
+    padding: 0.45rem 0.5rem !important;
+  }
+  
+  ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td {
+    font-size: 0.6rem !important;
+    padding: 0.35rem 0.5rem !important;
+    
+    span, .small, .badge {
+      font-size: 0.6rem !important;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-thead>tr>th {
+    font-size: 0.55rem !important;
+    padding: 0.4rem 0.4rem !important;
+    letter-spacing: 0.2px !important;
+  }
+  
+  ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td {
+    font-size: 0.55rem !important;
+    padding: 0.3rem 0.4rem !important;
+    max-width: 120px !important;
+    
+    span, .small, .badge {
+      font-size: 0.55rem !important;
+    }
+    
+    .badge {
+      padding: 0.2rem 0.4rem !important;
+    }
+  }
+  
+  :host ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td .p-button {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.55rem;
+    
+    i, .pi {
+      font-size: 0.6rem;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات المتوسطة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.875rem 1rem !important;
+    font-size: 0.7rem !important;
+    
+    .p-paginator-current {
+      font-size: 0.7rem !important;
+      padding: 0.45rem 0.875rem !important;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2.1rem !important;
+      height: 2.1rem !important;
+      font-size: 0.7rem !important;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-thead>tr>th {
+    font-size: 0.5rem !important;
+    padding: 0.35rem 0.3rem !important;
+  }
+  
+  ::ng-deep .applicants-list-supervisor .p-datatable .p-datatable-tbody>tr>td {
+    font-size: 0.5rem !important;
+    padding: 0.25rem 0.3rem !important;
+    max-width: 100px !important;
+    
+    span, .small, .badge {
+      font-size: 0.5rem !important;
+    }
+  }
+  
+  // ✅ تحسين الباجنيشن على الشاشات الصغيرة
+  ::ng-deep .applicants-list-supervisor .p-paginator {
+    padding: 0.75rem 0.5rem !important;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .p-paginator-current {
+      font-size: 0.65rem !important;
+      padding: 0.4rem 0.75rem !important;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .p-paginator-pages .p-paginator-page,
+    .p-paginator-first,
+    .p-paginator-prev,
+    .p-paginator-next,
+    .p-paginator-last {
+      min-width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.65rem !important;
+    }
+  }
+}

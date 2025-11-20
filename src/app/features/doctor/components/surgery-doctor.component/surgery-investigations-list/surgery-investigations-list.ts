@@ -43,12 +43,13 @@ export class SurgeryInvestigationsList implements OnInit {
 
   loadInvestigations() {
     this.loading = true;
-    this.service.getSurgicalInvestigations().subscribe({
+    const filter = this.globalFilter || '';
+    this.service.getSurgicalInvestigations(this.page, this.rowsPerPage, filter).subscribe({
       next: res => { 
-        this.investigations = res; 
-        this.filteredInvestigations = [...res]; 
-        this.totalRecords = this.filteredInvestigations.length;
-        this.applyPaging();
+        this.investigations = res.items; 
+        this.filteredInvestigations = res.items; 
+        this.totalRecords = res.totalCount;
+        this.pagedInvestigations = res.items;
         this.loading = false; 
       },
       error: () => { 
@@ -58,46 +59,21 @@ export class SurgeryInvestigationsList implements OnInit {
     });
   }
 
-  filterInvestigations() {
-    const search = this.globalFilter.trim().toLowerCase();
-    this.filteredInvestigations = !search ? [...this.investigations] :
-      this.investigations.filter(i =>
-        i.applicantFileNumber?.toLowerCase().includes(search) ||
-        i.type?.toLowerCase().includes(search) ||
-        i.result?.toLowerCase().includes(search) ||
-        i.status?.toLowerCase().includes(search) ||
-        (i.doctor?.fullName?.toLowerCase().includes(search) ?? false)
-      );
-    this.totalRecords = this.filteredInvestigations.length;
-    this.page = 1;
-    this.applyPaging();
-  }
-
   onFilterChange(event: Event) {
     this.globalFilter = (event.target as HTMLInputElement).value;
-    this.filterInvestigations();
-  }
-
-  onEnterSearch() {
     this.page = 1;
-    this.filterInvestigations();
+    this.loadInvestigations();
   }
 
   onPageChange(newPage: number) {
     this.page = newPage;
-    this.applyPaging();
+    this.loadInvestigations();
   }
 
   onPageSizeChange(newSize: number) {
     this.rowsPerPage = newSize;
     this.page = 1;
-    this.applyPaging();
-  }
-
-  private applyPaging() {
-    const start = (this.page - 1) * this.rowsPerPage;
-    const end = start + this.rowsPerPage;
-    this.pagedInvestigations = this.filteredInvestigations.slice(start, end);
+    this.loadInvestigations();
   }
 
   openEditDialog(inv: Investigation) { 

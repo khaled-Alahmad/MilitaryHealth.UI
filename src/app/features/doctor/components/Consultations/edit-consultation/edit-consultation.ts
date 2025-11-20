@@ -38,7 +38,8 @@ export class EditConsultation {
   ngOnInit(): void {
     this.consultationForm = this.fb.group({
       consultationType: [this.consultation.consultationType], // مخفي
-      referredDoctor: [this.consultation.referredDoctor], // مخفي
+      // referredDoctor: [this.consultation.referredDoctor], // ❌ تم حذفه
+      referralReason: [this.consultation.referralReason || ''], // ✅ جديد
       result: [this.consultation.result || ''],
       attachment: [this.consultation.attachment || null]
     });
@@ -88,7 +89,8 @@ export class EditConsultation {
       doctorID,
       applicantFileNumber: this.consultation.applicantFileNumber,
       consultationType: this.consultationForm.value.consultationType,
-      referredDoctor: this.consultationForm.value.referredDoctor,
+      // referredDoctor: this.consultationForm.value.referredDoctor, // ❌ تم حذفه
+      referralReason: this.consultationForm.value.referralReason, // ✅ جديد
       result: this.consultationForm.value.result,
       attachment: this.uploadedPath ?? ''
     };

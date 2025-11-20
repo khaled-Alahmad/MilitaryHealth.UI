@@ -127,10 +127,15 @@ openEditExam(eyeExam: EyeExam): void {
   }).subscribe({
     next: (responses) => {
       if (responses.exam.succeeded && responses.exam.data) {
+        // ✅ استخدام refractions من exam.data أولاً، ثم من API إذا لم تكن موجودة
+        const refractionsFromExam = (responses.exam.data as any).refractions || [];
+        const refractionsFromAPI = responses.refractions.succeeded && responses.refractions.data ? responses.refractions.data : [];
+        
         const examWithRefractions = {
           ...responses.exam.data,
-          refractions: responses.refractions.succeeded ? responses.refractions.data : []
+          refractions: refractionsFromExam.length > 0 ? refractionsFromExam : refractionsFromAPI
         };
+        
 
         const modalRef = this.modalService.open(EditEyeExam, {
           size: 'lg',

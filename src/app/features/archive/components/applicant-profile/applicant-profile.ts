@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../../shared/services/lookup.service';
 import { Result } from '../../../doctor/models/internal-exam.model';
@@ -18,7 +19,7 @@ declare const html2pdf: any;
 
 @Component({
   selector: 'app-applicant-profile',
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, GregorianDatePipe],
   templateUrl: './applicant-profile.html',
   styleUrl: './applicant-profile.scss'
 })

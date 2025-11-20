@@ -6,10 +6,12 @@ import { Result } from '../../../models/result.model';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, Observable } from 'rxjs';
 import { EyeExam } from '../../../models/eye-exam.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, normalizeHealthStatus, resolveHealthStatusValue } from '../../../constants/health-status-options';
+import { ApiResponse } from '../../../../applicants/models/api-response.model';
+import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 
 @Component({
   selector: 'app-edit-eye-exam',
@@ -19,8 +21,23 @@ import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, normalizeHealthStatus, resol
 })
 export class EditEyeExam implements OnInit {
   @Output() eyeExamUpdated = new EventEmitter<any>();
-  @Input() exam!: EyeExam;
   @Output() dialogClosed = new EventEmitter<boolean>();
+
+  private _exam!: EyeExam;
+  private formInitialized = false;
+
+  @Input() 
+  set exam(value: EyeExam) {
+    this._exam = value;
+    // ✅ تهيئة النموذج عند تعيين exam
+    if (value && !this.formInitialized) {
+      this.initializeForm();
+    }
+  }
+  
+  get exam(): EyeExam {
+    return this._exam;
+  }
 
   examForm!: FormGroup;
   refractionTypes: RefractionType[] = [];
@@ -44,20 +61,54 @@ export class EditEyeExam implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const colorTestNormalized = normalizeHealthStatus(this.exam.colorTest);
-    const colorTestLeftNormalized = normalizeHealthStatus(this.exam.colorTestLeft);
+    // ✅ إذا كان exam محملاً بالفعل، قم بتهيئة النموذج
+    if (this.exam && !this.formInitialized) {
+      this.initializeForm();
+    }
+  }
+
+  private initializeForm(): void {
+    if (!this.exam) {
+      return;
+    }
+
+    this.formInitialized = true;
+    const colorTestNormalized = normalizeHealthStatus(this.exam.colorTest || '');
+    const colorTestLeftNormalized = normalizeHealthStatus(this.exam.colorTestLeft || '');
+
+    // ✅ تنظيف البيانات من المسافات الزائدة
+    const vision = (this.exam.vision || '').toString().trim();
+    const visionLeft = (this.exam.visionLeft || '').toString().trim();
+    
+    // ✅ الحصول على أسوأ الانكسار - محاولة من الحقول الجديدة أولاً، ثم القديمة
+    let worstRefractionRight = '';
+    let worstRefractionLeft = '';
+    
+    if (this.exam.worstRefractionRight) {
+      worstRefractionRight = this.exam.worstRefractionRight.toString().trim();
+    } else if ((this.exam as any).refractiveError) {
+      worstRefractionRight = (this.exam as any).refractiveError.toString().trim();
+    }
+    
+    if (this.exam.worstRefractionLeft) {
+      worstRefractionLeft = this.exam.worstRefractionLeft.toString().trim();
+    } else if ((this.exam as any).refractiveError) {
+      worstRefractionLeft = (this.exam as any).refractiveError.toString().trim();
+    }
 
     this.examForm = this.fb.group({
-      vision: [this.exam.vision, Validators.required],
-      visionLeft: [this.exam.visionLeft || '', Validators.required],
+      vision: [vision, Validators.required],
+      visionLeft: [visionLeft, Validators.required],
       colorTest: [colorTestNormalized.status, Validators.required],
       colorTestOther: [colorTestNormalized.other],
       colorTestLeft: [colorTestLeftNormalized.status, Validators.required],
       colorTestLeftOther: [colorTestLeftNormalized.other],
-      refractiveError: [(this.exam as any).refractiveError || '', Validators.required],
-      otherDiseases: [this.exam.otherDiseases || ''],
+      refractiveError: [(this.exam as any).refractiveError || ''], // حقل قديم - للتوافق
+      worstRefractionRight: [worstRefractionRight || '', Validators.required],
+      worstRefractionLeft: [worstRefractionLeft || '', Validators.required],
+      otherDiseases: [(this.exam.otherDiseases || '').trim()],
       resultID: [this.exam.resultID, Validators.required],
-      reason: [this.exam.reason || ''],
+      reason: [(this.exam.reason || '').trim()],
       leftEye: this.fb.group({
         refractions: this.fb.array([])
       }),
@@ -66,53 +117,96 @@ export class EditEyeExam implements OnInit {
       })
     });
 
-    // جلب أنواع الانكسار والنتائج
-    forkJoin({
-      types: this.examService.getRefractionTypes(),
-      results: this.examService.getResults()
-    }).subscribe({
-      next: (response) => {
-        this.refractionTypes = response.types.data.items || [];
-        this.results = response.results.data.items || [];
-      },
-      error: (error) => {
-        this.toastr.error('❌ حدث خطأ أثناء تحميل البيانات', 'خطأ');
-        console.error('Error loading data:', error);
-      }
-    });
+    // ✅ تحميل الانكسارات أولاً من exam إذا كانت موجودة
+    const hasRefractionsInExam = this.exam.refractions && this.exam.refractions.length > 0;
+    if (hasRefractionsInExam) {
+      this.refractions = [...(this.exam.refractions || [])];
+    } else {
+      this.refractions = [];
+    }
 
-    // استخدام الانكسارات المرسلة أو جلبها من API
-    if (this.exam.refractions && this.exam.refractions.length > 0) {
-      // استخدام الانكسارات المرسلة
-      this.refractions = this.exam.refractions;
-      this.loadRefractionsIntoForm();
-    } else if (this.exam.eyeExamID) {
-      // جلب الانكسارات من API إذا لم تكن مرسلة
-      this.examService.getRefractionsByEyeExamId(this.exam.eyeExamID).subscribe({
-        next: (response) => {
-          this.refractions = response.data || [];
+    // جلب أنواع الانكسار والنتائج والانكسارات معاً
+    const requests: {
+      types: Observable<ApiResponse<PagedResponse<RefractionType>>>;
+      results: Observable<ApiResponse<PagedResponse<Result>>>;
+      refractions: Observable<ApiResponse<Refraction[]>>;
+    } = {
+      types: this.examService.getRefractionTypes(),
+      results: this.examService.getResults(),
+      refractions: !hasRefractionsInExam && this.exam.eyeExamID
+        ? this.examService.getRefractionsByEyeExamId(this.exam.eyeExamID)
+        : of({ succeeded: true, status: 200, message: '', data: (this.refractions || []) as Refraction[], traceId: '' } as ApiResponse<Refraction[]>)
+    };
+
+    forkJoin(requests).subscribe({
+      next: (response: {
+        types: ApiResponse<PagedResponse<RefractionType>>;
+        results: ApiResponse<PagedResponse<Result>>;
+        refractions: ApiResponse<Refraction[]>;
+      }) => {
+        this.refractionTypes = response.types.data?.items || [];
+        this.results = response.results.data?.items || [];
+        
+        // ✅ تحميل الانكسارات - استخدام البيانات من exam أولاً، ثم من API إذا لم تكن موجودة
+        if (!hasRefractionsInExam && response.refractions) {
+          if (response.refractions.succeeded && response.refractions.data && response.refractions.data.length > 0) {
+            this.refractions = response.refractions.data;
+          } else {
+            this.refractions = this.exam.refractions || [];
+          }
+        }
+        
+        // ✅ تحميل الانكسارات في النموذج بعد تحميل أنواع الانكسار
+        // استخدام setTimeout لضمان أن النموذج جاهز
+        setTimeout(() => {
           this.loadRefractionsIntoForm();
-        },
-        error: (err) => {
-          this.toastr.error('❌ حدث خطأ أثناء تحميل الانكسارات', 'خطأ');
+        }, 100);
+      },
+      error: () => {
+        this.toastr.error('❌ حدث خطأ أثناء تحميل البيانات', 'خطأ');
+        // ✅ محاولة تحميل الانكسارات من exam مباشرة
+        this.refractions = this.exam.refractions || [];
+        setTimeout(() => {
+          this.loadRefractionsIntoForm();
+        }, 100);
         }
       });
-    }
   }
 
   // دالة لتحميل الانكسارات في النموذج
   private loadRefractionsIntoForm() {
+    if (!this.examForm) {
+      return;
+    }
+
+    // ✅ مسح المصفوفات الموجودة أولاً
+    const leftEyeFormArray = this.examForm.get('leftEye.refractions') as FormArray;
+    const rightEyeFormArray = this.examForm.get('rightEye.refractions') as FormArray;
+    
+    if (!leftEyeFormArray || !rightEyeFormArray) {
+      return;
+    }
+    
+    while (leftEyeFormArray.length !== 0) {
+      leftEyeFormArray.removeAt(0);
+    }
+    while (rightEyeFormArray.length !== 0) {
+      rightEyeFormArray.removeAt(0);
+    }
+
     // تصنيف الانكسارات حسب العين
-    const leftEyeRefractions = this.refractions.filter((r: Refraction) => r.isLeft);
-    const rightEyeRefractions = this.refractions.filter((r: Refraction) => !r.isLeft);
+    const leftEyeRefractions = (this.refractions || []).filter((r: Refraction) => r.isLeft === true);
+    const rightEyeRefractions = (this.refractions || []).filter((r: Refraction) => r.isLeft === false);
 
     // تعبئة نموذج الانكسارات للعين اليسرى
-    const leftEyeFormArray = this.examForm.get('leftEye.refractions') as FormArray;
-    leftEyeRefractions.forEach(refraction => {
-      leftEyeFormArray.push(this.fb.group({
+    leftEyeRefractions.forEach((refraction) => {
+      if (refraction.refractionTypeID && refraction.refractionValue !== null && refraction.refractionValue !== undefined) {
+        const refractionGroup = this.fb.group({
         refractionTypeID: [refraction.refractionTypeID, Validators.required],
         refractionValue: [refraction.refractionValue, Validators.required]
-      }));
+        });
+        leftEyeFormArray.push(refractionGroup);
+      }
     });
 
     if (leftEyeRefractions.length > 0) {
@@ -120,19 +214,19 @@ export class EditEyeExam implements OnInit {
     }
 
     // تعبئة نموذج الانكسارات للعين اليمنى
-    const rightEyeFormArray = this.examForm.get('rightEye.refractions') as FormArray;
-    rightEyeRefractions.forEach(refraction => {
-      rightEyeFormArray.push(this.fb.group({
+    rightEyeRefractions.forEach((refraction) => {
+      if (refraction.refractionTypeID && refraction.refractionValue !== null && refraction.refractionValue !== undefined) {
+        const refractionGroup = this.fb.group({
         refractionTypeID: [refraction.refractionTypeID, Validators.required],
         refractionValue: [refraction.refractionValue, Validators.required]
-      }));
+        });
+        rightEyeFormArray.push(refractionGroup);
+      }
     });
 
     if (rightEyeRefractions.length > 0) {
       this.showRightEye = true;
     }
-
-    
   }
 
   // دالة إضافة انكسار جديد
@@ -181,7 +275,9 @@ export class EditEyeExam implements OnInit {
       this.examForm.value.colorTestLeft,
       this.examForm.value.colorTestLeftOther
     ),
-    refractiveError: this.examForm.value.refractiveError || '',
+    refractiveError: this.examForm.value.refractiveError || '', // للتوافق مع البيانات القديمة
+    worstRefractionRight: this.examForm.value.worstRefractionRight || '',
+    worstRefractionLeft: this.examForm.value.worstRefractionLeft || '',
     otherDiseases: this.examForm.value.otherDiseases || '',
     resultID: Number(this.examForm.value.resultID),
     reason: this.examForm.value.reason || ''
@@ -301,7 +397,6 @@ private updateRefractions(
     },
     error: (error) => {
       this.toastr.error('❌ حدث خطأ أثناء تحديث الانكسارات', 'خطأ');
-      console.error('Error updating refractions:', error);
     }
   });
 }

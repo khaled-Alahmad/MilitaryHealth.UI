@@ -99,3 +99,71 @@
     outline: none;
   }
 }
+
+/* ✅ تصميم ماسح الباركود */
+.scanner-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.scanner-container {
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+}
+
+.scanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.scanner-instructions {
+  text-align: center;
+  color: white;
+  padding: 1rem;
+  
+  p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  small {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+::ng-deep .barcode-scanner-dialog {
+  .p-dialog-content {
+    padding: 1rem;
+  }
+  
+  #barcode-scanner {
+    video {
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 8px;
+    }
+    
+    canvas {
+      display: none;
+    }
+  }
+}

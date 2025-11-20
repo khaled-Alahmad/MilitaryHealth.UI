@@ -13,9 +13,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Result } from '../../../../shared/models/result.model';
 import { EditArchive } from '../edit-archive/edit-archive';
 import { DataSharingService } from '../../../../shared/services/data-sharing';
+import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 @Component({
   selector: 'app-archive-list',
-  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule],
+  imports: [PaginatorComponent, TableModule, ButtonModule, TooltipModule, RippleModule, CommonModule, RouterModule, GregorianDatePipe],
   templateUrl: './archive-list.html',
   styleUrl: './archive-list.scss'
 })

@@ -79,16 +79,33 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-12">
-          <label class="form-label mb-2">أسواء الانكسار:</label>
+        <div class="col-md-6">
+          <label class="form-label mb-2">R: أسوأ الانكسار <span class="text-danger">*</span></label>
           <div class="ms-3">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="refractiveError" id="refractiveNotImportantEdit" value="غير مهمة" />
-              <label class="form-check-label" for="refractiveNotImportantEdit">غير مهمة</label>
+              <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+                id="worstRefractionRightNotImportantEdit" value="غير مهمة" />
+              <label class="form-check-label" for="worstRefractionRightNotImportantEdit">غير مهمة</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="refractiveError" id="refractiveImportantEdit" value="مهمة" />
-              <label class="form-check-label" for="refractiveImportantEdit">مهمة</label>
+              <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+                id="worstRefractionRightImportantEdit" value="مهمة" />
+              <label class="form-check-label" for="worstRefractionRightImportantEdit">مهمة</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label mb-2">L: أسوأ الانكسار <span class="text-danger">*</span></label>
+          <div class="ms-3">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+                id="worstRefractionLeftNotImportantEdit" value="غير مهمة" />
+              <label class="form-check-label" for="worstRefractionLeftNotImportantEdit">غير مهمة</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+                id="worstRefractionLeftImportantEdit" value="مهمة" />
+              <label class="form-check-label" for="worstRefractionLeftImportantEdit">مهمة</label>
             </div>
           </div>
         </div>

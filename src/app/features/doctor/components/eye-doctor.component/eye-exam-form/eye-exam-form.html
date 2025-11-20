@@ -107,21 +107,46 @@
           </div>
         </div>
 
-        <h6 class="section-title mt-4">أسواء الانكسار</h6>
+        <h6 class="section-title mt-4">أسوأ الانكسار</h6>
         <div class="row g-3">
-          <div class="col-md-12">
-            <label class="form-label mb-2">أسواء الانكسار <span class="text-danger">*</span></label>
+          <div class="col-md-6">
+            <label class="form-label mb-2">R: أسوأ الانكسار <span class="text-danger">*</span></label>
             <div class="ms-3">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="refractiveError" 
-                  id="refractiveNotImportant" value="غير مهمة" />
-                <label class="form-check-label" for="refractiveNotImportant">غير مهمة</label>
+                <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+                  id="worstRefractionRightNotImportant" value="غير مهمة"
+                  [class.is-invalid]="examForm.get('worstRefractionRight')?.invalid && examForm.get('worstRefractionRight')?.touched" />
+                <label class="form-check-label" for="worstRefractionRightNotImportant">غير مهمة</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="refractiveError" 
-                  id="refractiveImportant" value="مهمة" />
-                <label class="form-check-label" for="refractiveImportant">مهمة</label>
+                <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+                  id="worstRefractionRightImportant" value="مهمة"
+                  [class.is-invalid]="examForm.get('worstRefractionRight')?.invalid && examForm.get('worstRefractionRight')?.touched" />
+                <label class="form-check-label" for="worstRefractionRightImportant">مهمة</label>
               </div>
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="getErrorMessage('worstRefractionRight')">
+              <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('worstRefractionRight') }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label mb-2">L: أسوأ الانكسار <span class="text-danger">*</span></label>
+            <div class="ms-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+                  id="worstRefractionLeftNotImportant" value="غير مهمة"
+                  [class.is-invalid]="examForm.get('worstRefractionLeft')?.invalid && examForm.get('worstRefractionLeft')?.touched" />
+                <label class="form-check-label" for="worstRefractionLeftNotImportant">غير مهمة</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+                  id="worstRefractionLeftImportant" value="مهمة"
+                  [class.is-invalid]="examForm.get('worstRefractionLeft')?.invalid && examForm.get('worstRefractionLeft')?.touched" />
+                <label class="form-check-label" for="worstRefractionLeftImportant">مهمة</label>
+              </div>
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="getErrorMessage('worstRefractionLeft')">
+              <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('worstRefractionLeft') }}
             </div>
           </div>
         </div>

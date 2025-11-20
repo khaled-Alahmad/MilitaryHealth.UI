@@ -8,12 +8,26 @@ import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
+import { EditApplicantDialogComponent } from '../edit-applicant-dialog/edit-applicant-dialog';
+import { BarcodePrintService } from '../../services/barcode-print.service';
+import { MessageService } from 'primeng/api';
+import { ScrollService } from '../../../../shared/services/scroll.service';
+import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 
 @Component({
   selector: 'app-applicants-list',
-  imports: [TableModule, CommonModule, PaginatorComponent, TagModule, ButtonModule],
+  imports: [
+    TableModule, 
+    CommonModule, 
+    PaginatorComponent, 
+    TagModule, 
+    ButtonModule,
+    EditApplicantDialogComponent,
+    GregorianDatePipe
+  ],
   templateUrl: './applicants-list.html',
-  styleUrl: './applicants-list.scss'
+  styleUrl: './applicants-list.scss',
+  providers: [MessageService]
 })
 export class ApplicantsList implements OnInit,AfterViewInit  {
   applicants: ApplicantModel[] = [];
@@ -24,9 +38,19 @@ export class ApplicantsList implements OnInit,AfterViewInit  {
   rowsPerPage = 10;
   totalRecords = 0;
   loading = false;
- tableHeight = '400px';
-  constructor(private applicantService: ApplicantService , private cdr: ChangeDetectorRef,
-    private router: Router
+  tableHeight = '400px';
+  
+  // Edit Dialog
+  editDialogVisible = false;
+  selectedApplicant: ApplicantModel | null = null;
+  
+  constructor(
+    private applicantService: ApplicantService,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private barcodePrintService: BarcodePrintService,
+    private messageService: MessageService,
+    private scrollService: ScrollService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +90,10 @@ onFilterChange(event: Event) {
   this.page = 1;
   this.loadApplicants();
 
+  // ✅ Scroll to Top بعد البحث
+  setTimeout(() => {
+    this.scrollService.scrollToTop(true);
+  }, 300);
 }
   ngAfterViewInit() {
     this.tableHeight = this.calculateTableHeight(); 
@@ -88,6 +116,57 @@ onFilterChange(event: Event) {
     this.tableHeight = (screenHeight - reservedSpace) + 'px';
   }
   viewApplicant(applicant: ApplicantModel) {
-  this.router.navigate(['/applicants', applicant.fileNumber]);
-}
+    this.router.navigate(['reception/applicants/details', applicant.fileNumber]);
+  }
+  
+  openEditDialog(applicant: ApplicantModel): void {
+    this.selectedApplicant = applicant;
+    this.editDialogVisible = true;
+  }
+  
+  onEditSave(): void {
+    this.loadApplicants(); // إعادة تحميل القائمة
+  }
+
+  printApplicant(applicant: ApplicantModel): void {
+    if (!applicant) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'تحذير',
+        detail: 'لا توجد بيانات منتسب للطباعة'
+      });
+      return;
+    }
+
+    // ✅ جلب البيانات الكاملة للحصول على queueNumber و fileNumber
+    if (applicant.applicantID) {
+      this.applicantService.getApplicantById$(applicant.applicantID).subscribe({
+        next: (fullApplicantData: ApplicantModel) => {
+          this.barcodePrintService.printBarcodeReceipt(fullApplicantData).catch(error => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'خطأ',
+              detail: 'فشل في طباعة الإيصال'
+            });
+          });
+        },
+        error: (err) => {
+          // محاولة الطباعة بالبيانات المتوفرة
+          this.barcodePrintService.printBarcodeReceipt(applicant).catch(error => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'خطأ',
+              detail: 'فشل في طباعة الإيصال'
+            });
+          });
+        }
+      });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'تحذير',
+        detail: 'لا يمكن طباعة الإيصال - بيانات ناقصة'
+      });
+    }
+  }
 }

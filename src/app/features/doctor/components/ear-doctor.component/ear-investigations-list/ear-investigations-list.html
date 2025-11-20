@@ -25,9 +25,8 @@
       <tr>
         <th style="min-width:120px" class="text-center">رقم ملف المريض</th>
         <th style="min-width:150px" class="text-center">نوع التحليل</th>
-        <th style="min-width:150px" class="text-center">الوصف</th>
+        <th style="min-width:150px" class="text-center">السبب</th>
         <th style="min-width:100px" class="text-center">النتيجة</th>
-        <th style="min-width:120px" class="text-center">اسم الطبيب</th>
         <th style="min-width:120px" class="text-center">الملف المرفق</th>
         <th style="min-width:100px" class="text-center">إجراءات</th>
       </tr>
@@ -44,15 +43,12 @@
           </span>
         </td>
         <td class="text-center align-middle">
-          <span class="small">{{ investigation.status || 'غير محدد' }}</span>
+          <span class="small">{{ investigation.investigationReason || '-' }}</span>
         </td>
         <td class="text-center align-middle">
           <span [class]="getBadgeClass(investigation.result)">
             {{ investigation.result || 'غير محدد' }}
           </span>
-        </td>
-        <td class="text-center align-middle">
-          <span class="small">{{ investigation.doctor?.fullName || 'غير محدد' }}</span>
         </td>
         <td class="text-center align-middle">
           @if (investigation.attachment) {
@@ -84,7 +80,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-4">
+        <td colspan="6" class="text-center py-4">
           <div class="d-flex flex-column align-items-center">
             <i class="pi pi-wave-pulse text-muted mb-2" style="font-size: 2rem;"></i>
             <span class="text-muted">لا توجد تحاليل</span>

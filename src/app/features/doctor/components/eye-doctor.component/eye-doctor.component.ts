@@ -24,7 +24,8 @@ import { SearchApplicantComponent } from '../../../applicants/components/search-
 })
 export class EyeDoctorComponent {
   selectedApplicant: Applicant | null = null;
-  hasEyeExam = true;
+  hasEyeExam = false; // ✅ افتراضياً لا يوجد فحص حتى يتم التحقق
+  checkingEyeExam = false; // ✅ حالة التحقق من وجود فحص
 
   @ViewChild(EyeExamForm) eyeExamForm!: EyeExamForm;
   @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
@@ -37,15 +38,34 @@ export class EyeDoctorComponent {
 
    onApplicantSelected(applicant: Applicant) {
     this.selectedApplicant = applicant;
+    this.hasEyeExam = false; // ✅ إعادة تعيين إلى false عند اختيار منتسب جديد
+    this.checkingEyeExam = true; // ✅ بدء التحقق
+
+    if (!applicant?.fileNumber) {
     this.hasEyeExam = false;
+      this.checkingEyeExam = false;
+      return;
+    }
 
-    if (!applicant?.fileNumber) return;
-
+     // ✅ التحقق من وجود فحص عيني سابق
     this.eyeExamService.getByFileNumber(applicant.fileNumber).subscribe({
     next: (response) => {
-      this.hasEyeExam = !!(response?.data && response.data.eyeExamID); 
+         this.checkingEyeExam = false;
+         
+         // ✅ التحقق بشكل صريح من وجود فحص
+         // يجب أن يكون succeeded = true AND data !== null AND data.eyeExamID موجود
+         const hasExam = !!(response?.succeeded && 
+                           response.data !== null && 
+                           response.data !== undefined &&
+                           response.data.eyeExamID !== null &&
+                           response.data.eyeExamID !== undefined);
+         
+         this.hasEyeExam = hasExam;
     },
-    error: () => this.hasEyeExam = false
+       error: () => {
+         this.checkingEyeExam = false;
+         this.hasEyeExam = false; // ✅ في حالة الخطأ، نفترض أنه لا يوجد فحص
+       }
   });
    }
   addEyeExam() {
@@ -74,5 +94,12 @@ export class EyeDoctorComponent {
       return;
     }
     this.investigationForm.openModal();
+  }
+
+  // ✅ تحديث حالة الفحص بعد إضافة فحص جديد
+  onEyeExamAdded() {
+    if (this.selectedApplicant?.fileNumber) {
+      this.hasEyeExam = true; // ✅ الآن يوجد فحص عيني
+    }
   }
 }

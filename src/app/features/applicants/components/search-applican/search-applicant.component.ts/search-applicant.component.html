@@ -1,27 +1,125 @@
-<div class="supervisor-page container">
-  <!-- البحث -->
+<div class="search-applicant-container container">
+  <!-- ✅ نوع البحث -->
   <div class="row justify-content-center mb-3">
-    <div class="col-12 col-md-6">
-      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-wrapper d-flex gap-2">
-        <button type="submit" class="btn search-btn" [disabled]="loading">
-          <i class="fas fa-search"></i>
-          <span>ابحث</span>
+    <div class="col-12 col-md-8">
+      <div class="search-type-selector d-flex gap-2 justify-content-center mb-3">
+        <button 
+          type="button"
+          class="btn"
+          [class.btn-primary]="searchType === 'fileNumber'"
+          [class.btn-outline-primary]="searchType !== 'fileNumber'"
+          (click)="onSearchTypeChange('fileNumber')">
+          <i class="pi pi-file me-2"></i>
+          رقم الملف
         </button>
-        <input
-          type="text"
-          class="form-control search-input"
-          placeholder="أدخل رقم الملف..."
-          formControlName="fileNumber"
-        />
-      </form>
-      <div *ngIf="!applicant && responseMessage" class="alert alert-warning mt-3" role="alert">
-        {{ responseMessage }}
+        <button 
+          type="button"
+          class="btn"
+          [class.btn-primary]="searchType === 'barcode'"
+          [class.btn-outline-primary]="searchType !== 'barcode'"
+          (click)="onSearchTypeChange('barcode')">
+          <i class="pi pi-qrcode me-2"></i>
+          الباركود
+        </button>
+        <button 
+          type="button"
+          class="btn"
+          [class.btn-primary]="searchType === 'name'"
+          [class.btn-outline-primary]="searchType !== 'name'"
+          (click)="onSearchTypeChange('name')">
+          <i class="pi pi-user me-2"></i>
+          الاسم الثلاثي
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- تفاصيل المنتسب -->
-  <div class="row g-4 mt-4" *ngIf="applicant">
+  <!-- ✅ حقل البحث -->
+  <div class="row justify-content-center mb-3">
+    <div class="col-12 col-md-8">
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-wrapper d-flex gap-2">
+        <input
+          type="text"
+          class="form-control search-input"
+          [placeholder]="searchType === 'fileNumber' ? 'أدخل رقم الملف...' : searchType === 'barcode' ? 'أدخل الباركود أو امسحه...' : 'أدخل الاسم الثلاثي...'"
+          formControlName="searchValue"
+          (keypress)="onKeyPress($event)"
+          autofocus
+        />
+        @if (searchType === 'barcode') {
+          <button 
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="onBarcodeScan()"
+            title="مسح الباركود">
+            <i class="pi pi-camera"></i>
+          </button>
+        }
+        <button type="submit" class="btn btn-primary search-btn" [disabled]="loading">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          } @else {
+            <i class="pi pi-search me-2"></i>
+          }
+          <span>ابحث</span>
+        </button>
+      </form>
+      
+      @if (!applicant && responseMessage) {
+        <div class="alert alert-warning mt-3" role="alert">
+          <i class="pi pi-exclamation-triangle me-2"></i>
+        {{ responseMessage }}
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- ✅ نتائج البحث بالاسم -->
+  @if (showResults && searchResults.length > 0) {
+    <div class="row justify-content-center mb-3">
+      <div class="col-12 col-md-8">
+        <div class="search-results card">
+          <div class="card-header">
+            <h6 class="mb-0">
+              <i class="pi pi-list me-2"></i>
+              نتائج البحث ({{ searchResults.length }})
+            </h6>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush">
+              @for (result of searchResults; track result.applicantID) {
+                <li class="list-group-item list-group-item-action" (click)="selectApplicant(result)" style="cursor: pointer;">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <strong>{{ result.fullName }}</strong>
+                      <br>
+                      <small class="text-muted">
+                        رقم الملف: {{ result.fileNumber }}
+                        @if (result.queueNumber) {
+                          | رقم الدور: {{ result.queueNumber }}
+                        }
+                        @if (result.motherName) {
+                          | اسم الأم: {{ result.motherName }}
+                        }
+                        @if (result.bloodType) {
+                          | زمرة الدم: <span class="badge bg-info text-white">{{ result.bloodType }}</span>
+                        }
+                      </small>
+                    </div>
+                    <i class="pi pi-arrow-left"></i>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- تفاصيل المنتسب - تظهر عند الجميع ما عدا المشرف والديوان -->
+  @if (applicant && !hideApplicantDetails) {
+    <div class="row g-4 mt-4">
     <div class="col-12">
       <div class="card applicant-card shadow-lg border-0">
         <div class="card-header  text-white">
@@ -38,6 +136,31 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <strong>الاسم:</strong> <span>{{ applicant.fullName }}</span>
                 </li>
+                @if (applicant.motherName) {
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>اسم الأم:</strong> <span>{{ applicant.motherName }}</span>
+                  </li>
+                }
+                @if (applicant.dateOfBirth) {
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>تاريخ المواليد:</strong> <span>{{ applicant.dateOfBirth | gregorianDate:'yyyy/MM/dd' }}</span>
+                  </li>
+                }
+                @if (applicant.bloodType) {
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>زمرة الدم:</strong> <span class="badge bg-info text-white">{{ applicant.bloodType }}</span>
+                  </li>
+                }
+                @if (applicant.recruitmentCenter) {
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>مركز التجنيد:</strong> <span>{{ applicant.recruitmentCenter }}</span>
+                  </li>
+                }
+                @if (applicant.queueNumber) {
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>رقم الدور:</strong> <span class="badge bg-secondary text-white">{{ applicant.queueNumber }}</span>
+                  </li>
+                }
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <strong>العمل:</strong> <span>{{ applicant.job }}</span>
                 </li>
@@ -78,4 +201,40 @@
       </div>
     </div>
   </div>
+  }
+
+  <!-- ✅ Dialog لمسح الباركود -->
+  <p-dialog
+    [(visible)]="showBarcodeScanner"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '90vw', maxWidth: '500px' }"
+    [header]="'مسح الباركود'"
+    (onHide)="onCloseScanner()"
+    styleClass="barcode-scanner-dialog">
+    <div class="scanner-wrapper">
+      <div #scannerContainer id="barcode-scanner" class="scanner-container"></div>
+      @if (scanning) {
+        <div class="scanner-overlay">
+          <div class="scanner-instructions">
+            <i class="pi pi-camera" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+            <p class="mb-2">ضع الباركود داخل الإطار</p>
+            <small class="text-muted">سيتم البحث تلقائياً عند قراءة الباركود</small>
+          </div>
+        </div>
+      }
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="d-flex justify-content-end gap-2">
+        <p-button
+          label="إلغاء"
+          icon="pi pi-times"
+          severity="secondary"
+          (onClick)="onCloseScanner()">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

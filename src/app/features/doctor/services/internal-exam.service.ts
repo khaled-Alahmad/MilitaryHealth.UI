@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, catchError, map, of, shareReplay } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { InternalExam } from '../models/internal-exam.model';
 import { Consultation } from '../models/consultation.model';
@@ -31,8 +31,18 @@ export class InternalExamService {
     });
   }
 
+  // ✅ Cache للنتائج لتجنب الطلبات المكررة
+  private resultsCache$?: Observable<any>;
+
   getResults(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/api/Results`, { headers: this.getAuthHeaders() });
+    if (!this.resultsCache$) {
+      this.resultsCache$ = this.http.get(`${environment.apiUrl}/api/Results`, { 
+        headers: this.getAuthHeaders() 
+      }).pipe(
+        shareReplay(1) // ✅ مشاركة النتيجة مع جميع المشتركين
+      );
+    }
+    return this.resultsCache$;
   }
 
   // 🔹 جلب الفحوص الداخلية المؤجلة فقط
@@ -190,6 +200,58 @@ export class InternalExamService {
   //     .pipe(map(res => res.data));
   // }
 
+  // ✅ جلب التحاليل الخاصة بالعيادة الداخلية
+  getInternalInvestigations(
+    page: number = 1,
+    pageSize: number = 50,
+    filter: string = ''
+  ): Observable<PagedResponse<Investigation>> {
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortBy', 'investigationID') // ✅ ترتيب حسب معرف التحليل
+      .set('sortDesc', 'true'); // ✅ ترتيب تنازلي (الأحدث أولاً)
+  
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+
+    // إضافة فلترة حسب التخصص للتحاليل
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
+  
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+        params,
+        headers: this.getAuthHeaders()
+      })
+      .pipe(
+        map(res => {
+          const data = res.data ?? {
+            items: [],
+            totalCount: 0,
+            page,
+            pageSize,
+            totalPages: 0
+          };
+          
+          // ✅ ترتيب إضافي محلياً للتأكد (الأحدث أولاً حسب investigationID)
+          if (data.items && data.items.length > 0) {
+            data.items = data.items.sort((a, b) => {
+              const idA = a.investigationID || 0;
+              const idB = b.investigationID || 0;
+              return idB - idA; // ترتيب تنازلي
+            });
+          }
+          
+          return data;
+        })
+      );
+  }
+
   getOrthopedicInvestigations(
     page: number = 1,
     pageSize: number = 50,
@@ -289,15 +351,32 @@ export class InternalExamService {
   }
   
   getByFileNumber(fileNumber: string): Observable<InternalExam | null> {
-    const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
-    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
+    if (!fileNumber) {
+      return of(null);
+    }
+
+    const currentSpecializationId = this.authService.getSpecializationId();
+    
+    // ✅ استخدام filter في API بدلاً من جلب كل البيانات
+    let params = new HttpParams()
+      .set('page', '1')
+      .set('pageSize', '10') // ✅ تقليل حجم البيانات
+      .set('sortDesc', 'false')
+      .set('filter', fileNumber); // ✅ فلترة حسب رقم الملف
+
+    // ✅ إضافة فلترة حسب التخصص إذا كان متوفراً
+    if (currentSpecializationId) {
+      params = params.set('filterDict[doctor.specializationID]', currentSpecializationId.toString());
+    }
+
+    return this.http.get<ApiResponse<PagedResponse<InternalExam>>>(this.apiUrl, { 
+      headers: this.getAuthHeaders(),
+      params 
+    }).pipe(
       map(res => {
         const items: InternalExam[] = res.data?.items || [];
-        const currentSpecializationId = this.authService.getSpecializationId();
-        // 🔹 نبحث عن فحص لنفس الملف ونفس التخصص
-        const exam = items.find(e =>
-          e.applicantFileNumber === fileNumber && e.doctor?.specializationID === currentSpecializationId
-        );
+        // ✅ البحث عن فحص لنفس الملف (الفلترة الأساسية تمت في API)
+        const exam = items.find(e => e.applicantFileNumber === fileNumber);
         return exam || null;
       }),
       catchError(() => of(null))

@@ -199,19 +199,45 @@ export class EyeExamService {
       });
     }
 
-    const params = new HttpParams()
-      .set('filter', `applicantFileNumber=${fileNumber}`)
-      .set('page', '1')
-      .set('pageSize', '1');
+    // ✅ استخدام طريقة مشابهة للخدمات الأخرى - جلب جميع الفحوصات والبحث محلياً
+    const url = `${this.apiUrl}?sortDesc=false&page=1&pageSize=1000`;
 
-    return this.http.get<ApiResponse<PagedResponse<EyeExam>>>(this.apiUrl, {
-      headers: this.getAuthHeaders(),
-      params
+    return this.http.get<ApiResponse<PagedResponse<EyeExam>>>(url, {
+      headers: this.getAuthHeaders()
     }).pipe(
-      map(response => ({
-        ...response,
-        data: response.data.items?.[0] || null
-      })),
+      map(response => {
+        if (!response.succeeded || !response.data) {
+          return {
+            succeeded: false,
+            status: response.status || 500,
+            message: response.message || 'فشل في جلب الفحوصات',
+            data: null,
+            traceId: response.traceId || ''
+          };
+        }
+
+        const items: EyeExam[] = response.data.items || [];
+        // ✅ البحث عن فحص لنفس رقم الملف
+        const exam = items.find(e => e.applicantFileNumber === fileNumber);
+        
+        if (exam && exam.eyeExamID) {
+          return {
+            succeeded: true,
+            status: 200,
+            message: 'تم العثور على الفحص',
+            data: exam,
+            traceId: response.traceId || ''
+          };
+        } else {
+          return {
+            succeeded: false,
+            status: 404,
+            message: 'لم يتم العثور على فحص عيني لهذا المنتسب',
+            data: null,
+            traceId: response.traceId || ''
+          };
+        }
+      }),
       catchError(error => of({
         succeeded: false,
         status: error.status || 500,
@@ -550,7 +576,8 @@ export class EyeExamService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', 'true');
+      .set('sortBy', 'consultationID') // ✅ ترتيب حسب معرف الاستشارة
+      .set('sortDesc', 'true'); // ✅ ترتيب تنازلي (الأحدث أولاً)
   
     if (filter) {
       params = params.set('filter', filter);
@@ -565,12 +592,25 @@ export class EyeExamService {
       headers: this.getAuthHeaders(),
       params
     }).pipe(
-      map(res => res.data ?? {
+      map(res => {
+        const data = res.data ?? {
         items: [],
         totalCount: 0,
         page,
         pageSize,
         totalPages: 0
+        };
+        
+        // ✅ ترتيب إضافي محلياً للتأكد (الأحدث أولاً حسب consultationID)
+        if (data.items && data.items.length > 0) {
+          data.items = data.items.sort((a, b) => {
+            const idA = a.consultationID || 0;
+            const idB = b.consultationID || 0;
+            return idB - idA; // ترتيب تنازلي
+          });
+        }
+        
+        return data;
       }),
       catchError(() => of({
         items: [],

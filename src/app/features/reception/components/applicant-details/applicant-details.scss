@@ -1,0 +1,293 @@
+.applicant-details-container {
+  min-height: calc(100vh - 60px);
+  background-color: var(--neutral-light);
+  font-family: 'Cairo', sans-serif;
+
+  .page-title {
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: var(--font-size-2xl);
+    margin: 0;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: #B9A779;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+
+    ::ng-deep .p-button {
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      &.p-button-secondary {
+        background: var(--neutral-medium);
+        border-color: var(--neutral-medium);
+        color: white;
+
+        &:hover {
+          background: var(--neutral-dark);
+          border-color: var(--neutral-dark);
+        }
+      }
+
+      &.p-button-success {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+        border-color: var(--primary-dark);
+
+        &:hover {
+          background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
+          border-color: #218838;
+        }
+      }
+    }
+  }
+
+  .details-card {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+
+    ::ng-deep .p-card-header {
+      background: linear-gradient(135deg, #054239 0%, #428177 100%);
+      padding: 0;
+      border-radius: 0;
+
+      .card-header {
+        padding: 2rem;
+        color: white;
+
+        .header-content {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+
+          .applicant-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+
+            i {
+              font-size: 2.5rem;
+              color: #B9A779;
+            }
+          }
+
+          .header-text {
+            flex: 1;
+
+            .applicant-name {
+              font-size: 1.75rem;
+              font-weight: 700;
+              margin: 0 0 0.5rem 0;
+              color: white !important;
+              text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .applicant-file-number {
+              font-size: 1rem;
+              opacity: 0.9;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+
+    ::ng-deep .p-card-body {
+      padding: 2rem;
+    }
+  }
+
+  .info-section {
+    .section-title {
+      color: #054239;
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #e9ecef;
+      display: flex;
+      align-items: center;
+
+      i {
+        color: #B9A779;
+      }
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(5, 66, 57, 0.1);
+          transform: translateY(-2px);
+        }
+
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+
+        .info-label {
+          font-weight: 600;
+          color: #054239;
+          font-size: 0.9rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          &::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: #B9A779;
+            border-radius: 2px;
+          }
+        }
+
+        .info-value {
+          font-size: 1rem;
+          color: #495057;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // Dialog Styles
+  ::ng-deep .p-dialog {
+    .p-dialog-header {
+      background: linear-gradient(135deg, #054239 0%, #428177 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 12px 12px 0 0;
+
+      .p-dialog-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+      }
+
+      .p-dialog-header-icon {
+        color: white;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+
+    .p-dialog-content {
+      padding: 2rem;
+    }
+  }
+
+  .dialog-form {
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .form-label {
+        font-weight: 600;
+        color: #054239;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+
+        i {
+          color: #B9A779;
+          margin-left: 0.25rem;
+        }
+
+        .text-danger {
+          color: #dc3545;
+        }
+      }
+
+      .form-control {
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #054239;
+          box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+        }
+
+        &.p-invalid {
+          border-color: #dc3545;
+        }
+      }
+
+      .p-error {
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .applicant-details-container {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dialog-form {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+

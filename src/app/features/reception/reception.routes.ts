@@ -17,6 +17,13 @@ export const RECEPTION_ROUTES: Routes = [
     canActivate: [authGuard],
     data: { roles: [UserRoles.Receptionist] }
   },
+  {
+    path: 'applicants/details/:fileNumber',
+    loadComponent: () =>
+      import('./components/applicant-details/applicant-details').then(m => m.ApplicantDetailsComponent),
+    canActivate: [authGuard],
+    data: { roles: [UserRoles.Receptionist, UserRoles.Supervisor] }
+  },
     {
     path: 'applicants/:id', 
     loadComponent: () =>

@@ -20,8 +20,9 @@
       <tr>
         <th>رقم الملف</th>
         <th>الطبيب</th>
-          <th> نوع التحليل</th>
-            <th> الحالة</th>
+        <th>نوع التحليل</th>
+        <th>السبب</th>
+        <th>الحالة</th>
                     <th>النتيجة</th>
         <th>الملف المرفق</th>
         <th>إجراءات</th>
@@ -33,9 +34,10 @@
         <td>{{ i.applicantFileNumber || '-' }}</td>
         <td>{{ i.doctor?.fullName || '-' }}</td>
         <td>{{ i.type || '-' }}</td>
+        <td>{{ i.investigationReason || '-' }}</td>
         <td>{{ i.status || '-' }}</td>
            <td>
-          <span >{{ i.result || '-' }}</span>
+          <span>{{ i.result || '-' }}</span>
         </td>
         <td class="text-center">
           @if(i.attachment){
@@ -67,7 +69,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center">لا توجد تحاليل</td>
+        <td colspan="8" class="text-center">لا توجد تحاليل</td>
       </tr>
     </ng-template>
   </p-table>

@@ -12,8 +12,8 @@
       <tr>
         <th>رقم الملف</th>
         <th>نوع التحليل</th>
+        <th>السبب</th>
         <th>النتيجة</th>
-        <th>الطبيب</th>
         <th>الملف المرفق</th>
         <th>إجراءات</th>
       </tr>
@@ -22,8 +22,8 @@
       <tr>
         <td>{{ i.applicantFileNumber }}</td>
         <td>{{ i.type }}</td>
+        <td>{{ i.investigationReason || '-' }}</td>
         <td>{{ i.result }}</td>
-        <td>{{ i.doctor?.fullName }}</td>
         <td class="text-center">
           @if(i.attachment){
             <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"

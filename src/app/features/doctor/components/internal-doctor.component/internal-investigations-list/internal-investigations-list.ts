@@ -38,7 +38,7 @@ export class InternalInvestigationsList implements OnInit {
   loadInvestigations() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.service.getOrthopedicInvestigations(this.page, this.rowsPerPage, filter).subscribe({
+    this.service.getInternalInvestigations(this.page, this.rowsPerPage, filter).subscribe({
       next: res => {
         this.investigations = res.items;
         this.filteredInvestigations = res.items;

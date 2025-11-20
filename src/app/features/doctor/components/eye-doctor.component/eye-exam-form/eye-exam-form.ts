@@ -1,5 +1,5 @@
 // components/eye-doctor/eye-exam-form/eye-exam-form.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Refraction } from '../../../models/refraction.model';
@@ -20,6 +20,7 @@ import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, resolveHealthStatusValue } f
 })
 export class EyeExamForm implements OnInit {
   @Input() applicantFileNumber: string = '';
+  @Output() examAdded = new EventEmitter<void>(); // ✅ إشعار المكون الأب عند إضافة فحص جديد
   examForm!: FormGroup;
   refractionTypes: RefractionType[] = [];
   results: Result[] = [];
@@ -54,7 +55,9 @@ export class EyeExamForm implements OnInit {
       colorTestOther: [''],
       colorTestLeft: ['سليم', Validators.required],
       colorTestLeftOther: [''],
-      refractiveError: ['', Validators.required],
+      refractiveError: [''], // حقل قديم - للتوافق مع البيانات القديمة
+      worstRefractionRight: ['', Validators.required], // أسوأ انكسار العين اليمنى
+      worstRefractionLeft: ['', Validators.required], // أسوأ انكسار العين اليسرى
       otherDiseases: [''],
       resultID: [null, Validators.required],
       reason: [''],
@@ -78,7 +81,6 @@ export class EyeExamForm implements OnInit {
       },
       error: (error) => {
         this.toastr.error('❌ حدث خطأ أثناء تحميل البيانات', 'خطأ');
-        console.error('Error loading data:', error);
       }
     });
   }
@@ -206,7 +208,9 @@ private buildExamData(doctorID: number) {
         this.examForm.value.colorTest,
         this.examForm.value.colorTestOther
       ).trim(),
-    refractiveError: this.examForm.value.refractiveError?.trim() || "",
+    refractiveError: this.examForm.value.refractiveError?.trim() || "", // للتوافق مع البيانات القديمة
+    worstRefractionRight: this.examForm.value.worstRefractionRight?.trim() || "",
+    worstRefractionLeft: this.examForm.value.worstRefractionLeft?.trim() || "",
     otherDiseases: (this.examForm.value.otherDiseases || '').trim(),
     resultID: Number(this.examForm.value.resultID) || 0,
     reason: (this.examForm.value.reason || '').trim()
@@ -227,6 +231,10 @@ private buildExamData(doctorID: number) {
     if (newRefractions.length === 0) {
       this.toastr.success(isUpdate ? '✅ تم تحديث الفحص بنجاح' : '✅ تمت إضافة الفحص بنجاح');
       this.resetForm();
+      // ✅ إشعار المكون الأب عند إضافة فحص جديد (وليس تحديث)
+      if (!isUpdate) {
+        this.examAdded.emit();
+      }
       return;
     }
 
@@ -237,6 +245,10 @@ private buildExamData(doctorID: number) {
           this.toastr.error(`❌ فشل في إضافة ${failed.length} انكسار`, 'خطأ');
         } else {
           this.toastr.success(isUpdate ? '✅ تم تحديث الفحص والانكسارات بنجاح' : '✅ تمت إضافة الفحص والانكسارات بنجاح');
+          // ✅ إشعار المكون الأب عند إضافة فحص جديد (وليس تحديث)
+          if (!isUpdate) {
+            this.examAdded.emit();
+          }
         }
         this.resetForm();
       },
@@ -269,6 +281,8 @@ private buildExamData(doctorID: number) {
       colorTestLeft: 'سليم',
       colorTestLeftOther: '',
       refractiveError: '',
+      worstRefractionRight: '',
+      worstRefractionLeft: '',
       otherDiseases: '',
       resultID: null,
       reason: ''

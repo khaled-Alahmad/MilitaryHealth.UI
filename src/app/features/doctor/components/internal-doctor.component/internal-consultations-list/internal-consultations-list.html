@@ -16,7 +16,7 @@
       <tr>
         <th>رقم ملف المريض</th>
         <th>نوع الاستشارة</th>
-        <th>الطبيب المحال إليه</th>
+        <th>سبب الإحالة</th>
         <th>النتيجة</th>
         <th>اسم الطبيب</th>
         <th>الملف المرفق</th>
@@ -27,7 +27,7 @@
       <tr>
         <td>{{ c.applicantFileNumber || '-' }}</td>
         <td>{{ c.consultationType || '-' }}</td>
-        <td>{{ c.referredDoctor || '-' }}</td>
+        <td>{{ c.referralReason || '-' }}</td>
         <td>
           <span [ngClass]="{
             'badge bg-success': c.result === 'مقبول',

@@ -52,21 +52,16 @@
 
           <div class="form-field">
             <label>
-              <i class="pi pi-user"></i>
-              الطبيب المُحال إليه
-              <span class="required">*</span>
+              <i class="pi pi-info-circle"></i>
+              سبب الإحالة
             </label>
-            <input 
+            <textarea 
               type="text" 
               class="form-control" 
-              formControlName="referredDoctor" 
-              placeholder="أدخل اسم الطبيب المُحال إليه"
-              [class.is-invalid]="consultationForm.get('referredDoctor')?.invalid && consultationForm.get('referredDoctor')?.touched">
-            @if (consultationForm.get('referredDoctor')?.invalid && consultationForm.get('referredDoctor')?.touched) {
-              <div class="error-message">
-                اسم الطبيب مطلوب
-              </div>
-            }
+              formControlName="referralReason" 
+              placeholder="أدخل سبب الإحالة (اختياري)"
+              rows="3">
+            </textarea>
           </div>
         </div>
       </div>
