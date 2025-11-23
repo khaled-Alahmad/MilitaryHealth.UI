@@ -521,6 +521,39 @@ html[dir="rtl"] .field {
   @page {
     size: A4;
     margin: 15mm 10mm;
+    // إزالة الفوتر والهيدر من الطباعة بشكل كامل
+    @top-center {
+      content: "" !important;
+    }
+    @top-left {
+      content: "" !important;
+    }
+    @top-right {
+      content: "" !important;
+    }
+    @bottom-center {
+      content: "" !important;
+    }
+    @bottom-left {
+      content: "" !important;
+    }
+    @bottom-right {
+      content: "" !important;
+    }
+  }
+  
+  // إخفاء أي عناصر footer أو header قد تظهر في الطباعة
+  footer,
+  .footer,
+  app-footer,
+  .layout-footer,
+  .page-footer,
+  .print-footer,
+  header:not(.print-banner),
+  .header:not(.print-banner),
+  .report-header {
+    display: none !important;
+    visibility: hidden !important;
   }
   .only-print {
     display: block;

@@ -114,7 +114,20 @@ export class ApplicantProfile implements OnInit, OnDestroy {
   }
 
   printProfile() {
+    // حفظ العنوان الأصلي
+    const originalTitle = document.title;
+    // إزالة العنوان قبل الطباعة لتجنب طباعته في الهيدر
+    document.title = '';
+    
+    // إزالة أي معلومات من URL
+    const originalUrl = window.location.href;
+    
     window.print();
+    
+    // استعادة العنوان بعد الطباعة
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 100);
   }
 
   openAttachment(path: string) {
