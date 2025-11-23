@@ -25,7 +25,8 @@ export class ArchiveService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortDesc', false);
+      .set('sortDesc', 'true')
+      .set('sortBy', 'archiveID'); // الترتيب حسب المعرف
 
     if (filter) {
       params = params.set('filter', filter);

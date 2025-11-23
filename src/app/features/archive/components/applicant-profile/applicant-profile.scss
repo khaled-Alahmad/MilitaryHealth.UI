@@ -275,6 +275,20 @@
     font-size: 0.82rem;
   }
 
+  .attachment-clinic {
+    color: #0f172a;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .attachment-diagnosis {
+    color: #475569;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
   .attachment-action {
     display: inline-flex;
     align-items: center;
@@ -298,6 +312,28 @@
   .attachment-preview {
     margin-top: 12px;
     page-break-inside: avoid;
+  }
+
+  .attachment-print-header {
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: #f1f5f9;
+    border-right: 3px solid var(--primary-dark);
+    border-radius: 4px;
+    page-break-inside: avoid;
+  }
+
+  .print-clinic-name {
+    font-size: 0.9rem;
+    color: #0f172a;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .print-diagnosis {
+    font-size: 0.85rem;
+    color: #475569;
+    font-style: italic;
   }
 
   .print-image {
@@ -354,23 +390,80 @@
   }
 
   .note-item {
-    border: 1px dashed rgba(5, 66, 57, 0.3);
     border-radius: 10px;
-    padding: 12px;
-    background: #fbfdfa;
+    padding: 14px 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    &.note-consultation {
+      border: 2px solid rgba(185, 167, 121, 0.4);
+      background: linear-gradient(135deg, rgba(255, 250, 240, 0.9), rgba(255, 245, 230, 0.7));
+      border-right: 4px solid var(--accent-gold);
+      
+      .note-title {
+        color: var(--accent-gold-dark);
+      }
+      
+      .note-icon {
+        color: var(--accent-gold);
+      }
+    }
+    
+    &.note-investigation {
+      border: 2px solid rgba(16, 185, 129, 0.4);
+      background: linear-gradient(135deg, rgba(236, 253, 245, 0.9), rgba(209, 250, 229, 0.7));
+      border-right: 4px solid #10b981;
+      
+      .note-title {
+        color: #065f46;
+      }
+      
+      .note-icon {
+        color: #10b981;
+      }
+    }
+    
+    &.note-other {
+      border: 1px dashed rgba(5, 66, 57, 0.3);
+      background: #fbfdfa;
+      
+      .note-title {
+        color: #054239;
+      }
+      
+      .note-icon {
+        color: #6b7280;
+      }
+    }
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .note-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .note-icon {
+    font-size: 1.1rem;
+    font-weight: 600;
   }
 
   .note-title {
     font-weight: 600;
-    color: #054239;
-    margin-bottom: 6px;
-    display: block;
+    font-size: 0.9rem;
   }
 
   .note-value {
     margin: 0;
     color: #1f2937;
     line-height: 1.6;
+    white-space: pre-line; // لعرض الأسطر بشكل صحيح عند وجود \n
+    font-size: 0.85rem;
   }
 }
 

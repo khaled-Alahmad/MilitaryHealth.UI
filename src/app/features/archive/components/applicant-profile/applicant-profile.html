@@ -78,6 +78,12 @@
             <div class="attachment-info">
               <span class="attachment-source">{{ attachment.source }}</span>
               <span class="attachment-label">{{ attachment.label }}</span>
+              <span class="attachment-clinic" *ngIf="attachment.clinicName">
+                <strong>العيادة:</strong> {{ attachment.clinicName }}
+              </span>
+              <span class="attachment-diagnosis" *ngIf="attachment.diagnosis">
+                <strong>التشخيص / النتيجة:</strong> {{ attachment.diagnosis }}
+              </span>
             </div>
             <button class="attachment-action no-print" type="button" (click)="openAttachment(attachment.path)">
               <i class="pi pi-external-link"></i>
@@ -87,16 +93,40 @@
           
           <!-- عرض الصور مباشرة عند الطباعة -->
           <div class="attachment-preview only-print" *ngIf="getFileType(attachment.path) === 'image'">
+            <div class="attachment-print-header" *ngIf="attachment.clinicName || attachment.diagnosis">
+              <div *ngIf="attachment.clinicName" class="print-clinic-name">
+                <strong>المرفقات على {{ attachment.clinicName }}:</strong>
+              </div>
+              <div *ngIf="attachment.diagnosis" class="print-diagnosis">
+                <strong>النتيجة :</strong> {{ attachment.diagnosis }}
+              </div>
+            </div>
             <img [src]="getAttachmentUrl(attachment.path)" [alt]="attachment.label" class="print-image" />
           </div>
           
           <!-- عرض PDFs عند الطباعة -->
           <div class="attachment-preview only-print" *ngIf="getFileType(attachment.path) === 'pdf'">
+            <div class="attachment-print-header" *ngIf="attachment.clinicName || attachment.diagnosis">
+              <div *ngIf="attachment.clinicName" class="print-clinic-name">
+                <strong>المرفقات على {{ attachment.clinicName }}:</strong>
+              </div>
+              <div *ngIf="attachment.diagnosis" class="print-diagnosis">
+                <strong>النتيجة:</strong> {{ attachment.diagnosis }}
+              </div>
+            </div>
             <iframe [src]="getAttachmentUrl(attachment.path)" class="print-pdf" frameborder="0"></iframe>
           </div>
           
           <!-- للملفات الأخرى، عرض المسار فقط عند الطباعة -->
           <div class="attachment-path only-print" *ngIf="getFileType(attachment.path) === 'other'">
+            <div class="attachment-print-header" *ngIf="attachment.clinicName || attachment.diagnosis">
+              <div *ngIf="attachment.clinicName" class="print-clinic-name">
+                <strong>المرفقات على {{ attachment.clinicName }}:</strong>
+              </div>
+              <div *ngIf="attachment.diagnosis" class="print-diagnosis">
+                <strong>التشخيص:</strong> {{ attachment.diagnosis }}
+              </div>
+            </div>
             <strong>مسار الملف:</strong> {{ attachment.path }}
           </div>
         </div>
@@ -291,10 +321,20 @@
     </section>
 
     <section class="card avoid-break notes-card" *ngIf="notes.length">
-      <h5 class="card-title">ملاحظات وتوصيات</h5>
+      <h5 class="card-title">الملاحظات والتوصيات</h5>
       <div class="card-body notes-grid">
-        <div class="note-item" *ngFor="let note of notes">
-          <span class="note-title">{{ note.title }}</span>
+        <div class="note-item" 
+             [class.note-consultation]="note.type === 'consultation'"
+             [class.note-investigation]="note.type === 'investigation'"
+             [class.note-other]="note.type === 'other' || !note.type"
+             *ngFor="let note of notes">
+          <div class="note-header">
+            <i class="note-icon" 
+               [class.pi-comments]="note.type === 'consultation'"
+               [class.pi-flask]="note.type === 'investigation'"
+               [class.pi-info-circle]="note.type === 'other' || !note.type"></i>
+            <span class="note-title">{{ note.title }}</span>
+          </div>
           <p class="note-value">{{ note.value }}</p>
         </div>
       </div>

@@ -50,7 +50,13 @@ archives: ArchiveModel[] = [];
     this.archiveService.getArchives$(this.page, this.rowsPerPage, this.globalFilter)
       .subscribe({
         next: (res: PagedResponse<ArchiveModel>) => {
-          this.archives = res.items;
+          // ترتيب البيانات حسب المعرف (archiveID) تنازلياً - الأحدث أولاً
+          // نسخ المصفوفة وترتيبها حسب archiveID تنازلياً (الأكبر = الأحدث)
+          const sortedItems = [...res.items].sort((a, b) => {
+            // الترتيب الأساسي حسب archiveID تنازلياً (الأكبر = الأحدث)
+            return b.archiveID - a.archiveID;
+          });
+          this.archives = sortedItems;
           this.totalRecords = res.totalCount;
           this.loading = false;
         },
