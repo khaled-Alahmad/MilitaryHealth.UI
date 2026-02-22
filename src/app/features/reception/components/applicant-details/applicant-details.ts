@@ -16,7 +16,6 @@ import { ApplicantDetailsModel, ApplicantModel } from '../../models/applicant.mo
 import { ApplicantService } from '../../services/applicant.service';
 import { MaritalStatusService } from '../../services/marital-status.service';
 import { MaritalStatus } from '../../models/marital-status.model';
-import { EditApplicantDialogComponent } from '../edit-applicant-dialog/edit-applicant-dialog';
 import { BarcodePrintService } from '../../services/barcode-print.service';
 
 @Component({
@@ -28,8 +27,7 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
     CardModule,
     ButtonModule,
     ToastModule,
-    TagModule,
-    EditApplicantDialogComponent
+    TagModule
   ],
   templateUrl: './applicant-details.html',
   styleUrl: './applicant-details.scss',
@@ -38,7 +36,6 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
 export class ApplicantDetailsComponent implements OnInit {
   applicant: ApplicantDetailsModel | null = null;
   loading = false;
-  editDialogVisible = false;
   fileNumber: string = '';
   maritalStatuses: MaritalStatus[] = [];
 
@@ -88,17 +85,21 @@ export class ApplicantDetailsComponent implements OnInit {
     });
   }
 
-  openEditDialog(): void {
-    this.editDialogVisible = true;
+  editApplicant(): void {
+    if (!this.applicant?.applicantID) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'تنبيه',
+        detail: 'لا يمكن تعديل هذا المنتسب - معرف غير متوفر'
+      });
+      return;
+    }
+    this.router.navigate(['reception', 'applicants', this.applicant.applicantID]);
   }
 
   getMaritalStatusDescription(maritalStatusID: number): string {
     const status = this.maritalStatuses.find(s => s.maritalStatusID === maritalStatusID);
     return status?.description || '';
-  }
-
-  onEditSave(): void {
-    this.loadApplicant(this.fileNumber); // إعادة تحميل البيانات
   }
 
   goBack(): void {

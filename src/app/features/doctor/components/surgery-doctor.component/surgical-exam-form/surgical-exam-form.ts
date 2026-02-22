@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { SurgicalExam } from '../../../models/surgical-exam-post.model';
@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SurgicalExamForm implements OnInit {
  @Input() applicantFileNumber: string = '';
+ @Output() examAdded = new EventEmitter<void>();
   examForm!: FormGroup;
   results: any[] = [];
   loading: boolean = false;
@@ -97,6 +98,7 @@ export class SurgicalExamForm implements OnInit {
         this.examForm.reset();
         this.loading = false;
         this.closeModal();
+        this.examAdded.emit();
       },
       error: (err: any) => {
         this.loading = false;

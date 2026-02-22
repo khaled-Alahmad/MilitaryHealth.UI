@@ -18,14 +18,9 @@
           <div class="col-md-6">
             <label class="form-label">R: <span class="text-danger">*</span></label>
             <div class="input-group">
-              <input
-                type="number"
-                class="form-control"
-                formControlName="vision"
-                placeholder="أدخل الرقم"
+              <input type="number" class="form-control" formControlName="vision" placeholder="أدخل الرقم"
                 [class.is-invalid]="examForm.get('vision')?.invalid && examForm.get('vision')?.touched"
-                [class.is-valid]="isFieldValid('vision')"
-              />
+                [class.is-valid]="isFieldValid('vision')" />
               <span class="input-group-text">/10</span>
             </div>
             <div class="invalid-feedback d-block" *ngIf="getErrorMessage('vision')">
@@ -36,14 +31,9 @@
           <div class="col-md-6">
             <label class="form-label">L: <span class="text-danger">*</span></label>
             <div class="input-group">
-              <input
-                type="number"
-                class="form-control"
-                formControlName="visionLeft"
-                placeholder="أدخل الرقم"
+              <input type="number" class="form-control" formControlName="visionLeft" placeholder="أدخل الرقم"
                 [class.is-invalid]="examForm.get('visionLeft')?.invalid && examForm.get('visionLeft')?.touched"
-                [class.is-valid]="isFieldValid('visionLeft')"
-              />
+                [class.is-valid]="isFieldValid('visionLeft')" />
               <span class="input-group-text">/10</span>
             </div>
             <div class="invalid-feedback d-block" *ngIf="getErrorMessage('visionLeft')">
@@ -59,11 +49,7 @@
             <div class="d-flex flex-wrap gap-3">
               @for (option of healthStatusOptions; track option.value; let i = $index) {
               <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  formControlName="colorTest"
-                  [id]="'colorTest_' + i"
+                <input class="form-check-input" type="radio" formControlName="colorTest" [id]="'colorTest_' + i"
                   [value]="option.value" />
                 <label class="form-check-label" [for]="'colorTest_' + i">{{ option.label }}</label>
               </div>
@@ -71,11 +57,7 @@
             </div>
             @if (examForm.get('colorTest')?.value === otherOptionValue) {
             <div class="mt-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="colorTestOther"
-                placeholder="أدخل التفاصيل" />
+              <input type="text" class="form-control" formControlName="colorTestOther" placeholder="أدخل التفاصيل" />
             </div>
             }
           </div>
@@ -85,11 +67,7 @@
             <div class="d-flex flex-wrap gap-3">
               @for (option of healthStatusOptions; track option.value; let i = $index) {
               <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  formControlName="colorTestLeft"
-                  [id]="'colorTestLeft_' + i"
+                <input class="form-check-input" type="radio" formControlName="colorTestLeft" [id]="'colorTestLeft_' + i"
                   [value]="option.value" />
                 <label class="form-check-label" [for]="'colorTestLeft_' + i">{{ option.label }}</label>
               </div>
@@ -97,10 +75,7 @@
             </div>
             @if (examForm.get('colorTestLeft')?.value === otherOptionValue) {
             <div class="mt-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="colorTestLeftOther"
+              <input type="text" class="form-control" formControlName="colorTestLeftOther"
                 placeholder="أدخل التفاصيل" />
             </div>
             }
@@ -113,13 +88,13 @@
             <label class="form-label mb-2">R: أسوأ الانكسار <span class="text-danger">*</span></label>
             <div class="ms-3">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+                <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
                   id="worstRefractionRightNotImportant" value="غير مهمة"
                   [class.is-invalid]="examForm.get('worstRefractionRight')?.invalid && examForm.get('worstRefractionRight')?.touched" />
                 <label class="form-check-label" for="worstRefractionRightNotImportant">غير مهمة</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+                <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
                   id="worstRefractionRightImportant" value="مهمة"
                   [class.is-invalid]="examForm.get('worstRefractionRight')?.invalid && examForm.get('worstRefractionRight')?.touched" />
                 <label class="form-check-label" for="worstRefractionRightImportant">مهمة</label>
@@ -133,13 +108,13 @@
             <label class="form-label mb-2">L: أسوأ الانكسار <span class="text-danger">*</span></label>
             <div class="ms-3">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+                <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
                   id="worstRefractionLeftNotImportant" value="غير مهمة"
                   [class.is-invalid]="examForm.get('worstRefractionLeft')?.invalid && examForm.get('worstRefractionLeft')?.touched" />
                 <label class="form-check-label" for="worstRefractionLeftNotImportant">غير مهمة</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+                <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
                   id="worstRefractionLeftImportant" value="مهمة"
                   [class.is-invalid]="examForm.get('worstRefractionLeft')?.invalid && examForm.get('worstRefractionLeft')?.touched" />
                 <label class="form-check-label" for="worstRefractionLeftImportant">مهمة</label>
@@ -161,26 +136,17 @@
             <div class="mb-3" formArrayName="refractions">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="mb-0">الانكسارات</h6>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-primary"
-                  (click)="addRefraction('rightEye')"
-                >
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addRefraction('rightEye')">
                   <i class="pi pi-plus"></i> إضافة انكسار
                 </button>
               </div>
 
               @for (refraction of getRefractions('rightEye').controls; track i; let i = $index) {
-              <div
-                class="card mb-3"
-                [formGroupName]="i"
-              >
+              <div class="card mb-3" [formGroupName]="i">
                 <div class="card-body">
                   <div class="row g-3">
                     <div class="col-md-5">
-                      <label class="form-label"
-                        >نوع الانكسار <span class="text-danger">*</span></label
-                      >
+                      <label class="form-label">نوع الانكسار <span class="text-danger">*</span></label>
                       <select class="form-select" formControlName="refractionTypeID">
                         @for (type of refractionTypes; track type.refractionTypeID) {
                         <option [value]="type.refractionTypeID">
@@ -191,18 +157,12 @@
                     </div>
 
                     <div class="col-md-5">
-                      <label class="form-label"
-                        >نسبة الانكسار <span class="text-danger">*</span></label
-                      >
+                      <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
                       <input type="number" class="form-control" formControlName="refractionValue" />
                     </div>
 
                     <div class="col-md-2">
-                      <button
-                        type="button"
-                        class="btn btn-danger mt-4"
-                        (click)="removeRefraction('rightEye', i)"
-                      >
+                      <button type="button" class="btn btn-danger mt-4" (click)="removeRefraction('rightEye', i)">
                         <i class="pi pi-trash"></i>
                       </button>
                     </div>
@@ -237,26 +197,17 @@
             <div class="mb-3" formArrayName="refractions">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="mb-0">الانكسارات</h6>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-primary"
-                  (click)="addRefraction('leftEye')"
-                >
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addRefraction('leftEye')">
                   <i class="pi pi-plus"></i> إضافة انكسار
                 </button>
               </div>
 
               @for (refraction of getRefractions('leftEye').controls; track i; let i = $index) {
-              <div
-                class="card mb-3"
-                [formGroupName]="i"
-              >
+              <div class="card mb-3" [formGroupName]="i">
                 <div class="card-body">
                   <div class="row g-3">
                     <div class="col-md-5">
-                      <label class="form-label"
-                        >نوع الانكسار <span class="text-danger">*</span></label
-                      >
+                      <label class="form-label">نوع الانكسار <span class="text-danger">*</span></label>
                       <select class="form-select" formControlName="refractionTypeID">
                         @for (type of refractionTypes; track type.refractionTypeID) {
                         <option [value]="type.refractionTypeID">
@@ -267,18 +218,12 @@
                     </div>
 
                     <div class="col-md-5">
-                      <label class="form-label"
-                        >نسبة الانكسار <span class="text-danger">*</span></label
-                      >
+                      <label class="form-label">نسبة الانكسار <span class="text-danger">*</span></label>
                       <input type="number" class="form-control" formControlName="refractionValue" />
                     </div>
 
                     <div class="col-md-2">
-                      <button
-                        type="button"
-                        class="btn btn-danger mt-4"
-                        (click)="removeRefraction('leftEye', i)"
-                      >
+                      <button type="button" class="btn btn-danger mt-4" (click)="removeRefraction('leftEye', i)">
                         <i class="pi pi-trash"></i>
                       </button>
                     </div>
@@ -308,14 +253,9 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label mb-2">النتيجة <span class="text-danger">*</span></label>
-            <select
-              class="form-select"
-              formControlName="resultID"
-              [class.is-invalid]="
+            <select class="form-select" formControlName="resultID" [class.is-invalid]="
                 examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched
-              "
-              [class.is-valid]="isFieldValid('resultID')"
-            >
+              " [class.is-valid]="isFieldValid('resultID')">
               @for (r of results; track r.resultID) {
               <option [value]="r.resultID">
                 {{ r.description }}
@@ -342,14 +282,9 @@
       <button type="button" class="btn btn-secondary" (click)="closeModal()">
         <i class="pi pi-times me-2"></i> إلغاء
       </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="onSubmit()"
-        [disabled]="examForm.invalid || loading"
-      >
+      <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="examForm.invalid || loading">
         @if (loading) {
-          <span class="spinner-border spinner-border-sm me-2"></span>
+        <span class="spinner-border spinner-border-sm me-2"></span>
         }
         <i class="pi pi-save me-2"></i> حفظ فحص العيون
       </button>

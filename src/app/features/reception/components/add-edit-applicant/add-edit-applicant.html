@@ -6,16 +6,28 @@
         <i class="pi pi-user-plus"></i>
       </div>
       <div class="header-text">
-        <h2 class="form-title" style="color: white !important;">إضافة منتسب جديد</h2>
-        <p class="form-subtitle">أدخل البيانات الشخصية والطبية للمنتسب</p>
+        <h2 class="form-title" style="color: white !important;">
+          @if (!applicantId) {
+          إضافة منتسب جديد
+          } @else {
+          تعديل بيانات المنتسب
+          }
+        </h2>
+        <p class="form-subtitle">
+          @if (!applicantId) {
+          أدخل البيانات الشخصية والطبية للمنتسب الجديد
+          } @else {
+          تحديث البيانات الشخصية والطبية للمنتسب
+          }
+        </p>
       </div>
     </div>
-    
+
     @if(fileNumber) {
-      <div class="file-number-badge">
-        <i class="pi pi-file"></i>
-        <span>رقم الملف: {{ fileNumber }}</span>
-      </div>
+    <div class="file-number-badge">
+      <i class="pi pi-file"></i>
+      <span>رقم الملف: {{ fileNumber }}</span>
+    </div>
     }
   </div>
 
@@ -29,14 +41,14 @@
     </ng-template>
 
     <form [formGroup]="applicantForm" (ngSubmit)="onSubmit()" novalidate>
-      
+
       <!-- Personal Information Section -->
       <div class="form-section">
         <div class="section-header">
           <i class="pi pi-user"></i>
           <h3>البيانات الشخصية</h3>
         </div>
-        
+
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">
@@ -44,15 +56,10 @@
               الاسم الكامل
               <span class="required">*</span>
             </label>
-            <input 
-              pInputText 
-              type="text" 
-              formControlName="fullName"
-              placeholder="أدخل الاسم الكامل"
-              [class.p-invalid]="isControlInvalid('fullName')"
-            />
+            <input pInputText type="text" formControlName="fullName" placeholder="أدخل الاسم الكامل"
+              [class.p-invalid]="isControlInvalid('fullName')" />
             @if (controlHasError('required', 'fullName')) {
-              <small class="p-error">الاسم الكامل مطلوب</small>
+            <small class="p-error">الاسم الكامل مطلوب</small>
             }
           </div>
 
@@ -62,12 +69,7 @@
               <i class="pi pi-user"></i>
               اسم الأم
             </label>
-            <input 
-              pInputText 
-              type="text" 
-              formControlName="motherName"
-              placeholder="أدخل اسم الأم"
-            />
+            <input pInputText type="text" formControlName="motherName" placeholder="أدخل اسم الأم" />
           </div>
 
           <div class="form-group">
@@ -75,15 +77,9 @@
               <i class="pi pi-calendar"></i>
               تاريخ المواليد
             </label>
-            <input 
-              pInputText 
-              type="date" 
-              formControlName="dateOfBirth"
-              placeholder="اختر تاريخ المواليد"
-              [class.p-invalid]="isControlInvalid('dateOfBirth')"
-              class="w-100"
-            />
-            <!-- TODO: استبدال بـ PrimeNG Calendar عند توفر الدعم الكامل في PrimeNG 20 -->
+            <p-datepicker formControlName="dateOfBirth" [showIcon]="true" dateFormat="dd/mm/yy"
+              placeholder="اختر تاريخ المواليد" [minDate]="minDate" [maxDate]="maxDate" [appendTo]="'body'"
+              styleClass="date-picker-rtl"></p-datepicker>
           </div>
 
           <div class="form-group">
@@ -91,12 +87,7 @@
               <i class="pi pi-map-marker"></i>
               مركز التجنيد
             </label>
-            <input 
-              pInputText 
-              type="text" 
-              formControlName="recruitmentCenter"
-              placeholder="أدخل مركز التجنيد"
-            />
+            <input pInputText type="text" formControlName="recruitmentCenter" placeholder="أدخل مركز التجنيد" />
           </div>
 
           <div class="form-group">
@@ -104,9 +95,7 @@
               <i class="pi pi-heart"></i>
               زمرة الدم (فصيلة الدم)
             </label>
-            <select 
-              formControlName="bloodType" 
-              class="form-control">
+            <select formControlName="bloodType" class="form-control">
               <option value="A+">A+</option>
               <option value="A-">A-</option>
               <option value="B+">B+</option>
@@ -124,15 +113,10 @@
               العمل
               <span class="required">*</span>
             </label>
-            <input 
-              pInputText 
-              type="text" 
-              formControlName="job"
-              placeholder="أدخل نوع العمل"
-              [class.p-invalid]="isControlInvalid('job')"
-            />
+            <input pInputText type="text" formControlName="job" placeholder="أدخل نوع العمل"
+              [class.p-invalid]="isControlInvalid('job')" />
             @if (controlHasError('required', 'job')) {
-              <small class="p-error">نوع العمل مطلوب</small>
+            <small class="p-error">نوع العمل مطلوب</small>
             }
           </div>
 
@@ -142,16 +126,14 @@
               الحالة الاجتماعية
               <span class="required">*</span>
             </label>
-            <select 
-              formControlName="maritalStatusID" 
-              class="form-control"
+            <select formControlName="maritalStatusID" class="form-control"
               [class.p-invalid]="isControlInvalid('maritalStatusID')">
               @for (status of maritalStatuses; track status.maritalStatusID) {
-                <option [value]="status.maritalStatusID">{{ status.description }}</option>
+              <option [value]="status.maritalStatusID">{{ status.description }}</option>
               }
             </select>
             @if (controlHasError('required', 'maritalStatusID')) {
-              <small class="p-error">يرجى اختيار الحالة الاجتماعية</small>
+            <small class="p-error">يرجى اختيار الحالة الاجتماعية</small>
             }
           </div>
 
@@ -161,157 +143,161 @@
               كود التجنيد
               <span class="required">*</span>
             </label>
-            <input 
-              pInputText 
-              type="text" 
-              formControlName="associateNumber"
-              placeholder="أدخل كود التجنيد"
-              [class.p-invalid]="isControlInvalid('associateNumber')"
-            />
+            <input pInputText type="text" formControlName="associateNumber" placeholder="أدخل كود التجنيد"
+              [class.p-invalid]="isControlInvalid('associateNumber')" />
             @if (controlHasError('required', 'associateNumber')) {
-              <small class="p-error">كود التجنيد مطلوب</small>
+            <small class="p-error">كود التجنيد مطلوب</small>
             }
           </div>
         </div>
       </div>
 
-      <!-- Medical Information Section - مخفي عند إنشاء منتسب جديد -->
-      @if (applicantId) {
-        <div class="form-section">
-          <div class="section-header">
-            <i class="pi pi-heartbeat"></i>
-            <h3>البيانات الطبية</h3>
-          </div>
-          
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">
-                <i class="pi pi-arrows-v"></i>
-                الطول (سم)
-              </label>
-              <input 
-                pInputText 
-                type="number" 
-                min="0" 
-                step="0.1" 
-                formControlName="height"
-                placeholder="أدخل الطول"
-                (keydown)="preventMinus($event)"
-              />
-            </div>
+      <!-- Medical Information Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-heartbeat"></i>
+          <h3>البيانات الطبية</h3>
+        </div>
 
-            <div class="form-group">
-              <label class="form-label">
-                <i class="pi pi-chart-line"></i>
-                الوزن (كغ)
-              </label>
-              <input 
-                pInputText 
-                type="number" 
-                min="0" 
-                step="0.1" 
-                formControlName="weight"
-                placeholder="أدخل الوزن"
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                <i class="pi pi-calculator"></i>
-                مؤشر كتلة الجسم (BMI)
-              </label>
-              <input 
-                pInputText 
-                type="number" 
-                min="0" 
-                formControlName="bmi"
-                placeholder="أدخل مؤشر كتلة الجسم"
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                <i class="pi pi-heart"></i>
-                ضغط الدم
-              </label>
-              <input 
-                pInputText 
-                type="text" 
-                formControlName="bloodPressure"
-                placeholder="مثال: 120/80"
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                <i class="pi pi-circle"></i>
-                النبض (نبضة/دقيقة)
-              </label>
-              <input 
-                pInputText 
-                type="number" 
-                min="0" 
-                formControlName="pulse"
-                placeholder="أدخل معدل النبض"
-              />
-            </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-arrows-v"></i>
+              الطول (سم)
+            </label>
+            <p-inputNumber formControlName="height" [min]="0" [step]="0.1" placeholder="ادخل الطول"
+              [useGrouping]="false">
+            </p-inputNumber>
           </div>
 
-          <!-- ✅ تحسين شكل checkbox الوشم -->
-          <div class="form-group full-width">
-            <div class="tattoo-checkbox-container">
-              <p-checkbox 
-                formControlName="tattoo" 
-                [binary]="true"
-                inputId="tattooCheck"
-                styleClass="tattoo-checkbox">
-              </p-checkbox>
-              <label for="tattooCheck" class="tattoo-checkbox-label">
-                <i class="pi pi-palette"></i>
-                <span>هل يوجد وشم؟</span>
-              </label>
-            </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-chart-line"></i>
+              الوزن (كغ)
+            </label>
+            <p-inputNumber formControlName="weight" [min]="0" [step]="0.1" placeholder="ادخل الوزن"
+              [useGrouping]="false">
+            </p-inputNumber>
           </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-calculator"></i>
+              مؤشر كتلة الجسم (BMI)
+            </label>
+            <input pInputText type="number" min="0" formControlName="bmi" placeholder="أدخل مؤشر كتلة الجسم" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-heart"></i>
+              ضغط الدم
+            </label>
+            <input pInputText type="text" formControlName="bloodPressure" placeholder="مثال: 120/80" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-circle"></i>
+              النبض (نبضة/دقيقة)
+            </label>
+            <input pInputText type="number" min="0" formControlName="pulse" placeholder="أدخل معدل النبض" />
+          </div>
+        </div>
+
+        <!-- ✅ تحسين قسم الوشم والعلامات المميزة -->
+        <div class="tattoo-section">
+          <div class="section-divider"></div>
+          <h4 class="section-subtitle">
+            <i class="pi pi-palette"></i>
+            علامات التمييز والوشم
+          </h4>
 
           <div class="form-group full-width">
             <label class="form-label">
-              <i class="pi pi-info-circle"></i>
-              العلامات المميزة
+              <i class="pi pi-palette"></i>
+              هل يوجد وشم؟
             </label>
-            <textarea 
-              formControlName="distinctiveMarks" 
-              rows="3"
-              placeholder="أدخل أي علامات مميزة أو ملاحظات مهمة (اختياري)"
-              class="form-control"
-            ></textarea>
+            <div class="tattoo-choice-group" role="group" aria-label="حالة الوشم">
+              <button
+                type="button"
+                class="tattoo-choice"
+                [class.active]="hasTattoo"
+                (click)="setTattooChoice(true)"
+                [attr.aria-pressed]="hasTattoo">
+                <span class="choice-icon success">
+                  <i class="pi pi-check-circle"></i>
+                </span>
+                <div class="choice-text">
+                  <span class="choice-title">يوجد وشم</span>
+                  <small>سجل تفاصيل الوشم مع الموقع</small>
+                </div>
+              </button>
+              <button
+                type="button"
+                class="tattoo-choice"
+                [class.active]="!hasTattoo"
+                (click)="setTattooChoice(false)"
+                [attr.aria-pressed]="!hasTattoo">
+                <span class="choice-icon neutral">
+                  <i class="pi pi-ban"></i>
+                </span>
+                <div class="choice-text">
+                  <span class="choice-title">لا يوجد</span>
+                  <small>تأكيد عدم وجود أي وشم ظاهر</small>
+                </div>
+              </button>
+            </div>
           </div>
+
+          @if (hasTattoo) {
+          <div class="form-group full-width tattoo-details-field">
+            <label class="form-label">
+              <i class="pi pi-pencil"></i>
+              وصف الوشم (اختياري)
+            </label>
+            <textarea formControlName="tattooDescription" rows="2"
+              placeholder="وصف مفصل للوشم - الموقع، الحجم، الألوان، إلخ..." class="form-control"></textarea>
+          </div>
+          }
         </div>
-      }
+
+        <div class="form-group full-width">
+          <label class="form-label">
+            <i class="pi pi-bookmark"></i>
+            العلامات المميزة الأخرى
+          </label>
+          <textarea formControlName="distinctiveMarks" rows="3"
+            placeholder="أدخل أي علامات مميزة أو ملاحظات مهمة (الندوب، الوحمات، إلخ...)"
+            class="form-control"></textarea>
+        </div>
+      </div>
 
       <!-- Action Buttons -->
       <div class="form-actions">
-        <button 
-          type="submit" 
-          class="btn btn-primary btn-lg"
-          [disabled]="loading || applicantForm.invalid">
+        @if (applicantId && fileNumber) {
+        <button type="button" class="btn btn-info btn-lg" (click)="printBarcode()">
+          <i class="pi pi-print me-2"></i>
+          طباعة الباركود
+        </button>
+        }
+
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="loading || applicantForm.invalid">
           <i class="pi pi-save me-2"></i>
           @if (!loading) {
-            حفظ البيانات
+          حفظ البيانات
           } @else {
-            <span class="spinner-border spinner-border-sm me-2"></span>
-            جاري الحفظ...
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          جاري الحفظ...
           }
         </button>
-        
-        <button 
-          type="button" 
-          class="btn btn-secondary btn-lg"
-          (click)="resetForm()">
+
+        <button type="button" class="btn btn-secondary btn-lg" (click)="resetForm()">
           <i class="pi pi-refresh me-2"></i>
           إعادة تعيين
         </button>
       </div>
     </form>
   </p-card>
-  
+
 </div>

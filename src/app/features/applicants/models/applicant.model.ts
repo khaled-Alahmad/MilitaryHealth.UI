@@ -9,17 +9,17 @@ export interface Applicant {
   queueNumber?: number; // ✅ رقم الدور
   maritalStatusID: number;
   job: string;
-  height?: number;
-  weight?: number;
-  bmi?: number;
-  bloodPressure?: string;
-  pulse?: number;
-  tattoo?: boolean;
-  distinctiveMarks?: string;
+  height?: number | null;
+  weight?: number | null;
+  bmi?: number | null;
+  bloodPressure?: string | null;
+  pulse?: number | null;
+  tattoo?: boolean | null;
+  tattooDescription?: string | null;
+  distinctiveMarks?: string | null;
   maritalStatus?: MaritalStatus;
-  hasInternalExam?: boolean;   // ✅ أضفناها
+  hasInternalExam?: boolean; // ✅ أضفناها
 }
-
 
 export interface MaritalStatus {
   maritalStatusID: number;

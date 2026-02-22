@@ -76,4 +76,8 @@ onApplicantSelected(applicant: Applicant) {
     }
     this.investigationForm.openModal();
   }
+
+  onInternalExamAdded() {
+    this.hasInternalExam = true;
+  }
 }

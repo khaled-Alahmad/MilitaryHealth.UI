@@ -8,7 +8,6 @@ import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
-import { EditApplicantDialogComponent } from '../edit-applicant-dialog/edit-applicant-dialog';
 import { BarcodePrintService } from '../../services/barcode-print.service';
 import { MessageService } from 'primeng/api';
 import { ScrollService } from '../../../../shared/services/scroll.service';
@@ -24,7 +23,6 @@ import { ResetFiltersButtonComponent } from '../../../../shared/components/reset
     PaginatorComponent, 
     TagModule, 
     ButtonModule,
-    EditApplicantDialogComponent,
     GregorianDatePipe,
     ResetFiltersButtonComponent
   ],
@@ -43,9 +41,6 @@ export class ApplicantsList implements OnInit,AfterViewInit  {
   loading = false;
   tableHeight = '400px';
   
-  // Edit Dialog
-  editDialogVisible = false;
-  selectedApplicant: ApplicantModel | null = null;
   @ViewChild('table') table?: Table;
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   
@@ -124,13 +119,16 @@ onFilterChange(event: Event) {
     this.router.navigate(['reception/applicants/details', applicant.fileNumber]);
   }
   
-  openEditDialog(applicant: ApplicantModel): void {
-    this.selectedApplicant = applicant;
-    this.editDialogVisible = true;
-  }
-  
-  onEditSave(): void {
-    this.loadApplicants(); // إعادة تحميل القائمة
+  editApplicant(applicant: ApplicantModel): void {
+    if (!applicant?.applicantID) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'تنبيه',
+        detail: 'لا يمكن تعديل هذا المنتسب - معرّف غير متوفر'
+      });
+      return;
+    }
+    this.router.navigate(['reception', 'applicants', applicant.applicantID]);
   }
 
   printApplicant(applicant: ApplicantModel): void {

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+﻿import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
@@ -43,7 +43,7 @@ export class EarDoctorComponent {
       return;
     }
 
-    // التحقق من وجود فحص سابق
+    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ ÙØ­Øµ Ø³Ø§Ø¨Ù‚
     this.earClinicExamService.getByFileNumber(applicant.fileNumber).subscribe({
       next: (exam) => {
         this.hasEarClinicExam = !!(exam && exam.earClinicID); 
@@ -52,27 +52,26 @@ export class EarDoctorComponent {
     });
   }
 
-  onExamSaved() {
-    this.toastr.success('تم حفظ فحص الأذن والأنف والحنجرة بنجاح');
+  onEarExamAdded() {
     this.hasEarClinicExam = true;
   }
 
   onConsultationSaved() {
-    this.toastr.success('تم حفظ الاستشارة بنجاح');
+    this.toastr.success('ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¨Ù†Ø¬Ø§Ø­');
   }
 
   onInvestigationSaved() {
-    this.toastr.success('تم حفظ التحليل بنجاح');
+    this.toastr.success('ØªÙ… Ø­ÙØ¸ Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø¨Ù†Ø¬Ø§Ø­');
   }
 
   resetForms() {
     this.earClinicExamForm?.resetForm();
-    // المكونات المشتركة لا تحتاج resetForm
+    // Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ù…Ø´ØªØ±ÙƒØ© Ù„Ø§ ØªØ­ØªØ§Ø¬ resetForm
   }
 
   addEarClinicExam() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ø±ÙŠØ¶ Ø£ÙˆÙ„Ø§Ù‹');
       return;
     }
     this.earClinicExamForm?.addEarClinicExam();
@@ -80,7 +79,7 @@ export class EarDoctorComponent {
 
   addConsultation() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ø±ÙŠØ¶ Ø£ÙˆÙ„Ø§Ù‹');
       return;
     }
     this.consultationForm?.openModal();
@@ -88,9 +87,10 @@ export class EarDoctorComponent {
 
   addInvestigation() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ø±ÙŠØ¶ Ø£ÙˆÙ„Ø§Ù‹');
       return;
     }
     this.investigationForm?.openModal();
   }
 }
+

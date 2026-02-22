@@ -8,14 +8,14 @@ import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-t
   selector: 'app-root',
   imports: [RouterOutlet, CommonModule, ScrollToTopComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App implements OnInit {
   protected readonly title = signal('MilitaryHealth.UI');
 
   constructor(public loadingService: LoadingService) {}
-  
+
   ngOnInit(): void {
-    document.body.dir = 'rtl'; 
+    document.body.dir = 'rtl';
   }
 }

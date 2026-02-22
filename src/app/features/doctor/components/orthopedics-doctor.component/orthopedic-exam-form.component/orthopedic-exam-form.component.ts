@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class OrthopedicExamFormComponent {
  @Input() applicantFileNumber: string = '';
+ @Output() examAdded = new EventEmitter<void>();
   examForm!: FormGroup;
   results: any[] = [];
   loading: boolean = false;
@@ -93,6 +94,7 @@ export class OrthopedicExamFormComponent {
         this.examForm.reset();
         this.loading = false;
         this.closeModal();
+        this.examAdded.emit();
       },
       error: (err: any) => {
         this.loading = false;

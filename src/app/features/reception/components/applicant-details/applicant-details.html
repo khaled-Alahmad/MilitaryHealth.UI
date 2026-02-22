@@ -26,7 +26,7 @@
           label="تعديل" 
           icon="pi pi-pencil" 
           severity="success"
-          (onClick)="openEditDialog()"
+          (onClick)="editApplicant()"
           [disabled]="!applicant || loading">
         </p-button>
       </div>
@@ -113,6 +113,10 @@
                 </p-tag>
               </span>
             </div>
+            <div class="info-item full-width" *ngIf="applicant.tattooDescription">
+              <span class="info-label">وصف الوشم:</span>
+              <span class="info-value">{{ applicant.tattooDescription }}</span>
+            </div>
             <div class="info-item full-width">
               <span class="info-label">العلامات المميزة:</span>
               <span class="info-value">{{ applicant.distinctiveMarks || '-' }}</span>
@@ -128,13 +132,6 @@
       <p class="mt-3 text-muted">لم يتم العثور على بيانات المنتسب</p>
     </div>
   </div>
-
-  <!-- Edit Dialog -->
-  <app-edit-applicant-dialog
-    [(visible)]="editDialogVisible"
-    [applicant]="applicant"
-    (onSave)="onEditSave()">
-  </app-edit-applicant-dialog>
 
   <p-toast></p-toast>
 </div>

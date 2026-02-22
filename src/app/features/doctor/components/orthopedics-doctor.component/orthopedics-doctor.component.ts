@@ -68,4 +68,8 @@ selectedApplicant: Applicant | null = null;
     }
     this.investigationForm.openModal();
   }
+
+  onOrthopedicExamAdded() {
+    this.hasOrthopedicExam = true;
+  }
 }

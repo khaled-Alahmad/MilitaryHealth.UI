@@ -493,14 +493,14 @@ export class SearchApplicantComponent implements OnInit, OnDestroy {
       this.html5QrCode.start(
         { facingMode: 'environment' }, // استخدام الكاميرا الخلفية
         config,
-        (decodedText) => {
+        (decodedText: string) => {
           // ✅ تم قراءة الباركود بنجاح
           this.onBarcodeScanned(decodedText);
         },
-        (errorMessage) => {
+        (errorMessage: string) => {
           // تجاهل رسائل الخطأ أثناء المسح (NotFound, NotReadable, etc.)
         }
-      ).catch((err) => {
+      ).catch((err: any) => {
         console.error('Error starting scanner:', err);
         let errorMsg = 'فشل في تشغيل الكاميرا';
         if (err && err.toString().includes('Permission')) {
@@ -526,7 +526,7 @@ export class SearchApplicantComponent implements OnInit, OnDestroy {
         this.html5QrCode?.clear();
         this.html5QrCode = null;
         this.scanning = false;
-      }).catch((err) => {
+      }).catch((err: any) => {
         console.error('Error stopping scanner:', err);
         // ✅ إعادة تعيين الحالة حتى لو فشل الإيقاف
         this.html5QrCode = null;

@@ -206,6 +206,7 @@ export class EarClinicExamForm implements OnInit {
           this.resetForm();
           this.showModal = false;
           this.loading = false;
+          this.examAdded.emit();
         },
         error: (error) => {
           this.toastr.error('خطأ في حفظ الفحص');

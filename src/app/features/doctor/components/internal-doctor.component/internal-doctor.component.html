@@ -20,7 +20,8 @@
   <!-- المكونات -->
   <app-internal-exam-form
     *ngIf="selectedApplicant"
-    [applicantFileNumber]="selectedApplicant.fileNumber">
+    [applicantFileNumber]="selectedApplicant.fileNumber"
+    (examAdded)="onInternalExamAdded()">
   </app-internal-exam-form>
 
   <app-consultation-form

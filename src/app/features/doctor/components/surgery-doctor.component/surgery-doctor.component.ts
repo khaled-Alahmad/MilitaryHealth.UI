@@ -66,4 +66,8 @@ selectedApplicant: Applicant | null = null;
     }
     this.investigationForm.openModal();
   }
+
+  onSurgicalExamAdded() {
+    this.hasSurgicalExam = true;
+  }
 }

@@ -1,16 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap, switchMap, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import localAr from '@angular/common/locales/ar';
+import { registerLocaleData } from '@angular/common';
 
 // PrimeNG Components
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
-// import { Calendar } from 'primeng/calendar'; // TODO: PrimeNG 20 Calendar - سيتم إضافته لاحقاً
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TextareaModule } from 'primeng/textarea';
 
 // Models and Services
 import { MaritalStatus } from '../../models/marital-status.model';
@@ -20,23 +29,26 @@ import { ApplicantService } from '../../services/applicant.service';
 import { BarcodePrintService } from '../../services/barcode-print.service';
 import { ApiResponse } from '../../../../shared/models/paged-response.model';
 
+registerLocaleData(localAr);
+
 @Component({
   selector: 'app-add-edit-applicant',
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     CardModule,
     InputTextModule,
-    CheckboxModule,
     ButtonModule,
-    // Calendar // TODO: PrimeNG 20 Calendar
+    DatePickerModule,
+    InputNumberModule,
+    TextareaModule,
   ],
   templateUrl: './add-edit-applicant.html',
-  styleUrl: './add-edit-applicant.scss'
+  styleUrl: './add-edit-applicant.scss',
 })
 export class AddEditApplicant implements OnInit {
-    applicantForm!: FormGroup;
+  applicantForm!: FormGroup;
   maritalStatuses: MaritalStatus[] = [];
   applicantId!: number;
   fileNumber: string = '';
@@ -44,7 +56,8 @@ export class AddEditApplicant implements OnInit {
   loading = false;
   message = '';
   success = false;
-
+  minDate: Date;
+  maxDate: Date = new Date();
   constructor(
     private fb: FormBuilder,
     private maritalStatusService: MaritalStatusService,
@@ -52,40 +65,67 @@ export class AddEditApplicant implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
-    private barcodePrintService: BarcodePrintService
-  ) {}
+    private barcodePrintService: BarcodePrintService,
+    private cdr: ChangeDetectorRef,
+  ) {
+    const today = new Date();
+    this.minDate = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+    this.maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+  }
 
   ngOnInit(): void {
     this.loadForm();
     this.loadMaritalStatuses();
 
-    this.route.paramMap.subscribe(params => {
-  const id = params.get('id');
-  if (id) {
-    this.applicantId = +id;
-    this.loadApplicant(this.applicantId);
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.applicantId = +id;
+        this.loadApplicant(this.applicantId);
+      }
+    });
   }
-});
+
+  private getFormDefaults() {
+    return {
+      fullName: '',
+      motherName: '',
+      dateOfBirth: null as Date | null,
+      recruitmentCenter: '',
+      bloodType: '',
+      maritalStatusID: null as number | null,
+      job: '',
+      height: null as number | null,
+      weight: null as number | null,
+      bmi: null as number | null,
+      bloodPressure: '',
+      pulse: null as number | null,
+      tattoo: false,
+      tattooDescription: '',
+      distinctiveMarks: '',
+      associateNumber: '',
+    };
   }
 
   loadForm() {
+    const defaults = this.getFormDefaults();
     this.applicantForm = this.fb.group({
-      fullName: ['', Validators.required],
-      motherName: [''], // ✅ جديد - اختياري
-      dateOfBirth: [null], // ✅ جديد - اختياري
-      recruitmentCenter: [''], // ✅ جديد - اختياري
-      bloodType: [''], // ✅ جديد - اختياري
-      maritalStatusID: [null, Validators.required],
-      job: ['', Validators.required],
-      // ✅ البيانات الطبية غير مطلوبة
-      height: [null], // تم إزالة Validators.required
-      weight: [null], // تم إزالة Validators.required
-      bmi: [null], // تم إزالة Validators.required
-      bloodPressure: [''], // تم إزالة Validators.required
-      pulse: [null], // تم إزالة Validators.required
-      tattoo: [false], // تم إزالة Validators.required
-      distinctiveMarks: [''], // ✅ تم إزالة Validators.required
-      associateNumber: ['', Validators.required]
+      fullName: [defaults.fullName, Validators.required],
+      motherName: [defaults.motherName],
+      dateOfBirth: [defaults.dateOfBirth],
+      recruitmentCenter: [defaults.recruitmentCenter],
+      bloodType: [defaults.bloodType],
+      maritalStatusID: [defaults.maritalStatusID, Validators.required],
+      job: [defaults.job, Validators.required],
+      height: [defaults.height],
+      weight: [defaults.weight],
+      bmi: [defaults.bmi],
+      bloodPressure: [defaults.bloodPressure],
+      pulse: [defaults.pulse],
+      tattoo: [defaults.tattoo],
+      tattooDescription: [defaults.tattooDescription],
+      distinctiveMarks: [defaults.distinctiveMarks],
+      associateNumber: [defaults.associateNumber, Validators.required],
     });
   }
 
@@ -94,35 +134,54 @@ export class AddEditApplicant implements OnInit {
       next: (data) => (this.maritalStatuses = data),
       error: (err) => {
         this.toastr.error('فشل في تحميل الحالات الاجتماعية', 'خطأ');
-      }
+      },
     });
   }
 
   loadApplicant(id: number) {
     this.applicantService.getApplicantById$(id).subscribe({
       next: (applicant: ApplicantModel) => {
-        this.applicantForm.patchValue(applicant); 
+        const dateOfBirth = this.toDateOnly(applicant.dateOfBirth);
+        this.applicantForm.patchValue({
+          fullName: applicant.fullName ?? '',
+          motherName: applicant.motherName ?? '',
+          dateOfBirth,
+          recruitmentCenter: applicant.recruitmentCenter ?? '',
+          bloodType: applicant.bloodType ?? '',
+          maritalStatusID: applicant.maritalStatusID ?? null,
+          job: applicant.job ?? '',
+          height: applicant.height ?? null,
+          weight: applicant.weight ?? null,
+          bmi: applicant.bmi ?? null,
+          bloodPressure: applicant.bloodPressure ?? '',
+          pulse: applicant.pulse ?? null,
+          tattoo: applicant.tattoo ?? false,
+          tattooDescription: applicant.tattooDescription ?? '',
+          distinctiveMarks: applicant.distinctiveMarks ?? '',
+          associateNumber: applicant.associateNumber ?? '',
+        });
         this.fileNumber = applicant.fileNumber;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.toastr.error('فشل في تحميل بيانات المنتسب', 'خطأ');
-      }
+      },
     });
   }
 
-preventMinus(event: KeyboardEvent) {
-  if (event.key === '-' || event.key === 'e') {
-    event.preventDefault();
+  preventMinus(event: KeyboardEvent) {
+    if (event.key === '-' || event.key === 'e') {
+      event.preventDefault();
+    }
   }
-}
 
-resetForm(showMessage: boolean = true) {
-  this.applicantForm.reset();
-  this.submitted = false;
-  if (showMessage) {
-    this.toastr.info('تم إعادة تعيين النموذج', 'تم');
+  resetForm(showMessage: boolean = true) {
+    this.applicantForm.reset(this.getFormDefaults());
+    this.submitted = false;
+    if (showMessage) {
+      this.toastr.info('تم إعادة تعيين النموذج', 'تم');
+    }
   }
-}
 
   onSubmit() {
     this.submitted = true;
@@ -133,7 +192,7 @@ resetForm(showMessage: boolean = true) {
     }
 
     const formValue = this.applicantForm.getRawValue();
-    
+
     // ✅ تحويل البيانات إلى الأنواع الصحيحة قبل الإرسال
     // ملاحظة: لا نرسل maritalStatus ككائن، فقط maritalStatusID
     const applicantModel: any = {
@@ -142,7 +201,9 @@ resetForm(showMessage: boolean = true) {
       fullName: (formValue.fullName || '').trim(),
       motherName: formValue.motherName ? (formValue.motherName as string).trim() : null,
       dateOfBirth: formValue.dateOfBirth ? new Date(formValue.dateOfBirth).toISOString() : null,
-      recruitmentCenter: formValue.recruitmentCenter ? (formValue.recruitmentCenter as string).trim() : null,
+      recruitmentCenter: formValue.recruitmentCenter
+        ? (formValue.recruitmentCenter as string).trim()
+        : null,
       bloodType: formValue.bloodType ? (formValue.bloodType as string).trim() : null,
       maritalStatusID: Number(formValue.maritalStatusID), // ✅ تحويل إلى رقم
       job: (formValue.job || '').trim(),
@@ -152,25 +213,31 @@ resetForm(showMessage: boolean = true) {
       bloodPressure: formValue.bloodPressure ? (formValue.bloodPressure as string).trim() : null,
       pulse: formValue.pulse ? Number(formValue.pulse) : null,
       tattoo: Boolean(formValue.tattoo) || false,
-      distinctiveMarks: formValue.distinctiveMarks ? (formValue.distinctiveMarks as string).trim() : null,
-      associateNumber: (formValue.associateNumber || '').trim()
+      tattooDescription: formValue.tattooDescription 
+        ? (formValue.tattooDescription as string).trim() 
+        : null, // ✅ وصف الوشم
+      distinctiveMarks: formValue.distinctiveMarks
+        ? (formValue.distinctiveMarks as string).trim()
+        : null,
+      associateNumber: (formValue.associateNumber || '').trim(),
       // ❌ لا نرسل maritalStatus - الـ backend يحتاج فقط maritalStatusID
     };
-    
+
     this.loading = true;
 
     if (!this.applicantId) {
-      this.applicantService.createApplicant(applicantModel as ApplicantModel)
+      this.applicantService
+        .createApplicant(applicantModel as ApplicantModel)
         .pipe(
           // ✅ جلب بيانات المنتسب الكاملة بعد الإنشاء
           switchMap((res: ApiResponse<ApplicantModel>) => {
             this.toastr.success('تمت إضافة منتسب بنجاح', 'نجاح', {
               timeOut: 3000,
-              positionClass: 'toast-top-center'
+              positionClass: 'toast-top-center',
             });
             this.success = true;
             this.loading = false;
-            
+
             // جلب البيانات الكاملة إذا كان applicantID موجوداً
             if (res.data && res.data.applicantID) {
               return this.applicantService.getApplicantById$(res.data.applicantID);
@@ -180,7 +247,6 @@ resetForm(showMessage: boolean = true) {
             }
           }),
           tap(async (fullApplicantData: ApplicantModel) => {
-            
             // ✅ طباعة الباركود تلقائياً بعد إنشاء المنتسب
             if (fullApplicantData) {
               try {
@@ -189,10 +255,10 @@ resetForm(showMessage: boolean = true) {
                 this.toastr.warning('تمت إضافة المنتسب بنجاح، لكن فشلت طباعة الباركود', 'تحذير');
               }
             }
-            
+
             this.resetForm(false); // ✅ إعادة تعيين النموذج بدون رسالة
             // ✅ البقاء في نفس الصفحة لإضافة منتسب جديد
-          })
+          }),
         )
         .subscribe({
           error: (err) => {
@@ -202,12 +268,12 @@ resetForm(showMessage: boolean = true) {
             if (err?.error?.message) {
               errorMsg = err.error.message;
             } else if (err?.error?.errors) {
-              errorMsg = Array.isArray(err.error.errors) 
-                ? err.error.errors.join(', ') 
+              errorMsg = Array.isArray(err.error.errors)
+                ? err.error.errors.join(', ')
                 : err.error.errors;
             }
             this.toastr.error(errorMsg, 'خطأ');
-          }
+          },
         });
     } else {
       this.applicantService.updateApplicant(this.applicantId, applicantModel).subscribe({
@@ -216,7 +282,7 @@ resetForm(showMessage: boolean = true) {
           this.loading = false;
           this.toastr.success('تم تحديث بيانات المنتسب بنجاح', 'نجاح', {
             timeOut: 3000,
-            positionClass: 'toast-top-center'
+            positionClass: 'toast-top-center',
           });
         },
         error: (err) => {
@@ -226,18 +292,47 @@ resetForm(showMessage: boolean = true) {
           if (err?.error?.message) {
             errorMsg = err.error.message;
           } else if (err?.error?.errors) {
-            errorMsg = Array.isArray(err.error.errors) 
-              ? err.error.errors.join(', ') 
+            errorMsg = Array.isArray(err.error.errors)
+              ? err.error.errors.join(', ')
               : err.error.errors;
           }
           this.toastr.error(errorMsg, 'خطأ');
-        }
+        },
       });
     }
   }
 
   get f() {
     return this.applicantForm.controls;
+  }
+
+  get hasTattoo(): boolean {
+    return !!this.applicantForm.get('tattoo')?.value;
+  }
+
+  setTattooChoice(value: boolean): void {
+    const tattooControl = this.applicantForm.get('tattoo');
+    if (!tattooControl) {
+      return;
+    }
+    tattooControl.setValue(value);
+    tattooControl.markAsDirty();
+    tattooControl.markAsTouched();
+    if (!value) {
+      this.applicantForm.get('tattooDescription')?.reset('');
+    }
+  }
+
+  private toDateOnly(value: Date | string | null | undefined): Date | null {
+    if (!value) {
+      return null;
+    }
+    const parsed = typeof value === 'string' ? new Date(value) : new Date(value.getTime());
+    if (isNaN(parsed.getTime())) {
+      return null;
+    }
+
+    return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
   }
 
   isControlValid(controlName: string): boolean {
@@ -258,5 +353,23 @@ resetForm(showMessage: boolean = true) {
   isControlTouched(controlName: string): boolean {
     const control = this.f[controlName];
     return control.dirty || control.touched || this.submitted;
+  }
+
+  printBarcode() {
+    if (this.applicantId && this.fileNumber) {
+      this.applicantService.getApplicantById$(this.applicantId).subscribe({
+        next: (applicant: ApplicantModel) => {
+          try {
+            this.barcodePrintService.printBarcodeReceipt(applicant);
+            this.toastr.success('تمت طباعة الباركود بنجاح', 'نجاح');
+          } catch (error) {
+            this.toastr.error('فشل في طباعة الباركود', 'خطأ');
+          }
+        },
+        error: () => {
+          this.toastr.error('فشل في جلب بيانات المنتسب', 'خطأ');
+        },
+      });
+    }
   }
 }

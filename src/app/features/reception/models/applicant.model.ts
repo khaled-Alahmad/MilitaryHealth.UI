@@ -5,45 +5,47 @@ export interface ApplicantModel{
   applicantID:number;
   fileNumber:string;
   fullName: string;
-  motherName?: string; // ✅ جديد
-  dateOfBirth?: Date | string; // ✅ جديد
-  recruitmentCenter?: string; // ✅ جديد
-  bloodType?: string; // ✅ جديد
-  queueNumber?: number; // ✅ جديد (يتم توليده تلقائياً)
+  motherName?: string;
+  dateOfBirth?: Date | string;
+  recruitmentCenter?: string;
+  bloodType?: string;
+  queueNumber?: number;
   maritalStatusID: number;
   job: string;
-  height: number;
-  weight: number;
-  bmi: number;
-  bloodPressure: string;
-  pulse: number;
-  tattoo: boolean;
-  distinctiveMarks: string;
-  maritalStatus: MaritalStatus;
+  height?: number | null;
+  weight?: number | null;
+  bmi?: number | null;
+  bloodPressure?: string | null;
+  pulse?: number | null;
+  tattoo?: boolean | null;
+  tattooDescription?: string | null;
+  distinctiveMarks?: string | null;
+  maritalStatus?: MaritalStatus;
   associateNumber:string;
-  createdAt?: Date | string; // ✅ تاريخ الإنشاء
+  createdAt?: Date | string;
 }
 export interface ApplicantDetailsModel {
   applicantID: number;
   fileNumber: string;
   fullName: string;
-  motherName?: string; // ✅ جديد
-  dateOfBirth?: Date | string; // ✅ جديد
-  recruitmentCenter?: string; // ✅ جديد
-  bloodType?: string; // ✅ جديد
-  queueNumber?: number; // ✅ جديد
+  motherName?: string;
+  dateOfBirth?: Date | string;
+  recruitmentCenter?: string;
+  bloodType?: string;
+  queueNumber?: number;
   associateNumber?: string;
-  createdAt?: Date | string; // ✅ تاريخ الإضافة
+  createdAt?: Date | string;
   maritalStatusID: number;
-  maritalStatus?: MaritalStatus; // ✅ الحالة الاجتماعية
+  maritalStatus?: MaritalStatus;
   job: string;
-  height: number;
-  weight: number;
-  bmi: number;
-  bloodPressure: string;
-  pulse: number;
-  tattoo: boolean;
-  distinctiveMarks: string;
+  height?: number | null;
+  weight?: number | null;
+  bmi?: number | null;
+  bloodPressure?: string | null;
+  pulse?: number | null;
+  tattoo?: boolean | null;
+  tattooDescription?: string | null;
+  distinctiveMarks?: string | null;
 
   eyeExam?: EyeExam;
   surgicalExam?: SurgicalExam;
@@ -53,7 +55,6 @@ export interface ApplicantDetailsModel {
   consultation?: Consultation;
   investigation?: Investigation;
   finalDecision?: FinalDecision;
-
 }
 
 export interface EyeExam {

@@ -73,7 +73,7 @@
                             icon="pi pi-pencil" 
                             label="" 
                             styleClass="p-button-sm p-button-success"
-                            (onClick)="openEditDialog(applicant)"
+                            (onClick)="editApplicant(applicant)"
                             title="تعديل المنتسب"></p-button>
                         <p-button 
                             icon="pi pi-print" 
@@ -105,10 +105,4 @@
         (pageSizeChange)="onPageSizeChange($event)">
     </app-paginator>
 
-    <!-- Edit Dialog -->
-    <app-edit-applicant-dialog
-        [(visible)]="editDialogVisible"
-        [applicant]="selectedApplicant"
-        (onSave)="onEditSave()">
-    </app-edit-applicant-dialog>
 </div>

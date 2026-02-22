@@ -24,7 +24,8 @@
   <!-- المكونات -->
   <app-surgical-exam-form
     *ngIf="selectedApplicant"
-    [applicantFileNumber]="selectedApplicant.fileNumber">
+    [applicantFileNumber]="selectedApplicant.fileNumber"
+    (examAdded)="onSurgicalExamAdded()">
   </app-surgical-exam-form>
 
   <app-consultation-form

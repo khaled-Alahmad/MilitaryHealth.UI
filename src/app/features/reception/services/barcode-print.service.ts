@@ -142,132 +142,125 @@ export class BarcodePrintService {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إيصال الباركود - ${applicant.fileNumber}</title>
   <style>
-    * {
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      background: #fff;
     }
     
     body {
-      font-family: 'Arial', 'Tahoma', sans-serif;
-      width: 80mm; /* عرض الطابعة الحرارية (80mm = 3.15 inches) */
+      font-family: 'Cairo', 'Segoe UI', 'Tahoma', sans-serif;
+      width: 80mm;
       max-width: 80mm;
-      padding: 8mm 5mm;
-      background: white;
-      font-size: 11px;
-      line-height: 1.5;
       margin: 0 auto;
+      color: #000;
+      line-height: 1.4;
     }
     
-    .receipt {
-      text-align: center;
+    .ticket {
       width: 100%;
+      min-height: 135mm;
+      padding: 9mm 6mm 14mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-inside: avoid;
     }
     
     .header {
-      margin-bottom: 15px;
-      padding-bottom: 10px;
+      text-align: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
       border-bottom: 2px dashed #000;
     }
     
     .header h1 {
       font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #000;
-    }
-    
-    .header p {
-      font-size: 11px;
-      color: #666;
+      font-weight: 700;
+      margin: 0 0 4px 0;
     }
     
     .info-section {
-      margin: 15px 0;
+      margin: 12px 0;
       text-align: right;
-      direction: rtl;
     }
     
     .info-row {
       display: flex;
       justify-content: space-between;
-      margin: 8px 0;
       padding: 5px 0;
-      border-bottom: 1px dotted #ccc;
-    }
-    
-    .info-label {
-      font-weight: bold;
-      color: #333;
+      border-bottom: 1px dotted #bbb;
       font-size: 11px;
     }
     
-    .info-value {
-      color: #000;
-      font-size: 12px;
+    .info-label {
       font-weight: 600;
+      color: #111;
+    }
+    
+    .info-value {
+      font-weight: 700;
+      color: #111;
+      font-size: 12px;
     }
     
     .barcode-section {
-      margin: 20px 0;
       text-align: center;
+      margin: 18px 0;
     }
     
     .barcode-image {
-      width: 120px;
-      height: 120px;
-      margin: 15px auto;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto;
+      padding: 10px;
       border: 2px solid #000;
-      padding: 8px;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     
     .barcode-image img {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
     
     .file-number {
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 5px;
-      letter-spacing: 2px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-top: 8px;
     }
     
     .footer {
-      margin-top: 20px;
+      margin-top: 18px;
       padding-top: 10px;
       border-top: 2px dashed #000;
-      font-size: 10px;
-      color: #666;
+      font-size: 11px;
+      text-align: right;
+      line-height: 1.5;
     }
     
     @media print {
       body {
-        margin: 0;
-        padding: 5mm;
+        width: 80mm;
+        max-width: 80mm;
       }
       
       @page {
         size: 80mm auto;
         margin: 0;
       }
-      
-      .no-print {
-        display: none;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="receipt">
+  <div class="ticket">
     <div class="header">
       <h1>إيصال المنتسب</h1>
-  
     </div>
     
     <div class="info-section">
@@ -295,8 +288,7 @@ export class BarcodePrintService {
     </div>
     
         <div class="footer">
-          <p>تاريخ الطباعة الهجري: ${new Date().toLocaleDateString('ar-SA')}</p>
-          <p>تاريخ الطباعة الميلادي: ${this.getFormattedDate()}</p>
+          <p>تاريخ الميلادي: ${this.getFormattedDate()}</p>
           <p>وقت الطباعة: ${this.getFormattedTime()}</p>
         </div>
 

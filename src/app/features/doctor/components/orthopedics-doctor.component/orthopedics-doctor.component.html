@@ -31,7 +31,8 @@
   <!-- مودال فحص العظام -->
   <app-orthopedic-exam-form
     *ngIf="selectedApplicant"
-    [applicantFileNumber]="selectedApplicant.fileNumber">
+    [applicantFileNumber]="selectedApplicant.fileNumber"
+    (examAdded)="onOrthopedicExamAdded()">
   </app-orthopedic-exam-form>
 
   <!-- مودال الاستشارة -->

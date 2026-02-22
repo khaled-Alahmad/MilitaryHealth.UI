@@ -20,7 +20,8 @@
   <!-- المكونات -->
   <app-ear-clinic-exam-form
     *ngIf="selectedApplicant"
-    [applicantFileNumber]="selectedApplicant.fileNumber">
+    [applicantFileNumber]="selectedApplicant.fileNumber"
+    (examAdded)="onEarExamAdded()">
   </app-ear-clinic-exam-form>
 
   <app-consultation-form

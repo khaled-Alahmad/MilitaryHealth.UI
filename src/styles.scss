@@ -335,27 +335,203 @@ html body p {
   border-radius: var(--radius-md);
 }
 
-::ng-deep .p-datepicker {
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  
-  .p-datepicker-header {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
-    color: white;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding: var(--spacing-md);
+/* DatePicker - Comprehensive Styling */
+::ng-deep {
+  .p-datepicker {
+    .p-datepicker-input {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-md);
+      font-family: var(--font-family-primary);
+      font-size: var(--font-size-sm);
+      color: var(--neutral-dark);
+      transition: all var(--transition-fast);
+
+      &:focus {
+        border-color: var(--primary-medium);
+        box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+        outline: none;
+      }
+
+      &:hover:not(:disabled) {
+        border-color: var(--primary-medium);
+      }
+
+      &.p-invalid {
+        border-color: var(--status-danger);
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(107, 31, 42, 0.1);
+        }
+      }
     }
 
-  .p-datepicker-day.p-highlight {
-    background: var(--primary-dark);
-    color: white;
-  }
-  
-  .p-datepicker-day:not(.p-disabled):hover {
-    background: var(--neutral-light);
+    .p-datepicker-trigger {
+      color: var(--primary-dark);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+
+      &:hover {
+        color: var(--primary-medium);
+      }
+    }
+
+    .p-datepicker-panel {
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: white;
+
+      .p-datepicker-header {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+        color: white;
+        padding: 0.875rem;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+
+        .p-datepicker-title {
+          flex: 1;
+          text-align: center;
+          font-weight: 600;
+          display: flex;
+          justify-content: center;
+          gap: 0.5rem;
+          align-items: center;
+        }
+
+        .p-datepicker-prev,
+        .p-datepicker-next {
+          background: transparent;
+          border: none;
+          color: white;
+          cursor: pointer;
+          padding: 0.25rem 0.5rem;
+          border-radius: var(--radius-sm);
+          transition: all var(--transition-fast);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+
+      .p-datepicker-calendar {
+        padding: 0.75rem;
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+
+          thead {
+            tr {
+              th {
+                padding: 0.5rem;
+                text-align: center;
+                color: var(--primary-dark);
+                background: var(--neutral-light);
+                font-weight: 600;
+                font-size: var(--font-size-xs);
+                border-radius: var(--radius-sm);
+              }
+            }
+          }
+
+          tbody {
+            tr {
+              td {
+                padding: 0.375rem;
+
+                a,
+                span {
+                  display: block;
+                  padding: 0.5rem;
+                  text-align: center;
+                  text-decoration: none;
+                  border-radius: var(--radius-sm);
+                  transition: all var(--transition-fast);
+                  color: var(--neutral-dark);
+                  cursor: pointer;
+
+                  &:hover {
+                    background: rgba(5, 66, 57, 0.1);
+                    color: var(--primary-dark);
+                  }
+                }
+
+                &.p-datepicker-other-month {
+                  a,
+                  span {
+                    color: #ccc;
+                  }
+                }
+
+                &.p-datepicker-today {
+                  a,
+                  span {
+                    background: var(--primary-dark);
+                    color: white;
+                    font-weight: 600;
+                  }
+                }
+
+                &.p-datepicker-selected {
+                  a,
+                  span {
+                    background: var(--primary-medium);
+                    color: white;
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .p-datepicker-buttonbar {
+        padding: 0.75rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+
+        button {
+          padding: 0.5rem 1rem;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          background: white;
+          border-radius: var(--radius-md);
+          cursor: pointer;
+          font-family: var(--font-family-primary);
+          font-weight: 600;
+          color: var(--primary-dark);
+          transition: all var(--transition-fast);
+
+          &:hover {
+            background: var(--neutral-light);
+            border-color: var(--primary-dark);
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
+        }
+      }
+
+      .p-datepicker-weekheader {
+        padding: 0.5rem 0.75rem;
+        text-align: center;
+        color: var(--primary-dark);
+        font-weight: 600;
+        font-size: var(--font-size-xs);
+      }
+    }
   }
 }
+
 
 /* ===========================================
    Professional Dialog Design

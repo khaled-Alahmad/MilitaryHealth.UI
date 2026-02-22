@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { InternalExam } from '../../../models/internal-exam.model';
@@ -21,6 +21,7 @@ interface StatusSection {
 })
 export class InternalExamForm implements OnInit {
   @Input() applicantFileNumber: string = '';
+  @Output() examAdded = new EventEmitter<void>();
   examForm!: FormGroup;
   results: any[] = [];
   showModal = false;
@@ -114,6 +115,7 @@ export class InternalExamForm implements OnInit {
         this.examForm.reset(this.getDefaultFormValues());
         this.closeModal();
         this.loading = false;
+        this.examAdded.emit();
       },
       error: () => {
         this.toastr.error('❌ حدث خطأ أثناء إضافة الفحص', 'خطأ');

@@ -346,11 +346,156 @@ textarea.form-control {
   }
 }
 
+.btn-info {
+  background-color: #0D5B87 !important;
+  border-color: #0D5B87 !important;
+  color: white !important;
+
+  &:hover {
+    background-color: #054A6F !important;
+    border-color: #054A6F !important;
+  }
+}
+
 .p-error {
   color: #6B1F2A !important;
   font-size: 0.75rem !important;
   font-weight: 500 !important;
   margin-top: 0.25rem !important;
+}
+
+/* ✅ قسم الوشم والعلامات المميزة */
+.tattoo-section {
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #EDEBE0, transparent);
+    margin: 1.5rem 0;
+  }
+
+  .section-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #054239;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 1rem 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #EDEBE0;
+
+    i {
+      font-size: 1.25rem;
+      color: #B9A779;
+    }
+  }
+
+  .tattoo-details-field {
+    animation: fadeInDown 0.4s ease-out;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    border-left: 4px solid #B9A779;
+  }
+
+  textarea.form-control {
+    border: 2px solid rgba(5, 66, 57, 0.1);
+    background: white;
+    color: #054239;
+
+    &:focus {
+      border-color: #054239;
+      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
+    }
+
+    &::placeholder {
+      color: rgba(5, 66, 57, 0.4);
+    }
+  }
+  .tattoo-choice-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .tattoo-choice {
+      flex: 1 1 220px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1rem !important;
+      border-radius: 12px !important;
+      border: 1.5px solid rgba(5, 66, 57, 0.15) !important;
+      background: white !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: right;
+      color: inherit !important;
+      outline: none !important;
+
+      &:focus-visible {
+        box-shadow: 0 0 0 3px rgba(185, 167, 121, 0.35) !important;
+        border-color: #B9A779 !important;
+      }
+
+      &:hover {
+        border-color: rgba(5, 66, 57, 0.4);
+        box-shadow: 0 8px 14px rgba(5, 66, 57, 0.08);
+      }
+
+      &.active {
+        border-color: #054239 !important;
+        background: linear-gradient(135deg, rgba(5, 66, 57, 0.07), rgba(5, 66, 57, 0.02));
+        box-shadow: 0 12px 20px rgba(5, 66, 57, 0.1);
+      }
+
+      .choice-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+
+        &.success {
+          background: rgba(5, 66, 57, 0.12);
+          color: #054239;
+        }
+
+        &.neutral {
+          background: rgba(61, 58, 59, 0.1);
+          color: #3D3A3B;
+        }
+      }
+
+      .choice-text {
+        display: flex;
+        flex-direction: column;
+
+        .choice-title {
+          font-weight: 600;
+          color: #054239;
+        }
+
+        small {
+          color: #6c757d;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+/* Animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Form Actions */
@@ -484,4 +629,48 @@ textarea.form-control {
     opacity: 1;
     transform: translateY(0);
   }
+}
+::ng-deep {
+  .p-calendar {
+    width: 100%;
+
+    .p-calendar-w-btn .p-inputtext {
+      border-radius: 8px !important;
+      padding: 0.5rem 0.75rem !important;
+      font-family: 'Cairo', 'Segoe UI', sans-serif !important;
+      font-size: 1rem !important;
+      color: #3D3A3B;
+      border: 2px solid rgba(0, 0, 0, 0.1) !important;
+      transition: all 0.15s ease !important;
+
+      &:focus {
+        outline: none !important;
+        border-color: #054239 !important;
+        box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1) !important;
+      }
+    }
+
+    .p-calendar-button {
+      background-color: transparent !important;
+      border: none !important;
+      padding: 0.5rem 0.75rem !important;
+      color: #054239 !important;
+
+      &:hover {
+        background-color: rgba(5, 66, 57, 0.05) !important;
+      }
+    }
+  }
+
+  
+}
+
+/* ==========================================
+   DatePicker RTL Styling (Minimal Overrides)
+   ========================================== */
+
+.date-picker-rtl {
+  direction: rtl;
+  text-align: right;
+  width: 100%;
 }
