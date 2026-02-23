@@ -154,8 +154,8 @@ export class BarcodePrintService {
     
     body {
       font-family: 'Cairo', 'Segoe UI', 'Tahoma', sans-serif;
-      width: 80mm;
-      max-width: 80mm;
+      width: 70mm;
+      max-width: 70mm;
       margin: 0 auto;
       color: #000;
       line-height: 1.4;
@@ -163,11 +163,11 @@ export class BarcodePrintService {
     
     .ticket {
       width: 100%;
-      min-height: 135mm;
-      padding: 9mm 6mm 14mm;
+      min-height: auto;
+      padding: 2mm 3mm 4mm;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 2mm;
       page-break-inside: avoid;
     }
     
@@ -214,8 +214,8 @@ export class BarcodePrintService {
     }
     
     .barcode-image {
-      width: 110px;
-      height: 110px;
+      width: 140px;
+      height: 140px;
       margin: 0 auto;
       padding: 10px;
       border: 2px solid #000;
@@ -246,12 +246,12 @@ export class BarcodePrintService {
     
     @media print {
       body {
-        width: 80mm;
-        max-width: 80mm;
+        width: 70mm;
+        max-width: 70mm;
       }
       
       @page {
-        size: 80mm auto;
+        size: 72mm auto;
         margin: 0;
       }
     }

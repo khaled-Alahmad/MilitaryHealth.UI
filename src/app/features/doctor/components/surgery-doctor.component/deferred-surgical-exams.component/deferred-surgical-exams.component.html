@@ -63,10 +63,7 @@
   </app-paginator>
 
   <!-- رسالة عدم وجود بيانات -->
-  <div *ngIf="!loading && filteredExams.length === 0" class="alert alert-info text-center mt-3">
-    لا توجد فحوص جراحية
-  </div>
-
+ 
   <!-- مودال التعديل -->
   <app-edit-surgical-exam
     *ngIf="selectedExam"

@@ -3,20 +3,26 @@
 
 /* Custom overrides for this component */
 .dialog-card {
-  background: #EDEBE0 !important;
+  background: #edebe0 !important;
 }
 
 .dialog-form {
   padding: 2rem;
 }
-
+.input-group-q {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  flex-direction: row-reverse;
+}
 // تحسين Radio Buttons و Checkboxes
 .form-check {
   margin-bottom: 0.5rem !important;
   display: flex;
   align-items: center;
   gap: 0.4rem !important;
-  
+
   .form-check-input {
     margin-top: 0 !important;
     margin-right: 0 !important;
@@ -26,7 +32,7 @@
     height: 1.1rem !important;
     flex-shrink: 0;
   }
-  
+
   .form-check-label {
     margin: 0 !important;
     padding: 0 !important;
@@ -38,7 +44,7 @@
 .form-check-inline {
   margin-left: 0;
   margin-right: 1rem;
-  
+
   &:last-child {
     margin-right: 0;
   }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { FormsModule } from '@angular/forms';
@@ -54,7 +54,22 @@ export class RecruitmentExportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.updateTableHeight();
     this.loadPendingExports();
+  }
+
+  @HostListener('window:resize')
+  onViewportResize(): void {
+    this.updateTableHeight();
+  }
+
+  private updateTableHeight(): void {
+    if (typeof window === 'undefined') {
+      this.tableHeight = '480px';
+      return;
+    }
+    const available = window.innerHeight - 420;
+    this.tableHeight = `${Math.max(available, 320)}px`;
   }
 
   onGlobalFilter(event: Event): void {
@@ -79,17 +94,41 @@ export class RecruitmentExportComponent implements OnInit {
     this.loading = true;
     this.exportService.getPendingExports().subscribe({
       next: (data: PendingExportItem[]) => {
-        this.pendingExports = data || [];
+        const normalizedList = data || [];
+        const uniqueByFile = new Map<string, PendingExportItem>();
+        normalizedList.forEach(item => {
+          const key = this.buildUniqueKey(item);
+          if (!uniqueByFile.has(key)) {
+            uniqueByFile.set(key, { ...item });
+          }
+        });
+        const hadDuplicates = uniqueByFile.size < normalizedList.length;
+        this.pendingExports = Array.from(uniqueByFile.values());
+        this.selectedExports = [];
+        this.decisionIdCache.clear();
+        this.pendingExports.forEach(item => {
+          if (item.fileNumber && item.decisionID) {
+            this.decisionIdCache.set(item.fileNumber, item.decisionID);
+          }
+        });
+        if (hadDuplicates) {
+          this.toastr.info('تم استبعاد السجلات المكررة بحسب رقم الملف قبل التصدير.', 'تنبيه');
+        }
         
-        // ✅ جلب decisionDate من القرار النهائي للمنتسبين الذين لا يملكون supervisorEvaluationDate
-        const itemsWithoutDate = this.pendingExports.filter(item => !item.supervisorEvaluationDate && item.fileNumber);
+        const itemsNeedingDetails = this.pendingExports.filter(item =>
+          item.fileNumber && (!item.supervisorEvaluationDate || !item.decisionID)
+        );
         
-        if (itemsWithoutDate.length > 0) {
-          const requests = itemsWithoutDate.map(item =>
-            this.applicantService.getApplicantByFileNumber$(item.fileNumber).pipe(
+        if (itemsNeedingDetails.length > 0) {
+          const requests = itemsNeedingDetails.map(item =>
+            this.applicantService.getApplicantByFileNumber$(item.fileNumber!).pipe(
               map(details => {
-                if (details?.finalDecision?.decisionDate) {
+                if (details?.finalDecision?.decisionDate && !item.supervisorEvaluationDate) {
                   item.supervisorEvaluationDate = details.finalDecision.decisionDate;
+                }
+                if (details?.finalDecision?.decisionID) {
+                  item.decisionID = details.finalDecision.decisionID;
+                  this.decisionIdCache.set(item.fileNumber!, item.decisionID);
                 }
                 return item;
               }),
@@ -118,14 +157,14 @@ export class RecruitmentExportComponent implements OnInit {
 
   onExportSelected(): void {
     if (this.selectedExports.length === 0) {
-      this.toastr.warning('يرجى اختيار منتسب واحد على الأقل للتصدير', 'تنبيه');
+      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ø®ØªÙŠØ§Ø± Ù…Ù†ØªØ³Ø¨ ÙˆØ§Ø­Ø¯ Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„ Ù„Ù„ØªØµØ¯ÙŠØ±', 'ØªÙ†Ø¨ÙŠÙ‡');
       return;
     }
 
     this.ensureDecisionIdsForSelection().subscribe({
       next: (decisionIds) => {
     if (decisionIds.length === 0) {
-      this.toastr.error('لم يتم العثور على معرفات القرارات. يرجى تحديث الصفحة والمحاولة مرة أخرى', 'خطأ');
+      this.toastr.error('Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ù…Ø¹Ø±ÙØ§Øª Ø§Ù„Ù‚Ø±Ø§Ø±Ø§Øª. ÙŠØ±Ø¬Ù‰ ØªØ­Ø¯ÙŠØ« Ø§Ù„ØµÙØ­Ø© ÙˆØ§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰', 'Ø®Ø·Ø£');
       return;
     }
 
@@ -135,29 +174,29 @@ export class RecruitmentExportComponent implements OnInit {
       exportAll: false
     }).subscribe({
       next: (blob: Blob) => {
-        // التحقق من أن الـ blob صحيح
+        // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø£Ù† Ø§Ù„Ù€ blob ØµØ­ÙŠØ­
         if (blob && blob.size > 0) {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
           this.downloadFile(blob, `Recruitment_Export_${timestamp}.pdf`);
-          this.toastr.success(`تم تصدير ${decisionIds.length} منتسب بنجاح`, 'نجاح');
+          this.toastr.success(`ØªÙ… ØªØµØ¯ÙŠØ± ${decisionIds.length} Ù…Ù†ØªØ³Ø¨ Ø¨Ù†Ø¬Ø§Ø­`, 'Ù†Ø¬Ø§Ø­');
           this.exporting = false;
           this.selectedExports = [];
           this.loadPendingExports(); // Refresh list
         } else {
-          this.toastr.error('الملف المُصدّر فارغ أو معطوب', 'خطأ');
+          this.toastr.error('Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…ÙØµØ¯Ù‘Ø± ÙØ§Ø±Øº Ø£Ùˆ Ù…Ø¹Ø·ÙˆØ¨', 'Ø®Ø·Ø£');
           this.exporting = false;
         }
       },
       error: (err) => {
-        let errorMessage = 'فشل في تصدير البيانات';
+        let errorMessage = 'ÙØ´Ù„ ÙÙŠ ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª';
         if (err.status === 401) {
-          errorMessage = 'غير مصرح لك بالوصول. يرجى تسجيل الدخول مرة أخرى';
+          errorMessage = 'ØºÙŠØ± Ù…ØµØ±Ø­ Ù„Ùƒ Ø¨Ø§Ù„ÙˆØµÙˆÙ„. ÙŠØ±Ø¬Ù‰ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ù…Ø±Ø© Ø£Ø®Ø±Ù‰';
         } else if (err.status === 404) {
-          errorMessage = 'الـ API غير موجود. يرجى التحقق من إعدادات الخادم';
+          errorMessage = 'Ø§Ù„Ù€ API ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯. ÙŠØ±Ø¬Ù‰ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø®Ø§Ø¯Ù…';
         } else if (err.status === 500) {
-          errorMessage = 'خطأ في الخادم. يرجى المحاولة لاحقاً';
+          errorMessage = 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø®Ø§Ø¯Ù…. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù„Ø§Ø­Ù‚Ø§Ù‹';
         }
-        this.toastr.error(errorMessage, 'خطأ');
+        this.toastr.error(errorMessage, 'Ø®Ø·Ø£');
         this.exporting = false;
           }
         });
@@ -167,36 +206,36 @@ export class RecruitmentExportComponent implements OnInit {
 
   onExportAll(): void {
     if (this.pendingExports.length === 0) {
-      this.toastr.warning('لا توجد بيانات للتصدير', 'تنبيه');
+      this.toastr.warning('Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ù„Ù„ØªØµØ¯ÙŠØ±', 'ØªÙ†Ø¨ÙŠÙ‡');
       return;
     }
 
     this.exporting = true;
     this.exportService.exportAll().subscribe({
       next: (blob: Blob) => {
-        // التحقق من أن الـ blob صحيح
+        // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø£Ù† Ø§Ù„Ù€ blob ØµØ­ÙŠØ­
         if (blob && blob.size > 0) {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
           this.downloadFile(blob, `Recruitment_Export_All_${timestamp}.pdf`);
-          this.toastr.success(`تم تصدير ${this.pendingExports.length} منتسب بنجاح`, 'نجاح');
+          this.toastr.success(`ØªÙ… ØªØµØ¯ÙŠØ± ${this.pendingExports.length} Ù…Ù†ØªØ³Ø¨ Ø¨Ù†Ø¬Ø§Ø­`, 'Ù†Ø¬Ø§Ø­');
           this.exporting = false;
           this.selectedExports = [];
           this.loadPendingExports(); // Refresh list
         } else {
-          this.toastr.error('الملف المُصدّر فارغ أو معطوب', 'خطأ');
+          this.toastr.error('Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…ÙØµØ¯Ù‘Ø± ÙØ§Ø±Øº Ø£Ùˆ Ù…Ø¹Ø·ÙˆØ¨', 'Ø®Ø·Ø£');
           this.exporting = false;
         }
       },
       error: (err) => {
-        let errorMessage = 'فشل في تصدير البيانات';
+        let errorMessage = 'ÙØ´Ù„ ÙÙŠ ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª';
         if (err.status === 401) {
-          errorMessage = 'غير مصرح لك بالوصول. يرجى تسجيل الدخول مرة أخرى';
+          errorMessage = 'ØºÙŠØ± Ù…ØµØ±Ø­ Ù„Ùƒ Ø¨Ø§Ù„ÙˆØµÙˆÙ„. ÙŠØ±Ø¬Ù‰ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ù…Ø±Ø© Ø£Ø®Ø±Ù‰';
         } else if (err.status === 404) {
-          errorMessage = 'الـ API غير موجود. يرجى التحقق من إعدادات الخادم';
+          errorMessage = 'Ø§Ù„Ù€ API ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯. ÙŠØ±Ø¬Ù‰ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø®Ø§Ø¯Ù…';
         } else if (err.status === 500) {
-          errorMessage = 'خطأ في الخادم. يرجى المحاولة لاحقاً';
+          errorMessage = 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø®Ø§Ø¯Ù…. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù„Ø§Ø­Ù‚Ø§Ù‹';
         }
-        this.toastr.error(errorMessage, 'خطأ');
+        this.toastr.error(errorMessage, 'Ø®Ø·Ø£');
         this.exporting = false;
       }
     });
@@ -214,16 +253,16 @@ export class RecruitmentExportComponent implements OnInit {
   }
 
   isSelected(item: PendingExportItem): boolean {
-    return this.selectedExports.some(selected => 
-      selected.sequenceNumber === item.sequenceNumber || 
-      (selected as any).decisionID === (item as any).decisionID
+    return this.selectedExports.some(selected =>
+      selected.sequenceNumber === item.sequenceNumber ||
+      this.hasSameDecision(selected, item)
     );
   }
 
   toggleSelection(item: PendingExportItem): void {
-    const index = this.selectedExports.findIndex(selected => 
-      selected.sequenceNumber === item.sequenceNumber || 
-      (selected as any).decisionID === (item as any).decisionID
+    const index = this.selectedExports.findIndex(selected =>
+      selected.sequenceNumber === item.sequenceNumber ||
+      this.hasSameDecision(selected, item)
     );
     
     if (index > -1) {
@@ -234,53 +273,93 @@ export class RecruitmentExportComponent implements OnInit {
   }
 
   selectAll(): void {
-    // تحديد جميع العناصر المرئية في الجدول (بعد التصفية)
-    this.selectedExports = [...this.pendingExports];
+    // ØªØ­Ø¯ÙŠØ¯ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù…Ø±Ø¦ÙŠØ© ÙÙŠ Ø§Ù„Ø¬Ø¯ÙˆÙ„ (Ø¨Ø¹Ø¯ Ø§Ù„ØªØµÙÙŠØ©)
+    this.selectedExports = this.pendingExports.map(item => ({ ...item }));
   }
 
   deselectAll(): void {
     this.selectedExports = [];
   }
 
-  /**
-   * التأكد من أن كل العناصر المحددة تمتلك decisionID
-   */
-  private ensureDecisionIdsForSelection() {
-    const itemsWithoutDecisionId = this.selectedExports.filter(item => !item.decisionID);
+  private buildUniqueKey(item: PendingExportItem): string {
+    const normalized = (item.fileNumber || '').trim().toLowerCase();
+    return normalized || `seq-${item.sequenceNumber}`;
+  }
 
-    if (itemsWithoutDecisionId.length === 0) {
-      const ids = this.selectedExports
-        .map(item => item.decisionID)
-        .filter((id): id is number => id !== null && id !== undefined);
-      return of(ids);
+  private hasSameDecision(a: PendingExportItem, b: PendingExportItem): boolean {
+    return !!a.decisionID && !!b.decisionID && a.decisionID === b.decisionID;
+  }
+
+  private getDecisionIdForItem(item: PendingExportItem) {
+    if (item.decisionID) {
+      if (item.fileNumber) {
+        this.decisionIdCache.set(item.fileNumber, item.decisionID);
+      }
+      return of(item.decisionID);
     }
 
-    const requests = itemsWithoutDecisionId.map(item =>
-      this.applicantService.getApplicantByFileNumber$(item.fileNumber).pipe(
+    if (item.fileNumber) {
+      const cached = this.decisionIdCache.get(item.fileNumber);
+      if (cached) {
+        item.decisionID = cached;
+        return of(cached);
+      }
+      return this.applicantService.getApplicantByFileNumber$(item.fileNumber).pipe(
         map(details => {
-          const decisionId = details?.finalDecision?.decisionID;
+          const decisionId = details?.finalDecision?.decisionID ?? null;
           if (decisionId) {
             item.decisionID = decisionId;
+            this.decisionIdCache.set(item.fileNumber!, decisionId);
           }
           return decisionId;
         }),
-        catchError(err => {
-          return of(null);
-        })
-      )
-    );
+        catchError(() => of(null))
+      );
+    }
 
-    return forkJoin(requests).pipe(
-      map(() => {
-        const ids = this.selectedExports
-          .map(item => item.decisionID)
-          .filter((id): id is number => id !== null && id !== undefined);
+    return of(null);
+  }
 
-        if (ids.length !== this.selectedExports.length) {
-          this.toastr.error('بعض المنتسبين لا يملكون قراراً نهائياً، لا يمكن تصديرهم', 'تنبيه');
+  /**
+   * Ø§Ù„ØªØ£ÙƒØ¯ Ù…Ù† Ø£Ù† ÙƒÙ„ Ø§Ù„Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù…Ø­Ø¯Ø¯Ø© ØªÙ…ØªÙ„Ùƒ decisionID
+   */
+  private ensureDecisionIdsForSelection() {
+    if (this.selectedExports.length === 0) {
+      return of([]);
+    }
+
+    const lookups = this.selectedExports.map(item => this.getDecisionIdForItem(item));
+
+    return forkJoin(lookups).pipe(
+      map(resolvedIds => {
+        const uniqueByFile = new Map<string, number>();
+        const missing: string[] = [];
+        let duplicates = 0;
+
+        this.selectedExports.forEach((item, index) => {
+          const decisionId = item.decisionID ?? resolvedIds[index];
+          const key = this.buildUniqueKey(item);
+
+          if (decisionId) {
+            if (!uniqueByFile.has(key)) {
+              uniqueByFile.set(key, decisionId);
+            } else {
+              duplicates++;
+            }
+          } else {
+            missing.push(key);
+          }
+        });
+
+        if (missing.length) {
+          this.toastr.warning(`ØªÙ… ØªØ¬Ø§Ù‡Ù„ ${missing.length} Ù…Ù†ØªØ³Ø¨/Ø© Ù„Ø¹Ø¯Ù… ØªÙˆÙØ± Ù‚Ø±Ø§Ø± Ù†Ù‡Ø§Ø¦ÙŠ Ù„Ù‡Ù….`, 'ØªÙ†Ø¨ÙŠÙ‡');
         }
 
-        return ids;
+        if (duplicates > 0) {
+          this.toastr.info('ØªÙ… Ø¥Ø²Ø§Ù„Ø© Ø§Ù„Ø³Ø¬Ù„Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© (Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù) Ù…Ù† Ø§Ù„ØªØµØ¯ÙŠØ± Ù„Ø¶Ù…Ø§Ù† Ø¹Ø¯Ù… Ø§Ù„ØªÙƒØ±Ø§Ø±.', 'Ù…Ø¹Ù„ÙˆÙ…Ø©');
+        }
+
+        return Array.from(uniqueByFile.values());
       })
     );
   }

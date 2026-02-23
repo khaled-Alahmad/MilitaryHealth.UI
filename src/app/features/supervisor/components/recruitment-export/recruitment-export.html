@@ -1,92 +1,162 @@
-<div class="recruitment-export-container container-fluid">
-  <!-- Header -->
-  <div class="page-header mb-4">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-file-export"></i>
-      </div>
-      <div class="header-text">
-        <h2 class="page-title">تصدير بيانات التجنيد</h2>
-        <p class="page-subtitle">إدارة وتصدير المنتسبين الجاهزين لمركز التجنيد</p>
-      </div>
-    </div>
-    <div class="table-toolbar">
-      <div class="filter-reset-wrapper">
-        <app-reset-filters-button   class="reset-filters-button"  (reset)="resetFilters()"></app-reset-filters-button>
-        <div class="search-wrapper">
-          <i class="pi pi-search search-icon"></i>
-          <input 
-            #searchInput
-            type="text" 
-            class="search-input" 
-            placeholder="ابحث عن رقم الملف أو الاسم..."
-            [value]="globalFilter"
-            (input)="onGlobalFilter($event)">
+﻿<div class="recruitment-export-page container-fluid">
+  <section class="hero-panel glass-card">
+    <div class="hero-text">
+      <p class="eyebrow">لوحة الإشراف</p>
+      <h1>تصدير دفعات التجنيد</h1>
+      <p class="lead">
+        تأكد من جاهزية البيانات ثم صدّر ملفات المنتسبين الرسمية بصيغة PDF مع تتبع لحظي 
+        لنسبة الجاهزية والدفعات المحددة.
+      </p>
+      <div class="hero-meta">
+        <div class="meta-chip">
+          <span>عدد الملفات الجاهزة</span>
+          <strong>{{ pendingExports.length }}</strong>
+        </div>
+        <div class="meta-chip">
+          <span>المحدّد الآن</span>
+          <strong>{{ selectedExports.length }}</strong>
+        </div>
+        <div class="meta-chip">
+          <span>المتبقي للتصدير</span>
+          <strong>{{ pendingExports.length - selectedExports.length }}</strong>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Actions Toolbar -->
-  <div class="actions-toolbar mb-3">
-    <div class="toolbar-left">
-      <p-button 
-        label="تصدير المحدد" 
-        icon="pi pi-download" 
-        severity="success"
-        styleClass="export-btn"
-        [disabled]="selectedExports.length === 0 || exporting"
-        (onClick)="onExportSelected()">
-      </p-button>
-      <p-button 
-        label="تصدير الكل" 
-        icon="pi pi-file-pdf" 
-        severity="info"
-        styleClass="export-btn"
-        [disabled]="pendingExports.length === 0 || exporting"
-        (onClick)="onExportAll()">
-      </p-button>
-      <p-button 
-        label="تحديث" 
-        icon="pi pi-refresh" 
-        severity="secondary"
-        [disabled]="loading"
-        (onClick)="loadPendingExports()">
-      </p-button>
-    </div>
-    <div class="toolbar-right">
-      <p-button 
-        label="تحديد الكل" 
-        icon="pi pi-check-square" 
-        severity="secondary"
-        outlined
-        [disabled]="pendingExports.length === 0"
-        (onClick)="selectAll()">
-      </p-button>
-      <p-button 
-        label="إلغاء التحديد" 
-        icon="pi pi-square" 
-        severity="secondary"
-        outlined
-        [disabled]="selectedExports.length === 0"
-        (onClick)="deselectAll()">
-      </p-button>
-    </div>
-  </div>
-
-  <!-- Progress Bar -->
-  @if (exporting) {
-    <div class="progress-container mb-3">
-      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-      <p class="text-center mt-2 text-muted">جاري تصدير البيانات...</p>
-    </div>
+  @if (pendingExports.length > 0) {
+    <section class="stats-grid">
+      <article class="stat-card gradient-green">
+        <header>
+          <i class="pi pi-database"></i>
+          <span>إجمالي الملفات الجاهزة</span>
+        </header>
+        <strong>{{ pendingExports.length }}</strong>
+        <p>دفعات متاحة للتصدير مع كامل بياناتها المعتمدة.</p>
+      </article>
+      <article class="stat-card gradient-blue">
+        <header>
+          <i class="pi pi-check-circle"></i>
+          <span>المحدد حالياً</span>
+        </header>
+        <strong>{{ selectedExports.length }}</strong>
+        <p>ملفات سيتم تضمينها حال تنفيذ أمر التصدير.</p>
+      </article>
+      <article class="stat-card gradient-gold">
+        <header>
+          <i class="pi pi-percentage"></i>
+          <span>نسبة الجاهزية</span>
+        </header>
+        <strong>{{ (pendingExports.length ? (selectedExports.length / pendingExports.length) * 100 : 0) | number:'1.0-0' }}%</strong>
+        <p>اجعلها 100٪ لإغلاق الدفعة الحالية بثقة.</p>
+      </article>
+      <article class="stat-card gradient-slate">
+        <header>
+          <i class="pi pi-clock"></i>
+          <span>المتبقي</span>
+        </header>
+        <strong>{{ pendingExports.length - selectedExports.length }}</strong>
+        <p>عدد السجلات التي لم تُحدّد بعد.</p>
+      </article>
+    </section>
   }
 
-  <!-- Table -->
-  <div class="table-container">
-    <p-table 
+  <!-- <section class="preflight-card glass-card">
+    <div class="preflight-header">
+      <div>
+        <p class="eyebrow">دليل جودة</p>
+        <h3>قبل أن تصدّر</h3>
+      </div>
+      <i class="pi pi-info-circle"></i>
+    </div>
+    <ol>
+      <li>تأكد من اكتمال التقييمات الطبية والقرار النهائي.</li>
+      <li>راجع مركز التجنيد والسبب قبل اعتماد الدفعة.</li>
+      <li>استخدم زر التحديث للتأكد من ظهور آخر التعديلات.</li>
+    </ol>
+  </section> -->
+
+  @if (exporting) {
+    <section class="progress-panel">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+      <p>جاري تجهيز ملف التصدير ...</p>
+    </section>
+  }
+
+  <section class="table-shell glass-card">
+    <header class="table-headline">
+      <div>
+        <p class="eyebrow">قائمة البيانات</p>
+        <h2>المنتسبون الجاهزون</h2>
+        <p>انقر على أي صف لتحديده. يظهر الشريط الأخضر عند اختيار الصف.</p>
+      </div>
+      <!-- <div class="table-pill">
+        <span>المعروض</span>
+        <strong>{{ pendingExports.length }}</strong>
+      </div> -->
+    </header>
+
+    <div class="table-controls">
+      <div class="control-stack search-block">
+        <div class="search-wrapper">
+          <i class="pi pi-search"></i>
+          <input
+            #searchInput
+            type="text"
+            class="search-input"
+            placeholder="ابحث باسم المنتسب أو رقم الملف..."
+            [value]="globalFilter"
+            (input)="onGlobalFilter($event)" />
+        </div>
+        <app-reset-filters-button class="reset-chip" (reset)="resetFilters()"></app-reset-filters-button>
+        <button class="ghost-refresh" type="button" (click)="loadPendingExports()" [disabled]="loading">
+          <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+          <span>تحديث الآن</span>
+        </button>
+      </div>
+      <div class="control-stack actions-block">
+        <div class="button-group primary-group">
+          <p-button
+            label="تصدير المحدد"
+            icon="pi pi-download"
+            severity="success"
+            styleClass="wide"
+            [disabled]="selectedExports.length === 0 || exporting"
+            (onClick)="onExportSelected()">
+          </p-button>
+          <p-button
+            label="تصدير جميع الملفات"
+            icon="pi pi-file-pdf"
+            severity="info"
+            styleClass="wide"
+            [disabled]="pendingExports.length === 0 || exporting"
+            (onClick)="onExportAll()">
+          </p-button>
+        </div>
+        <div class="button-group secondary-group">
+          <p-button
+            label="تحديد الكل"
+            icon="pi pi-check-square"
+            severity="secondary"
+            outlined
+            [disabled]="pendingExports.length === 0"
+            (onClick)="selectAll()">
+          </p-button>
+          <p-button
+            label="إلغاء التحديد"
+            icon="pi pi-times"
+            severity="secondary"
+            outlined
+            [disabled]="selectedExports.length === 0"
+            (onClick)="deselectAll()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <p-table
       #exportTable
-      [value]="pendingExports" 
+      [value]="pendingExports"
       [loading]="loading"
       [paginator]="true"
       [rows]="10"
@@ -97,40 +167,38 @@
       [scrollable]="true"
       [scrollHeight]="tableHeight"
       [rowHover]="true"
-      dataKey="sequenceNumber"
-      >
-      
+      dataKey="sequenceNumber">
+
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3rem">
-            <p-checkbox 
+          <th style="width: 3.2rem">
+            <p-checkbox
               [binary]="true"
               [ngModel]="selectedExports.length === pendingExports.length && pendingExports.length > 0"
               (ngModelChange)="selectedExports.length === pendingExports.length ? deselectAll() : selectAll()">
             </p-checkbox>
           </th>
-          <th pSortableColumn="sequenceNumber"># <p-sortIcon field="sequenceNumber"></p-sortIcon></th>
-          <th pSortableColumn="fileNumber">رقم الملف <p-sortIcon field="fileNumber"></p-sortIcon></th>
-          <th pSortableColumn="fullName">الاسم الكامل <p-sortIcon field="fullName"></p-sortIcon></th>
-          <th pSortableColumn="motherName">اسم الأم <p-sortIcon field="motherName"></p-sortIcon></th>
+          <th pSortableColumn="sequenceNumber">#<p-sortIcon field="sequenceNumber"></p-sortIcon></th>
+          <th pSortableColumn="fileNumber">رقم الملف<p-sortIcon field="fileNumber"></p-sortIcon></th>
+          <th pSortableColumn="fullName">الاسم الكامل<p-sortIcon field="fullName"></p-sortIcon></th>
+          <th pSortableColumn="motherName">اسم الأم<p-sortIcon field="motherName"></p-sortIcon></th>
           <th>الحالة الاجتماعية</th>
-          <th pSortableColumn="dateOfBirth">تاريخ المواليد <p-sortIcon field="dateOfBirth"></p-sortIcon></th>
+          <th pSortableColumn="dateOfBirth">تاريخ الميلاد<p-sortIcon field="dateOfBirth"></p-sortIcon></th>
           <th>زمرة الدم</th>
-          <th pSortableColumn="recruitmentCenter">مركز التجنيد <p-sortIcon field="recruitmentCenter"></p-sortIcon></th>
-          <th pSortableColumn="result">النتيجة <p-sortIcon field="result"></p-sortIcon></th>
-          <th pSortableColumn="supervisorEvaluationDate">تاريخ التقييم <p-sortIcon field="supervisorEvaluationDate"></p-sortIcon></th>
+          <th pSortableColumn="recruitmentCenter">مركز التجنيد<p-sortIcon field="recruitmentCenter"></p-sortIcon></th>
+          <th pSortableColumn="result">النتيجة<p-sortIcon field="result"></p-sortIcon></th>
+          <th pSortableColumn="supervisorEvaluationDate">تاريخ التقييم<p-sortIcon field="supervisorEvaluationDate"></p-sortIcon></th>
           <th>السبب</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-item>
-        <tr 
-          [class.row-selected]="isSelected(item)" 
-          [class.row-hover]="true"
+        <tr
+          [class.row-selected]="isSelected(item)"
           (click)="toggleSelection(item)"
           [title]="isSelected(item) ? 'انقر لإلغاء التحديد' : 'انقر للتحديد'">
           <td class="text-center align-middle" (click)="$event.stopPropagation()">
-            <p-checkbox 
+            <p-checkbox
               [binary]="true"
               [ngModel]="isSelected(item)"
               (ngModelChange)="toggleSelection(item)"
@@ -138,10 +206,10 @@
             </p-checkbox>
           </td>
           <td class="text-center align-middle">
-            <span class="fw-bold small badge bg-primary text-white">{{ item.sequenceNumber }}</span>
+            <span class="badge-seq">{{ item.sequenceNumber }}</span>
           </td>
           <td class="text-center align-middle">
-            <span class="fw-bold text-primary">{{ item.fileNumber }}</span>
+            <span class="file-number">{{ item.fileNumber }}</span>
           </td>
           <td class="text-center align-middle">{{ item.fullName }}</td>
           <td class="text-center align-middle">{{ item.motherName || 'غير محدد' }}</td>
@@ -155,9 +223,9 @@
           </td>
           <td class="text-center align-middle">{{ item.recruitmentCenter || 'غير محدد' }}</td>
           <td class="text-center align-middle">
-            <p-tag 
-              [value]="item.result || 'غير محدد'" 
-              [severity]="item.result === 'لائق' ? 'success' : item.result ? 'danger' : 'warn'">
+            <p-tag
+              [value]="item.result || 'غير محدد'"
+              [severity]="item.result === 'مقبول' ? 'success' : item.result ? 'danger' : 'warn'">
             </p-tag>
           </td>
           <td class="text-center align-middle">
@@ -173,7 +241,7 @@
           <td colspan="12" class="text-center py-5">
             <div class="empty-state">
               <i class="pi pi-inbox"></i>
-              <p class="mt-2">لا توجد بيانات جاهزة للتصدير</p>
+              <p class="mt-2">لا توجد بيانات جاهزة للتصدير حالياً.</p>
             </div>
           </td>
         </tr>
@@ -188,37 +256,7 @@
         </tr>
       </ng-template>
     </p-table>
-  </div>
-
-  <!-- Summary -->
-  @if (pendingExports.length > 0) {
-    <div class="summary-card mt-3">
-      <div class="summary-content">
-        <div class="summary-item">
-          <i class="pi pi-list"></i>
-          <div>
-            <p>إجمالي المنتسبين</p>
-            <strong>{{ pendingExports.length }}</strong>
-          </div>
-        </div>
-        <div class="summary-item">
-          <i class="pi pi-check-circle"></i>
-          <div>
-            <p>المحدد حالياً</p>
-            <strong>{{ selectedExports.length }}</strong>
-          </div>
-        </div>
-        <div class="summary-item">
-          <i class="pi pi-file-export"></i>
-          <div>
-            <p>جاهز للتصدير</p>
-            <strong>{{ pendingExports.length - selectedExports.length }}</strong>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
+  </section>
 </div>
 
 <p-toast></p-toast>
-

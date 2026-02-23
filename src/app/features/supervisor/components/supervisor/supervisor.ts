@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApplicantDetailsModel, ApplicantModel } from '../../../reception/models/applicant.model';
 import { ApplicantService } from '../../../reception/services/applicant.service';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ import { DividerModule } from 'primeng/divider';
 import { Consultation } from '../../../doctor/models/consultation.model';
 import { Investigation } from '../../../doctor/models/investigation.model';
 import { forkJoin, of, Observable } from 'rxjs';
-import { catchError, map, take, shareReplay } from 'rxjs/operators';
+import { catchError, finalize, map, take, shareReplay } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
@@ -62,17 +62,17 @@ export class Supervisor implements OnInit {
   isApproved: boolean = true;
   isAccept : boolean = false;
   
-  // ✅ متغيرات للتحكم في إمكانية التعديل بناءً على النتيجة السابقة
-  canEditDecision: boolean = true; // يمكن التعديل افتراضياً
-  previousDecisionLocked: boolean = false; // هل النتيجة السابقة مقفلة (مقبول/مرفوض)
+  // âœ… Ù…ØªØºÙŠØ±Ø§Øª Ù„Ù„ØªØ­ÙƒÙ… ÙÙŠ Ø¥Ù…ÙƒØ§Ù†ÙŠØ© Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
+  canEditDecision: boolean = true; // ÙŠÙ…ÙƒÙ† Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø§ÙØªØ±Ø§Ø¶ÙŠØ§Ù‹
+  previousDecisionLocked: boolean = false; // Ù‡Ù„ Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø© Ù…Ù‚ÙÙ„Ø© (Ù…Ù‚Ø¨ÙˆÙ„/Ù…Ø±ÙÙˆØ¶)
   
   clinicsData: ClinicData[] = [];
   loading: boolean = false;
   refractionTypes: RefractionType[] = [];
-  private currentFileNumber: string | null = null; // ✅ منع الطلبات المكررة لنفس رقم الملف
-  private isLoadingClinicsData: boolean = false; // ✅ منع استدعاء loadClinicsData عدة مرات
+  private currentFileNumber: string | null = null; // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù
+  private isLoadingClinicsData: boolean = false; // âœ… Ù…Ù†Ø¹ Ø§Ø³ØªØ¯Ø¹Ø§Ø¡ loadClinicsData Ø¹Ø¯Ø© Ù…Ø±Ø§Øª
   private lastSelectedApplicantSummary: Applicant | null = null;
-  private isLoadingApplicantDetails: boolean = false; // ✅ منع استدعاء getApplicantByFileNumber$ عدة مرات
+  private isLoadingApplicantDetails: boolean = false; // âœ… Ù…Ù†Ø¹ Ø§Ø³ØªØ¯Ø¹Ø§Ø¡ getApplicantByFileNumber$ Ø¹Ø¯Ø© Ù…Ø±Ø§Øª
 
   // Specialization IDs
   private readonly EYE_SPECIALIZATION_ID = 1;
@@ -131,15 +131,15 @@ export class Supervisor implements OnInit {
     }).pipe(
       map(res => {
         const items = res.data?.items || [];
-        // إزالة التكرارات بناءً على consultationID
+        // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ consultationID
         const uniqueItems = this.removeDuplicateConsultations(items);
-        // ترتيب حسب consultationID (الأحدث أولاً)
+        // ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨ consultationID (Ø§Ù„Ø£Ø­Ø¯Ø« Ø£ÙˆÙ„Ø§Ù‹)
         return uniqueItems.sort((a, b) => (b.consultationID || 0) - (a.consultationID || 0));
       }),
       catchError(() => {
         return of([]);
       }),
-      shareReplay(1) // ✅ منع الطلبات المكررة لنفس الطلب
+      shareReplay(1) // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø§Ù„Ø·Ù„Ø¨
     );
   }
 
@@ -159,24 +159,24 @@ export class Supervisor implements OnInit {
     }).pipe(
       map(res => {
         const items = res.data?.items || [];
-        // إزالة التكرارات بناءً على investigationID
+        // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ investigationID
         const uniqueItems = this.removeDuplicateInvestigations(items);
-        // ترتيب حسب investigationID (الأحدث أولاً)
+        // ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨ investigationID (Ø§Ù„Ø£Ø­Ø¯Ø« Ø£ÙˆÙ„Ø§Ù‹)
         return uniqueItems.sort((a, b) => (b.investigationID || 0) - (a.investigationID || 0));
       }),
       catchError(() => {
         return of([]);
       }),
-      shareReplay(1) // ✅ منع الطلبات المكررة لنفس الطلب
+      shareReplay(1) // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø§Ù„Ø·Ù„Ø¨
     );
   }
 
-  // إزالة التكرارات من الاستشارات
+  // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ù…Ù† Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø§Øª
   private removeDuplicateConsultations(consultations: Consultation[]): Consultation[] {
     const seen = new Set<number>();
     return consultations.filter(consultation => {
       const id = consultation.consultationID;
-      // تجاهل الاستشارات بدون ID
+      // ØªØ¬Ø§Ù‡Ù„ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø§Øª Ø¨Ø¯ÙˆÙ† ID
       if (!id || id === 0) {
         return false;
       }
@@ -188,12 +188,12 @@ export class Supervisor implements OnInit {
     });
   }
 
-  // إزالة التكرارات من التحاليل
+  // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ù…Ù† Ø§Ù„ØªØ­Ø§Ù„ÙŠÙ„
   private removeDuplicateInvestigations(investigations: Investigation[]): Investigation[] {
     const seen = new Set<number>();
     return investigations.filter(investigation => {
       const id = investigation.investigationID;
-      // تجاهل التحاليل بدون ID
+      // ØªØ¬Ø§Ù‡Ù„ Ø§Ù„ØªØ­Ø§Ù„ÙŠÙ„ Ø¨Ø¯ÙˆÙ† ID
       if (!id || id === 0) {
         return false;
       }
@@ -210,7 +210,7 @@ export class Supervisor implements OnInit {
     this.loadRefractionTypes();
   }
 
-  // جلب أنواع الانكسار
+  // Ø¬Ù„Ø¨ Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø§Ù†ÙƒØ³Ø§Ø±
   loadRefractionTypes() {
     const url = `${environment.apiUrl}/api/RefractionTypes?page=1&pageSize=100`;
     this.http.get<ApiResponse<PagedResponse<RefractionType>>>(url, {
@@ -220,25 +220,25 @@ export class Supervisor implements OnInit {
         this.refractionTypes = response.data?.items || [];
       },
       error: () => {
-        // Fallback إلى القيم الثابتة
+        // Fallback Ø¥Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ø«Ø§Ø¨ØªØ©
         this.refractionTypes = [
-          { refractionTypeID: 1, description: 'قصر نظر' },
-          { refractionTypeID: 2, description: 'مد نظر' },
-          { refractionTypeID: 3, description: 'استجماتيزم' },
-          { refractionTypeID: 4, description: 'قصر نظر مع استجماتيزم' },
-          { refractionTypeID: 5, description: 'مد نظر مع استجماتيزم' }
+          { refractionTypeID: 1, description: 'Ù‚ØµØ± Ù†Ø¸Ø±' },
+          { refractionTypeID: 2, description: 'Ù…Ø¯ Ù†Ø¸Ø±' },
+          { refractionTypeID: 3, description: 'Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
+          { refractionTypeID: 4, description: 'Ù‚ØµØ± Ù†Ø¸Ø± Ù…Ø¹ Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
+          { refractionTypeID: 5, description: 'Ù…Ø¯ Ù†Ø¸Ø± Ù…Ø¹ Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' }
         ];
       }
     });
   }
 
-  // الحصول على اسم نوع الانكسار
+  // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ø³Ù… Ù†ÙˆØ¹ Ø§Ù„Ø§Ù†ÙƒØ³Ø§Ø±
   getRefractionTypeName(refractionTypeID: number): string {
     const type = this.refractionTypes.find(rt => rt.refractionTypeID === refractionTypeID);
-    return type?.description || 'غير معروف';
+    return type?.description || 'ØºÙŠØ± Ù…Ø¹Ø±ÙˆÙ';
   }
 
-  // الحصول على انكسارات العين اليمنى
+  // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù†ÙƒØ³Ø§Ø±Ø§Øª Ø§Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰
   getRightEyeRefractions(exam: any): Refraction[] {
     if (!exam?.refractions || !Array.isArray(exam.refractions)) {
       return [];
@@ -246,7 +246,7 @@ export class Supervisor implements OnInit {
     return exam.refractions.filter((r: Refraction) => !r.isLeft);
   }
 
-  // الحصول على انكسارات العين اليسرى
+  // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù†ÙƒØ³Ø§Ø±Ø§Øª Ø§Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠØ³Ø±Ù‰
   getLeftEyeRefractions(exam: any): Refraction[] {
     if (!exam?.refractions || !Array.isArray(exam.refractions)) {
       return [];
@@ -254,149 +254,149 @@ export class Supervisor implements OnInit {
     return exam.refractions.filter((r: Refraction) => r.isLeft);
   }
 
-  // الحصول على حقل من فحص العين مع معالجة القيم الفارغة
+  // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø­Ù‚Ù„ Ù…Ù† ÙØ­Øµ Ø§Ù„Ø¹ÙŠÙ† Ù…Ø¹ Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„ÙØ§Ø±ØºØ©
   getEyeExamField(exam: any, fieldName: string): string {
-    // إذا كان exam غير موجود أو null أو undefined
+    // Ø¥Ø°Ø§ ÙƒØ§Ù† exam ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ Ø£Ùˆ null Ø£Ùˆ undefined
     if (!exam || exam === null || exam === undefined) {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // التحقق من وجود الحقل في الكائن
+    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ø§Ù„Ø­Ù‚Ù„ ÙÙŠ Ø§Ù„ÙƒØ§Ø¦Ù†
     if (!(fieldName in exam)) {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // الحصول على القيمة
+    // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ…Ø©
     const value = exam[fieldName];
-    // إذا كانت القيمة null أو undefined، نعيد "غير محدد"
+    // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© null Ø£Ùˆ undefinedØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (value === null || value === undefined) {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // تحويل القيمة إلى string وtrim
+    // ØªØ­ÙˆÙŠÙ„ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø¥Ù„Ù‰ string Ùˆtrim
     const trimmedValue = String(value).trim();
-    // إذا كانت القيمة فارغة بعد trim، نعيد "غير محدد"
+    // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© ÙØ§Ø±ØºØ© Ø¨Ø¹Ø¯ trimØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (trimmedValue === '') {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // إذا كانت القيمة من الباك إند هي "غير محدد" أو أي قيمة أخرى، نعيدها كما هي
+    // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù† Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ Ù‡ÙŠ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯" Ø£Ùˆ Ø£ÙŠ Ù‚ÙŠÙ…Ø© Ø£Ø®Ø±Ù‰ØŒ Ù†Ø¹ÙŠØ¯Ù‡Ø§ ÙƒÙ…Ø§ Ù‡ÙŠ
     return trimmedValue;
   }
 
   /**
-   * الحصول على القدرة البصرية للعين اليمنى
-   * ✅ جاهز للعمل تلقائياً عندما يضيف الباك إند visionRight
-   * ⚠️ حالياً: يستخدم vision العام كـ fallback
+   * Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù‚Ø¯Ø±Ø© Ø§Ù„Ø¨ØµØ±ÙŠØ© Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰
+   * âœ… Ø¬Ø§Ù‡Ø² Ù„Ù„Ø¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ visionRight
+   * âš ï¸ Ø­Ø§Ù„ÙŠØ§Ù‹: ÙŠØ³ØªØ®Ø¯Ù… vision Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback
    */
   getVisionRight(exam: any): string {
-    if (!exam) return 'غير محدد';
-    // ✅ أولوية: visionRight (عندما يضيفه الباك إند)
+    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: visionRight (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('visionRight' in exam && exam.visionRight) {
       const value = String(exam.visionRight).trim();
       if (value !== '') return value;
     }
-    // ⚠️ Fallback: vision العام (البيانات الحالية)
+    // âš ï¸ Fallback: vision Ø§Ù„Ø¹Ø§Ù… (Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø­Ø§Ù„ÙŠØ©)
     if ('vision' in exam && exam.vision) {
       const value = String(exam.vision).trim();
       if (value !== '') return value;
     }
-    return 'غير محدد';
+    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
   }
 
   /**
-   * الحصول على القدرة البصرية للعين اليسرى
-   * ✅ جاهز للعمل تلقائياً عندما يضيف الباك إند visionLeft
-   * ⚠️ حالياً: يعرض "غير محدد" لأن visionLeft غير موجود في API
-   * ❌ لا نستخدم vision العام كـ fallback لأنه قد يكون للعين اليمنى فقط
+   * Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù‚Ø¯Ø±Ø© Ø§Ù„Ø¨ØµØ±ÙŠØ© Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠØ³Ø±Ù‰
+   * âœ… Ø¬Ø§Ù‡Ø² Ù„Ù„Ø¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ visionLeft
+   * âš ï¸ Ø­Ø§Ù„ÙŠØ§Ù‹: ÙŠØ¹Ø±Ø¶ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯" Ù„Ø£Ù† visionLeft ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ ÙÙŠ API
+   * âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… vision Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
    */
   getVisionLeft(exam: any): string {
-    if (!exam) return 'غير محدد';
-    // ✅ أولوية: visionLeft (عندما يضيفه الباك إند)
+    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: visionLeft (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('visionLeft' in exam && exam.visionLeft) {
       const value = String(exam.visionLeft).trim();
       if (value !== '') return value;
     }
-    // ❌ لا نستخدم vision العام كـ fallback لأنه قد يكون للعين اليمنى فقط
-    // ✅ عندما يضيف الباك إند visionLeft، سيعمل تلقائياً
-    return 'غير محدد';
+    // âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… vision Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
+    // âœ… Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ visionLeftØŒ Ø³ÙŠØ¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹
+    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
   }
 
   /**
-   * الحصول على اختبار الألوان للعين اليمنى
-   * ✅ جاهز للعمل تلقائياً عندما يضيف الباك إند colorTestRight
-   * ⚠️ حالياً: يستخدم colorTest العام كـ fallback
+   * Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ø®ØªØ¨Ø§Ø± Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰
+   * âœ… Ø¬Ø§Ù‡Ø² Ù„Ù„Ø¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ colorTestRight
+   * âš ï¸ Ø­Ø§Ù„ÙŠØ§Ù‹: ÙŠØ³ØªØ®Ø¯Ù… colorTest Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback
    */
   getColorTestRight(exam: any): string {
-    if (!exam) return 'غير محدد';
-    // ✅ أولوية: colorTestRight (عندما يضيفه الباك إند)
+    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: colorTestRight (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('colorTestRight' in exam && exam.colorTestRight) {
       const value = String(exam.colorTestRight).trim();
       if (value !== '') return value;
     }
-    // ⚠️ Fallback: colorTest العام (البيانات الحالية)
+    // âš ï¸ Fallback: colorTest Ø§Ù„Ø¹Ø§Ù… (Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø­Ø§Ù„ÙŠØ©)
     if ('colorTest' in exam && exam.colorTest) {
       const value = String(exam.colorTest).trim();
       if (value !== '') return value;
     }
-    return 'غير محدد';
+    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
   }
 
   /**
-   * الحصول على اختبار الألوان للعين اليسرى
-   * ✅ جاهز للعمل تلقائياً عندما يضيف الباك إند colorTestLeft
-   * ⚠️ حالياً: يعرض "غير محدد" لأن colorTestLeft غير موجود في API
-   * ❌ لا نستخدم colorTest العام كـ fallback لأنه قد يكون للعين اليمنى فقط
+   * Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ø®ØªØ¨Ø§Ø± Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠØ³Ø±Ù‰
+   * âœ… Ø¬Ø§Ù‡Ø² Ù„Ù„Ø¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ colorTestLeft
+   * âš ï¸ Ø­Ø§Ù„ÙŠØ§Ù‹: ÙŠØ¹Ø±Ø¶ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯" Ù„Ø£Ù† colorTestLeft ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ ÙÙŠ API
+   * âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… colorTest Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
    */
   getColorTestLeft(exam: any): string {
-    if (!exam) return 'غير محدد';
-    // ✅ أولوية: colorTestLeft (عندما يضيفه الباك إند)
+    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: colorTestLeft (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('colorTestLeft' in exam && exam.colorTestLeft) {
       const value = String(exam.colorTestLeft).trim();
       if (value !== '') return value;
     }
-    // ❌ لا نستخدم colorTest العام كـ fallback لأنه قد يكون للعين اليمنى فقط
-    // ✅ عندما يضيف الباك إند colorTestLeft، سيعمل تلقائياً
-    return 'غير محدد';
+    // âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… colorTest Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
+    // âœ… Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ colorTestLeftØŒ Ø³ÙŠØ¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹
+    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
   }
 
-  // الحصول على حقل من فحص الأذن مع معالجة القيم الفارغة
+  // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø­Ù‚Ù„ Ù…Ù† ÙØ­Øµ Ø§Ù„Ø£Ø°Ù† Ù…Ø¹ Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„ÙØ§Ø±ØºØ©
   getEarExamField(exam: any, fieldName: string): string {
-    // إذا كان exam غير موجود أو null أو undefined
+    // Ø¥Ø°Ø§ ÙƒØ§Ù† exam ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ Ø£Ùˆ null Ø£Ùˆ undefined
     if (!exam || exam === null || exam === undefined) {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // التحقق من وجود الحقل في الكائن
+    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ø§Ù„Ø­Ù‚Ù„ ÙÙŠ Ø§Ù„ÙƒØ§Ø¦Ù†
     if (!(fieldName in exam)) {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // الحصول على القيمة
+    // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ…Ø©
     const value = exam[fieldName];
-    // إذا كانت القيمة null أو undefined، نعيد "غير محدد"
+    // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© null Ø£Ùˆ undefinedØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (value === null || value === undefined) {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // تحويل القيمة إلى string وtrim
+    // ØªØ­ÙˆÙŠÙ„ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø¥Ù„Ù‰ string Ùˆtrim
     const trimmedValue = String(value).trim();
-    // إذا كانت القيمة فارغة بعد trim، نعيد "غير محدد"
+    // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© ÙØ§Ø±ØºØ© Ø¨Ø¹Ø¯ trimØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (trimmedValue === '') {
-      return 'غير محدد';
+      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
     }
-    // إذا كانت القيمة من الباك إند هي "غير محدد" أو أي قيمة أخرى، نعيدها كما هي
+    // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù† Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ Ù‡ÙŠ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯" Ø£Ùˆ Ø£ÙŠ Ù‚ÙŠÙ…Ø© Ø£Ø®Ø±Ù‰ØŒ Ù†Ø¹ÙŠØ¯Ù‡Ø§ ÙƒÙ…Ø§ Ù‡ÙŠ
     return trimmedValue;
   }
 
-  // ✅ معالج اختيار المنتسب من مكون البحث
-  // ✅ دالة جديدة لاستقبال ApplicantDetailsModel مباشرة (تجنب الطلبات المكررة)
+  // âœ… Ù…Ø¹Ø§Ù„Ø¬ Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ù…Ù† Ù…ÙƒÙˆÙ† Ø§Ù„Ø¨Ø­Ø«
+  // âœ… Ø¯Ø§Ù„Ø© Ø¬Ø¯ÙŠØ¯Ø© Ù„Ø§Ø³ØªÙ‚Ø¨Ø§Ù„ ApplicantDetailsModel Ù…Ø¨Ø§Ø´Ø±Ø© (ØªØ¬Ù†Ø¨ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø©)
   onApplicantDetailsSelected(applicantDetails: ApplicantDetailsModel) {
     if (!applicantDetails?.fileNumber) {
-      this.responseMessage = 'رقم الملف غير متوفر';
+      this.responseMessage = 'Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…ØªÙˆÙØ±';
       this.responseSuccess = false;
       return;
     }
 
-    // ✅ منع الطلبات المكررة لنفس رقم الملف
+    // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù
     if (this.currentFileNumber === applicantDetails.fileNumber && (this.loading || this.isLoadingApplicantDetails)) {
       return;
     }
 
-    // ✅ منع الطلبات المكررة إذا كان الطلب قيد التنفيذ
+    // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ø·Ù„Ø¨ Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°
     if (this.isLoadingApplicantDetails) {
       return;
     }
@@ -409,28 +409,28 @@ export class Supervisor implements OnInit {
     this.clinicsData = [];
     this.loading = true;
 
-    // ✅ استخدام ApplicantDetailsModel مباشرة بدون جلب البيانات مرة أخرى
+    // âœ… Ø§Ø³ØªØ®Ø¯Ø§Ù… ApplicantDetailsModel Ù…Ø¨Ø§Ø´Ø±Ø© Ø¨Ø¯ÙˆÙ† Ø¬Ù„Ø¨ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù…Ø±Ø© Ø£Ø®Ø±Ù‰
     this.applicant = applicantDetails;
     this.mapApplicantToDecision(applicantDetails);
-    this.checkPreviousDecisionStatus(applicantDetails); // ✅ فحص حالة النتيجة السابقة
+    this.checkPreviousDecisionStatus(applicantDetails); // âœ… ÙØ­Øµ Ø­Ø§Ù„Ø© Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
     this.loadClinicsData(applicantDetails.fileNumber);
     this.loading = false;
   }
 
-  // ✅ دالة قديمة للتوافق مع المكونات الأخرى (إذا كانت تستخدم applicantSelected)
+  // âœ… Ø¯Ø§Ù„Ø© Ù‚Ø¯ÙŠÙ…Ø© Ù„Ù„ØªÙˆØ§ÙÙ‚ Ù…Ø¹ Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ø£Ø®Ø±Ù‰ (Ø¥Ø°Ø§ ÙƒØ§Ù†Øª ØªØ³ØªØ®Ø¯Ù… applicantSelected)
   onApplicantSelected(applicant: Applicant) {
     if (!applicant?.fileNumber) {
-      this.responseMessage = 'رقم الملف غير متوفر';
+      this.responseMessage = 'Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…ØªÙˆÙØ±';
       this.responseSuccess = false;
       return;
     }
 
-    // ✅ منع الطلبات المكررة لنفس رقم الملف
+    // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù
     if (this.currentFileNumber === applicant.fileNumber && (this.loading || this.isLoadingApplicantDetails)) {
       return;
     }
 
-    // ✅ منع الطلبات المكررة إذا كان الطلب قيد التنفيذ
+    // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ø·Ù„Ø¨ Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°
     if (this.isLoadingApplicantDetails) {
       return;
     }
@@ -445,19 +445,19 @@ export class Supervisor implements OnInit {
     this.loading = true;
     this.isLoadingApplicantDetails = true;
 
-    // ✅ جلب البيانات الكاملة للمنتسب - استخدام take(1) لمنع الاشتراكات المكررة
+    // âœ… Ø¬Ù„Ø¨ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„ÙƒØ§Ù…Ù„Ø© Ù„Ù„Ù…Ù†ØªØ³Ø¨ - Ø§Ø³ØªØ®Ø¯Ø§Ù… take(1) Ù„Ù…Ù†Ø¹ Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØ§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø©
     this.applicantService.getApplicantByFileNumber$(applicant.fileNumber).pipe(
-      take(1) // ✅ منع الاشتراكات المكررة - يتم تنفيذ الطلب مرة واحدة فقط
+      take(1) // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØ§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© - ÙŠØªÙ… ØªÙ†ÙÙŠØ° Ø§Ù„Ø·Ù„Ø¨ Ù…Ø±Ø© ÙˆØ§Ø­Ø¯Ø© ÙÙ‚Ø·
     ).subscribe({
       next: (applicantDetails: ApplicantDetailsModel) => {
         this.isLoadingApplicantDetails = false;
         if (applicantDetails) {
           this.applicant = this.mergeApplicantDetailsWithBasicInfo(applicantDetails, this.lastSelectedApplicantSummary);
           this.mapApplicantToDecision(applicantDetails);
-          this.checkPreviousDecisionStatus(applicantDetails); // ✅ فحص حالة النتيجة السابقة
+          this.checkPreviousDecisionStatus(applicantDetails); // âœ… ÙØ­Øµ Ø­Ø§Ù„Ø© Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
           this.loadClinicsData(applicantDetails.fileNumber);
         } else {
-          this.responseMessage = 'لم يتم العثور على المنتسب';
+          this.responseMessage = 'Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ³Ø¨';
           this.responseSuccess = false;
           this.loading = false;
           this.currentFileNumber = null;
@@ -467,7 +467,7 @@ export class Supervisor implements OnInit {
         this.isLoadingApplicantDetails = false;
         this.applicant = undefined!;
         this.decisionModel = undefined!;
-        this.responseMessage = 'لم يتم العثور على المنتسب';
+        this.responseMessage = 'Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ³Ø¨';
         this.responseSuccess = false;
         this.loading = false;
         this.currentFileNumber = null;
@@ -539,7 +539,7 @@ export class Supervisor implements OnInit {
   }
 
   loadClinicsData(fileNumber: string) {
-    // ✅ منع استدعاء loadClinicsData عدة مرات لنفس رقم الملف
+    // âœ… Ù…Ù†Ø¹ Ø§Ø³ØªØ¯Ø¹Ø§Ø¡ loadClinicsData Ø¹Ø¯Ø© Ù…Ø±Ø§Øª Ù„Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù
     if (this.isLoadingClinicsData && this.currentFileNumber === fileNumber) {
       return;
     }
@@ -547,7 +547,7 @@ export class Supervisor implements OnInit {
     this.isLoadingClinicsData = true;
     this.loading = true;
     
-    // جلب الاستشارات والتحاليل لكل عيادة باستخدام التخصص الصحيح
+    // Ø¬Ù„Ø¨ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø§Øª ÙˆØ§Ù„ØªØ­Ø§Ù„ÙŠÙ„ Ù„ÙƒÙ„ Ø¹ÙŠØ§Ø¯Ø© Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ØªØ®ØµØµ Ø§Ù„ØµØ­ÙŠØ­
     const eyeConsultations$ = this.getConsultationsBySpecialization(this.EYE_SPECIALIZATION_ID, fileNumber);
     const eyeInvestigations$ = this.getInvestigationsBySpecialization(this.EYE_SPECIALIZATION_ID, fileNumber);
     
@@ -587,7 +587,7 @@ export class Supervisor implements OnInit {
         orthopedicConsultations: Consultation[];
         orthopedicInvestigations: Investigation[];
       }) => {
-        // ✅ إزالة التكرارات النهائية للتأكد
+        // âœ… Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠØ© Ù„Ù„ØªØ£ÙƒØ¯
         const eyeConsultations = this.removeDuplicateConsultations(data.eyeConsultations);
         const eyeInvestigations = this.removeDuplicateInvestigations(data.eyeInvestigations);
         const earConsultations = this.removeDuplicateConsultations(data.earConsultations);
@@ -601,35 +601,35 @@ export class Supervisor implements OnInit {
 
         this.clinicsData = [
           {
-            name: 'عيادة العيون',
+            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹ÙŠÙˆÙ†',
             icon: 'pi pi-eye',
             exam: this.applicant.eyeExam,
             consultations: eyeConsultations,
             investigations: eyeInvestigations
           },
           {
-            name: 'عيادة الباطنة',
+            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¨Ø§Ø·Ù†Ø©',
             icon: 'pi pi-heart',
             exam: this.applicant.internalExam,
             consultations: internalConsultations,
             investigations: internalInvestigations
           },
           {
-            name: 'عيادة الجراحة',
+            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¬Ø±Ø§Ø­Ø©',
             icon: 'pi pi-briefcase',
             exam: this.applicant.surgicalExam,
             consultations: surgicalConsultations,
             investigations: surgicalInvestigations
           },
           {
-            name: 'عيادة العظمية',
+            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹Ø¸Ù…ÙŠØ©',
             icon: 'pi pi-bone',
             exam: this.applicant.orthopedicExamDto,
             consultations: orthopedicConsultations,
             investigations: orthopedicInvestigations
           },
           {
-            name: 'عيادة الأذنية',
+            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø£Ø°Ù†ÙŠØ©',
             icon: 'pi pi-volume-up',
             exam: this.applicant.earClinic,
             consultations: earConsultations,
@@ -640,7 +640,7 @@ export class Supervisor implements OnInit {
         this.isLoadingClinicsData = false;
       },
       error: (err) => {
-        this.toastr.error('حدث خطأ أثناء جلب بيانات العيادات', 'خطأ');
+        this.toastr.error('Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ Ø¬Ù„Ø¨ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¹ÙŠØ§Ø¯Ø§Øª', 'Ø®Ø·Ø£');
         this.loading = false;
         this.isLoadingClinicsData = false;
       }
@@ -662,16 +662,16 @@ export class Supervisor implements OnInit {
   }
   getMaritalStatusDescription(id: number): string {
   const status = this.maritalStatuses.find(s => s.maritalStatusID === id);
-  return status ? status.description : 'غير محدد';
+  return status ? status.description : 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
 }
 
   loadResults() {
     this.lookupService.getResults().subscribe({
       next: (data) => {
         this.results = data;
-        const rejected = this.results.find(r => r.description == 'مرفوض');
-        const postponed = this.results.find(r => r.description == 'مؤجل');
-        const approved = this.results.find(r => r.description == 'مقبول');
+        const rejected = this.results.find(r => r.description == 'Ù…Ø±ÙÙˆØ¶');
+        const postponed = this.results.find(r => r.description == 'Ù…Ø¤Ø¬Ù„');
+        const approved = this.results.find(r => r.description == 'Ù…Ù‚Ø¨ÙˆÙ„');
         this.rejectedId = rejected ? rejected.resultID : null;
         this.postponedId = postponed ? postponed.resultID : null;
         this.acceptedId = approved ? approved.resultID : null;
@@ -695,34 +695,34 @@ export class Supervisor implements OnInit {
   }
 
   /**
-   * ✅ فحص حالة النتيجة السابقة وتحديد إمكانية التعديل
-   * - إذا كانت هناك أي نتيجة نهائية موجودة → منع إضافة نتيجة جديدة
-   * - يمكن تعديل النتيجة فقط في dialog قائمة المنتسبين إذا كانت "مؤجل"
+   * âœ… ÙØ­Øµ Ø­Ø§Ù„Ø© Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø© ÙˆØªØ­Ø¯ÙŠØ¯ Ø¥Ù…ÙƒØ§Ù†ÙŠØ© Ø§Ù„ØªØ¹Ø¯ÙŠÙ„
+   * - Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ù†Ø§Ùƒ Ø£ÙŠ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…ÙˆØ¬ÙˆØ¯Ø© â†’ Ù…Ù†Ø¹ Ø¥Ø¶Ø§ÙØ© Ù†ØªÙŠØ¬Ø© Ø¬Ø¯ÙŠØ¯Ø©
+   * - ÙŠÙ…ÙƒÙ† ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù†ØªÙŠØ¬Ø© ÙÙ‚Ø· ÙÙŠ dialog Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ù†ØªØ³Ø¨ÙŠÙ† Ø¥Ø°Ø§ ÙƒØ§Ù†Øª "Ù…Ø¤Ø¬Ù„"
    */
   private checkPreviousDecisionStatus(applicant: ApplicantDetailsModel) {
-    // إعادة تعيين الحالة الافتراضية
+    // Ø¥Ø¹Ø§Ø¯Ø© ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©
     this.canEditDecision = true;
     this.previousDecisionLocked = false;
 
-    // التحقق من وجود نتيجة نهائية سابقة
+    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ø³Ø§Ø¨Ù‚Ø©
     if (!applicant?.finalDecision?.resultID) {
-      // لا توجد نتيجة سابقة، يمكن التعديل
+      // Ù„Ø§ ØªÙˆØ¬Ø¯ Ù†ØªÙŠØ¬Ø© Ø³Ø§Ø¨Ù‚Ø©ØŒ ÙŠÙ…ÙƒÙ† Ø§Ù„ØªØ¹Ø¯ÙŠÙ„
       return;
     }
 
     const previousResultID = applicant.finalDecision.resultID;
 
-    // ✅ إذا كانت هناك أي نتيجة نهائية موجودة → منع إضافة نتيجة جديدة
-    // (يمكن تعديلها فقط في dialog قائمة المنتسبين إذا كانت "مؤجل")
+    // âœ… Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ù†Ø§Ùƒ Ø£ÙŠ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…ÙˆØ¬ÙˆØ¯Ø© â†’ Ù…Ù†Ø¹ Ø¥Ø¶Ø§ÙØ© Ù†ØªÙŠØ¬Ø© Ø¬Ø¯ÙŠØ¯Ø©
+    // (ÙŠÙ…ÙƒÙ† ØªØ¹Ø¯ÙŠÙ„Ù‡Ø§ ÙÙ‚Ø· ÙÙŠ dialog Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ù†ØªØ³Ø¨ÙŠÙ† Ø¥Ø°Ø§ ÙƒØ§Ù†Øª "Ù…Ø¤Ø¬Ù„")
     this.previousDecisionLocked = true;
     this.canEditDecision = false;
 
-    // تعيين النتيجة السابقة في النموذج للعرض فقط
+    // ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø© ÙÙŠ Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ù„Ù„Ø¹Ø±Ø¶ ÙÙ‚Ø·
     this.decisionModel.resultID = previousResultID;
     this.decisionModel.reason = applicant.finalDecision.reason || '';
     this.decisionModel.postponeDuration = applicant.finalDecision.postponeDuration || '';
     
-    // تحديث حالة isApproved و isAccept بناءً على النتيجة السابقة
+    // ØªØ­Ø¯ÙŠØ« Ø­Ø§Ù„Ø© isApproved Ùˆ isAccept Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
     if (previousResultID === this.acceptedId) {
       this.isAccept = true;
       this.isApproved = true;
@@ -735,7 +735,7 @@ export class Supervisor implements OnInit {
     }
   }
   onResultChange(selectedId: number) {
-    // ✅ منع التعديل إذا كانت النتيجة السابقة مقفلة
+    // âœ… Ù…Ù†Ø¹ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø© Ù…Ù‚ÙÙ„Ø©
     if (this.previousDecisionLocked || !this.canEditDecision) {
       return;
     }
@@ -754,67 +754,81 @@ export class Supervisor implements OnInit {
   }
 
   submitDecision() {
-    // ✅ التحقق من إمكانية التعديل
+    // âœ… Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø¥Ù…ÙƒØ§Ù†ÙŠØ© Ø§Ù„ØªØ¹Ø¯ÙŠÙ„
     if (this.previousDecisionLocked || !this.canEditDecision) {
-      this.responseMessage = 'لا يمكن إعادة تقييم هذا المنتسب لأنه تم إصدار نتيجة نهائية سابقاً.';
+      this.responseMessage = 'Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¹Ø§Ø¯Ø© ØªÙ‚ÙŠÙŠÙ… Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ù„Ø£Ù†Ù‡ ØªÙ… Ø¥ØµØ¯Ø§Ø± Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ø³Ø§Ø¨Ù‚Ø§Ù‹.';
       this.responseSuccess = false;
-      this.toastr.warning('لا يمكن إعادة تقييم هذا المنتسب لأنه تم إصدار نتيجة نهائية سابقاً.', 'تحذير');
+      this.toastr.warning('Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¹Ø§Ø¯Ø© ØªÙ‚ÙŠÙŠÙ… Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ù„Ø£Ù†Ù‡ ØªÙ… Ø¥ØµØ¯Ø§Ø± Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ø³Ø§Ø¨Ù‚Ø§Ù‹.', 'ØªØ­Ø°ÙŠØ±');
       return;
     }
 
-    // التحقق من صحة البيانات قبل الإرسال
+    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ØµØ­Ø© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„
     const requiredFields = ['orthopedicExamID', 'surgicalExamID', 'internalExamID', 'eyeExamID', 'applicantFileNumber', 'resultID', 'decisionDate'];
     const missingFields = requiredFields.filter(field => !this.decisionModel[field as keyof typeof this.decisionModel]);
     
     if (missingFields.length > 0) {
-      this.responseMessage = 'بيانات ناقصة: ' + missingFields.join(', ');
+      this.responseMessage = 'Ø¨ÙŠØ§Ù†Ø§Øª Ù†Ø§Ù‚ØµØ©: ' + missingFields.join(', ');
       this.responseSuccess = false;
-      this.toastr.warning('بيانات ناقصة: ' + missingFields.join(', '), 'تحذير');
+      this.toastr.warning('Ø¨ÙŠØ§Ù†Ø§Øª Ù†Ø§Ù‚ØµØ©: ' + missingFields.join(', '), 'ØªØ­Ø°ÙŠØ±');
       return;
     }
     
-    // ✅ التحقق من وجود نتيجة نهائية من بيانات المنتسب المحملة (بدون استدعاء API إضافي)
+    // âœ… Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…Ù† Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ø§Ù„Ù…Ø­Ù…Ù„Ø© (Ø¨Ø¯ÙˆÙ† Ø§Ø³ØªØ¯Ø¹Ø§Ø¡ API Ø¥Ø¶Ø§ÙÙŠ)
     if (this.applicant?.finalDecision?.resultID) {
-      this.responseMessage = 'لا يمكن إضافة نتيجة نهائية، حيث توجد نتيجة نهائية مسجّلة مسبقًا.';
+      this.responseMessage = 'Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ©ØŒ Ø­ÙŠØ« ØªÙˆØ¬Ø¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…Ø³Ø¬Ù‘Ù„Ø© Ù…Ø³Ø¨Ù‚Ù‹Ø§.';
       this.responseSuccess = false;
-      this.toastr.warning('لا يمكن إضافة نتيجة نهائية، حيث توجد نتيجة نهائية مسجّلة مسبقًا.', 'تحذير');
+      this.toastr.warning('Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ©ØŒ Ø­ÙŠØ« ØªÙˆØ¬Ø¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…Ø³Ø¬Ù‘Ù„Ø© Ù…Ø³Ø¨Ù‚Ù‹Ø§.', 'ØªØ­Ø°ÙŠØ±');
       return;
     }
     
-    // ✅ إرسال القرار النهائي مباشرة (الـ backend سيتحقق من وجود نتيجة نهائية)
+    // âœ… Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ù‚Ø±Ø§Ø± Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ Ù…Ø¨Ø§Ø´Ø±Ø© (Ø§Ù„Ù€ backend Ø³ÙŠØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ©)
     this.loading = true;
     
     this.decisionService.createFinalDecision(this.decisionModel)
+      .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: (res) => {
-          this.loading = false;
-          if (res.succeeded) {
-            // ✅ إظهار رسالة تأكيد باستخدام Toastr
+          const isSuccessful = res?.succeeded !== false;
+          if (isSuccessful) {
+            this.responseMessage = 'تم رفع النتيجة بنجاح وتم تثبيت حالة الملف.';
+            this.responseSuccess = true;
             this.toastr.success('تم رفع النتيجة بنجاح', 'نجاح', {
-              timeOut: 2000,
+              timeOut: 2500,
               positionClass: 'toast-top-center'
             });
-            
-            // ✅ إعادة تحميل الصفحة بالكامل بعد تأخير قصير لإظهار الرسالة
-            // هذا سيضمن أن الصفحة مصفرة تماماً بدون أي بيانات أو طلبات API
-            setTimeout(() => {
-              window.location.href = '/supervisor';
-            }, 2000);
+            this.previousDecisionLocked = true;
+            this.canEditDecision = false;
+            if (this.applicant) {
+              this.applicant.finalDecision = {
+                ...(this.applicant.finalDecision || {}),
+                resultID: this.decisionModel.resultID,
+                reason: this.decisionModel.reason,
+                postponeDuration: this.decisionModel.postponeDuration,
+                decisionDate: this.decisionModel.decisionDate,
+                supervisorAddedAt: new Date().toISOString()
+              };
+            }
           } else {
-            const errorMsg = res.message || 'حدث خطأ غير معروف';
+            const errorMsg = res?.message || 'حدث خطأ غير معروف';
             this.responseMessage = errorMsg;
             this.responseSuccess = false;
             this.toastr.error(errorMsg, 'خطأ');
           }
         },
         error: (err) => {
-          this.loading = false;
           let serverMsg = 'حدث خطأ أثناء الاتصال بالسيرفر';
           
           if (err?.status === 404) {
             serverMsg = 'الـ endpoint غير موجود. يرجى التحقق من إعدادات الـ API أو الاتصال بالدعم الفني.';
           } else if (err?.error?.errors) {
-            serverMsg = err.error.errors.detail?.join(', ') || err.error.errors.join(', ') || err.error.message || serverMsg;
+            const errorsMap = err.error.errors;
+            if (Array.isArray(errorsMap)) {
+              serverMsg = errorsMap.join(', ');
+            } else if (Array.isArray(errorsMap?.detail)) {
+              serverMsg = errorsMap.detail.join(', ');
+            } else if (errorsMap?.message) {
+              serverMsg = errorsMap.message;
+            }
           } else if (err?.error?.message) {
             serverMsg = err.error.message;
           }
@@ -828,12 +842,12 @@ export class Supervisor implements OnInit {
   }
 
   resetForm() {
-    // إعادة تعيين النموذج في القالب أولاً
+    // Ø¥Ø¹Ø§Ø¯Ø© ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ ÙÙŠ Ø§Ù„Ù‚Ø§Ù„Ø¨ Ø£ÙˆÙ„Ø§Ù‹
     if (this.decisionForm) {
       this.decisionForm.resetForm();
     }
     
-    // إعادة تعيين جميع المتغيرات إلى حالتها الأولية
+    // Ø¥Ø¹Ø§Ø¯Ø© ØªØ¹ÙŠÙŠÙ† Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…ØªØºÙŠØ±Ø§Øª Ø¥Ù„Ù‰ Ø­Ø§Ù„ØªÙ‡Ø§ Ø§Ù„Ø£ÙˆÙ„ÙŠØ©
     this.applicant = undefined!;
     this.decisionModel = undefined!;
     this.responseMessage = '';
@@ -847,7 +861,7 @@ export class Supervisor implements OnInit {
   }
   getResultDescription(resultID: number): string {
     const result = this.results.find(r => r.resultID === resultID);
-    return result ? result.description : 'غير محدد';
+    return result ? result.description : 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
   }
 
   getResultSeverity(resultID: number): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null {
@@ -855,23 +869,23 @@ export class Supervisor implements OnInit {
     if (!result) return 'secondary';
     
     const description = result.description.toLowerCase();
-    if (description.includes('مقبول') || description.includes('قبول')) return 'success';
-    if (description.includes('مرفوض') || description.includes('رفض')) return 'danger';
-    if (description.includes('مؤجل') || description.includes('تأجيل')) return 'warn';
+    if (description.includes('Ù…Ù‚Ø¨ÙˆÙ„') || description.includes('Ù‚Ø¨ÙˆÙ„')) return 'success';
+    if (description.includes('Ù…Ø±ÙÙˆØ¶') || description.includes('Ø±ÙØ¶')) return 'danger';
+    if (description.includes('Ù…Ø¤Ø¬Ù„') || description.includes('ØªØ£Ø¬ÙŠÙ„')) return 'warn';
     return 'info';
   }
 
   getStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null {
     if (!status) return 'secondary';
     const statusLower = status.toLowerCase();
-    if (statusLower.includes('مكتمل') || statusLower.includes('جاهز')) return 'success';
-    if (statusLower.includes('قيد') || statusLower.includes('انتظار')) return 'warn';
-    if (statusLower.includes('ملغي') || statusLower.includes('رفض')) return 'danger';
+    if (statusLower.includes('Ù…ÙƒØªÙ…Ù„') || statusLower.includes('Ø¬Ø§Ù‡Ø²')) return 'success';
+    if (statusLower.includes('Ù‚ÙŠØ¯') || statusLower.includes('Ø§Ù†ØªØ¸Ø§Ø±')) return 'warn';
+    if (statusLower.includes('Ù…Ù„ØºÙŠ') || statusLower.includes('Ø±ÙØ¶')) return 'danger';
     return 'info';
   }
 
   /**
-   * ✅ حساب عدد التواريخ المتاحة في القرار النهائي
+   * âœ… Ø­Ø³Ø§Ø¨ Ø¹Ø¯Ø¯ Ø§Ù„ØªÙˆØ§Ø±ÙŠØ® Ø§Ù„Ù…ØªØ§Ø­Ø© ÙÙŠ Ø§Ù„Ù‚Ø±Ø§Ø± Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ
    */
   getDatesCount(finalDecision: any): number {
     if (!finalDecision) return 0;
@@ -906,11 +920,11 @@ export class Supervisor implements OnInit {
 
   getSpecializationId(clinicName: string): number {
     switch(clinicName) {
-      case 'عيادة العيون': return this.EYE_SPECIALIZATION_ID;
-      case 'عيادة الباطنة': return this.INTERNAL_SPECIALIZATION_ID;
-      case 'عيادة الجراحة': return this.SURGICAL_SPECIALIZATION_ID;
-      case 'عيادة العظمية': return this.ORTHOPEDIC_SPECIALIZATION_ID;
-      case 'عيادة الأذنية': return this.EAR_SPECIALIZATION_ID;
+      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹ÙŠÙˆÙ†': return this.EYE_SPECIALIZATION_ID;
+      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¨Ø§Ø·Ù†Ø©': return this.INTERNAL_SPECIALIZATION_ID;
+      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¬Ø±Ø§Ø­Ø©': return this.SURGICAL_SPECIALIZATION_ID;
+      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹Ø¸Ù…ÙŠØ©': return this.ORTHOPEDIC_SPECIALIZATION_ID;
+      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø£Ø°Ù†ÙŠØ©': return this.EAR_SPECIALIZATION_ID;
       default: return 0;
     }
   }
@@ -932,15 +946,15 @@ export class Supervisor implements OnInit {
       consultationID: 0,
       applicantFileNumber: this.applicant.fileNumber,
       consultationType: '',
-      referralReason: '', // ✅ جديد
+      referralReason: '', // âœ… Ø¬Ø¯ÙŠØ¯
       result: '',
       attachment: '',
       doctorID: 0
     } as Consultation;
     this.consultationForm = this.fb.group({
       consultationType: ['', Validators.required],
-      // referredDoctor: ['', Validators.required], // ❌ تم حذفه
-      referralReason: [''], // ✅ جديد - اختياري
+      // referredDoctor: ['', Validators.required], // âŒ ØªÙ… Ø­Ø°ÙÙ‡
+      referralReason: [''], // âœ… Ø¬Ø¯ÙŠØ¯ - Ø§Ø®ØªÙŠØ§Ø±ÙŠ
       result: ['', Validators.required],
       attachment: [null]
     });
@@ -976,14 +990,14 @@ export class Supervisor implements OnInit {
         if (response.succeeded && response.data) {
           this.uploadedPath = response.data;
           this.consultationForm.patchValue({ attachment: response.data });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+          this.toastr.success('âœ… ØªÙ… Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
         } else {
-          this.toastr.error('❌ فشل رفع الملف', 'خطأ');
+          this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
         }
         this.uploadingFile = false;
       },
       error: () => {
-        this.toastr.error('❌ فشل رفع الملف', 'خطأ');
+        this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
         this.uploadingFile = false;
       }
     });
@@ -991,7 +1005,7 @@ export class Supervisor implements OnInit {
 
   saveConsultation() {
     if (this.consultationForm.invalid) {
-      this.toastr.warning('❌ يرجى تعبئة جميع الحقول المطلوبة', 'تحذير');
+      this.toastr.warning('âŒ ÙŠØ±Ø¬Ù‰ ØªØ¹Ø¨Ø¦Ø© Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ„ Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø©', 'ØªØ­Ø°ÙŠØ±');
       return;
     }
 
@@ -1004,8 +1018,8 @@ export class Supervisor implements OnInit {
       doctorID: doctorID || this.selectedConsultation.doctorID || 0,
       applicantFileNumber: this.applicant.fileNumber,
       consultationType: formValue.consultationType || this.selectedConsultation.consultationType,
-      // referredDoctor: formValue.referredDoctor || this.selectedConsultation.referredDoctor, // ❌ تم حذفه
-      referralReason: formValue.referralReason || this.selectedConsultation.referralReason || '', // ✅ جديد
+      // referredDoctor: formValue.referredDoctor || this.selectedConsultation.referredDoctor, // âŒ ØªÙ… Ø­Ø°ÙÙ‡
+      referralReason: formValue.referralReason || this.selectedConsultation.referralReason || '', // âœ… Ø¬Ø¯ÙŠØ¯
       result: formValue.result,
       attachment: this.uploadedPath || this.selectedConsultation.attachment || ''
     };
@@ -1024,16 +1038,16 @@ export class Supervisor implements OnInit {
     request$.subscribe({
       next: (response) => {
         if (response.succeeded) {
-          this.toastr.success(isUpdate ? '✅ تم تحديث الاستشارة بنجاح' : '✅ تم إضافة الاستشارة بنجاح', 'نجاح');
+          this.toastr.success(isUpdate ? 'âœ… ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¨Ù†Ø¬Ø§Ø­' : 'âœ… ØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
           this.closeConsultationModal();
           this.loadClinicsData(this.applicant.fileNumber);
         } else {
-          this.toastr.error('❌ فشل العملية', 'خطأ');
+          this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
         }
         this.loading = false;
       },
       error: () => {
-        this.toastr.error('❌ فشل العملية', 'خطأ');
+        this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
         this.loading = false;
       }
     });
@@ -1045,7 +1059,7 @@ export class Supervisor implements OnInit {
     this.investigationForm = this.fb.group({
       type: [investigation.type || ''],
       result: [investigation.result || '', Validators.required],
-      status: [investigation.status || (investigation.result ? 'مكتمل' : 'مؤجل'), Validators.required],
+      status: [investigation.status || (investigation.result ? 'Ù…ÙƒØªÙ…Ù„' : 'Ù…Ø¤Ø¬Ù„'), Validators.required],
       attachment: [investigation.attachment || null]
     });
     this.uploadedPath = investigation.attachment || null;
@@ -1059,14 +1073,14 @@ export class Supervisor implements OnInit {
       applicantFileNumber: this.applicant.fileNumber,
       type: '',
       result: '',
-      status: 'مؤجل',
+      status: 'Ù…Ø¤Ø¬Ù„',
       attachment: '',
       doctorID: 0
     } as Investigation;
     this.investigationForm = this.fb.group({
       type: ['', Validators.required],
       result: ['', Validators.required],
-      status: ['مؤجل', Validators.required],
+      status: ['Ù…Ø¤Ø¬Ù„', Validators.required],
       attachment: [null]
     });
     this.uploadedPath = null;
@@ -1101,14 +1115,14 @@ export class Supervisor implements OnInit {
         if (response.succeeded && response.data) {
           this.uploadedPath = response.data;
           this.investigationForm.patchValue({ attachment: response.data });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+          this.toastr.success('âœ… ØªÙ… Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
         } else {
-          this.toastr.error('❌ فشل رفع الملف', 'خطأ');
+          this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
         }
         this.uploadingFile = false;
       },
       error: () => {
-        this.toastr.error('❌ فشل رفع الملف', 'خطأ');
+        this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
         this.uploadingFile = false;
       }
     });
@@ -1116,7 +1130,7 @@ export class Supervisor implements OnInit {
 
   saveInvestigation() {
     if (this.investigationForm.invalid) {
-      this.toastr.warning('❌ يرجى تعبئة جميع الحقول المطلوبة', 'تحذير');
+      this.toastr.warning('âŒ ÙŠØ±Ø¬Ù‰ ØªØ¹Ø¨Ø¦Ø© Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ„ Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø©', 'ØªØ­Ø°ÙŠØ±');
       return;
     }
 
@@ -1148,19 +1162,20 @@ export class Supervisor implements OnInit {
     request$.subscribe({
       next: (response) => {
         if (response.succeeded) {
-          this.toastr.success(isUpdate ? '✅ تم تحديث التحليل بنجاح' : '✅ تم إضافة التحليل بنجاح', 'نجاح');
+          this.toastr.success(isUpdate ? 'âœ… ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø¨Ù†Ø¬Ø§Ø­' : 'âœ… ØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
           this.closeInvestigationModal();
           this.loadClinicsData(this.applicant.fileNumber);
         } else {
-          this.toastr.error('❌ فشل العملية', 'خطأ');
+          this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
         }
         this.loading = false;
       },
       error: () => {
-        this.toastr.error('❌ فشل العملية', 'خطأ');
+        this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
         this.loading = false;
       }
     });
   }
 
 }
+

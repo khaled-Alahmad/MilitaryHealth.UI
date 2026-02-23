@@ -2,7 +2,8 @@
   <!-- ✅ Search Section - استخدام مكون البحث المتقدم -->
   <div class="row justify-content-center mb-4">
     <div class="col-12">
-      <app-search-applicant [hideApplicantDetails]="true" (applicantDetailsSelected)="onApplicantDetailsSelected($event)"></app-search-applicant>
+      <app-search-applicant [hideApplicantDetails]="true"
+        (applicantDetailsSelected)="onApplicantDetailsSelected($event)"></app-search-applicant>
       <div *ngIf="applicant && !hasAllExams()" class="alert alert-danger mt-3" role="alert">
         <i class="fas fa-exclamation-triangle me-2"></i>
         الفحوصات الطبية غير مكتملة
@@ -31,7 +32,7 @@
             <p-tag [value]="'ملف: ' + applicant.fileNumber" severity="info" styleClass="file-badge"></p-tag>
           </div>
         </ng-template>
-        
+
         <div class="personal-info-grid">
           <div class="info-item">
             <div class="info-label">
@@ -47,54 +48,54 @@
             </div>
             <div class="info-value">{{ applicant.fullName }}</div>
           </div>
-            <div class="info-item">
-              <div class="info-label">
-                <i class="pi pi-user-edit"></i>
-                اسم الأم
-              </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-user-edit"></i>
+              اسم الأم
+            </div>
             <div class="info-value">{{ applicant.motherName || 'غير محدد' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-calendar"></i>
+              تاريخ المواليد
             </div>
-            <div class="info-item">
-              <div class="info-label">
-                <i class="pi pi-calendar"></i>
-                تاريخ المواليد
-              </div>
             <div class="info-value">{{ applicant.dateOfBirth | gregorianDate:'yyyy/MM/dd' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-heart"></i>
+              زمرة الدم
             </div>
-            <div class="info-item">
-              <div class="info-label">
-                <i class="pi pi-heart"></i>
-                زمرة الدم
-              </div>
-              <div class="info-value">
+            <div class="info-value">
               <span *ngIf="applicant.bloodType" class="badge bg-info text-white">{{ applicant.bloodType }}</span>
               <span *ngIf="!applicant.bloodType" class="text-muted">غير محدد</span>
-              </div>
             </div>
-            <div class="info-item">
-              <div class="info-label">
-                <i class="pi pi-building"></i>
-                مركز التجنيد
-              </div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-building"></i>
+              مركز التجنيد
+            </div>
             <div class="info-value">{{ applicant.recruitmentCenter || 'غير محدد' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-sort-numeric-up"></i>
+              رقم الدور
             </div>
-            <div class="info-item">
-              <div class="info-label">
-                <i class="pi pi-sort-numeric-up"></i>
-                رقم الدور
-              </div>
-              <div class="info-value">
+            <div class="info-value">
               <span *ngIf="applicant.queueNumber" class="badge bg-primary text-white">{{ applicant.queueNumber }}</span>
               <span *ngIf="!applicant.queueNumber" class="text-muted">غير محدد</span>
-              </div>
             </div>
-            <div class="info-item">
-              <div class="info-label">
-                <i class="pi pi-calendar-plus"></i>
-                تاريخ الإضافة
-              </div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <i class="pi pi-calendar-plus"></i>
+              تاريخ الإضافة
+            </div>
             <div class="info-value">{{ applicant.createdAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</div>
-            </div>
+          </div>
           <div class="info-item">
             <div class="info-label">
               <i class="pi pi-heart"></i>
@@ -150,8 +151,8 @@
               وشم
             </div>
             <div class="info-value">
-              <p-tag [value]="applicant.tattoo ? 'يوجد' : 'لا يوجد'" 
-                     [severity]="applicant.tattoo ? 'warn' : 'success'"></p-tag>
+              <p-tag [value]="applicant.tattoo ? 'يوجد' : 'لا يوجد'"
+                [severity]="applicant.tattoo ? 'warn' : 'success'"></p-tag>
             </div>
           </div>
           <div class="info-item col-12">
@@ -174,9 +175,8 @@
               <i [class]="clinic.icon" class="clinic-icon"></i>
               <h5 class="mb-0">{{ clinic.name }}</h5>
             </div>
-            <p-tag [value]="clinic.exam ? 'تم الفحص' : 'لم يتم الفحص'" 
-                   [severity]="clinic.exam ? 'success' : 'danger'"
-                   styleClass="exam-status-badge"></p-tag>
+            <p-tag [value]="clinic.exam ? 'تم الفحص' : 'لم يتم الفحص'" [severity]="clinic.exam ? 'success' : 'danger'"
+              styleClass="exam-status-badge"></p-tag>
           </div>
         </ng-template>
 
@@ -219,7 +219,7 @@
                     </div>
                     <div class="data-value">{{ getColorTestLeft(clinic.exam) }}</div>
                   </div>
-                  
+
                   <!-- الانكسارات - العين اليمنى -->
                   <div class="data-row" *ngIf="getRightEyeRefractions(clinic.exam).length > 0">
                     <div class="data-label">
@@ -228,14 +228,13 @@
                     </div>
                     <div class="data-value">
                       <div class="refractions-display d-flex flex-wrap gap-2">
-                        <span *ngFor="let ref of getRightEyeRefractions(clinic.exam)" 
-                              class="badge bg-info text-white">
+                        <span *ngFor="let ref of getRightEyeRefractions(clinic.exam)" class="badge bg-info text-white">
                           {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
                         </span>
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- الانكسارات - العين اليسرى -->
                   <div class="data-row" *ngIf="getLeftEyeRefractions(clinic.exam).length > 0">
                     <div class="data-label">
@@ -244,23 +243,24 @@
                     </div>
                     <div class="data-value">
                       <div class="refractions-display d-flex flex-wrap gap-2">
-                        <span *ngFor="let ref of getLeftEyeRefractions(clinic.exam)" 
-                              class="badge bg-secondary text-white">
+                        <span *ngFor="let ref of getLeftEyeRefractions(clinic.exam)"
+                          class="badge bg-secondary text-white">
                           {{ getRefractionTypeName(ref.refractionTypeID) }}: {{ ref.refractionValue }}
                         </span>
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- رسالة إذا لم توجد انكسارات -->
-                  <div class="data-row" *ngIf="getRightEyeRefractions(clinic.exam).length === 0 && getLeftEyeRefractions(clinic.exam).length === 0">
+                  <div class="data-row"
+                    *ngIf="getRightEyeRefractions(clinic.exam).length === 0 && getLeftEyeRefractions(clinic.exam).length === 0">
                     <div class="data-label">
                       <i class="pi pi-info-circle"></i>
                       <span>الانكسارات</span>
                     </div>
                     <div class="data-value text-muted">لا توجد انكسارات مسجلة</div>
                   </div>
-                  
+
                   <div class="data-row" *ngIf="clinic.exam.otherDiseases">
                     <div class="data-label">
                       <i class="pi pi-exclamation-triangle"></i>
@@ -268,7 +268,7 @@
                     </div>
                     <div class="data-value">{{ clinic.exam.otherDiseases }}</div>
                   </div>
-                  
+
                   <div class="data-row" *ngIf="clinic.exam.reason">
                     <div class="data-label">
                       <i class="pi pi-info-circle"></i>
@@ -276,19 +276,19 @@
                     </div>
                     <div class="data-value reason-text">{{ clinic.exam.reason }}</div>
                   </div>
-                  
+
                   <div class="data-row result-row">
                     <div class="data-label">
                       <i class="pi pi-check-circle"></i>
                       <span>النتيجة</span>
                     </div>
                     <div class="data-value">
-                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
-                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)"
+                        [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Internal Exam -->
                 <div *ngSwitchCase="'عيادة الباطنة'" class="exam-data">
                   <div class="data-row">
@@ -360,12 +360,12 @@
                       <span>النتيجة</span>
                     </div>
                     <div class="data-value">
-                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
-                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)"
+                        [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Surgical Exam -->
                 <div *ngSwitchCase="'عيادة الجراحة'" class="exam-data">
                   <div class="data-row">
@@ -402,12 +402,12 @@
                       <span>النتيجة</span>
                     </div>
                     <div class="data-value">
-                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
-                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)"
+                        [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Orthopedic Exam -->
                 <div *ngSwitchCase="'عيادة العظمية'" class="exam-data">
                   <div class="data-row">
@@ -430,8 +430,8 @@
                       <span>النتيجة</span>
                     </div>
                     <div class="data-value">
-                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
-                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)"
+                        [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
                     </div>
                   </div>
                   <div class="data-row" *ngIf="clinic.exam.reason">
@@ -442,7 +442,7 @@
                     <div class="data-value reason-text">{{ clinic.exam.reason }}</div>
                   </div>
                 </div>
-                
+
                 <!-- Ear Exam -->
                 <div *ngSwitchCase="'عيادة الأذنية'" class="exam-data">
                   <div class="data-row">
@@ -450,14 +450,16 @@
                       <i class="pi pi-volume-up"></i>
                       <span>الأذن اليمنى (الغشاء الطبلي)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.rightTympanicMembrane || clinic.exam.rightEar || 'غير محدد' }}</div>
+                    <div class="data-value">{{ clinic.exam.rightTympanicMembrane || clinic.exam.rightEar || 'غير محدد'
+                      }}</div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
                       <i class="pi pi-volume-down"></i>
                       <span>الأذن اليسرى (الغشاء الطبلي)</span>
                     </div>
-                    <div class="data-value">{{ clinic.exam.leftTympanicMembrane || clinic.exam.leftEar || 'غير محدد' }}</div>
+                    <div class="data-value">{{ clinic.exam.leftTympanicMembrane || clinic.exam.leftEar || 'غير محدد' }}
+                    </div>
                   </div>
                   <div class="data-row">
                     <div class="data-label">
@@ -507,8 +509,8 @@
                       <span>النتيجة</span>
                     </div>
                     <div class="data-value">
-                      <p-tag [value]="getResultDescription(clinic.exam.resultID)" 
-                             [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
+                      <p-tag [value]="getResultDescription(clinic.exam.resultID)"
+                        [severity]="getResultSeverity(clinic.exam.resultID)"></p-tag>
                     </div>
                   </div>
                   <div class="data-row" *ngIf="clinic.exam.reason">
@@ -538,27 +540,25 @@
               <div class="d-flex align-items-center gap-2">
                 <i class="pi pi-comments"></i>
                 <span>الاستشارات الخارجية</span>
-                <p-tag [value]="clinic.consultations.length + ' استشارة'" 
-                       severity="info" 
-                       styleClass="ms-2 count-badge"></p-tag>
+                <p-tag [value]="clinic.consultations.length + ' استشارة'" severity="info"
+                  styleClass="ms-2 count-badge"></p-tag>
               </div>
-              <p-button 
-                icon="pi pi-plus" 
-                label="إضافة استشارة" 
-                styleClass="p-button-sm p-button-outlined"
+              <p-button icon="pi pi-plus" label="إضافة استشارة" styleClass="p-button-sm p-button-outlined"
                 (click)="openAddConsultationModal(clinic.name, getSpecializationId(clinic.name))"
                 [disabled]="!applicant"></p-button>
             </div>
             <div *ngIf="clinic.consultations.length > 0; else noConsultations" class="consultations-list">
-              <div *ngFor="let consultation of clinic.consultations; trackBy: trackByConsultationId" class="consultation-card">
+              <div *ngFor="let consultation of clinic.consultations; trackBy: trackByConsultationId"
+                class="consultation-card">
                 <div class="consultation-main">
                   <div class="consultation-info">
                     <div class="consultation-header">
-                    <div class="consultation-type">
-                      <i class="pi pi-comment"></i>
+                      <div class="consultation-type">
+                        <i class="pi pi-comment"></i>
                         <strong>{{ consultation.consultationType || 'غير محدد' }}</strong>
-                    </div>
-                      <p-tag [value]="'#' + consultation.consultationID" severity="info" styleClass="consultation-id-badge"></p-tag>
+                      </div>
+                      <p-tag [value]="'#' + consultation.consultationID" severity="info"
+                        styleClass="consultation-id-badge"></p-tag>
                     </div>
                     <div class="consultation-meta">
                       <div class="meta-item" *ngIf="consultation.doctor">
@@ -566,7 +566,7 @@
                         <span>{{ consultation.doctor.fullName || 'غير محدد' }}</span>
                       </div>
                       <div class="meta-item" *ngIf="consultation.referralReason">
-                      <i class="pi pi-info-circle"></i>
+                        <i class="pi pi-info-circle"></i>
                         <span class="referral-reason">{{ consultation.referralReason }}</span>
                       </div>
                       <div class="meta-item" *ngIf="!consultation.referralReason">
@@ -576,13 +576,10 @@
                     </div>
                   </div>
                   <div class="consultation-actions">
-                    <p-button 
-                      icon="pi pi-pencil" 
-                      label="تعديل" 
-                      styleClass="p-button-sm p-button-outlined"
-                      (onClick)="openEditConsultationModal(consultation)"
-                      [disabled]="loading"></p-button>
-                    <button *ngIf="consultation.attachment" class="btn-attachment" (click)="openFile(consultation.attachment)" title="عرض المرفق">
+                    <p-button icon="pi pi-pencil" label="تعديل" styleClass="p-button-sm p-button-outlined"
+                      (onClick)="openEditConsultationModal(consultation)" [disabled]="loading"></p-button>
+                    <button *ngIf="consultation.attachment" class="btn-attachment"
+                      (click)="openFile(consultation.attachment)" title="عرض المرفق">
                       <i class="pi pi-file"></i>
                       <span>عرض المرفق</span>
                     </button>
@@ -619,33 +616,30 @@
               <div class="d-flex align-items-center gap-2">
                 <i class="pi pi-file"></i>
                 <span>التحاليل المخبرية والشعاعية</span>
-                <p-tag [value]="clinic.investigations.length + ' تحليل'" 
-                       severity="info" 
-                       styleClass="ms-2 count-badge"></p-tag>
+                <p-tag [value]="clinic.investigations.length + ' تحليل'" severity="info"
+                  styleClass="ms-2 count-badge"></p-tag>
               </div>
-              <p-button 
-                icon="pi pi-plus" 
-                label="إضافة تحليل" 
-                styleClass="p-button-sm p-button-outlined"
+              <p-button icon="pi pi-plus" label="إضافة تحليل" styleClass="p-button-sm p-button-outlined"
                 (onClick)="openAddInvestigationModal(clinic.name, getSpecializationId(clinic.name))"
                 [disabled]="!applicant"></p-button>
             </div>
             <div *ngIf="clinic.investigations.length > 0; else noInvestigations" class="investigations-list">
-              <div *ngFor="let investigation of clinic.investigations; trackBy: trackByInvestigationId" class="investigation-card">
+              <div *ngFor="let investigation of clinic.investigations; trackBy: trackByInvestigationId"
+                class="investigation-card">
                 <div class="investigation-main">
                   <div class="investigation-info">
                     <div class="investigation-header">
-                    <div class="investigation-type">
-                      <i class="pi pi-file"></i>
+                      <div class="investigation-type">
+                        <i class="pi pi-file"></i>
                         <strong>{{ investigation.type || 'غير محدد' }}</strong>
                       </div>
-                      <p-tag [value]="'#' + investigation.investigationID" severity="info" styleClass="investigation-id-badge"></p-tag>
+                      <p-tag [value]="'#' + investigation.investigationID" severity="info"
+                        styleClass="investigation-id-badge"></p-tag>
                     </div>
                     <div class="investigation-meta">
                       <div class="meta-item">
-                      <p-tag [value]="investigation.status || 'غير محدد'" 
-                             [severity]="getStatusSeverity(investigation.status)"
-                             styleClass="status-badge"></p-tag>
+                        <p-tag [value]="investigation.status || 'غير محدد'"
+                          [severity]="getStatusSeverity(investigation.status)" styleClass="status-badge"></p-tag>
                       </div>
                       <div class="meta-item" *ngIf="investigation.doctor">
                         <i class="pi pi-user-md"></i>
@@ -662,13 +656,10 @@
                     </div>
                   </div>
                   <div class="investigation-actions">
-                    <p-button 
-                      icon="pi pi-pencil" 
-                      label="تعديل" 
-                      styleClass="p-button-sm p-button-outlined"
-                      (onClick)="openEditInvestigationModal(investigation)"
-                      [disabled]="loading"></p-button>
-                    <button *ngIf="investigation.attachment" class="btn-attachment" (click)="openFile(investigation.attachment)" title="عرض المرفق">
+                    <p-button icon="pi pi-pencil" label="تعديل" styleClass="p-button-sm p-button-outlined"
+                      (onClick)="openEditInvestigationModal(investigation)" [disabled]="loading"></p-button>
+                    <button *ngIf="investigation.attachment" class="btn-attachment"
+                      (click)="openFile(investigation.attachment)" title="عرض المرفق">
                       <i class="pi pi-file"></i>
                       <span>عرض المرفق</span>
                     </button>
@@ -711,34 +702,34 @@
             </div>
           </div>
         </ng-template> -->
-        
+
         <!-- ✅ معلومات القرار النهائي الحالي (إن وجد) -->
         @if (applicant && applicant.finalDecision) {
-          @let finalDecision = applicant.finalDecision;
-          <div class="final-decision-card">
-            <!-- Header Section -->
-            <div class="decision-card-header">
-              <div class="header-content">
-                <div class="header-icon-wrapper">
-                  <i class="pi pi-check-circle"></i>
-                </div>
-                <div class="header-text">
-                  <h4 class="header-title">
-                    <i class="pi pi-file-check header-title-icon"></i>
-                    القرار النهائي
-                  </h4>
-                  <p class="header-subtitle">
-                    <i class="pi pi-info-circle header-subtitle-icon"></i>
-                    معلومات تفصيلية عن القرار النهائي المسجل
-                  </p>
-                </div>
+        @let finalDecision = applicant.finalDecision;
+        <div class="final-decision-card">
+          <!-- Header Section -->
+          <div class="decision-card-header">
+            <div class="header-content">
+              <div class="header-icon-wrapper">
+                <i class="pi pi-check-circle"></i>
+              </div>
+              <div class="header-text">
+                <h4 class="header-title">
+                  <i class="pi pi-file-check header-title-icon"></i>
+                  القرار النهائي
+                </h4>
+                <p class="header-subtitle">
+                  <i class="pi pi-info-circle header-subtitle-icon"></i>
+                  معلومات تفصيلية عن القرار النهائي المسجل
+                </p>
               </div>
             </div>
+          </div>
 
-            <!-- Content Section -->
-            <div class="decision-card-body">
-              <!-- التواريخ Section -->
-              <div class="decision-info-section dates-section">
+          <!-- Content Section -->
+          <div class="decision-card-body">
+            <!-- التواريخ Section -->
+            <!-- <div class="decision-info-section dates-section">
                 <div class="section-header">
                   <div class="section-icon">
                     <i class="pi pi-calendar"></i>
@@ -824,239 +815,197 @@
                     </div>
                   }
                 </div>
-              </div>
+              </div> -->
 
-              <!-- الحالة والنتيجة Section -->
-              <div class="decision-info-section status-section">
-                <div class="section-header">
-                  <div class="section-icon status-section-icon">
-                    <i class="pi pi-check-circle"></i>
-                  </div>
-                  <h6 class="section-title">الحالة والنتيجة</h6>
+            <!-- الحالة والنتيجة Section -->
+            <div class="decision-info-section status-section">
+              <div class="section-header">
+                <div class="section-icon status-section-icon">
+                  <i class="pi pi-check-circle"></i>
                 </div>
-                <div class="info-list status-list">
-                  <div class="info-item status-item">
-                    <div class="info-item-icon status-icon">
-                      <i class="pi pi-file-export"></i>
-                    </div>
-                    <div class="info-item-content">
-                      <div class="info-item-label">حالة التصدير للتجنيد</div>
-                      <div class="info-item-value">
-                        <p-tag 
-                          [value]="(finalDecision.isExportedToRecruitment ?? false) ? 'تم التصدير' : 'لم يتم التصدير'" 
-                          [severity]="(finalDecision.isExportedToRecruitment ?? false) ? 'success' : 'warn'"
-                          styleClass="status-badge">
-                        </p-tag>
-                      </div>
+                <h6 class="section-title">الحالة والنتيجة</h6>
+              </div>
+              <div class="info-list status-list">
+                <div class="info-item status-item">
+                  <div class="info-item-icon status-icon">
+                    <i class="pi pi-file-export"></i>
+                  </div>
+                  <div class="info-item-content">
+                    <div class="info-item-label">حالة التصدير للتجنيد</div>
+                    <div class="info-item-value">
+                      <p-tag
+                        [value]="(finalDecision.isExportedToRecruitment ?? false) ? 'تم التصدير' : 'لم يتم التصدير'"
+                        [severity]="(finalDecision.isExportedToRecruitment ?? false) ? 'success' : 'warn'"
+                        styleClass="status-badge">
+                      </p-tag>
                     </div>
                   </div>
+                </div>
 
-                  <div class="info-item result-item">
-                    <div class="info-item-icon result-icon">
-                      <i class="pi pi-flag"></i>
-                    </div>
-                    <div class="info-item-content">
-                      <div class="info-item-label">النتيجة النهائية</div>
-                      <div class="info-item-value">
-                        <p-tag 
-                          [value]="finalDecision.result ? finalDecision.result.description : '-'" 
-                          [severity]="getResultSeverity(finalDecision.resultID)"
-                          styleClass="result-badge">
-                        </p-tag>
-                      </div>
+                <div class="info-item result-item">
+                  <div class="info-item-icon result-icon">
+                    <i class="pi pi-flag"></i>
+                  </div>
+                  <div class="info-item-content">
+                    <div class="info-item-label">النتيجة النهائية</div>
+                    <div class="info-item-value">
+                      <p-tag [value]="finalDecision.result ? finalDecision.result.description : '-'"
+                        [severity]="getResultSeverity(finalDecision.resultID)" styleClass="result-badge">
+                      </p-tag>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
         }
-        
+
         <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود -->
         @if (applicant && applicant.finalDecision) {
-          <div class="decision-locked-message">
-            <div class="locked-icon">
-              <i class="pi pi-lock"></i>
-            </div>
-            <div class="locked-content">
-              <h6 class="locked-title">
-                <i class="pi pi-info-circle"></i>
-                القرار النهائي مسجل مسبقاً
-              </h6>
-              <p class="locked-text">
-                تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
-                يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
-              </p>
-            </div>
+        <div class="decision-locked-message">
+          <div class="locked-icon">
+            <i class="pi pi-lock"></i>
           </div>
+          <div class="locked-content">
+            <h6 class="locked-title">
+              <i class="pi pi-info-circle"></i>
+              القرار النهائي مسجل مسبقاً
+            </h6>
+            <p class="locked-text">
+              تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
+              يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
+            </p>
+          </div>
+        </div>
         } @else if (previousDecisionLocked) {
-          <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود (من checkExistingDecision) -->
-          <div class="decision-locked-message">
-            <div class="locked-icon">
-              <i class="pi pi-lock"></i>
+        <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود (من checkExistingDecision) -->
+        <div class="decision-locked-message">
+          <div class="locked-icon">
+            <i class="pi pi-lock"></i>
+          </div>
+          <div class="locked-content">
+            <h6 class="locked-title">
+              <i class="pi pi-info-circle"></i>
+              القرار النهائي مسجل مسبقاً
+            </h6>
+            <p class="locked-text">
+              تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
+              يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
+            </p>
+          </div>
+        </div>
+        } @else {
+        <!-- ✅ نموذج إضافة قرار نهائي جديد -->
+        <form #decisionForm="ngForm" name="decisionForm" class="decision-form">
+          <div class="form-section-header">
+            <div class="section-icon-small">
+              <i class="pi pi-plus-circle"></i>
             </div>
-            <div class="locked-content">
-              <h6 class="locked-title">
+            <h6 class="section-title-small">إضافة قرار نهائي جديد</h6>
+          </div>
+
+          <div class="form-fields">
+            <div class="form-field-group">
+              <label class="form-label-enhanced">
+                <i class="pi pi-list"></i>
+                النتيجة <span class="required-star">*</span>
+              </label>
+              <ng-select [items]="results" bindLabel="description" bindValue="resultID"
+                [(ngModel)]="decisionModel.resultID" name="resultID" (ngModelChange)="onResultChange($event)"
+                [appendTo]="'body'" [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked"
+                placeholder="اختر النتيجة" class="enhanced-select">
+              </ng-select>
+              @if (!hasAllExams()) {
+              <small class="form-hint">
+                <i class="pi pi-exclamation-triangle"></i>
+                يجب إكمال جميع الفحوصات الطبية أولاً
+              </small>
+              }
+            </div>
+
+            <div class="form-field-group" *ngIf="canEditDecision && !previousDecisionLocked">
+              <label class="form-label-enhanced" *ngIf="isAccept">
+                <i class="pi pi-thumbs-up"></i>
+                التوصية
+              </label>
+              <label class="form-label-enhanced" *ngIf="!isAccept">
                 <i class="pi pi-info-circle"></i>
-                القرار النهائي مسجل مسبقاً
-              </h6>
-              <p class="locked-text">
-                تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
-                يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
-              </p>
+                السبب
+              </label>
+              <textarea class="form-control-enhanced" [(ngModel)]="decisionModel.reason" name="reason" rows="4"
+                placeholder="أدخل التوصية أو السبب..."
+                [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked">
+                </textarea>
+            </div>
+
+            <!-- ✅ عرض السبب/التوصية للقراءة فقط عند وجود نتيجة نهائية -->
+            <div class="form-field-group" *ngIf="previousDecisionLocked">
+              <label class="form-label-enhanced">
+                <i class="pi pi-info-circle"></i>
+                {{ isAccept ? 'التوصية' : 'السبب' }}
+              </label>
+              <textarea class="form-control-enhanced" [value]="decisionModel.reason || 'لا يوجد'" rows="4" readonly
+                style="background-color: var(--neutral-light); cursor: not-allowed;">
+                </textarea>
+            </div>
+
+            <div class="form-field-group" *ngIf="!isApproved && canEditDecision && !previousDecisionLocked">
+              <label class="form-label-enhanced">
+                <i class="pi pi-clock"></i>
+                مدة التأجيل
+              </label>
+              <input type="text" class="form-control-enhanced" [(ngModel)]="decisionModel.postponeDuration"
+                name="postponeDuration" placeholder="أدخل مدة التأجيل..."
+                [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked">
+            </div>
+
+            <!-- ✅ عرض مدة التأجيل للقراءة فقط عند وجود نتيجة نهائية -->
+            <div class="form-field-group" *ngIf="previousDecisionLocked && decisionModel.postponeDuration">
+              <label class="form-label-enhanced">
+                <i class="pi pi-clock"></i>
+                مدة التأجيل
+              </label>
+              <input type="text" class="form-control-enhanced" [value]="decisionModel.postponeDuration" readonly
+                style="background-color: var(--neutral-light); cursor: not-allowed;">
             </div>
           </div>
-        } @else {
-          <!-- ✅ نموذج إضافة قرار نهائي جديد -->
-          <form #decisionForm="ngForm" name="decisionForm" class="decision-form">
-            <div class="form-section-header">
-              <div class="section-icon-small">
-                <i class="pi pi-plus-circle"></i>
-              </div>
-              <h6 class="section-title-small">إضافة قرار نهائي جديد</h6>
+
+          <div class="form-actions" *ngIf="canEditDecision && !previousDecisionLocked">
+            <p-button label="إرسال القرار النهائي" icon="pi pi-check" severity="success" (onClick)="submitDecision()"
+              [disabled]="!hasAllExams() || loading || !canEditDecision || previousDecisionLocked" [loading]="loading"
+              styleClass="submit-decision-btn">
+            </p-button>
+          </div>
+
+          @if (responseMessage) {
+          <div class="response-message">
+            <div class="alert" [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
+              role="alert">
+              <i [class]="responseSuccess ? 'pi pi-check-circle' : 'pi pi-exclamation-triangle'" class="me-2"></i>
+              {{ responseMessage }}
             </div>
-
-            <div class="form-fields">
-              <div class="form-field-group">
-                <label class="form-label-enhanced">
-                  <i class="pi pi-list"></i>
-                  النتيجة <span class="required-star">*</span>
-                </label>
-                <ng-select 
-                  [items]="results" 
-                  bindLabel="description" 
-                  bindValue="resultID"
-                  [(ngModel)]="decisionModel.resultID" 
-                  name="resultID" 
-                  (ngModelChange)="onResultChange($event)"
-                  [appendTo]="'body'" 
-                  [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked"
-                  placeholder="اختر النتيجة"
-                  class="enhanced-select">
-                </ng-select>
-                @if (!hasAllExams()) {
-                  <small class="form-hint">
-                    <i class="pi pi-exclamation-triangle"></i>
-                    يجب إكمال جميع الفحوصات الطبية أولاً
-                  </small>
-                }
-              </div>
-
-              <div class="form-field-group" *ngIf="canEditDecision && !previousDecisionLocked">
-                <label class="form-label-enhanced" *ngIf="isAccept">
-                  <i class="pi pi-thumbs-up"></i>
-                  التوصية
-                </label>
-                <label class="form-label-enhanced" *ngIf="!isAccept">
-                  <i class="pi pi-info-circle"></i>
-                  السبب
-                </label>
-                <textarea 
-                  class="form-control-enhanced" 
-                  [(ngModel)]="decisionModel.reason" 
-                  name="reason"
-                  rows="4"
-                  placeholder="أدخل التوصية أو السبب..."
-                  [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked">
-                </textarea>
-              </div>
-              
-              <!-- ✅ عرض السبب/التوصية للقراءة فقط عند وجود نتيجة نهائية -->
-              <div class="form-field-group" *ngIf="previousDecisionLocked">
-                <label class="form-label-enhanced">
-                  <i class="pi pi-info-circle"></i>
-                  {{ isAccept ? 'التوصية' : 'السبب' }}
-                </label>
-                <textarea 
-                  class="form-control-enhanced" 
-                  [value]="decisionModel.reason || 'لا يوجد'"
-                  rows="4"
-                  readonly
-                  style="background-color: var(--neutral-light); cursor: not-allowed;">
-                </textarea>
-              </div>
-              
-              <div class="form-field-group" *ngIf="!isApproved && canEditDecision && !previousDecisionLocked">
-                <label class="form-label-enhanced">
-                  <i class="pi pi-clock"></i>
-                  مدة التأجيل
-                </label>
-                <input 
-                  type="text" 
-                  class="form-control-enhanced" 
-                  [(ngModel)]="decisionModel.postponeDuration"
-                  name="postponeDuration"
-                  placeholder="أدخل مدة التأجيل..."
-                  [disabled]="!hasAllExams() || !canEditDecision || previousDecisionLocked">
-              </div>
-
-              <!-- ✅ عرض مدة التأجيل للقراءة فقط عند وجود نتيجة نهائية -->
-              <div class="form-field-group" *ngIf="previousDecisionLocked && decisionModel.postponeDuration">
-                <label class="form-label-enhanced">
-                  <i class="pi pi-clock"></i>
-                  مدة التأجيل
-                </label>
-                <input 
-                  type="text" 
-                  class="form-control-enhanced" 
-                  [value]="decisionModel.postponeDuration"
-                  readonly
-                  style="background-color: var(--neutral-light); cursor: not-allowed;">
-              </div>
-            </div>
-            
-            <div class="form-actions" *ngIf="canEditDecision && !previousDecisionLocked">
-              <p-button 
-                label="إرسال القرار النهائي" 
-                icon="pi pi-check" 
-                severity="success"
-                (onClick)="submitDecision()"
-                [disabled]="!hasAllExams() || loading || !canEditDecision || previousDecisionLocked"
-                [loading]="loading"
-                styleClass="submit-decision-btn">
-              </p-button>
-            </div>
-
-            @if (responseMessage) {
-              <div class="response-message">
-                <div class="alert" 
-                     [ngClass]="{'alert-success': responseSuccess, 'alert-danger': !responseSuccess}"
-                     role="alert">
-                  <i [class]="responseSuccess ? 'pi pi-check-circle' : 'pi pi-exclamation-triangle'" class="me-2"></i>
-                  {{ responseMessage }}
-                </div>
-              </div>
-            }
-          </form>
+          </div>
+          }
+        </form>
         }
       </p-card>
     </div>
   </div>
 
   <!-- Consultation Modal -->
-  <p-dialog 
-    [(visible)]="showConsultationModal" 
-    [modal]="true" 
-    [dismissableMask]="false"
-    [style]="{width: '600px'}"
-    [closable]="true"
-    [draggable]="false"
-    [resizable]="false"
-    (onHide)="closeConsultationModal()"
+  <p-dialog [(visible)]="showConsultationModal" [modal]="true" [dismissableMask]="false" [style]="{width: '600px'}"
+    [closable]="true" [draggable]="false" [resizable]="false" (onHide)="closeConsultationModal()"
     [header]="(selectedConsultation?.consultationID ?? 0) > 0 ? 'تعديل الاستشارة' : 'إضافة استشارة جديدة'">
-    
+
     <form [formGroup]="consultationForm" *ngIf="consultationForm" (ngSubmit)="saveConsultation()">
       <div class="form-group mb-3">
         <label class="form-label">
           <i class="pi pi-comment"></i>
           نوع الاستشارة
         </label>
-        <input 
-          type="text" 
-          class="form-control" 
-          formControlName="consultationType"
-          [readonly]="(selectedConsultation?.consultationID ?? 0) > 0"
-          placeholder="أدخل نوع الاستشارة">
+        <input type="text" class="form-control" formControlName="consultationType"
+          [readonly]="(selectedConsultation?.consultationID ?? 0) > 0" placeholder="أدخل نوع الاستشارة">
       </div>
 
       <div class="form-group mb-3" *ngIf="(selectedConsultation?.consultationID ?? 0) === 0">
@@ -1064,11 +1013,7 @@
           <i class="pi pi-info-circle"></i>
           سبب الإحالة
         </label>
-        <textarea 
-          type="text" 
-          class="form-control" 
-          formControlName="referralReason"
-          rows="3"
+        <textarea type="text" class="form-control" formControlName="referralReason" rows="3"
           placeholder="أدخل سبب الإحالة (اختياري)"></textarea>
       </div>
 
@@ -1077,11 +1022,7 @@
           <i class="pi pi-file-edit"></i>
           النتيجة <span class="text-danger">*</span>
         </label>
-        <textarea 
-          class="form-control" 
-          formControlName="result" 
-          rows="5"
-          placeholder="أدخل نتيجة الاستشارة"></textarea>
+        <textarea class="form-control" formControlName="result" rows="5" placeholder="أدخل نتيجة الاستشارة"></textarea>
       </div>
 
       <div class="form-group mb-3">
@@ -1089,11 +1030,7 @@
           <i class="pi pi-file"></i>
           ملف مرفق
         </label>
-        <input 
-          type="file" 
-          class="form-control" 
-          accept="image/*,.pdf"
-          (change)="onConsultationFileSelected($event)"
+        <input type="file" class="form-control" accept="image/*,.pdf" (change)="onConsultationFileSelected($event)"
           [disabled]="uploadingFile">
         <small class="text-muted" *ngIf="uploadingFile">
           <i class="pi pi-spin pi-spinner"></i>
@@ -1102,11 +1039,8 @@
       </div>
 
       <div *ngIf="previewUrl" class="preview-container mb-3">
-        <img *ngIf="previewUrl.startsWith('data:') || previewUrl.includes('.jpg') || previewUrl.includes('.png')" 
-             [src]="previewUrl" 
-             alt="معاينة المرفق" 
-             class="img-fluid rounded" 
-             style="max-height: 200px;">
+        <img *ngIf="previewUrl.startsWith('data:') || previewUrl.includes('.jpg') || previewUrl.includes('.png')"
+          [src]="previewUrl" alt="معاينة المرفق" class="img-fluid rounded" style="max-height: 200px;">
         <div *ngIf="previewUrl.includes('.pdf')" class="alert alert-info">
           <i class="pi pi-file-pdf"></i>
           ملف PDF: {{ previewUrl }}
@@ -1114,45 +1048,27 @@
       </div>
 
       <div class="d-flex justify-content-end gap-2">
-        <p-button 
-          label="إلغاء" 
-          icon="pi pi-times" 
-          styleClass="p-button-secondary"
-          (onClick)="closeConsultationModal()"
+        <p-button label="إلغاء" icon="pi pi-times" styleClass="p-button-secondary" (onClick)="closeConsultationModal()"
           [disabled]="loading"></p-button>
-        <p-button 
-          label="حفظ" 
-          icon="pi pi-check" 
-          type="submit"
+        <p-button label="حفظ" icon="pi pi-check" type="submit"
           [disabled]="consultationForm.invalid || loading || uploadingFile"></p-button>
       </div>
     </form>
   </p-dialog>
 
   <!-- Investigation Modal -->
-  <p-dialog 
-    [(visible)]="showInvestigationModal" 
-    [modal]="true" 
-    [dismissableMask]="false"
-    [style]="{width: '600px'}"
-    [closable]="true"
-    [draggable]="false"
-    [resizable]="false"
-    (onHide)="closeInvestigationModal()"
+  <p-dialog [(visible)]="showInvestigationModal" [modal]="true" [dismissableMask]="false" [style]="{width: '600px'}"
+    [closable]="true" [draggable]="false" [resizable]="false" (onHide)="closeInvestigationModal()"
     [header]="(selectedInvestigation?.investigationID ?? 0) > 0 ? 'تعديل التحليل' : 'إضافة تحليل جديد'">
-    
+
     <form [formGroup]="investigationForm" *ngIf="investigationForm" (ngSubmit)="saveInvestigation()">
       <div class="form-group mb-3">
         <label class="form-label">
           <i class="pi pi-file"></i>
           نوع التحليل <span class="text-danger">*</span>
         </label>
-        <input 
-          type="text" 
-          class="form-control" 
-          formControlName="type"
-          [readonly]="(selectedInvestigation?.investigationID ?? 0) > 0"
-          placeholder="أدخل نوع التحليل">
+        <input type="text" class="form-control" formControlName="type"
+          [readonly]="(selectedInvestigation?.investigationID ?? 0) > 0" placeholder="أدخل نوع التحليل">
       </div>
 
       <div class="form-group mb-3">
@@ -1160,11 +1076,7 @@
           <i class="pi pi-file-edit"></i>
           النتيجة <span class="text-danger">*</span>
         </label>
-        <textarea 
-          class="form-control" 
-          formControlName="result" 
-          rows="5"
-          placeholder="أدخل نتيجة التحليل"></textarea>
+        <textarea class="form-control" formControlName="result" rows="5" placeholder="أدخل نتيجة التحليل"></textarea>
       </div>
 
       <div class="form-group mb-3">
@@ -1184,11 +1096,7 @@
           <i class="pi pi-file"></i>
           ملف مرفق
         </label>
-        <input 
-          type="file" 
-          class="form-control" 
-          accept="image/*,.pdf"
-          (change)="onInvestigationFileSelected($event)"
+        <input type="file" class="form-control" accept="image/*,.pdf" (change)="onInvestigationFileSelected($event)"
           [disabled]="uploadingFile">
         <small class="text-muted" *ngIf="uploadingFile">
           <i class="pi pi-spin pi-spinner"></i>
@@ -1197,11 +1105,8 @@
       </div>
 
       <div *ngIf="previewUrl" class="preview-container mb-3">
-        <img *ngIf="previewUrl.startsWith('data:') || previewUrl.includes('.jpg') || previewUrl.includes('.png')" 
-             [src]="previewUrl" 
-             alt="معاينة المرفق" 
-             class="img-fluid rounded" 
-             style="max-height: 200px;">
+        <img *ngIf="previewUrl.startsWith('data:') || previewUrl.includes('.jpg') || previewUrl.includes('.png')"
+          [src]="previewUrl" alt="معاينة المرفق" class="img-fluid rounded" style="max-height: 200px;">
         <div *ngIf="previewUrl.includes('.pdf')" class="alert alert-info">
           <i class="pi pi-file-pdf"></i>
           ملف PDF: {{ previewUrl }}
@@ -1209,16 +1114,9 @@
       </div>
 
       <div class="d-flex justify-content-end gap-2">
-        <p-button 
-          label="إلغاء" 
-          icon="pi pi-times" 
-          styleClass="p-button-secondary"
-          (onClick)="closeInvestigationModal()"
+        <p-button label="إلغاء" icon="pi pi-times" styleClass="p-button-secondary" (onClick)="closeInvestigationModal()"
           [disabled]="loading"></p-button>
-        <p-button 
-          label="حفظ" 
-          icon="pi pi-check" 
-          type="submit"
+        <p-button label="حفظ" icon="pi pi-check" type="submit"
           [disabled]="investigationForm.invalid || loading || uploadingFile"></p-button>
       </div>
     </form>

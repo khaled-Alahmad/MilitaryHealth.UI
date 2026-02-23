@@ -11,16 +11,16 @@
       <div class="row mb-3">
         <div class="col-md-6">
           <label class="form-label">القدرة البصرية R:</label>
-          <div class="input-group">
-            <input type="number" class="form-control" formControlName="vision" placeholder="أدخل الرقم" />
+          <div class="input-group-q ">
             <span class="input-group-text">/10</span>
+            <input type="number" class="form-control" formControlName="vision" placeholder="أدخل الرقم" />
           </div>
         </div>
         <div class="col-md-6">
           <label class="form-label">القدرة البصرية L:</label>
-          <div class="input-group">
-            <input type="number" class="form-control" formControlName="visionLeft" placeholder="أدخل الرقم" />
+          <div class="input-group-q">
             <span class="input-group-text">/10</span>
+            <input type="number" class="form-control" formControlName="visionLeft" placeholder="أدخل الرقم" />
           </div>
         </div>
       </div>
@@ -31,11 +31,7 @@
           <div class="d-flex flex-wrap gap-3">
             @for (option of healthStatusOptions; track option.value; let i = $index) {
             <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                formControlName="colorTest"
-                [id]="'colorTestEdit_' + i"
+              <input class="form-check-input" type="radio" formControlName="colorTest" [id]="'colorTestEdit_' + i"
                 [value]="option.value" />
               <label class="form-check-label" [for]="'colorTestEdit_' + i">{{ option.label }}</label>
             </div>
@@ -43,11 +39,7 @@
           </div>
           @if (examForm.get('colorTest')?.value === otherOptionValue) {
           <div class="mt-2">
-            <input
-              type="text"
-              class="form-control"
-              formControlName="colorTestOther"
-              placeholder="أدخل التفاصيل" />
+            <input type="text" class="form-control" formControlName="colorTestOther" placeholder="أدخل التفاصيل" />
           </div>
           }
         </div>
@@ -56,23 +48,15 @@
           <div class="d-flex flex-wrap gap-3">
             @for (option of healthStatusOptions; track option.value; let i = $index) {
             <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                formControlName="colorTestLeft"
-                [id]="'colorTestLeftEdit_' + i"
-                [value]="option.value" />
+              <input class="form-check-input" type="radio" formControlName="colorTestLeft"
+                [id]="'colorTestLeftEdit_' + i" [value]="option.value" />
               <label class="form-check-label" [for]="'colorTestLeftEdit_' + i">{{ option.label }}</label>
             </div>
             }
           </div>
           @if (examForm.get('colorTestLeft')?.value === otherOptionValue) {
           <div class="mt-2">
-            <input
-              type="text"
-              class="form-control"
-              formControlName="colorTestLeftOther"
-              placeholder="أدخل التفاصيل" />
+            <input type="text" class="form-control" formControlName="colorTestLeftOther" placeholder="أدخل التفاصيل" />
           </div>
           }
         </div>
@@ -81,14 +65,14 @@
       <div class="row mb-3">
         <div class="col-md-6">
           <label class="form-label mb-2">R: أسوأ الانكسار <span class="text-danger">*</span></label>
-          <div class="ms-3">
+          <div class="d-flex flex-wrap gap-3 ms-3">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+              <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
                 id="worstRefractionRightNotImportantEdit" value="غير مهمة" />
               <label class="form-check-label" for="worstRefractionRightNotImportantEdit">غير مهمة</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionRight" 
+              <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
                 id="worstRefractionRightImportantEdit" value="مهمة" />
               <label class="form-check-label" for="worstRefractionRightImportantEdit">مهمة</label>
             </div>
@@ -96,14 +80,15 @@
         </div>
         <div class="col-md-6">
           <label class="form-label mb-2">L: أسوأ الانكسار <span class="text-danger">*</span></label>
-          <div class="ms-3">
+          <div class="ms-3 d-flex flex-wrap gap-3">
+
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
                 id="worstRefractionLeftNotImportantEdit" value="غير مهمة" />
               <label class="form-check-label" for="worstRefractionLeftNotImportantEdit">غير مهمة</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft" 
+              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
                 id="worstRefractionLeftImportantEdit" value="مهمة" />
               <label class="form-check-label" for="worstRefractionLeftImportantEdit">مهمة</label>
             </div>
@@ -124,7 +109,8 @@
           </div>
           <div class="card-body" formGroupName="rightEye">
             <div formArrayName="refractions">
-              <div class="card mb-3" *ngFor="let refraction of getRefractions('rightEye').controls; let i=index" [formGroupName]="i">
+              <div class="card mb-3" *ngFor="let refraction of getRefractions('rightEye').controls; let i=index"
+                [formGroupName]="i">
                 <div class="card-body">
                   <div class="row g-3">
                     <div class="col-md-5">
@@ -179,7 +165,8 @@
           </div>
           <div class="card-body" formGroupName="leftEye">
             <div formArrayName="refractions">
-              <div class="card mb-3" *ngFor="let refraction of getRefractions('leftEye').controls; let i=index" [formGroupName]="i">
+              <div class="card mb-3" *ngFor="let refraction of getRefractions('leftEye').controls; let i=index"
+                [formGroupName]="i">
                 <div class="card-body">
                   <div class="row g-3">
                     <div class="col-md-5">
@@ -217,7 +204,8 @@
       <!-- الأمراض الأخرى -->
       <div class="mb-3">
         <label class="form-label">أمراض أخرى</label>
-        <textarea class="form-control" formControlName="otherDiseases" rows="3" placeholder="أدخل الأمراض الأخرى إن وجدت"></textarea>
+        <textarea class="form-control" formControlName="otherDiseases" rows="3"
+          placeholder="أدخل الأمراض الأخرى إن وجدت"></textarea>
       </div>
 
       <!-- النتيجة والسبب -->
