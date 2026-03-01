@@ -63,9 +63,9 @@ import { EyeExamService } from '../../../services/eye-exam.service';
         next: (path) => {
           this.uploadedPath = path;
           this.investigationForm.patchValue({ attachment: path });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+          this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
         },
-        error: () => this.toastr.error('❌ فشل رفع الملف', 'خطأ')
+        error: () => this.toastr.error('فشل رفع الملف', 'خطأ')
       });
     }
   }
@@ -78,7 +78,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
 
     const doctorID = Number(this.authService.getDoctorId());
     if (!doctorID) {
-      this.toastr.error('❌ لم يتم العثور على معرف الطبيب', 'خطأ');
+      this.toastr.error('لم يتم العثور على معرف الطبيب', 'خطأ');
       return;
     }
 
@@ -101,7 +101,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
     request$.subscribe({
       next: () => {
         this.toastr.success(
-          this.investigationToEdit ? 'تم تعديل التحليل بنجاح' : 'تم إضافة طلب التحليل بنجاح',
+          this.investigationToEdit ? 'تم تعديل التحليل بنجاح' : 'تمت إضافة طلب التحليل بنجاح',
           'نجاح'
         );
         this.investigationForm.reset();

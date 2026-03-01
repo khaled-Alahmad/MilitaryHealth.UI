@@ -67,10 +67,10 @@ export class ConsultationFormComponent {
         next: (path) => {
           this.uploadedPath = path;
           this.consultationForm.patchValue({ attachment: path });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+          this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
         },
         error: () => {
-          this.toastr.error('❌ فشل رفع الملف', 'خطأ');
+          this.toastr.error('فشل رفع الملف', 'خطأ');
         }
       });
     }
@@ -84,7 +84,7 @@ export class ConsultationFormComponent {
 
     const doctorID = Number(this.authService.getDoctorId());
     if (!doctorID) {
-      this.toastr.error('❌ لم يتم العثور على معرف الطبيب', 'خطأ');
+      this.toastr.error('لم يتم العثور على معرف الطبيب', 'خطأ');
       return;
     }
 
@@ -102,7 +102,7 @@ export class ConsultationFormComponent {
 
     this.consultationService.addConsultation(consultation).subscribe({
       next: () => {
-        this.toastr.success('✅ تم إضافة الاستشارة بنجاح', 'نجاح');
+        this.toastr.success('تمت إضافة الاستشارة بنجاح', 'نجاح');
         this.consultationForm.reset();
         this.previewUrl = null;
         this.uploadedPath = null;

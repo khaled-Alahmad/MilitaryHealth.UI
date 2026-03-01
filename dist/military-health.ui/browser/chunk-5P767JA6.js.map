@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/supervisor/supervisor.routes.ts"],
+  "sourcesContent": ["import { Routes } from '@angular/router';\r\nimport { authGuard } from '../../core/guards/auth-guard';\r\nimport { UserRoles } from '../../core/models/enums/user-roles.enum';\r\n\r\nexport const RECEPTION_ROUTES: Routes = [\r\n  {\r\n    path: '',\r\n    loadComponent: () =>\r\n      import('./components/supervisor/supervisor').then(m => m.Supervisor),\r\n    canActivate: [authGuard],\r\n    data: { roles: [UserRoles.Supervisor] }\r\n  },\r\n  {\r\n    path: 'list',\r\n    loadComponent: () =>\r\n      import('./components/applicants-list-supervisor/applicants-list-supervisor').then(m => m.ApplicantsListSupervisor),\r\n    canActivate: [authGuard],\r\n    data: { roles: [UserRoles.Supervisor] }\r\n  },\r\n  {\r\n    path: 'export',\r\n    loadComponent: () =>\r\n      import('./components/recruitment-export/recruitment-export').then(m => m.RecruitmentExportComponent),\r\n    canActivate: [authGuard],\r\n    data: { roles: [UserRoles.Supervisor] }\r\n  }\r\n];\r\n"],
+  "mappings": ";;;;;;;;;;;;;;AAIO,IAAM,mBAA2B;EACtC;IACE,MAAM;IACN,eAAe,MACb,OAAO,qBAAoC,EAAE,KAAK,OAAK,EAAE,UAAU;IACrE,aAAa,CAAC,SAAS;IACvB,MAAM,EAAE,OAAO,CAAC,UAAU,UAAU,EAAC;;EAEvC;IACE,MAAM;IACN,eAAe,MACb,OAAO,qBAAoE,EAAE,KAAK,OAAK,EAAE,wBAAwB;IACnH,aAAa,CAAC,SAAS;IACvB,MAAM,EAAE,OAAO,CAAC,UAAU,UAAU,EAAC;;EAEvC;IACE,MAAM;IACN,eAAe,MACb,OAAO,qBAAoD,EAAE,KAAK,OAAK,EAAE,0BAA0B;IACrG,aAAa,CAAC,SAAS;IACvB,MAAM,EAAE,OAAO,CAAC,UAAU,UAAU,EAAC;;;",
+  "names": []
+}

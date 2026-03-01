@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/core/guards/auth-guard.ts"],
+  "sourcesContent": ["import { inject } from '@angular/core';\r\nimport { CanActivateFn, Router } from '@angular/router';\r\nimport Swal from 'sweetalert2';\r\n\r\nimport { AuthService } from '../../features/auth/services/auth.service';\r\nimport { UserRoles } from '../models/enums/user-roles.enum';\r\n\r\nexport const authGuard: CanActivateFn = (route, state) => {\r\n  const auth = inject(AuthService);\r\n  const router = inject(Router);\r\n\r\n  const roles = route.data['roles'] as UserRoles[] || [];\r\n  const messageError = route.data['messageError'] || 'تم رفض الوصول';\r\n\r\n  if (!auth.isAuthenticated()) {\r\n    return router.createUrlTree(['/login']);\r\n  }\r\n\r\n  if (roles.length > 0 && !auth.isAuthorizated(roles)) {\r\n    return router.createUrlTree(['/unauthorized']);\r\n  }\r\n\r\n  return true;\r\n};\r\n"],
+  "mappings": ";;;;;;;;;;;AAOO,IAAM,YAA2B,CAAC,OAAO,UAAS;AACvD,QAAM,OAAO,OAAO,WAAW;AAC/B,QAAM,SAAS,OAAO,MAAM;AAE5B,QAAM,QAAQ,MAAM,KAAK,OAAO,KAAoB,CAAA;AACpD,QAAM,eAAe,MAAM,KAAK,cAAc,KAAK;AAEnD,MAAI,CAAC,KAAK,gBAAe,GAAI;AAC3B,WAAO,OAAO,cAAc,CAAC,QAAQ,CAAC;EACxC;AAEA,MAAI,MAAM,SAAS,KAAK,CAAC,KAAK,eAAe,KAAK,GAAG;AACnD,WAAO,OAAO,cAAc,CAAC,eAAe,CAAC;EAC/C;AAEA,SAAO;AACT;",
+  "names": []
+}

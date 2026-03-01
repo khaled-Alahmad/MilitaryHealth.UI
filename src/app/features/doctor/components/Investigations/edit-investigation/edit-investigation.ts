@@ -67,9 +67,9 @@ export class EditInvestigation {
         next: (path) => {
           this.uploadedPath = path;
           this.investigationForm.patchValue({ attachment: path });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+          this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
         },
-        error: () => this.toastr.error('❌ فشل رفع الملف', 'خطأ')
+        error: () => this.toastr.error('فشل رفع الملف', 'خطأ')
       });
     }
   }

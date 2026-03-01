@@ -68,16 +68,16 @@ export class EditConsultation {
         next: (path) => {
           this.uploadedPath = path;
           this.consultationForm.patchValue({ attachment: path });
-          this.toastr.success('✅ تم رفع الملف بنجاح', 'نجاح');
+          this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
         },
-        error: () => this.toastr.error('❌ فشل رفع الملف', 'خطأ')
+        error: () => this.toastr.error('فشل رفع الملف', 'خطأ')
       });
     }
   }
 
   onSubmit() {
     if (!this.consultationForm.valid) {
-      this.toastr.warning('❌ يرجى تعبئة جميع الحقول المطلوبة', 'تحذير');
+      this.toastr.warning('يرجى تعبئة جميع الحقول المطلوبة', 'تنبيه');
       return;
     }
 
@@ -100,7 +100,7 @@ export class EditConsultation {
   this.service.updateConsultation(this.consultation.consultationID!, updatedConsultation)
   .subscribe({
     next: () => {
-      this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
+      this.toastr.success('تم تحديث الاستشارة بنجاح', 'نجاح');
       this.loading = false;
 
       // 🔹 إطلاق الحدث لإعلام الأب أن التحديث تم
@@ -109,7 +109,7 @@ export class EditConsultation {
       this.closeModal();
     },
     error: () => {
-      this.toastr.error('❌ فشل التحديث', 'خطأ');
+      this.toastr.error('فشل التحديث', 'خطأ');
       this.loading = false;
     }
   });

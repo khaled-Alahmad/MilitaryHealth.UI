@@ -1,8 +1,15 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApplicantDetailsModel, ApplicantModel } from '../../../reception/models/applicant.model';
 import { ApplicantService } from '../../../reception/services/applicant.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  NgForm,
+} from '@angular/forms';
 import { LookupService } from '../../../../shared/services/lookup.service';
 import { Result } from '../../../../shared/models/result.model';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -43,9 +50,22 @@ interface ClinicData {
 
 @Component({
   selector: 'app-supervisor',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, CardModule, TagModule, ButtonModule, DividerModule, DialogModule, InputTextModule, SearchApplicantComponent, GregorianDatePipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NgSelectModule,
+    CardModule,
+    TagModule,
+    ButtonModule,
+    DividerModule,
+    DialogModule,
+    InputTextModule,
+    SearchApplicantComponent,
+    GregorianDatePipe,
+  ],
   templateUrl: './supervisor.html',
-  styleUrl: './supervisor.scss'
+  styleUrl: './supervisor.scss',
 })
 export class Supervisor implements OnInit {
   applicant!: ApplicantDetailsModel;
@@ -55,17 +75,17 @@ export class Supervisor implements OnInit {
 
   rejectedId: number | null = null;
   postponedId: number | null = null;
- acceptedId: number | null = null;
+  acceptedId: number | null = null;
   responseMessage: string = '';
   responseSuccess: boolean = false;
 
   isApproved: boolean = true;
-  isAccept : boolean = false;
-  
+  isAccept: boolean = false;
+
   // âœ… Ù…ØªØºÙŠØ±Ø§Øª Ù„Ù„ØªØ­ÙƒÙ… ÙÙŠ Ø¥Ù…ÙƒØ§Ù†ÙŠØ© Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
   canEditDecision: boolean = true; // ÙŠÙ…ÙƒÙ† Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø§ÙØªØ±Ø§Ø¶ÙŠØ§Ù‹
   previousDecisionLocked: boolean = false; // Ù‡Ù„ Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø© Ù…Ù‚ÙÙ„Ø© (Ù…Ù‚Ø¨ÙˆÙ„/Ù…Ø±ÙÙˆØ¶)
-  
+
   clinicsData: ClinicData[] = [];
   loading: boolean = false;
   refractionTypes: RefractionType[] = [];
@@ -99,16 +119,16 @@ export class Supervisor implements OnInit {
   @ViewChild('decisionForm') decisionForm!: NgForm;
 
   constructor(
-    private applicantService: ApplicantService, 
+    private applicantService: ApplicantService,
     private lookupService: LookupService,
-    private decisionService: DecisionService, 
+    private decisionService: DecisionService,
     private maritalStatusService: MaritalStatusService,
     private http: HttpClient,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('access_token') || '';
@@ -116,7 +136,10 @@ export class Supervisor implements OnInit {
   }
 
   // Helper method to get consultations by specialization and file number
-  private getConsultationsBySpecialization(specializationId: number, fileNumber: string): Observable<Consultation[]> {
+  private getConsultationsBySpecialization(
+    specializationId: number,
+    fileNumber: string,
+  ): Observable<Consultation[]> {
     let params = new HttpParams()
       .set('page', '1')
       .set('pageSize', '1000')
@@ -125,26 +148,31 @@ export class Supervisor implements OnInit {
       .set('filterDict[doctor.specializationID]', specializationId.toString())
       .set('filterDict[applicantFileNumber]', fileNumber);
 
-    return this.http.get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
-      headers: this.getAuthHeaders(),
-      params
-    }).pipe(
-      map(res => {
-        const items = res.data?.items || [];
-        // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ consultationID
-        const uniqueItems = this.removeDuplicateConsultations(items);
-        // ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨ consultationID (Ø§Ù„Ø£Ø­Ø¯Ø« Ø£ÙˆÙ„Ø§Ù‹)
-        return uniqueItems.sort((a, b) => (b.consultationID || 0) - (a.consultationID || 0));
-      }),
-      catchError(() => {
-        return of([]);
-      }),
-      shareReplay(1) // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø§Ù„Ø·Ù„Ø¨
-    );
+    return this.http
+      .get<ApiResponse<PagedResponse<Consultation>>>(this.consultationUrl, {
+        headers: this.getAuthHeaders(),
+        params,
+      })
+      .pipe(
+        map((res) => {
+          const items = res.data?.items || [];
+          // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ consultationID
+          const uniqueItems = this.removeDuplicateConsultations(items);
+          // ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨ consultationID (Ø§Ù„Ø£Ø­Ø¯Ø« Ø£ÙˆÙ„Ø§Ù‹)
+          return uniqueItems.sort((a, b) => (b.consultationID || 0) - (a.consultationID || 0));
+        }),
+        catchError(() => {
+          return of([]);
+        }),
+        shareReplay(1), // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø§Ù„Ø·Ù„Ø¨
+      );
   }
 
   // Helper method to get investigations by specialization and file number
-  private getInvestigationsBySpecialization(specializationId: number, fileNumber: string): Observable<Investigation[]> {
+  private getInvestigationsBySpecialization(
+    specializationId: number,
+    fileNumber: string,
+  ): Observable<Investigation[]> {
     let params = new HttpParams()
       .set('page', '1')
       .set('pageSize', '1000')
@@ -153,28 +181,30 @@ export class Supervisor implements OnInit {
       .set('filterDict[doctor.specializationID]', specializationId.toString())
       .set('filterDict[applicantFileNumber]', fileNumber);
 
-    return this.http.get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
-      headers: this.getAuthHeaders(),
-      params
-    }).pipe(
-      map(res => {
-        const items = res.data?.items || [];
-        // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ investigationID
-        const uniqueItems = this.removeDuplicateInvestigations(items);
-        // ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨ investigationID (Ø§Ù„Ø£Ø­Ø¯Ø« Ø£ÙˆÙ„Ø§Ù‹)
-        return uniqueItems.sort((a, b) => (b.investigationID || 0) - (a.investigationID || 0));
-      }),
-      catchError(() => {
-        return of([]);
-      }),
-      shareReplay(1) // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø§Ù„Ø·Ù„Ø¨
-    );
+    return this.http
+      .get<ApiResponse<PagedResponse<Investigation>>>(this.investigationUrl, {
+        headers: this.getAuthHeaders(),
+        params,
+      })
+      .pipe(
+        map((res) => {
+          const items = res.data?.items || [];
+          // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ investigationID
+          const uniqueItems = this.removeDuplicateInvestigations(items);
+          // ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨ investigationID (Ø§Ù„Ø£Ø­Ø¯Ø« Ø£ÙˆÙ„Ø§Ù‹)
+          return uniqueItems.sort((a, b) => (b.investigationID || 0) - (a.investigationID || 0));
+        }),
+        catchError(() => {
+          return of([]);
+        }),
+        shareReplay(1), // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø§Ù„Ø·Ù„Ø¨
+      );
   }
 
   // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ù…Ù† Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø§Øª
   private removeDuplicateConsultations(consultations: Consultation[]): Consultation[] {
     const seen = new Set<number>();
-    return consultations.filter(consultation => {
+    return consultations.filter((consultation) => {
       const id = consultation.consultationID;
       // ØªØ¬Ø§Ù‡Ù„ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø§Øª Ø¨Ø¯ÙˆÙ† ID
       if (!id || id === 0) {
@@ -191,7 +221,7 @@ export class Supervisor implements OnInit {
   // Ø¥Ø²Ø§Ù„Ø© Ø§Ù„ØªÙƒØ±Ø§Ø±Ø§Øª Ù…Ù† Ø§Ù„ØªØ­Ø§Ù„ÙŠÙ„
   private removeDuplicateInvestigations(investigations: Investigation[]): Investigation[] {
     const seen = new Set<number>();
-    return investigations.filter(investigation => {
+    return investigations.filter((investigation) => {
       const id = investigation.investigationID;
       // ØªØ¬Ø§Ù‡Ù„ Ø§Ù„ØªØ­Ø§Ù„ÙŠÙ„ Ø¨Ø¯ÙˆÙ† ID
       if (!id || id === 0) {
@@ -213,29 +243,31 @@ export class Supervisor implements OnInit {
   // Ø¬Ù„Ø¨ Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø§Ù†ÙƒØ³Ø§Ø±
   loadRefractionTypes() {
     const url = `${environment.apiUrl}/api/RefractionTypes?page=1&pageSize=100`;
-    this.http.get<ApiResponse<PagedResponse<RefractionType>>>(url, {
-      headers: this.getAuthHeaders()
-    }).subscribe({
-      next: (response) => {
-        this.refractionTypes = response.data?.items || [];
-      },
-      error: () => {
-        // Fallback Ø¥Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ø«Ø§Ø¨ØªØ©
-        this.refractionTypes = [
-          { refractionTypeID: 1, description: 'Ù‚ØµØ± Ù†Ø¸Ø±' },
-          { refractionTypeID: 2, description: 'Ù…Ø¯ Ù†Ø¸Ø±' },
-          { refractionTypeID: 3, description: 'Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
-          { refractionTypeID: 4, description: 'Ù‚ØµØ± Ù†Ø¸Ø± Ù…Ø¹ Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
-          { refractionTypeID: 5, description: 'Ù…Ø¯ Ù†Ø¸Ø± Ù…Ø¹ Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' }
-        ];
-      }
-    });
+    this.http
+      .get<ApiResponse<PagedResponse<RefractionType>>>(url, {
+        headers: this.getAuthHeaders(),
+      })
+      .subscribe({
+        next: (response) => {
+          this.refractionTypes = response.data?.items || [];
+        },
+        error: () => {
+          // Fallback Ø¥Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ø«Ø§Ø¨ØªØ©
+          this.refractionTypes = [
+            { refractionTypeID: 1, description: 'Ù‚ØµØ± Ù†Ø¸Ø±' },
+            { refractionTypeID: 2, description: 'Ù…Ø¯ Ù†Ø¸Ø±' },
+            { refractionTypeID: 3, description: 'Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
+            { refractionTypeID: 4, description: 'Ù‚ØµØ± Ù†Ø¸Ø± Ù…Ø¹ Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
+            { refractionTypeID: 5, description: 'Ù…Ø¯ Ù†Ø¸Ø± Ù…Ø¹ Ø§Ø³ØªØ¬Ù…Ø§ØªÙŠØ²Ù…' },
+          ];
+        },
+      });
   }
 
   // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ø³Ù… Ù†ÙˆØ¹ Ø§Ù„Ø§Ù†ÙƒØ³Ø§Ø±
   getRefractionTypeName(refractionTypeID: number): string {
-    const type = this.refractionTypes.find(rt => rt.refractionTypeID === refractionTypeID);
-    return type?.description || 'ØºÙŠØ± Ù…Ø¹Ø±ÙˆÙ';
+    const type = this.refractionTypes.find((rt) => rt.refractionTypeID === refractionTypeID);
+    return type?.description || 'غير معروف';
   }
 
   // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù†ÙƒØ³Ø§Ø±Ø§Øª Ø§Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰
@@ -258,23 +290,23 @@ export class Supervisor implements OnInit {
   getEyeExamField(exam: any, fieldName: string): string {
     // Ø¥Ø°Ø§ ÙƒØ§Ù† exam ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ Ø£Ùˆ null Ø£Ùˆ undefined
     if (!exam || exam === null || exam === undefined) {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ø§Ù„Ø­Ù‚Ù„ ÙÙŠ Ø§Ù„ÙƒØ§Ø¦Ù†
     if (!(fieldName in exam)) {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ…Ø©
     const value = exam[fieldName];
     // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© null Ø£Ùˆ undefinedØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (value === null || value === undefined) {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // ØªØ­ÙˆÙŠÙ„ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø¥Ù„Ù‰ string Ùˆtrim
     const trimmedValue = String(value).trim();
     // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© ÙØ§Ø±ØºØ© Ø¨Ø¹Ø¯ trimØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (trimmedValue === '') {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù† Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ Ù‡ÙŠ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯" Ø£Ùˆ Ø£ÙŠ Ù‚ÙŠÙ…Ø© Ø£Ø®Ø±Ù‰ØŒ Ù†Ø¹ÙŠØ¯Ù‡Ø§ ÙƒÙ…Ø§ Ù‡ÙŠ
     return trimmedValue;
@@ -286,7 +318,7 @@ export class Supervisor implements OnInit {
    * âš ï¸ Ø­Ø§Ù„ÙŠØ§Ù‹: ÙŠØ³ØªØ®Ø¯Ù… vision Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback
    */
   getVisionRight(exam: any): string {
-    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    if (!exam) return 'غير محدد';
     // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: visionRight (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('visionRight' in exam && exam.visionRight) {
       const value = String(exam.visionRight).trim();
@@ -297,7 +329,7 @@ export class Supervisor implements OnInit {
       const value = String(exam.vision).trim();
       if (value !== '') return value;
     }
-    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    return 'غير محدد';
   }
 
   /**
@@ -307,7 +339,7 @@ export class Supervisor implements OnInit {
    * âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… vision Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
    */
   getVisionLeft(exam: any): string {
-    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    if (!exam) return 'غير محدد';
     // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: visionLeft (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('visionLeft' in exam && exam.visionLeft) {
       const value = String(exam.visionLeft).trim();
@@ -315,7 +347,7 @@ export class Supervisor implements OnInit {
     }
     // âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… vision Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
     // âœ… Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ visionLeftØŒ Ø³ÙŠØ¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹
-    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    return 'غير محدد';
   }
 
   /**
@@ -324,7 +356,7 @@ export class Supervisor implements OnInit {
    * âš ï¸ Ø­Ø§Ù„ÙŠØ§Ù‹: ÙŠØ³ØªØ®Ø¯Ù… colorTest Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback
    */
   getColorTestRight(exam: any): string {
-    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    if (!exam) return 'غير محدد';
     // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: colorTestRight (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('colorTestRight' in exam && exam.colorTestRight) {
       const value = String(exam.colorTestRight).trim();
@@ -335,7 +367,7 @@ export class Supervisor implements OnInit {
       const value = String(exam.colorTest).trim();
       if (value !== '') return value;
     }
-    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    return 'غير محدد';
   }
 
   /**
@@ -345,7 +377,7 @@ export class Supervisor implements OnInit {
    * âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… colorTest Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
    */
   getColorTestLeft(exam: any): string {
-    if (!exam) return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    if (!exam) return 'غير محدد';
     // âœ… Ø£ÙˆÙ„ÙˆÙŠØ©: colorTestLeft (Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙÙ‡ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯)
     if ('colorTestLeft' in exam && exam.colorTestLeft) {
       const value = String(exam.colorTestLeft).trim();
@@ -353,30 +385,30 @@ export class Supervisor implements OnInit {
     }
     // âŒ Ù„Ø§ Ù†Ø³ØªØ®Ø¯Ù… colorTest Ø§Ù„Ø¹Ø§Ù… ÙƒÙ€ fallback Ù„Ø£Ù†Ù‡ Ù‚Ø¯ ÙŠÙƒÙˆÙ† Ù„Ù„Ø¹ÙŠÙ† Ø§Ù„ÙŠÙ…Ù†Ù‰ ÙÙ‚Ø·
     // âœ… Ø¹Ù†Ø¯Ù…Ø§ ÙŠØ¶ÙŠÙ Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ colorTestLeftØŒ Ø³ÙŠØ¹Ù…Ù„ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹
-    return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    return 'غير محدد';
   }
 
   // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø­Ù‚Ù„ Ù…Ù† ÙØ­Øµ Ø§Ù„Ø£Ø°Ù† Ù…Ø¹ Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„ÙØ§Ø±ØºØ©
   getEarExamField(exam: any, fieldName: string): string {
     // Ø¥Ø°Ø§ ÙƒØ§Ù† exam ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯ Ø£Ùˆ null Ø£Ùˆ undefined
     if (!exam || exam === null || exam === undefined) {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ø§Ù„Ø­Ù‚Ù„ ÙÙŠ Ø§Ù„ÙƒØ§Ø¦Ù†
     if (!(fieldName in exam)) {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // Ø§Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ…Ø©
     const value = exam[fieldName];
     // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© null Ø£Ùˆ undefinedØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (value === null || value === undefined) {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // ØªØ­ÙˆÙŠÙ„ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø¥Ù„Ù‰ string Ùˆtrim
     const trimmedValue = String(value).trim();
     // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© ÙØ§Ø±ØºØ© Ø¨Ø¹Ø¯ trimØŒ Ù†Ø¹ÙŠØ¯ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯"
     if (trimmedValue === '') {
-      return 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+      return 'غير محدد';
     }
     // Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù† Ø§Ù„Ø¨Ø§Ùƒ Ø¥Ù†Ø¯ Ù‡ÙŠ "ØºÙŠØ± Ù…Ø­Ø¯Ø¯" Ø£Ùˆ Ø£ÙŠ Ù‚ÙŠÙ…Ø© Ø£Ø®Ø±Ù‰ØŒ Ù†Ø¹ÙŠØ¯Ù‡Ø§ ÙƒÙ…Ø§ Ù‡ÙŠ
     return trimmedValue;
@@ -386,13 +418,16 @@ export class Supervisor implements OnInit {
   // âœ… Ø¯Ø§Ù„Ø© Ø¬Ø¯ÙŠØ¯Ø© Ù„Ø§Ø³ØªÙ‚Ø¨Ø§Ù„ ApplicantDetailsModel Ù…Ø¨Ø§Ø´Ø±Ø© (ØªØ¬Ù†Ø¨ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø©)
   onApplicantDetailsSelected(applicantDetails: ApplicantDetailsModel) {
     if (!applicantDetails?.fileNumber) {
-      this.responseMessage = 'Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…ØªÙˆÙØ±';
+      this.responseMessage = 'رقم الملف غير متوفر';
       this.responseSuccess = false;
       return;
     }
 
     // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù
-    if (this.currentFileNumber === applicantDetails.fileNumber && (this.loading || this.isLoadingApplicantDetails)) {
+    if (
+      this.currentFileNumber === applicantDetails.fileNumber &&
+      (this.loading || this.isLoadingApplicantDetails)
+    ) {
       return;
     }
 
@@ -420,13 +455,16 @@ export class Supervisor implements OnInit {
   // âœ… Ø¯Ø§Ù„Ø© Ù‚Ø¯ÙŠÙ…Ø© Ù„Ù„ØªÙˆØ§ÙÙ‚ Ù…Ø¹ Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ø£Ø®Ø±Ù‰ (Ø¥Ø°Ø§ ÙƒØ§Ù†Øª ØªØ³ØªØ®Ø¯Ù… applicantSelected)
   onApplicantSelected(applicant: Applicant) {
     if (!applicant?.fileNumber) {
-      this.responseMessage = 'Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…ØªÙˆÙØ±';
+      this.responseMessage = 'رقم الملف غير متوفر';
       this.responseSuccess = false;
       return;
     }
 
     // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© Ù„Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù
-    if (this.currentFileNumber === applicant.fileNumber && (this.loading || this.isLoadingApplicantDetails)) {
+    if (
+      this.currentFileNumber === applicant.fileNumber &&
+      (this.loading || this.isLoadingApplicantDetails)
+    ) {
       return;
     }
 
@@ -446,37 +484,46 @@ export class Supervisor implements OnInit {
     this.isLoadingApplicantDetails = true;
 
     // âœ… Ø¬Ù„Ø¨ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„ÙƒØ§Ù…Ù„Ø© Ù„Ù„Ù…Ù†ØªØ³Ø¨ - Ø§Ø³ØªØ®Ø¯Ø§Ù… take(1) Ù„Ù…Ù†Ø¹ Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØ§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø©
-    this.applicantService.getApplicantByFileNumber$(applicant.fileNumber).pipe(
-      take(1) // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØ§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© - ÙŠØªÙ… ØªÙ†ÙÙŠØ° Ø§Ù„Ø·Ù„Ø¨ Ù…Ø±Ø© ÙˆØ§Ø­Ø¯Ø© ÙÙ‚Ø·
-    ).subscribe({
-      next: (applicantDetails: ApplicantDetailsModel) => {
-        this.isLoadingApplicantDetails = false;
-        if (applicantDetails) {
-          this.applicant = this.mergeApplicantDetailsWithBasicInfo(applicantDetails, this.lastSelectedApplicantSummary);
-          this.mapApplicantToDecision(applicantDetails);
-          this.checkPreviousDecisionStatus(applicantDetails); // âœ… ÙØ­Øµ Ø­Ø§Ù„Ø© Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
-          this.loadClinicsData(applicantDetails.fileNumber);
-        } else {
-          this.responseMessage = 'Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ³Ø¨';
+    this.applicantService
+      .getApplicantByFileNumber$(applicant.fileNumber)
+      .pipe(
+        take(1), // âœ… Ù…Ù†Ø¹ Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØ§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© - ÙŠØªÙ… ØªÙ†ÙÙŠØ° Ø§Ù„Ø·Ù„Ø¨ Ù…Ø±Ø© ÙˆØ§Ø­Ø¯Ø© ÙÙ‚Ø·
+      )
+      .subscribe({
+        next: (applicantDetails: ApplicantDetailsModel) => {
+          this.isLoadingApplicantDetails = false;
+          if (applicantDetails) {
+            this.applicant = this.mergeApplicantDetailsWithBasicInfo(
+              applicantDetails,
+              this.lastSelectedApplicantSummary,
+            );
+            this.mapApplicantToDecision(applicantDetails);
+            this.checkPreviousDecisionStatus(applicantDetails); // âœ… ÙØ­Øµ Ø­Ø§Ù„Ø© Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
+            this.loadClinicsData(applicantDetails.fileNumber);
+          } else {
+            this.responseMessage = 'لم يتم العثور على المنتسب';
+            this.responseSuccess = false;
+            this.loading = false;
+            this.currentFileNumber = null;
+          }
+        },
+        error: () => {
+          this.isLoadingApplicantDetails = false;
+          this.applicant = undefined!;
+          this.decisionModel = undefined!;
+          this.responseMessage = 'لم يتم العثور على المنتسب';
           this.responseSuccess = false;
           this.loading = false;
           this.currentFileNumber = null;
-        }
-      },
-      error: () => {
-        this.isLoadingApplicantDetails = false;
-        this.applicant = undefined!;
-        this.decisionModel = undefined!;
-        this.responseMessage = 'Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ³Ø¨';
-        this.responseSuccess = false;
-        this.loading = false;
-        this.currentFileNumber = null;
-        this.lastSelectedApplicantSummary = null;
-    }
-    });
+          this.lastSelectedApplicantSummary = null;
+        },
+      });
   }
 
-  private mergeApplicantDetailsWithBasicInfo(details: ApplicantDetailsModel, basicInfo: Applicant | null): ApplicantDetailsModel {
+  private mergeApplicantDetailsWithBasicInfo(
+    details: ApplicantDetailsModel,
+    basicInfo: Applicant | null,
+  ): ApplicantDetailsModel {
     if (!basicInfo) {
       return details;
     }
@@ -546,22 +593,52 @@ export class Supervisor implements OnInit {
 
     this.isLoadingClinicsData = true;
     this.loading = true;
-    
+
     // Ø¬Ù„Ø¨ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø§Øª ÙˆØ§Ù„ØªØ­Ø§Ù„ÙŠÙ„ Ù„ÙƒÙ„ Ø¹ÙŠØ§Ø¯Ø© Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ØªØ®ØµØµ Ø§Ù„ØµØ­ÙŠØ­
-    const eyeConsultations$ = this.getConsultationsBySpecialization(this.EYE_SPECIALIZATION_ID, fileNumber);
-    const eyeInvestigations$ = this.getInvestigationsBySpecialization(this.EYE_SPECIALIZATION_ID, fileNumber);
-    
-    const internalConsultations$ = this.getConsultationsBySpecialization(this.INTERNAL_SPECIALIZATION_ID, fileNumber);
-    const internalInvestigations$ = this.getInvestigationsBySpecialization(this.INTERNAL_SPECIALIZATION_ID, fileNumber);
-    
-    const surgicalConsultations$ = this.getConsultationsBySpecialization(this.SURGICAL_SPECIALIZATION_ID, fileNumber);
-    const surgicalInvestigations$ = this.getInvestigationsBySpecialization(this.SURGICAL_SPECIALIZATION_ID, fileNumber);
-    
-    const orthopedicConsultations$ = this.getConsultationsBySpecialization(this.ORTHOPEDIC_SPECIALIZATION_ID, fileNumber);
-    const orthopedicInvestigations$ = this.getInvestigationsBySpecialization(this.ORTHOPEDIC_SPECIALIZATION_ID, fileNumber);
-    
-    const earConsultations$ = this.getConsultationsBySpecialization(this.EAR_SPECIALIZATION_ID, fileNumber);
-    const earInvestigations$ = this.getInvestigationsBySpecialization(this.EAR_SPECIALIZATION_ID, fileNumber);
+    const eyeConsultations$ = this.getConsultationsBySpecialization(
+      this.EYE_SPECIALIZATION_ID,
+      fileNumber,
+    );
+    const eyeInvestigations$ = this.getInvestigationsBySpecialization(
+      this.EYE_SPECIALIZATION_ID,
+      fileNumber,
+    );
+
+    const internalConsultations$ = this.getConsultationsBySpecialization(
+      this.INTERNAL_SPECIALIZATION_ID,
+      fileNumber,
+    );
+    const internalInvestigations$ = this.getInvestigationsBySpecialization(
+      this.INTERNAL_SPECIALIZATION_ID,
+      fileNumber,
+    );
+
+    const surgicalConsultations$ = this.getConsultationsBySpecialization(
+      this.SURGICAL_SPECIALIZATION_ID,
+      fileNumber,
+    );
+    const surgicalInvestigations$ = this.getInvestigationsBySpecialization(
+      this.SURGICAL_SPECIALIZATION_ID,
+      fileNumber,
+    );
+
+    const orthopedicConsultations$ = this.getConsultationsBySpecialization(
+      this.ORTHOPEDIC_SPECIALIZATION_ID,
+      fileNumber,
+    );
+    const orthopedicInvestigations$ = this.getInvestigationsBySpecialization(
+      this.ORTHOPEDIC_SPECIALIZATION_ID,
+      fileNumber,
+    );
+
+    const earConsultations$ = this.getConsultationsBySpecialization(
+      this.EAR_SPECIALIZATION_ID,
+      fileNumber,
+    );
+    const earInvestigations$ = this.getInvestigationsBySpecialization(
+      this.EAR_SPECIALIZATION_ID,
+      fileNumber,
+    );
 
     forkJoin({
       eyeConsultations: eyeConsultations$,
@@ -573,7 +650,7 @@ export class Supervisor implements OnInit {
       surgicalConsultations: surgicalConsultations$,
       surgicalInvestigations: surgicalInvestigations$,
       orthopedicConsultations: orthopedicConsultations$,
-      orthopedicInvestigations: orthopedicInvestigations$
+      orthopedicInvestigations: orthopedicInvestigations$,
     }).subscribe({
       next: (data: {
         eyeConsultations: Consultation[];
@@ -593,57 +670,68 @@ export class Supervisor implements OnInit {
         const earConsultations = this.removeDuplicateConsultations(data.earConsultations);
         const earInvestigations = this.removeDuplicateInvestigations(data.earInvestigations);
         const internalConsultations = this.removeDuplicateConsultations(data.internalConsultations);
-        const internalInvestigations = this.removeDuplicateInvestigations(data.internalInvestigations);
+        const internalInvestigations = this.removeDuplicateInvestigations(
+          data.internalInvestigations,
+        );
         const surgicalConsultations = this.removeDuplicateConsultations(data.surgicalConsultations);
-        const surgicalInvestigations = this.removeDuplicateInvestigations(data.surgicalInvestigations);
-        const orthopedicConsultations = this.removeDuplicateConsultations(data.orthopedicConsultations);
-        const orthopedicInvestigations = this.removeDuplicateInvestigations(data.orthopedicInvestigations);
+        const surgicalInvestigations = this.removeDuplicateInvestigations(
+          data.surgicalInvestigations,
+        );
+        const orthopedicConsultations = this.removeDuplicateConsultations(
+          data.orthopedicConsultations,
+        );
+        const orthopedicInvestigations = this.removeDuplicateInvestigations(
+          data.orthopedicInvestigations,
+        );
 
         this.clinicsData = [
           {
-            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹ÙŠÙˆÙ†',
+            name: 'عيادة العيون',
             icon: 'pi pi-eye',
             exam: this.applicant.eyeExam,
             consultations: eyeConsultations,
-            investigations: eyeInvestigations
+            investigations: eyeInvestigations,
           },
           {
-            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¨Ø§Ø·Ù†Ø©',
+            name: 'عيادة الباطنة',
             icon: 'pi pi-heart',
             exam: this.applicant.internalExam,
             consultations: internalConsultations,
-            investigations: internalInvestigations
+            investigations: internalInvestigations,
           },
           {
-            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¬Ø±Ø§Ø­Ø©',
+            name: 'عيادة الجراحة',
             icon: 'pi pi-briefcase',
             exam: this.applicant.surgicalExam,
             consultations: surgicalConsultations,
-            investigations: surgicalInvestigations
+            investigations: surgicalInvestigations,
           },
           {
-            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹Ø¸Ù…ÙŠØ©',
+            name: 'عيادة العظمية',
             icon: 'pi pi-bone',
             exam: this.applicant.orthopedicExamDto,
             consultations: orthopedicConsultations,
-            investigations: orthopedicInvestigations
+            investigations: orthopedicInvestigations,
           },
           {
-            name: 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø£Ø°Ù†ÙŠØ©',
+            name: 'عيادة الأذنية',
             icon: 'pi pi-volume-up',
             exam: this.applicant.earClinic,
             consultations: earConsultations,
-            investigations: earInvestigations
-          }
+            investigations: earInvestigations,
+          },
         ];
         this.loading = false;
         this.isLoadingClinicsData = false;
       },
       error: (err) => {
-        this.toastr.error('Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ Ø¬Ù„Ø¨ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¹ÙŠØ§Ø¯Ø§Øª', 'Ø®Ø·Ø£');
+        this.toastr.error(
+          'حدث خطأ أثناء جلب بيانات العيادات',
+          'خطأ',
+        );
         this.loading = false;
         this.isLoadingClinicsData = false;
-      }
+      },
     });
   }
 
@@ -654,29 +742,29 @@ export class Supervisor implements OnInit {
     const url = `${environment.apiUrl}/${attachment}`;
     window.open(url, '_blank');
   }
-   loadMaritalStatuses() {
+  loadMaritalStatuses() {
     this.maritalStatusService.getMaritalStatus().subscribe({
       next: (data) => (this.maritalStatuses = data),
-      error: () => {}
+      error: () => {},
     });
   }
   getMaritalStatusDescription(id: number): string {
-  const status = this.maritalStatuses.find(s => s.maritalStatusID === id);
-  return status ? status.description : 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
-}
+    const status = this.maritalStatuses.find((s) => s.maritalStatusID === id);
+    return status ? status.description : 'غير محدد';
+  }
 
   loadResults() {
     this.lookupService.getResults().subscribe({
       next: (data) => {
         this.results = data;
-        const rejected = this.results.find(r => r.description == 'Ù…Ø±ÙÙˆØ¶');
-        const postponed = this.results.find(r => r.description == 'Ù…Ø¤Ø¬Ù„');
-        const approved = this.results.find(r => r.description == 'Ù…Ù‚Ø¨ÙˆÙ„');
+        const rejected = this.results.find((r) => r.description == 'مرفوض');
+        const postponed = this.results.find((r) => r.description == 'مؤجل');
+        const approved = this.results.find((r) => r.description == 'مقبول');
         this.rejectedId = rejected ? rejected.resultID : null;
         this.postponedId = postponed ? postponed.resultID : null;
         this.acceptedId = approved ? approved.resultID : null;
       },
-      error: () => {}
+      error: () => {},
     });
   }
   private mapApplicantToDecision(applicant: ApplicantDetailsModel) {
@@ -690,7 +778,7 @@ export class Supervisor implements OnInit {
       resultID: 0,
       reason: '',
       postponeDuration: '',
-      decisionDate: new Date().toISOString().split('T')[0]
+      decisionDate: new Date().toISOString().split('T')[0],
     };
   }
 
@@ -721,7 +809,7 @@ export class Supervisor implements OnInit {
     this.decisionModel.resultID = previousResultID;
     this.decisionModel.reason = applicant.finalDecision.reason || '';
     this.decisionModel.postponeDuration = applicant.finalDecision.postponeDuration || '';
-    
+
     // ØªØ­Ø¯ÙŠØ« Ø­Ø§Ù„Ø© isApproved Ùˆ isAccept Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ø§Ù„Ù†ØªÙŠØ¬Ø© Ø§Ù„Ø³Ø§Ø¨Ù‚Ø©
     if (previousResultID === this.acceptedId) {
       this.isAccept = true;
@@ -746,9 +834,9 @@ export class Supervisor implements OnInit {
       this.isApproved = true;
       this.decisionModel.postponeDuration = '';
     }
-    if(selectedId == this.acceptedId){
+    if (selectedId == this.acceptedId) {
       this.isAccept = true;
-    }else{
+    } else {
       this.isAccept = false;
     }
   }
@@ -756,36 +844,55 @@ export class Supervisor implements OnInit {
   submitDecision() {
     // âœ… Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø¥Ù…ÙƒØ§Ù†ÙŠØ© Ø§Ù„ØªØ¹Ø¯ÙŠÙ„
     if (this.previousDecisionLocked || !this.canEditDecision) {
-      this.responseMessage = 'Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¹Ø§Ø¯Ø© ØªÙ‚ÙŠÙŠÙ… Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ù„Ø£Ù†Ù‡ ØªÙ… Ø¥ØµØ¯Ø§Ø± Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ø³Ø§Ø¨Ù‚Ø§Ù‹.';
+      this.responseMessage =
+        'لا يمكن إعادة تقييم هذا المنتسب لأنه تم إصدار نتيجة نهائية سابقاً.';
       this.responseSuccess = false;
-      this.toastr.warning('Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¹Ø§Ø¯Ø© ØªÙ‚ÙŠÙŠÙ… Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ù„Ø£Ù†Ù‡ ØªÙ… Ø¥ØµØ¯Ø§Ø± Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ø³Ø§Ø¨Ù‚Ø§Ù‹.', 'ØªØ­Ø°ÙŠØ±');
+      this.toastr.warning(
+        'لا يمكن إعادة تقييم هذا المنتسب لأنه تم إصدار نتيجة نهائية سابقاً.',
+        'تنبيه',
+      );
       return;
     }
 
     // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ØµØ­Ø© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„
-    const requiredFields = ['orthopedicExamID', 'surgicalExamID', 'internalExamID', 'eyeExamID', 'applicantFileNumber', 'resultID', 'decisionDate'];
-    const missingFields = requiredFields.filter(field => !this.decisionModel[field as keyof typeof this.decisionModel]);
-    
+    const requiredFields = [
+      'orthopedicExamID',
+      'surgicalExamID',
+      'internalExamID',
+      'eyeExamID',
+      'applicantFileNumber',
+      'resultID',
+      'decisionDate',
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => !this.decisionModel[field as keyof typeof this.decisionModel],
+    );
+
     if (missingFields.length > 0) {
-      this.responseMessage = 'Ø¨ÙŠØ§Ù†Ø§Øª Ù†Ø§Ù‚ØµØ©: ' + missingFields.join(', ');
+      this.responseMessage = 'بيانات ناقصة: ' + missingFields.join(', ');
       this.responseSuccess = false;
-      this.toastr.warning('Ø¨ÙŠØ§Ù†Ø§Øª Ù†Ø§Ù‚ØµØ©: ' + missingFields.join(', '), 'ØªØ­Ø°ÙŠØ±');
+      this.toastr.warning('بيانات ناقصة: ' + missingFields.join(', '), 'تنبيه');
       return;
     }
-    
+
     // âœ… Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…Ù† Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ù†ØªØ³Ø¨ Ø§Ù„Ù…Ø­Ù…Ù„Ø© (Ø¨Ø¯ÙˆÙ† Ø§Ø³ØªØ¯Ø¹Ø§Ø¡ API Ø¥Ø¶Ø§ÙÙŠ)
     if (this.applicant?.finalDecision?.resultID) {
-      this.responseMessage = 'Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ©ØŒ Ø­ÙŠØ« ØªÙˆØ¬Ø¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…Ø³Ø¬Ù‘Ù„Ø© Ù…Ø³Ø¨Ù‚Ù‹Ø§.';
+      this.responseMessage =
+        'لا يمكن إضافة نتيجة نهائية، حيث توجد نتيجة نهائية مسجّلة مسبقاً.';
       this.responseSuccess = false;
-      this.toastr.warning('Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ©ØŒ Ø­ÙŠØ« ØªÙˆØ¬Ø¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ© Ù…Ø³Ø¬Ù‘Ù„Ø© Ù…Ø³Ø¨Ù‚Ù‹Ø§.', 'ØªØ­Ø°ÙŠØ±');
+      this.toastr.warning(
+        'لا يمكن إضافة نتيجة نهائية، حيث توجد نتيجة نهائية مسجّلة مسبقاً.',
+        'تنبيه',
+      );
       return;
     }
-    
+
     // âœ… Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ù‚Ø±Ø§Ø± Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ Ù…Ø¨Ø§Ø´Ø±Ø© (Ø§Ù„Ù€ backend Ø³ÙŠØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ù†ØªÙŠØ¬Ø© Ù†Ù‡Ø§Ø¦ÙŠØ©)
     this.loading = true;
-    
-    this.decisionService.createFinalDecision(this.decisionModel)
-      .pipe(finalize(() => this.loading = false))
+
+    this.decisionService
+      .createFinalDecision(this.decisionModel)
+      .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (res) => {
           const isSuccessful = res?.succeeded !== false;
@@ -794,18 +901,39 @@ export class Supervisor implements OnInit {
             this.responseSuccess = true;
             this.toastr.success('تم رفع النتيجة بنجاح', 'نجاح', {
               timeOut: 2500,
-              positionClass: 'toast-top-center'
+              positionClass: 'toast-top-center',
             });
             this.previousDecisionLocked = true;
             this.canEditDecision = false;
             if (this.applicant) {
+              const existing = this.applicant.finalDecision;
+              const newDecisionId = (res?.data as { decisionID?: number })?.decisionID;
+              const result = existing?.result ??
+                this.results.find((r) => r.resultID === this.decisionModel.resultID) ?? {
+                  resultID: this.decisionModel.resultID,
+                  description: '',
+                };
               this.applicant.finalDecision = {
-                ...(this.applicant.finalDecision || {}),
+                decisionID: newDecisionId ?? existing?.decisionID ?? 0,
+                orthopedicExamID:
+                  this.decisionModel.orthopedicExamID ?? existing?.orthopedicExamID ?? 0,
+                surgicalExamID: this.decisionModel.surgicalExamID ?? existing?.surgicalExamID ?? 0,
+                internalExamID: this.decisionModel.internalExamID ?? existing?.internalExamID ?? 0,
+                eyeExamID: this.decisionModel.eyeExamID ?? existing?.eyeExamID ?? 0,
+                applicantFileNumber:
+                  this.decisionModel.applicantFileNumber ?? existing?.applicantFileNumber ?? '',
                 resultID: this.decisionModel.resultID,
-                reason: this.decisionModel.reason,
-                postponeDuration: this.decisionModel.postponeDuration,
+                reason: this.decisionModel.reason ?? '',
+                postponeDuration: this.decisionModel.postponeDuration ?? '',
                 decisionDate: this.decisionModel.decisionDate,
-                supervisorAddedAt: new Date().toISOString()
+                result,
+                supervisorAddedAt: new Date().toISOString(),
+                ...(existing && {
+                  receptionAddedAt: existing.receptionAddedAt,
+                  supervisorLastModifiedAt: existing.supervisorLastModifiedAt,
+                  isExportedToRecruitment: existing.isExportedToRecruitment,
+                  exportedAt: existing.exportedAt,
+                }),
               };
             }
           } else {
@@ -817,9 +945,10 @@ export class Supervisor implements OnInit {
         },
         error: (err) => {
           let serverMsg = 'حدث خطأ أثناء الاتصال بالسيرفر';
-          
+
           if (err?.status === 404) {
-            serverMsg = 'الـ endpoint غير موجود. يرجى التحقق من إعدادات الـ API أو الاتصال بالدعم الفني.';
+            serverMsg =
+              'الـ endpoint غير موجود. يرجى التحقق من إعدادات الـ API أو الاتصال بالدعم الفني.';
           } else if (err?.error?.errors) {
             const errorsMap = err.error.errors;
             if (Array.isArray(errorsMap)) {
@@ -832,12 +961,12 @@ export class Supervisor implements OnInit {
           } else if (err?.error?.message) {
             serverMsg = err.error.message;
           }
-          
+
           this.responseMessage = serverMsg;
           this.responseSuccess = false;
           this.toastr.error(serverMsg, 'خطأ');
           console.error('Error creating final decision:', err);
-        }
+        },
       });
   }
 
@@ -846,7 +975,7 @@ export class Supervisor implements OnInit {
     if (this.decisionForm) {
       this.decisionForm.resetForm();
     }
-    
+
     // Ø¥Ø¹Ø§Ø¯Ø© ØªØ¹ÙŠÙŠÙ† Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…ØªØºÙŠØ±Ø§Øª Ø¥Ù„Ù‰ Ø­Ø§Ù„ØªÙ‡Ø§ Ø§Ù„Ø£ÙˆÙ„ÙŠØ©
     this.applicant = undefined!;
     this.decisionModel = undefined!;
@@ -860,27 +989,31 @@ export class Supervisor implements OnInit {
     this.previousDecisionLocked = false;
   }
   getResultDescription(resultID: number): string {
-    const result = this.results.find(r => r.resultID === resultID);
-    return result ? result.description : 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
+    const result = this.results.find((r) => r.resultID === resultID);
+    return result ? result.description : 'غير محدد';
   }
 
-  getResultSeverity(resultID: number): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null {
-    const result = this.results.find(r => r.resultID === resultID);
+  getResultSeverity(
+    resultID: number,
+  ): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null {
+    const result = this.results.find((r) => r.resultID === resultID);
     if (!result) return 'secondary';
-    
+
     const description = result.description.toLowerCase();
-    if (description.includes('Ù…Ù‚Ø¨ÙˆÙ„') || description.includes('Ù‚Ø¨ÙˆÙ„')) return 'success';
-    if (description.includes('Ù…Ø±ÙÙˆØ¶') || description.includes('Ø±ÙØ¶')) return 'danger';
-    if (description.includes('Ù…Ø¤Ø¬Ù„') || description.includes('ØªØ£Ø¬ÙŠÙ„')) return 'warn';
+    if (description.includes('مقبول') || description.includes('قبول')) return 'success';
+    if (description.includes('مرفوض') || description.includes('رفض')) return 'danger';
+    if (description.includes('مؤجل') || description.includes('تأجيل')) return 'warn';
     return 'info';
   }
 
-  getStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null {
+  getStatusSeverity(
+    status: string,
+  ): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null {
     if (!status) return 'secondary';
     const statusLower = status.toLowerCase();
-    if (statusLower.includes('Ù…ÙƒØªÙ…Ù„') || statusLower.includes('Ø¬Ø§Ù‡Ø²')) return 'success';
-    if (statusLower.includes('Ù‚ÙŠØ¯') || statusLower.includes('Ø§Ù†ØªØ¸Ø§Ø±')) return 'warn';
-    if (statusLower.includes('Ù…Ù„ØºÙŠ') || statusLower.includes('Ø±ÙØ¶')) return 'danger';
+    if (statusLower.includes('مكتمل') || statusLower.includes('جاهز')) return 'success';
+    if (statusLower.includes('قيد') || statusLower.includes('انتظار')) return 'warn';
+    if (statusLower.includes('ملغي') || statusLower.includes('رفض')) return 'danger';
     return 'info';
   }
 
@@ -919,13 +1052,19 @@ export class Supervisor implements OnInit {
   }
 
   getSpecializationId(clinicName: string): number {
-    switch(clinicName) {
-      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹ÙŠÙˆÙ†': return this.EYE_SPECIALIZATION_ID;
-      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¨Ø§Ø·Ù†Ø©': return this.INTERNAL_SPECIALIZATION_ID;
-      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¬Ø±Ø§Ø­Ø©': return this.SURGICAL_SPECIALIZATION_ID;
-      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø¹Ø¸Ù…ÙŠØ©': return this.ORTHOPEDIC_SPECIALIZATION_ID;
-      case 'Ø¹ÙŠØ§Ø¯Ø© Ø§Ù„Ø£Ø°Ù†ÙŠØ©': return this.EAR_SPECIALIZATION_ID;
-      default: return 0;
+    switch (clinicName) {
+      case 'عيادة العيون':
+        return this.EYE_SPECIALIZATION_ID;
+      case 'عيادة الباطنة':
+        return this.INTERNAL_SPECIALIZATION_ID;
+      case 'عيادة الجراحة':
+        return this.SURGICAL_SPECIALIZATION_ID;
+      case 'عيادة العظمية':
+        return this.ORTHOPEDIC_SPECIALIZATION_ID;
+      case 'عيادة الأذنية':
+        return this.EAR_SPECIALIZATION_ID;
+      default:
+        return 0;
     }
   }
 
@@ -934,10 +1073,12 @@ export class Supervisor implements OnInit {
     this.selectedConsultation = consultation;
     this.consultationForm = this.fb.group({
       result: [consultation.result || '', Validators.required],
-      attachment: [consultation.attachment || null]
+      attachment: [consultation.attachment || null],
     });
     this.uploadedPath = consultation.attachment || null;
-    this.previewUrl = consultation.attachment ? `${environment.apiUrl}/${consultation.attachment}` : null;
+    this.previewUrl = consultation.attachment
+      ? `${environment.apiUrl}/${consultation.attachment}`
+      : null;
     this.showConsultationModal = true;
   }
 
@@ -949,14 +1090,14 @@ export class Supervisor implements OnInit {
       referralReason: '', // âœ… Ø¬Ø¯ÙŠØ¯
       result: '',
       attachment: '',
-      doctorID: 0
+      doctorID: 0,
     } as Consultation;
     this.consultationForm = this.fb.group({
       consultationType: ['', Validators.required],
       // referredDoctor: ['', Validators.required], // âŒ ØªÙ… Ø­Ø°ÙÙ‡
       referralReason: [''], // âœ… Ø¬Ø¯ÙŠØ¯ - Ø§Ø®ØªÙŠØ§Ø±ÙŠ
       result: ['', Validators.required],
-      attachment: [null]
+      attachment: [null],
     });
     this.uploadedPath = null;
     this.previewUrl = null;
@@ -980,38 +1121,44 @@ export class Supervisor implements OnInit {
     formData.append('file', file);
 
     const reader = new FileReader();
-    reader.onload = (e: any) => this.previewUrl = e.target.result;
+    reader.onload = (e: any) => (this.previewUrl = e.target.result);
     reader.readAsDataURL(file);
 
-    this.http.post<ApiResponse<string>>(this.fileUploadUrl, formData, {
-      headers: this.getAuthHeaders()
-    }).subscribe({
-      next: (response) => {
-        if (response.succeeded && response.data) {
-          this.uploadedPath = response.data;
-          this.consultationForm.patchValue({ attachment: response.data });
-          this.toastr.success('âœ… ØªÙ… Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
-        } else {
-          this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
-        }
-        this.uploadingFile = false;
-      },
-      error: () => {
-        this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
-        this.uploadingFile = false;
-      }
-    });
+    this.http
+      .post<ApiResponse<string>>(this.fileUploadUrl, formData, {
+        headers: this.getAuthHeaders(),
+      })
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded && response.data) {
+            this.uploadedPath = response.data;
+            this.consultationForm.patchValue({ attachment: response.data });
+            this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
+          } else {
+            this.toastr.error('فشل رفع الملف', 'خطأ');
+          }
+          this.uploadingFile = false;
+        },
+        error: () => {
+          this.toastr.error('فشل رفع الملف', 'خطأ');
+          this.uploadingFile = false;
+        },
+      });
   }
 
   saveConsultation() {
     if (this.consultationForm.invalid) {
-      this.toastr.warning('âŒ ÙŠØ±Ø¬Ù‰ ØªØ¹Ø¨Ø¦Ø© Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ„ Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø©', 'ØªØ­Ø°ÙŠØ±');
+      this.toastr.warning(
+        'يرجى تعبئة جميع الحقول المطلوبة',
+        'تنبيه',
+      );
       return;
     }
 
     if (!this.selectedConsultation) return;
 
-    const doctorID = Number(this.authService.getDoctorId()) || Number(this.authService.getUserId()) || 0;
+    const doctorID =
+      Number(this.authService.getDoctorId()) || Number(this.authService.getUserId()) || 0;
     const formValue = this.consultationForm.value;
     const updatedConsultation: Consultation = {
       ...this.selectedConsultation,
@@ -1021,35 +1168,45 @@ export class Supervisor implements OnInit {
       // referredDoctor: formValue.referredDoctor || this.selectedConsultation.referredDoctor, // âŒ ØªÙ… Ø­Ø°ÙÙ‡
       referralReason: formValue.referralReason || this.selectedConsultation.referralReason || '', // âœ… Ø¬Ø¯ÙŠØ¯
       result: formValue.result,
-      attachment: this.uploadedPath || this.selectedConsultation.attachment || ''
+      attachment: this.uploadedPath || this.selectedConsultation.attachment || '',
     };
 
     this.loading = true;
-    const isUpdate = this.selectedConsultation.consultationID && this.selectedConsultation.consultationID > 0;
+    const isUpdate =
+      this.selectedConsultation.consultationID && this.selectedConsultation.consultationID > 0;
 
     const request$ = isUpdate
-      ? this.http.put<ApiResponse<Consultation>>(`${this.consultationUrl}/${this.selectedConsultation.consultationID}`, updatedConsultation, {
-          headers: this.getAuthHeaders().set('Content-Type', 'application/json')
-        })
+      ? this.http.put<ApiResponse<Consultation>>(
+          `${this.consultationUrl}/${this.selectedConsultation.consultationID}`,
+          updatedConsultation,
+          {
+            headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
+          },
+        )
       : this.http.post<ApiResponse<Consultation>>(this.consultationUrl, updatedConsultation, {
-          headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+          headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
         });
 
     request$.subscribe({
       next: (response) => {
         if (response.succeeded) {
-          this.toastr.success(isUpdate ? 'âœ… ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¨Ù†Ø¬Ø§Ø­' : 'âœ… ØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
+          this.toastr.success(
+            isUpdate
+              ? 'تم تحديث الاستشارة بنجاح'
+              : 'تم إضافة الاستشارة بنجاح',
+            'نجاح',
+          );
           this.closeConsultationModal();
           this.loadClinicsData(this.applicant.fileNumber);
         } else {
-          this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
+          this.toastr.error('فشل العملية', 'خطأ');
         }
         this.loading = false;
       },
       error: () => {
-        this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
+        this.toastr.error('فشل العملية', 'خطأ');
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -1059,11 +1216,16 @@ export class Supervisor implements OnInit {
     this.investigationForm = this.fb.group({
       type: [investigation.type || ''],
       result: [investigation.result || '', Validators.required],
-      status: [investigation.status || (investigation.result ? 'Ù…ÙƒØªÙ…Ù„' : 'Ù…Ø¤Ø¬Ù„'), Validators.required],
-      attachment: [investigation.attachment || null]
+      status: [
+        investigation.status || (investigation.result ? 'مكتمل' : 'مؤجل'),
+        Validators.required,
+      ],
+      attachment: [investigation.attachment || null],
     });
     this.uploadedPath = investigation.attachment || null;
-    this.previewUrl = investigation.attachment ? `${environment.apiUrl}/${investigation.attachment}` : null;
+    this.previewUrl = investigation.attachment
+      ? `${environment.apiUrl}/${investigation.attachment}`
+      : null;
     this.showInvestigationModal = true;
   }
 
@@ -1073,15 +1235,15 @@ export class Supervisor implements OnInit {
       applicantFileNumber: this.applicant.fileNumber,
       type: '',
       result: '',
-      status: 'Ù…Ø¤Ø¬Ù„',
+      status: 'مؤجل',
       attachment: '',
-      doctorID: 0
+      doctorID: 0,
     } as Investigation;
     this.investigationForm = this.fb.group({
       type: ['', Validators.required],
       result: ['', Validators.required],
-      status: ['Ù…Ø¤Ø¬Ù„', Validators.required],
-      attachment: [null]
+      status: ['مؤجل', Validators.required],
+      attachment: [null],
     });
     this.uploadedPath = null;
     this.previewUrl = null;
@@ -1105,38 +1267,44 @@ export class Supervisor implements OnInit {
     formData.append('file', file);
 
     const reader = new FileReader();
-    reader.onload = (e: any) => this.previewUrl = e.target.result;
+    reader.onload = (e: any) => (this.previewUrl = e.target.result);
     reader.readAsDataURL(file);
 
-    this.http.post<ApiResponse<string>>(this.fileUploadUrl, formData, {
-      headers: this.getAuthHeaders()
-    }).subscribe({
-      next: (response) => {
-        if (response.succeeded && response.data) {
-          this.uploadedPath = response.data;
-          this.investigationForm.patchValue({ attachment: response.data });
-          this.toastr.success('âœ… ØªÙ… Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
-        } else {
-          this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
-        }
-        this.uploadingFile = false;
-      },
-      error: () => {
-        this.toastr.error('âŒ ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ù…Ù„Ù', 'Ø®Ø·Ø£');
-        this.uploadingFile = false;
-      }
-    });
+    this.http
+      .post<ApiResponse<string>>(this.fileUploadUrl, formData, {
+        headers: this.getAuthHeaders(),
+      })
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded && response.data) {
+            this.uploadedPath = response.data;
+            this.investigationForm.patchValue({ attachment: response.data });
+            this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
+          } else {
+            this.toastr.error('فشل رفع الملف', 'خطأ');
+          }
+          this.uploadingFile = false;
+        },
+        error: () => {
+          this.toastr.error('فشل رفع الملف', 'خطأ');
+          this.uploadingFile = false;
+        },
+      });
   }
 
   saveInvestigation() {
     if (this.investigationForm.invalid) {
-      this.toastr.warning('âŒ ÙŠØ±Ø¬Ù‰ ØªØ¹Ø¨Ø¦Ø© Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ„ Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø©', 'ØªØ­Ø°ÙŠØ±');
+      this.toastr.warning(
+        'يرجى تعبئة جميع الحقول المطلوبة',
+        'تنبيه',
+      );
       return;
     }
 
     if (!this.selectedInvestigation) return;
 
-    const doctorID = Number(this.authService.getDoctorId()) || Number(this.authService.getUserId()) || 0;
+    const doctorID =
+      Number(this.authService.getDoctorId()) || Number(this.authService.getUserId()) || 0;
     const formValue = this.investigationForm.value;
     const updatedInvestigation: Investigation = {
       ...this.selectedInvestigation,
@@ -1145,37 +1313,45 @@ export class Supervisor implements OnInit {
       type: formValue.type || this.selectedInvestigation.type,
       result: formValue.result,
       status: formValue.status,
-      attachment: this.uploadedPath || this.selectedInvestigation.attachment || ''
+      attachment: this.uploadedPath || this.selectedInvestigation.attachment || '',
     };
 
     this.loading = true;
-    const isUpdate = this.selectedInvestigation.investigationID && this.selectedInvestigation.investigationID > 0;
+    const isUpdate =
+      this.selectedInvestigation.investigationID && this.selectedInvestigation.investigationID > 0;
 
     const request$ = isUpdate
-      ? this.http.put<ApiResponse<Investigation>>(`${this.investigationUrl}/${this.selectedInvestigation.investigationID}`, updatedInvestigation, {
-          headers: this.getAuthHeaders().set('Content-Type', 'application/json')
-        })
+      ? this.http.put<ApiResponse<Investigation>>(
+          `${this.investigationUrl}/${this.selectedInvestigation.investigationID}`,
+          updatedInvestigation,
+          {
+            headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
+          },
+        )
       : this.http.post<ApiResponse<Investigation>>(this.investigationUrl, updatedInvestigation, {
-          headers: this.getAuthHeaders().set('Content-Type', 'application/json')
+          headers: this.getAuthHeaders().set('Content-Type', 'application/json'),
         });
 
     request$.subscribe({
       next: (response) => {
         if (response.succeeded) {
-          this.toastr.success(isUpdate ? 'âœ… ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø¨Ù†Ø¬Ø§Ø­' : 'âœ… ØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø¨Ù†Ø¬Ø§Ø­', 'Ù†Ø¬Ø§Ø­');
+          this.toastr.success(
+            isUpdate
+              ? 'تم تحديث التحليل بنجاح'
+              : 'تم إضافة التحليل بنجاح',
+            'نجاح',
+          );
           this.closeInvestigationModal();
           this.loadClinicsData(this.applicant.fileNumber);
         } else {
-          this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
+          this.toastr.error('فشل العملية', 'خطأ');
         }
         this.loading = false;
       },
       error: () => {
-        this.toastr.error('âŒ ÙØ´Ù„ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©', 'Ø®Ø·Ø£');
+        this.toastr.error('فشل العملية', 'خطأ');
         this.loading = false;
-      }
+      },
     });
   }
-
 }
-

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/admin/admin.routes.ts"],
+  "sourcesContent": ["import { Routes } from '@angular/router';\r\nimport { authGuard } from '../../core/guards/auth-guard';\r\nimport { UserRoles } from '../../core/models/enums/user-roles.enum';\r\n\r\nexport const ADMIN_ROUTES: Routes = [\r\n  {\r\n    path: 'dashboard',\r\n    loadComponent: () =>\r\n      import('./dashboard/dashboard').then(m => m.Dashboard),\r\n    canActivate: [authGuard]\r\n  },\r\n  {\r\n    path: 'final',\r\n    loadComponent: () =>\r\n      import('./final-applicant-list/final-applicant-list').then(m => m.FinalApplicantList),\r\n    canActivate: [authGuard],\r\n    data: { roles: [UserRoles.Admin] }\r\n  },\r\n];\r\n"],
+  "mappings": ";;;;;;;;;;;;;;AAIO,IAAM,eAAuB;EAClC;IACE,MAAM;IACN,eAAe,MACb,OAAO,qBAAuB,EAAE,KAAK,OAAK,EAAE,SAAS;IACvD,aAAa,CAAC,SAAS;;EAEzB;IACE,MAAM;IACN,eAAe,MACb,OAAO,qBAA6C,EAAE,KAAK,OAAK,EAAE,kBAAkB;IACtF,aAAa,CAAC,SAAS;IACvB,MAAM,EAAE,OAAO,CAAC,UAAU,KAAK,EAAC;;;",
+  "names": []
+}

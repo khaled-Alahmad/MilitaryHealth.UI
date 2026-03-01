@@ -3,30 +3,16 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="page-title">
-        <i class="pi pi-user me-2"></i>
+        <i class="pi pi-user ms-2"></i>
         تفاصيل المنتسب
       </h2>
       <div class="action-buttons">
-        <p-button 
-          label="رجوع" 
-          icon="pi pi-arrow-right" 
-          severity="secondary"
-          (onClick)="goBack()"
-          styleClass="me-2">
+        <p-button label="رجوع" icon="pi pi-arrow-right" severity="secondary" (onClick)="goBack()" styleClass="me-2">
         </p-button>
-        <p-button 
-          label="طباعة الإيصال" 
-          icon="pi pi-print" 
-          severity="info"
-          (onClick)="printReceipt()"
-          [disabled]="!applicant || loading"
-          styleClass="me-2">
+        <p-button label="طباعة الإيصال" icon="pi pi-print" severity="info" (onClick)="printReceipt()"
+          [disabled]="!applicant || loading" styleClass="me-2">
         </p-button>
-        <p-button 
-          label="تعديل" 
-          icon="pi pi-pencil" 
-          severity="success"
-          (onClick)="editApplicant()"
+        <p-button label="تعديل" icon="pi pi-pencil" severity="success" (onClick)="editApplicant()"
           [disabled]="!applicant || loading">
         </p-button>
       </div>
@@ -58,10 +44,10 @@
         <!-- Personal Information Section -->
         <div class="info-section">
           <h4 class="section-title">
-            <i class="pi pi-id-card me-2"></i>
+            <i class="pi pi-id-card ms-2"></i>
             البيانات الشخصية
           </h4>
-          <div class="info-grid">
+          <div class="info-grid ">
             <div class="info-item">
               <span class="info-label">رقم الدور:</span>
               <span class="info-value">
@@ -107,9 +93,7 @@
             <div class="info-item">
               <span class="info-label">وجود وشم:</span>
               <span class="info-value">
-                <p-tag 
-                  [value]="applicant.tattoo ? 'نعم' : 'لا'" 
-                  [severity]="applicant.tattoo ? 'warn' : 'success'">
+                <p-tag [value]="applicant.tattoo ? 'نعم' : 'لا'" [severity]="applicant.tattoo ? 'warn' : 'success'">
                 </p-tag>
               </span>
             </div>
@@ -121,6 +105,36 @@
               <span class="info-label">العلامات المميزة:</span>
               <span class="info-value">{{ applicant.distinctiveMarks || '-' }}</span>
             </div>
+          </div>
+          <h4 class="section-title mt-4">
+            <i class="pi pi-id-card ms-2"></i>
+            البيانات الطبية
+          </h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">الطول:</span>
+              <span class="info-value">{{ applicant.height || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">الوزن:</span>
+              <span class="info-value">{{ applicant.weight || '-' }}</span>
+            </div>
+         
+            <div class="info-item">
+              <span class="info-label">BMI:</span>
+              <span class="info-value">{{ applicant.bmi?.toFixed(1) || '-' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">ضغط الدم:</span>
+              <span class="info-value">{{ applicant.bloodPressure || '-' }}</span>
+            </div>
+        
+            <div class="info-item">
+              <span class="info-label">النبض:</span>
+              <span class="info-value">{{ applicant.pulse?.toString() || '-' }}</span>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -135,4 +149,3 @@
 
   <p-toast></p-toast>
 </div>
-

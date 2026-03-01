@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/pipes/gregorian-date.pipe.ts"],
+  "sourcesContent": ["import { Pipe, PipeTransform } from '@angular/core';\r\nimport { DatePipe } from '@angular/common';\r\n\r\n@Pipe({\r\n  name: 'gregorianDate',\r\n  standalone: true\r\n})\r\nexport class GregorianDatePipe implements PipeTransform {\r\n  private datePipe: DatePipe;\r\n\r\n  constructor() {\r\n    // استخدام locale إنجليزي لضمان عرض التقويم الميلادي\r\n    this.datePipe = new DatePipe('en-US');\r\n  }\r\n\r\n  transform(value: Date | string | null | undefined, format: string = 'yyyy/MM/dd'): string {\r\n    if (!value) {\r\n      return 'غير محدد';\r\n    }\r\n\r\n    try {\r\n      const date = typeof value === 'string' ? new Date(value) : value;\r\n      \r\n      if (isNaN(date.getTime())) {\r\n        return 'غير محدد';\r\n      }\r\n\r\n      // استخدام DatePipe مع locale إنجليزي لضمان التقويم الميلادي\r\n      return this.datePipe.transform(date, format) || 'غير محدد';\r\n    } catch {\r\n      return 'غير محدد';\r\n    }\r\n  }\r\n}\r\n\r\n"],
+  "mappings": ";;;;;;;;;;AAOM,IAAO,oBAAP,MAAO,mBAAiB;EACpB;EAER,cAAA;AAEE,SAAK,WAAW,IAAI,SAAS,OAAO;EACtC;EAEA,UAAU,OAAyC,SAAiB,cAAY;AAC9E,QAAI,CAAC,OAAO;AACV,aAAO;IACT;AAEA,QAAI;AACF,YAAM,OAAO,OAAO,UAAU,WAAW,IAAI,KAAK,KAAK,IAAI;AAE3D,UAAI,MAAM,KAAK,QAAO,CAAE,GAAG;AACzB,eAAO;MACT;AAGA,aAAO,KAAK,SAAS,UAAU,MAAM,MAAM,KAAK;IAClD,QAAQ;AACN,aAAO;IACT;EACF;;qCAzBW,oBAAiB;EAAA;4FAAjB,oBAAiB,MAAA,KAAA,CAAA;;;sEAAjB,mBAAiB,CAAA;UAJ7B;WAAK;MACJ,MAAM;MACN,YAAY;KACb;;;",
+  "names": []
+}

@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { FormsModule } from '@angular/forms';
@@ -43,6 +43,7 @@ export class RecruitmentExportComponent implements OnInit {
   exporting = false;
   globalFilter = '';
   tableHeight = '600px';
+  private decisionIdCache = new Map<string, number>();
   @ViewChild('exportTable') table?: Table;
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
@@ -157,14 +158,14 @@ export class RecruitmentExportComponent implements OnInit {
 
   onExportSelected(): void {
     if (this.selectedExports.length === 0) {
-      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ø®ØªÙŠØ§Ø± Ù…Ù†ØªØ³Ø¨ ÙˆØ§Ø­Ø¯ Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„ Ù„Ù„ØªØµØ¯ÙŠØ±', 'ØªÙ†Ø¨ÙŠÙ‡');
+      this.toastr.warning('يرجى اختيار منتسب واحد على الأقل للتصدير', 'تنبيه');
       return;
     }
 
     this.ensureDecisionIdsForSelection().subscribe({
       next: (decisionIds) => {
     if (decisionIds.length === 0) {
-      this.toastr.error('Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ù…Ø¹Ø±ÙØ§Øª Ø§Ù„Ù‚Ø±Ø§Ø±Ø§Øª. ÙŠØ±Ø¬Ù‰ ØªØ­Ø¯ÙŠØ« Ø§Ù„ØµÙØ­Ø© ÙˆØ§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰', 'Ø®Ø·Ø£');
+      this.toastr.error('لم يتم العثور على معرفات القرارات. يرجى تحديث الصفحة والمحاولة مرة أخرى', 'خطأ');
       return;
     }
 
@@ -178,25 +179,25 @@ export class RecruitmentExportComponent implements OnInit {
         if (blob && blob.size > 0) {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
           this.downloadFile(blob, `Recruitment_Export_${timestamp}.pdf`);
-          this.toastr.success(`ØªÙ… ØªØµØ¯ÙŠØ± ${decisionIds.length} Ù…Ù†ØªØ³Ø¨ Ø¨Ù†Ø¬Ø§Ø­`, 'Ù†Ø¬Ø§Ø­');
+          this.toastr.success(`تم تصدير ${decisionIds.length} منتسب بنجاح`, 'نجاح');
           this.exporting = false;
           this.selectedExports = [];
           this.loadPendingExports(); // Refresh list
         } else {
-          this.toastr.error('Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…ÙØµØ¯Ù‘Ø± ÙØ§Ø±Øº Ø£Ùˆ Ù…Ø¹Ø·ÙˆØ¨', 'Ø®Ø·Ø£');
+          this.toastr.error('الملف المُصدَّر فارغ أو معطوب', 'خطأ');
           this.exporting = false;
         }
       },
       error: (err) => {
-        let errorMessage = 'ÙØ´Ù„ ÙÙŠ ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª';
+        let errorMessage = 'فشل في تصدير البيانات';
         if (err.status === 401) {
-          errorMessage = 'ØºÙŠØ± Ù…ØµØ±Ø­ Ù„Ùƒ Ø¨Ø§Ù„ÙˆØµÙˆÙ„. ÙŠØ±Ø¬Ù‰ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ù…Ø±Ø© Ø£Ø®Ø±Ù‰';
+          errorMessage = 'غير مصرح لك بالوصول. يرجى تسجيل الدخول مرة أخرى';
         } else if (err.status === 404) {
-          errorMessage = 'Ø§Ù„Ù€ API ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯. ÙŠØ±Ø¬Ù‰ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø®Ø§Ø¯Ù…';
+          errorMessage = 'الـ API غير موجود. يرجى التحقق من إعدادات الخادم';
         } else if (err.status === 500) {
-          errorMessage = 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø®Ø§Ø¯Ù…. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù„Ø§Ø­Ù‚Ø§Ù‹';
+          errorMessage = 'خطأ في الخادم. يرجى المحاولة لاحقاً';
         }
-        this.toastr.error(errorMessage, 'Ø®Ø·Ø£');
+        this.toastr.error(errorMessage, 'خطأ');
         this.exporting = false;
           }
         });
@@ -206,7 +207,7 @@ export class RecruitmentExportComponent implements OnInit {
 
   onExportAll(): void {
     if (this.pendingExports.length === 0) {
-      this.toastr.warning('Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ù„Ù„ØªØµØ¯ÙŠØ±', 'ØªÙ†Ø¨ÙŠÙ‡');
+      this.toastr.warning('لا توجد بيانات للتصدير', 'تنبيه');
       return;
     }
 
@@ -217,25 +218,25 @@ export class RecruitmentExportComponent implements OnInit {
         if (blob && blob.size > 0) {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
           this.downloadFile(blob, `Recruitment_Export_All_${timestamp}.pdf`);
-          this.toastr.success(`ØªÙ… ØªØµØ¯ÙŠØ± ${this.pendingExports.length} Ù…Ù†ØªØ³Ø¨ Ø¨Ù†Ø¬Ø§Ø­`, 'Ù†Ø¬Ø§Ø­');
+          this.toastr.success(`تم تصدير ${this.pendingExports.length} منتسب بنجاح`, 'نجاح');
           this.exporting = false;
           this.selectedExports = [];
           this.loadPendingExports(); // Refresh list
         } else {
-          this.toastr.error('Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…ÙØµØ¯Ù‘Ø± ÙØ§Ø±Øº Ø£Ùˆ Ù…Ø¹Ø·ÙˆØ¨', 'Ø®Ø·Ø£');
+          this.toastr.error('الملف المُصدَّر فارغ أو معطوب', 'خطأ');
           this.exporting = false;
         }
       },
       error: (err) => {
-        let errorMessage = 'ÙØ´Ù„ ÙÙŠ ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª';
+        let errorMessage = 'فشل في تصدير البيانات';
         if (err.status === 401) {
-          errorMessage = 'ØºÙŠØ± Ù…ØµØ±Ø­ Ù„Ùƒ Ø¨Ø§Ù„ÙˆØµÙˆÙ„. ÙŠØ±Ø¬Ù‰ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ù…Ø±Ø© Ø£Ø®Ø±Ù‰';
+          errorMessage = 'غير مصرح لك بالوصول. يرجى تسجيل الدخول مرة أخرى';
         } else if (err.status === 404) {
-          errorMessage = 'Ø§Ù„Ù€ API ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯. ÙŠØ±Ø¬Ù‰ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø®Ø§Ø¯Ù…';
+          errorMessage = 'الـ API غير موجود. يرجى التحقق من إعدادات الخادم';
         } else if (err.status === 500) {
-          errorMessage = 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø®Ø§Ø¯Ù…. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù„Ø§Ø­Ù‚Ø§Ù‹';
+          errorMessage = 'خطأ في الخادم. يرجى المحاولة لاحقاً';
         }
-        this.toastr.error(errorMessage, 'Ø®Ø·Ø£');
+        this.toastr.error(errorMessage, 'خطأ');
         this.exporting = false;
       }
     });
@@ -352,11 +353,11 @@ export class RecruitmentExportComponent implements OnInit {
         });
 
         if (missing.length) {
-          this.toastr.warning(`ØªÙ… ØªØ¬Ø§Ù‡Ù„ ${missing.length} Ù…Ù†ØªØ³Ø¨/Ø© Ù„Ø¹Ø¯Ù… ØªÙˆÙØ± Ù‚Ø±Ø§Ø± Ù†Ù‡Ø§Ø¦ÙŠ Ù„Ù‡Ù….`, 'ØªÙ†Ø¨ÙŠÙ‡');
+          this.toastr.warning(`تم تجاهل ${missing.length} منتسب/ة لعدم توفّر قرار نهائي لهم.`, 'تنبيه');
         }
 
         if (duplicates > 0) {
-          this.toastr.info('ØªÙ… Ø¥Ø²Ø§Ù„Ø© Ø§Ù„Ø³Ø¬Ù„Ø§Øª Ø§Ù„Ù…ÙƒØ±Ø±Ø© (Ù†ÙØ³ Ø±Ù‚Ù… Ø§Ù„Ù…Ù„Ù) Ù…Ù† Ø§Ù„ØªØµØ¯ÙŠØ± Ù„Ø¶Ù…Ø§Ù† Ø¹Ø¯Ù… Ø§Ù„ØªÙƒØ±Ø§Ø±.', 'Ù…Ø¹Ù„ÙˆÙ…Ø©');
+          this.toastr.info('تم إزالة السجلات المكررة (نفس رقم الملف) من التصدير لضمان عدم التكرار.', 'معلومة');
         }
 
         return Array.from(uniqueByFile.values());

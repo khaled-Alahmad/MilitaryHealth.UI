@@ -9,28 +9,28 @@
   --primary-medium: #428177;
   --primary-light: #66b5a8;
   --primary-darkest: #002623;
-  
+
   /* Accent Colors - Gold (Wheat) */
-  --accent-gold: #B9A779;
-  --accent-gold-light: #E2BE7B;
+  --accent-gold: #b9a779;
+  --accent-gold-light: #e2be7b;
   --accent-gold-dark: #988561;
-  
+
   /* Status Colors - Red (Umber) */
-  --status-danger: #6B1F2A;
-  --status-danger-dark: #4A151E;
-  --status-danger-darkest: #260F14;
-  
+  --status-danger: #6b1f2a;
+  --status-danger-dark: #4a151e;
+  --status-danger-darkest: #260f14;
+
   /* Neutral Colors - Charcoal & Beige */
-  --neutral-light: #EDEBE0;
-  --neutral-medium: #3D3A3B;
+  --neutral-light: #edebe0;
+  --neutral-medium: #3d3a3b;
   --neutral-dark: #161616;
-  
+
   /* Semantic Colors */
   --success: var(--primary-dark);
   --info: var(--primary-medium);
   --warning: var(--accent-gold);
   --danger: var(--status-danger);
-  
+
   /* Typography */
   --font-family-primary: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-size-xs: 0.75rem;
@@ -40,7 +40,7 @@
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -49,20 +49,20 @@
   --spacing-xl: 1.5rem;
   --spacing-2xl: 2rem;
   --spacing-3xl: 3rem;
-  
+
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
   --radius-xl: 12px;
   --radius-full: 9999px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
+
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
@@ -85,7 +85,9 @@
   border: 1px solid rgba(5, 66, 57, 0.08);
   border-radius: var(--radius-xl);
   box-shadow: 0 4px 14px rgba(5, 66, 57, 0.08);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .table-toolbar .filter-reset-wrapper {
@@ -123,7 +125,9 @@
   border: 1.5px solid rgba(5, 66, 57, 0.25);
   border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
   background: #fff;
 }
 
@@ -206,20 +210,20 @@ html body p {
   font-size: var(--font-size-sm);
   color: var(--neutral-dark);
   transition: all var(--transition-fast);
-  
+
   &:focus {
     border-color: var(--primary-medium);
     box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
     outline: none;
   }
-  
+
   &:hover:not(:disabled) {
     border-color: var(--primary-medium);
   }
-  
+
   &.p-invalid {
     border-color: var(--status-danger);
-    
+
     &:focus {
       box-shadow: 0 0 0 3px rgba(107, 31, 42, 0.1);
     }
@@ -234,7 +238,7 @@ html body p {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-sm);
   resize: vertical;
-  
+
   &:focus {
     border-color: var(--primary-medium);
     box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
@@ -245,11 +249,11 @@ html body p {
 /* Select/Dropdown */
 ::ng-deep .p-dropdown {
   background: white;
-  
+
   .p-dropdown-trigger {
     color: var(--neutral-medium);
   }
-  
+
   &:not(.p-disabled).p-focus {
     border-color: var(--primary-medium);
     box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
@@ -261,20 +265,20 @@ html body p {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  
+
   .p-dropdown-items {
     padding: 0;
   }
-  
+
   .p-dropdown-item {
     padding: 0.75rem 1rem;
     font-family: var(--font-family-primary);
     transition: all var(--transition-fast);
 
-      &:hover {
+    &:hover {
       background: var(--neutral-light);
     }
-    
+
     &.p-highlight {
       background: var(--primary-dark);
       color: white;
@@ -299,16 +303,16 @@ html body p {
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
-  
+
   &.p-highlight {
     background: var(--primary-dark);
     border-color: var(--primary-dark);
-    
+
     .p-checkbox-icon {
       color: white;
     }
   }
-  
+
   &:hover {
     border-color: var(--primary-medium);
   }
@@ -320,11 +324,11 @@ html body p {
   height: 1.25rem;
   border: 2px solid rgba(0, 0, 0, 0.2);
   transition: all var(--transition-fast);
-  
+
   &.p-highlight .p-radiobutton-icon {
     background: var(--primary-dark);
   }
-  
+
   &:hover {
     border-color: var(--primary-medium);
   }
@@ -532,7 +536,6 @@ html body p {
   }
 }
 
-
 /* ===========================================
    Professional Dialog Design
    =========================================== */
@@ -544,7 +547,7 @@ html body p {
   max-width: 90vw;
   max-height: 90vh;
   border: none;
-  }
+}
 
 ::ng-deep .p-dialog-header {
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
@@ -552,21 +555,21 @@ html body p {
   padding: var(--spacing-lg) var(--spacing-xl);
   border-radius: 0;
 
-    .p-dialog-title {
+  .p-dialog-title {
     font-size: var(--font-size-xl);
     font-weight: 700;
     color: white;
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
-    
+
     i {
       color: var(--accent-gold);
       font-size: var(--font-size-2xl);
-      }
     }
+  }
 
-    .p-dialog-header-icon {
+  .p-dialog-header-icon {
     color: white;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
@@ -577,12 +580,12 @@ html body p {
     justify-content: center;
     transition: all var(--transition-fast);
 
-      &:hover {
+    &:hover {
       background: rgba(255, 255, 255, 0.2);
       transform: scale(1.1);
-      }
     }
   }
+}
 
 ::ng-deep .p-dialog-content {
   padding: var(--spacing-xl);
@@ -590,25 +593,25 @@ html body p {
   max-height: calc(90vh - 140px);
   overflow-y: auto;
 
-    /* Custom scrollbar */
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
 
-    &::-webkit-scrollbar-track {
-      background: var(--neutral-light);
-      border-radius: var(--radius-sm);
-    }
+  &::-webkit-scrollbar-track {
+    background: var(--neutral-light);
+    border-radius: var(--radius-sm);
+  }
 
-    &::-webkit-scrollbar-thumb {
+  &::-webkit-scrollbar-thumb {
     background: var(--primary-medium);
-      border-radius: var(--radius-sm);
-    
+    border-radius: var(--radius-sm);
+
     &:hover {
       background: var(--primary-dark);
     }
-    }
   }
+}
 
 ::ng-deep .p-dialog-footer {
   background: var(--neutral-light);
@@ -633,7 +636,7 @@ html body p {
     position: sticky;
     top: 0;
     z-index: 10;
-    
+
     > tr > th {
       position: sticky;
       top: 0;
@@ -688,7 +691,11 @@ html body p {
    =========================================== */
 
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
   font-weight: 600 !important;
   padding: 0.875rem 1rem !important;
@@ -714,7 +721,7 @@ html body p {
 ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
   padding: 0.75rem 1rem !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-        color: var(--neutral-dark) !important;
+  color: var(--neutral-dark) !important;
   font-size: var(--font-size-sm) !important;
 }
 
@@ -728,7 +735,7 @@ html body p {
 ::ng-deep .p-datatable .p-datatable-emptymessage {
   padding: 2rem !important;
   text-align: center !important;
-        color: var(--neutral-medium) !important;
+  color: var(--neutral-medium) !important;
 }
 
 ::ng-deep .p-paginator {
@@ -744,10 +751,10 @@ html body p {
   color: var(--neutral-dark) !important;
   font-weight: 500 !important;
   transition: all var(--transition-fast) !important;
-  
+
   &:hover:not(.p-disabled) {
     background: rgba(5, 66, 57, 0.1) !important;
-        color: var(--primary-dark) !important;
+    color: var(--primary-dark) !important;
   }
 }
 
@@ -763,10 +770,10 @@ html body p {
 ::ng-deep button,
 ::ng-deep .btn,
 ::ng-deep .p-button {
-    border-radius: var(--radius-md) !important;
+  border-radius: var(--radius-md) !important;
   font-family: var(--font-family-primary) !important;
-    font-weight: 600 !important;
-    transition: all var(--transition-fast) !important;
+  font-weight: 600 !important;
+  transition: all var(--transition-fast) !important;
   border: none !important;
   padding: 0.625rem 1.25rem !important;
   font-size: var(--font-size-sm) !important;
@@ -782,9 +789,9 @@ html body p {
   }
 
   &:hover:not(:disabled) {
-      transform: translateY(-1px) !important;
-      box-shadow: var(--shadow-md) !important;
-    }
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-md) !important;
+  }
 
   &:active:not(:disabled) {
     transform: translateY(0) !important;
@@ -799,12 +806,20 @@ html body p {
 /* Primary Button */
 ::ng-deep .btn-primary,
 ::ng-deep .p-button-primary,
-::ng-deep .p-button[styleClass="btn-primary"] {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
-      color: white !important;
+::ng-deep .p-button[styleClass='btn-primary'] {
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
+  color: white !important;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-medium) 0%,
+      var(--primary-dark) 100%
+    ) !important;
   }
 
   &:focus {
@@ -830,11 +845,19 @@ html body p {
 /* Success Button */
 ::ng-deep .btn-success,
 ::ng-deep .p-button-success {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-medium) 0%,
+      var(--primary-dark) 100%
+    ) !important;
   }
 }
 
@@ -854,10 +877,10 @@ html body p {
 ::ng-deep .p-button-warn {
   background: var(--accent-gold) !important;
   color: var(--neutral-dark) !important;
-  
+
   &:hover:not(:disabled) {
     background: var(--accent-gold-dark) !important;
-  color: white !important;
+    color: white !important;
   }
 }
 
@@ -893,19 +916,23 @@ html body p {
   box-shadow: var(--shadow-md) !important;
   border: 1px solid rgba(0, 0, 0, 0.05) !important;
   overflow: hidden !important;
-  
+
   .p-card-header {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-dark) 0%,
+      var(--primary-medium) 100%
+    ) !important;
     color: white !important;
     padding: var(--spacing-lg) !important;
     border: none !important;
-    
+
     i {
       color: var(--accent-gold) !important;
       margin-left: var(--spacing-sm) !important;
     }
   }
-  
+
   .p-card-body {
     padding: var(--spacing-xl) !important;
   }
@@ -916,41 +943,66 @@ html body p {
    =========================================== */
 
 ::ng-deep .p-toast-message {
-    border-radius: var(--radius-md) !important;
-    box-shadow: var(--shadow-lg) !important;
-    border: none !important;
-    overflow: hidden !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border: none !important;
+  overflow: hidden !important;
 
-    .p-toast-message-content {
-      padding: var(--spacing-md) var(--spacing-lg) !important;
+  .p-toast-message-content {
+    padding: var(--spacing-md) var(--spacing-lg) !important;
   }
-  
+
   &.p-toast-message-success {
     background: white !important;
-    
+
     .p-toast-message-icon {
       background: var(--primary-medium) !important;
-    color: white !important;
+      color: white !important;
+    }
   }
-}
 
   &.p-toast-message-error {
     background: white !important;
-    
+
     .p-toast-message-icon {
       background: var(--status-danger) !important;
-    color: white !important;
+      color: white !important;
+    }
   }
-}
 
   &.p-toast-message-warn {
     background: white !important;
-    
+
     .p-toast-message-icon {
       background: var(--accent-gold) !important;
       color: var(--neutral-dark) !important;
     }
   }
+}
+
+/* ===========================================
+   ngx-toastr - ألوان الهوية فقط (لا تغيّر layout أو visibility)
+   =========================================== */
+
+.toast-container .ngx-toastr.toast-success {
+  background-color: var(--primary-dark) !important;
+}
+.toast-container {
+  // position: relative !important;
+  // z-index: 99999 !important;
+}
+
+.toast-container .ngx-toastr.toast-error {
+  background-color: var(--status-danger) !important;
+}
+
+.toast-container .ngx-toastr.toast-warning {
+  background-color: var(--accent-gold) !important;
+  color: var(--neutral-dark) !important;
+}
+
+.toast-container .ngx-toastr.toast-info {
+  background-color: var(--primary-medium) !important;
 }
 
 /* ===========================================
@@ -969,12 +1021,12 @@ html body p {
   font-weight: 600 !important;
   color: var(--neutral-dark) !important;
   font-size: var(--font-size-sm) !important;
-  
+
   i {
-        color: var(--primary-dark) !important;
+    color: var(--primary-dark) !important;
     font-size: var(--font-size-base) !important;
   }
-  
+
   .required {
     color: var(--status-danger) !important;
     font-weight: 700 !important;
@@ -988,7 +1040,7 @@ html body p {
   margin-bottom: var(--spacing-xl) !important;
   box-shadow: var(--shadow-sm) !important;
   border: 1px solid rgba(0, 0, 0, 0.05) !important;
-  
+
   .section-header {
     display: flex !important;
     align-items: center !important;
@@ -996,13 +1048,13 @@ html body p {
     margin-bottom: var(--spacing-lg) !important;
     padding-bottom: var(--spacing-md) !important;
     border-bottom: 2px solid var(--neutral-light) !important;
-    
+
     h3 {
       color: var(--primary-dark) !important;
       font-size: var(--font-size-lg) !important;
       font-weight: 600 !important;
     }
-    
+
     i {
       color: var(--primary-medium) !important;
       font-size: var(--font-size-xl) !important;
@@ -1078,20 +1130,20 @@ html body p {
   .form-grid {
     grid-template-columns: 1fr !important;
   }
-  
+
   ::ng-deep .p-dialog {
     max-width: 95vw !important;
     margin: var(--spacing-sm) !important;
   }
-  
+
   ::ng-deep .p-dialog-content {
     padding: var(--spacing-md) !important;
   }
-  
+
   ::ng-deep .p-dialog-footer {
     flex-direction: column !important;
     gap: var(--spacing-sm) !important;
-    
+
     button {
       width: 100% !important;
     }
@@ -1114,7 +1166,7 @@ select:focus,
 }
 
 /* Force remove blue from search inputs everywhere */
-input[type="search"]:focus,
+input[type='search']:focus,
 .search-input:focus {
   border-color: var(--primary-medium) !important;
   box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1) !important;
@@ -1123,15 +1175,23 @@ input[type="search"]:focus,
 
 /* Search buttons - use brand colors */
 .search-btn,
-button[type="submit"].search-btn,
+button[type='submit'].search-btn,
 .btn-search {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
   border: none !important;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%) !important;
-  transform: translateY(-1px) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-medium) 0%,
+      var(--primary-dark) 100%
+    ) !important;
+    transform: translateY(-1px) !important;
     box-shadow: var(--shadow-md) !important;
   }
 }
@@ -1140,15 +1200,15 @@ button[type="submit"].search-btn,
 .highlight-blue,
 mark {
   background-color: var(--primary-dark) !important;
-    color: white !important;
-  }
+  color: white !important;
+}
 
 /* Ghost buttons use brand colors */
 ::ng-deep .p-button-ghost,
 .p-button-ghost {
   color: var(--primary-dark) !important;
   background: transparent !important;
-  
+
   &:hover {
     background: rgba(5, 66, 57, 0.1) !important;
     color: var(--primary-medium) !important;
@@ -1164,8 +1224,12 @@ mark {
 
 /* All tables use brand gradient header */
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
-    color: white !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
+  color: white !important;
   border: none !important;
 }
 
@@ -1173,7 +1237,7 @@ mark {
 .section-title {
   color: var(--primary-dark) !important;
   border-bottom-color: var(--primary-medium) !important;
-  
+
   &::before {
     background: var(--accent-gold) !important;
   }
@@ -1182,8 +1246,12 @@ mark {
 /* Modal headers use brand gradient */
 .modal-header,
 ::ng-deep .p-dialog-header {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
-  
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
+
   .modal-title,
   ::ng-deep .p-dialog-title {
     color: white !important;
@@ -1198,8 +1266,8 @@ mark {
 ::ng-deep .search-input:focus,
 ::ng-deep input.search-input:focus,
 ::ng-deep .search-input:active,
-::ng-deep input[type="search"]:focus,
-::ng-deep input[placeholder*="ابحث"]:focus {
+::ng-deep input[type='search']:focus,
+::ng-deep input[placeholder*='ابحث']:focus {
   border-color: var(--primary-medium) !important;
   box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.2) !important;
   outline: none !important;
@@ -1207,7 +1275,7 @@ mark {
 
 /* All table search inputs */
 ::ng-deep .p-datatable .search-input,
-::ng-deep .p-datatable input[type="text"] {
+::ng-deep .p-datatable input[type='text'] {
   &:focus {
     border-color: var(--primary-medium) !important;
     box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.2) !important;
@@ -1219,7 +1287,7 @@ mark {
 ::ng-deep .p-paginator .p-paginator-prev,
 ::ng-deep .p-paginator .p-paginator-next {
   color: var(--neutral-dark) !important;
-  
+
   &:hover:not(.p-disabled) {
     background: rgba(5, 66, 57, 0.1) !important;
     color: var(--primary-dark) !important;
@@ -1235,12 +1303,20 @@ mark {
 ::ng-deep button.btn-primary,
 ::ng-deep .btn-primary,
 ::ng-deep .p-button.p-button-primary {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   border-color: var(--primary-dark) !important;
   color: white !important;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-medium) 0%,
+      var(--primary-dark) 100%
+    ) !important;
   }
 }
 
@@ -1251,7 +1327,11 @@ mark {
 /* Force green on badges that might be blue */
 .badge.bg-primary,
 ::ng-deep .badge.bg-primary {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -1279,7 +1359,7 @@ mark {
 ::ng-deep .p-datatable .badge.bg-warning,
 .badge.bg-warning.text-dark,
 ::ng-deep .badge.bg-warning.text-dark {
-  background: linear-gradient(135deg, #988561 0%, #B9A779 100%) !important;
+  background: linear-gradient(135deg, #988561 0%, #b9a779 100%) !important;
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -1291,7 +1371,7 @@ mark {
 ::ng-deep span.badge.bg-danger,
 ::ng-deep td .badge.bg-danger,
 ::ng-deep .p-datatable .badge.bg-danger {
-  background: linear-gradient(135deg, #4A151E 0%, #6B1F2A 100%) !important;
+  background: linear-gradient(135deg, #4a151e 0%, #6b1f2a 100%) !important;
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -1303,7 +1383,7 @@ mark {
 ::ng-deep span.badge.bg-secondary,
 ::ng-deep td .badge.bg-secondary,
 ::ng-deep .p-datatable .badge.bg-secondary {
-  background: linear-gradient(135deg, #3D3A3B 0%, #616161 100%) !important;
+  background: linear-gradient(135deg, #3d3a3b 0%, #616161 100%) !important;
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -1312,7 +1392,11 @@ mark {
 /* Info Badge - Light Green */
 .badge.bg-info,
 ::ng-deep .badge.bg-info {
-  background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-light) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-medium) 0%,
+    var(--primary-light) 100%
+  ) !important;
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -1361,34 +1445,36 @@ mark {
 }
 
 /* Force remove blue and yellow backgrounds from badges */
-::ng-deep .badge[style*="background"],
-::ng-deep span[style*="background"].badge,
-::ng-deep .p-datatable [style*="background"] {
+::ng-deep .badge[style*='background'],
+::ng-deep span[style*='background'].badge,
+::ng-deep .p-datatable [style*='background'] {
   background: none !important;
 }
 
 /* Override any Bootstrap badge colors */
-.bg-success, .bg-primary, .bg-info {
+.bg-success,
+.bg-primary,
+.bg-info {
   background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
 }
 
 .bg-warning {
-  background: linear-gradient(135deg, #988561 0%, #B9A779 100%) !important;
+  background: linear-gradient(135deg, #988561 0%, #b9a779 100%) !important;
 }
 
 .bg-danger {
-  background: linear-gradient(135deg, #4A151E 0%, #6B1F2A 100%) !important;
+  background: linear-gradient(135deg, #4a151e 0%, #6b1f2a 100%) !important;
 }
 
 .bg-secondary {
-  background: linear-gradient(135deg, #3D3A3B 0%, #616161 100%) !important;
+  background: linear-gradient(135deg, #3d3a3b 0%, #616161 100%) !important;
 }
 
 /* Remove blue from links */
 ::ng-deep a,
 ::ng-deep .link {
   color: var(--primary-dark) !important;
-  
+
   &:hover {
     color: var(--primary-medium) !important;
   }
@@ -1396,12 +1482,12 @@ mark {
 
 /* ABSOLUTE FORCE - Remove ALL blue colors */
 * {
-  &[class*="blue"],
-  &[style*="blue"],
-  &[style*="#0d6efd"],
-  &[style*="#007bff"],
-  &[style*="#0b5ed7"],
-  &[class*="Blue"] {
+  &[class*='blue'],
+  &[style*='blue'],
+  &[style*='#0d6efd'],
+  &[style*='#007bff'],
+  &[style*='#0b5ed7'],
+  &[class*='Blue'] {
     color: var(--primary-dark) !important;
     background: var(--primary-dark) !important;
     border-color: var(--primary-dark) !important;
@@ -1429,7 +1515,7 @@ mark {
 }
 
 /* Search boxes must be green */
-::ng-deep input:not([type="checkbox"]):not([type="radio"]) {
+::ng-deep input:not([type='checkbox']):not([type='radio']) {
   &:focus {
     border-color: var(--primary-medium) !important;
     box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.2) !important;
@@ -1448,11 +1534,11 @@ mark {
   color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
   background: transparent !important;
-  
+
   &:hover:not(:disabled) {
     background: var(--primary-dark) !important;
     border-color: var(--primary-dark) !important;
-  color: white !important;
+    color: white !important;
   }
 }
 
@@ -1462,7 +1548,7 @@ mark {
 ::ng-deep .btn-outline-info {
   border-color: var(--neutral-medium) !important;
   color: var(--neutral-dark) !important;
-  
+
   &:hover:not(:disabled) {
     background: var(--neutral-medium) !important;
     color: white !important;
@@ -1475,7 +1561,7 @@ mark {
   background: var(--primary-medium) !important;
   border-color: var(--primary-medium) !important;
   color: white !important;
-  
+
   &:hover:not(:disabled) {
     background: var(--primary-dark) !important;
   }
@@ -1488,9 +1574,13 @@ mark {
   &.btn-info {
     color: var(--primary-dark) !important;
     border-color: var(--primary-dark) !important;
-    
+
     &:hover:not(:disabled) {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+      background: linear-gradient(
+        135deg,
+        var(--primary-dark) 0%,
+        var(--primary-medium) 100%
+      ) !important;
       border-color: var(--primary-dark) !important;
       color: white !important;
     }
@@ -1503,20 +1593,24 @@ button.btn-outline-primary,
   color: var(--primary-dark) !important;
   border-color: var(--primary-dark) !important;
   background: transparent !important;
-  
+
   &:hover:not(:disabled),
   &:active:not(:disabled),
   &:focus:not(:disabled) {
     color: white !important;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-dark) 0%,
+      var(--primary-medium) 100%
+    ) !important;
     border-color: var(--primary-dark) !important;
     box-shadow: var(--shadow-md) !important;
   }
 }
 
 /* Remove any blue background or border */
-button[class*="outline-primary"],
-.btn[class*="outline-primary"] {
+button[class*='outline-primary'],
+.btn[class*='outline-primary'] {
   border: 2px solid var(--primary-dark) !important;
   background: transparent !important;
   color: var(--primary-dark) !important;
@@ -1525,7 +1619,11 @@ button[class*="outline-primary"],
 /* Force active state to green */
 button.btn-outline-primary.active,
 .btn-outline-primary.active {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
   border-color: var(--primary-dark) !important;
 }
@@ -1533,12 +1631,20 @@ button.btn-outline-primary.active,
 /* Force all primary buttons to green */
 button.btn-primary:not(.btn-danger):not(.btn-warning),
 .btn-primary:not(.btn-danger):not(.btn-warning) {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
   border-color: var(--primary-dark) !important;
-  
+
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      var(--primary-medium) 0%,
+      var(--primary-dark) 100%
+    ) !important;
   }
 }
 
