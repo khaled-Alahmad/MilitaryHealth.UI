@@ -209,6 +209,25 @@
   }
 }
 
+/* مودال التفاصيل - خلفية ومركز */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+}
+
+.modal-content-details {
+  max-width: 1000px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 /* Remove blue highlights */
 .highlight-blue {
   background-color: var(--primary-dark) !important;

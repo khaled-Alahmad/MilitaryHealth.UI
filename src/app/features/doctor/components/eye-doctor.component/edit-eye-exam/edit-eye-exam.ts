@@ -251,7 +251,7 @@ export class EditEyeExam implements OnInit {
 
  onSubmit() {
   if (!this.exam || this.examForm.invalid) {
-    this.toastr.warning('❌ يرجى تعبئة جميع الحقول المطلوبة', 'تحذير');
+    this.toastr.warning('يرجى تعبئة جميع الحقول المطلوبة', 'تنبيه');
     return;
   }
 
@@ -259,31 +259,29 @@ export class EditEyeExam implements OnInit {
   const rightEyeRefractions = (this.examForm.get('rightEye.refractions') as FormArray).value;
 
   if (!leftEyeRefractions.length && !rightEyeRefractions.length) {
-    this.toastr.warning('⚠️ يجب إدخال قياس الانكسار لعين واحدة على الأقل', 'تنبيه');
+    this.toastr.warning('يجب إدخال قياس الانكسار لعين واحدة على الأقل', 'تنبيه');
     return;
   }
 
+  const v = this.examForm.value;
+  // تحويل كل القيم بشكل صريح لضمان إرسالها بالشكل الذي يتوقعه الـ API
   const updatedExam: EyeExam = {
-    ...this.exam,
-    vision: this.examForm.value.vision,
-    visionLeft: this.examForm.value.visionLeft || '',
-    colorTest: resolveHealthStatusValue(
-      this.examForm.value.colorTest,
-      this.examForm.value.colorTestOther
-    ),
-    colorTestLeft: resolveHealthStatusValue(
-      this.examForm.value.colorTestLeft,
-      this.examForm.value.colorTestLeftOther
-    ),
-    refractiveError: this.examForm.value.refractiveError || '', // للتوافق مع البيانات القديمة
-    worstRefractionRight: this.examForm.value.worstRefractionRight || '',
-    worstRefractionLeft: this.examForm.value.worstRefractionLeft || '',
-    otherDiseases: this.examForm.value.otherDiseases || '',
-    resultID: Number(this.examForm.value.resultID),
-    reason: this.examForm.value.reason || ''
+    eyeExamID: this.exam.eyeExamID,
+    applicantFileNumber: this.exam.applicantFileNumber,
+    doctorID: this.exam.doctorID,
+    vision: v.vision != null && v.vision !== '' ? String(v.vision).trim() : (this.exam.vision || ''),
+    visionLeft: v.visionLeft != null && v.visionLeft !== '' ? String(v.visionLeft).trim() : (this.exam.visionLeft || ''),
+    colorTest: resolveHealthStatusValue(v.colorTest, v.colorTestOther),
+    colorTestLeft: resolveHealthStatusValue(v.colorTestLeft, v.colorTestLeftOther),
+    refractiveError: ((v.refractiveError != null ? String(v.refractiveError) : '') || '').trim(),
+    worstRefractionRight: ((v.worstRefractionRight != null ? String(v.worstRefractionRight) : '') || '').trim() || (this.exam.worstRefractionRight ?? ''),
+    worstRefractionLeft: ((v.worstRefractionLeft != null ? String(v.worstRefractionLeft) : '') || '').trim() || (this.exam.worstRefractionLeft ?? ''),
+    otherDiseases: ((v.otherDiseases != null ? String(v.otherDiseases) : '') || '').trim(),
+    resultID: Number(v.resultID) || this.exam.resultID,
+    reason: ((v.reason != null ? String(v.reason) : '') || '').trim()
   };
 
-  // تحديث الفحص أولاً
+  // تحديث الفحص أولاً (بدون إرسال مصفوفة الانكسارات؛ تُحدَّث لاحقاً عبر updateRefractions)
   this.examService.updateEyeExam(this.exam.eyeExamID!, updatedExam).subscribe({
     next: () => {
       this.updateRefractions(leftEyeRefractions, rightEyeRefractions, updatedExam);

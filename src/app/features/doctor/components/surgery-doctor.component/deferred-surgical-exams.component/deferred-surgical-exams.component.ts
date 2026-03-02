@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SurgicalExam } from '../../../models/surgical-exam-post.model';
 import { EditSurgicalExam } from '../edit-surgical-exam/edit-surgical-exam';
+import { SurgicalExamDetailsComponent } from '../surgical-exam-details/surgical-exam-details.component';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +15,7 @@ import { ResetFiltersButtonComponent } from '../../../../../shared/components/re
 @Component({
   selector: 'app-deferred-surgical-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, EditSurgicalExam, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, EditSurgicalExam, SurgicalExamDetailsComponent, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
   templateUrl: './deferred-surgical-exams.component.html',
   styleUrls: ['./deferred-surgical-exams.component.scss']
 })
@@ -23,6 +24,7 @@ export class DeferredSurgicalExamsComponent implements OnInit {
   filteredExams: SurgicalExam[] = [];
   loading = true;
   selectedExam: SurgicalExam | null = null;
+  selectedExamDetails: SurgicalExam | null = null;
   searchTerm: string = '';
 
   globalFilter: string = '';
@@ -82,6 +84,14 @@ export class DeferredSurgicalExamsComponent implements OnInit {
 
   openEditDialog(exam: SurgicalExam) {
     this.selectedExam = { ...exam };
+  }
+
+  viewDetails(exam: SurgicalExam) {
+    this.selectedExamDetails = { ...exam };
+  }
+
+  closeDetailsModal() {
+    this.selectedExamDetails = null;
   }
 
   onDialogClose(updated: boolean) {

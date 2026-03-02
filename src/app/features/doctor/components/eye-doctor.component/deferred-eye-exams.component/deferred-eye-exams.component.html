@@ -77,10 +77,17 @@
         </td>
         <td class="text-center align-middle">
           <div class="d-flex flex-row justify-content-center align-items-center gap-2">
-            <!-- تفاصيل الفحص معطلة بناءً على المتطلبات -->
-            <button 
-              type="button" 
-              class="btn-icon-action" 
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="عرض التفاصيل"
+              tooltipPosition="top"
+              (click)="showDetails(exam)">
+              <i class="pi pi-eye"></i>
+            </button>
+            <button
+              type="button"
+              class="btn-icon-action"
               pTooltip="تعديل الفحص"
               tooltipPosition="top"
               (click)="openEditExam(exam)">
