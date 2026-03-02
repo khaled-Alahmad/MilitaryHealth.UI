@@ -277,13 +277,15 @@ export class AddEditApplicant implements OnInit {
         });
     } else {
       this.applicantService.updateApplicant(this.applicantId, applicantModel).subscribe({
-        next: () => {
-          this.success = true;
+        next: (res) => {
           this.loading = false;
-          this.toastr.success('تم تحديث بيانات المنتسب بنجاح', 'نجاح', {
-            timeOut: 3000,
-            positionClass: 'toast-top-center',
-          });
+          if (res && res.succeeded === false) {
+            this.success = false;
+            this.toastr.error(res.message || 'فشل في تحديث بيانات المنتسب', 'خطأ');
+            return;
+          }
+          this.success = true;
+          this.toastr.success('تم تحديث بيانات المنتسب بنجاح', 'نجاح');
         },
         error: (err) => {
           this.success = false;
@@ -294,7 +296,7 @@ export class AddEditApplicant implements OnInit {
           } else if (err?.error?.errors) {
             errorMsg = Array.isArray(err.error.errors)
               ? err.error.errors.join(', ')
-              : err.error.errors;
+              : (typeof err.error?.errors === 'string' ? err.error.errors : JSON.stringify(err.error?.errors));
           }
           this.toastr.error(errorMsg, 'خطأ');
         },

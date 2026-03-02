@@ -17,8 +17,8 @@ export class ApplicantService {
   createApplicant(applicant: ApplicantModel): Observable<ApiResponse<ApplicantModel>> {
     return this.http.post<ApiResponse<ApplicantModel>>(this.apiUrl, applicant);
   }
-  updateApplicant(id: number, applicant: ApplicantModel): Observable<ApplicantModel> {
-    return this.http.put<ApplicantModel>(`${this.apiUrl}/${id}`, applicant);
+  updateApplicant(id: number, applicant: ApplicantModel): Observable<ApiResponse<ApplicantModel>> {
+    return this.http.put<ApiResponse<ApplicantModel>>(`${this.apiUrl}/${id}`, applicant);
   }
 
   getApplicantById$(id: number): Observable<ApplicantModel> {
