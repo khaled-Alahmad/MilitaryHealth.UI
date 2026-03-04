@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { TableModule } from 'primeng/table';
@@ -21,7 +21,7 @@ import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../../../auth/services/auth.service';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { DecisionService } from '../../services/decision.service';
+import { DecisionService, FinalDecisionHistoryItem } from '../../services/decision.service';
 import { LookupService } from '../../../../shared/services/lookup.service';
 import { Result } from '../../../../shared/models/result.model';
 import { FinalDecisionModel } from '../../models/final-decision.model';
@@ -30,6 +30,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TextareaModule } from 'primeng/textarea';
 import { Table } from 'primeng/table';
 import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { DatePickerModule } from 'primeng/datepicker';
 
 interface ApplicantTimeline {
   event: string;
@@ -53,7 +54,8 @@ interface ApplicantTimeline {
     GregorianDatePipe,
     FormsModule,
     NgSelectModule,
-    ResetFiltersButtonComponent
+    ResetFiltersButtonComponent,
+    DatePickerModule
   ],
   templateUrl: './applicants-list-supervisor.html',
   styleUrl: './applicants-list-supervisor.scss'
@@ -66,6 +68,13 @@ export class ApplicantsListSupervisor implements OnInit {
   pageSize = 20;
   globalFilter = '';
   tableHeight = '600px';
+
+  /** فلاتر التاريخ (مختار بشكل تلقائي اليوم الحالي) */
+  dateFrom: Date = new Date();
+  dateTo: Date = new Date();
+  maxDate: Date = new Date();
+  /** خريطة رقم الملف -> وصف النتيجة النهائية */
+  finalResultByFile: Map<string, string> = new Map();
 
   // تفاصيل المنتسب
   selectedApplicant: ApplicantDetailsModel | null = null;
@@ -105,6 +114,8 @@ export class ApplicantsListSupervisor implements OnInit {
   isEditingDecision: boolean = false;
   updatingDecision: boolean = false;
   readonly POSTPONED_RESULT_ID = 3; // ID للنتيجة "مؤجل"
+  /** سجل تغيير النتيجة النهائية (كان مرفوض → صار مقبول) */
+  decisionHistory: FinalDecisionHistoryItem[] = [];
   @ViewChild('table') table?: Table;
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
@@ -114,7 +125,8 @@ export class ApplicantsListSupervisor implements OnInit {
     private toastr: ToastrService,
     private authService: AuthService,
     private decisionService: DecisionService,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -137,30 +149,74 @@ export class ApplicantsListSupervisor implements OnInit {
   }
 
   loadApplicants(): void {
-    // ✅ منع الطلب المكرر
     if (this.isLoadingApplicants) {
       return;
     }
-    
     this.isLoadingApplicants = true;
     this.loading = true;
-    this.applicantService.getApplicants$(this.page, this.pageSize, this.globalFilter).subscribe({
-      next: (response: PagedResponse<ApplicantModel>) => {
-        this.applicants = response.items;
-        this.totalRecords = response.totalCount;
-        this.loading = false;
-        this.isLoadingApplicants = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.isLoadingApplicants = false;
-        this.toastr.error('حدث خطأ أثناء جلب قائمة المنتسبين', 'خطأ');
+    this.applicantService
+      .getApplicants$(this.page, this.pageSize, this.globalFilter, this.dateFrom, this.dateTo)
+      .subscribe({
+        next: (response: PagedResponse<ApplicantModel>) => {
+          this.applicants = response.items;
+          this.totalRecords = response.totalCount;
+          this.loading = false;
+          this.isLoadingApplicants = false;
+          this.loadFinalResultsForCurrentPage();
+        },
+        error: () => {
+          this.loading = false;
+          this.isLoadingApplicants = false;
+          this.toastr.error('حدث خطأ أثناء جلب قائمة المنتسبين', 'خطأ');
+        }
+      });
+  }
+
+  private loadFinalResultsForCurrentPage(): void {
+    const fileNumbers = this.applicants.map(a => a.fileNumber).filter(Boolean);
+    if (fileNumbers.length === 0) {
+      this.finalResultByFile.clear();
+      return;
+    }
+    this.decisionService.getDecisionsByFileNumbers(fileNumbers).subscribe({
+      next: (items) => {
+        this.finalResultByFile.clear();
+        items.forEach(item => {
+          const desc = item.result?.description;
+          if (desc) {
+            this.finalResultByFile.set(item.applicantFileNumber, desc);
+          }
+        });
+        this.cdr.markForCheck();
       }
     });
   }
 
+  getFinalResult(fileNumber: string): string {
+    return this.finalResultByFile.get(fileNumber) ?? '-';
+  }
+
+  getBadgeClass(resultDescription: string): string {
+    if (!resultDescription || resultDescription === '-') {
+      return 'badge bg-secondary';
+    }
+    switch (resultDescription) {
+      case 'مقبول':
+        return 'badge bg-success';
+      case 'مرفوض':
+        return 'badge bg-danger';
+      case 'مؤجل':
+      case 'تأجيل':
+        return 'badge bg-warning text-dark';
+      default:
+        return 'badge bg-secondary';
+    }
+  }
+
   resetFilters(): void {
     this.globalFilter = '';
+    this.dateFrom = new Date();
+    this.dateTo = new Date();
     this.page = 1;
     if (this.searchInput) {
       this.searchInput.nativeElement.value = '';
@@ -169,6 +225,11 @@ export class ApplicantsListSupervisor implements OnInit {
       this.table.first = 0;
       this.table.clear();
     }
+    this.loadApplicants();
+  }
+
+  onDateFilterChange(): void {
+    this.page = 1;
     this.loadApplicants();
   }
 
@@ -204,6 +265,7 @@ export class ApplicantsListSupervisor implements OnInit {
         // دمج البيانات الأساسية من القائمة مع التفاصيل الكاملة
         this.selectedApplicant = this.mergeApplicantDetailsWithBasicInfo(details, applicant);
         this.buildTimeline(this.selectedApplicant, applicant.fileNumber);
+        this.loadDecisionHistory(applicant.fileNumber);
         this.detailsLoading = false;
       },
       error: () => {
@@ -536,6 +598,11 @@ export class ApplicantsListSupervisor implements OnInit {
     return results[resultID] || 'غير محدد';
   }
 
+  /** وصف النتيجة الحالية لعرضها في قسم تعديل القرار */
+  getFinalResultDescription(resultID: number | undefined): string {
+    return resultID != null ? this.getResultDescription(resultID) : 'غير محدد';
+  }
+
   getTimelineIcon(type: string): string {
     const icons: { [key: string]: string } = {
       'entry': 'pi pi-sign-in',
@@ -582,6 +649,7 @@ export class ApplicantsListSupervisor implements OnInit {
     this.showDetailsDialog = false;
     this.selectedApplicant = null;
     this.applicantTimeline = [];
+    this.decisionHistory = [];
     // مسح الحالة عند إغلاق Dialog
     this.currentFileNumber = null;
     this.isLoadingConsultations = false;
@@ -590,9 +658,9 @@ export class ApplicantsListSupervisor implements OnInit {
     this.editDecisionModel = {};
   }
 
-  // ✅ التحقق من إمكانية تعديل القرار النهائي (فقط إذا كانت النتيجة "مؤجل")
+  // ✅ التحقق من إمكانية تعديل القرار النهائي (لأي قرار موجود - مقبول / مرفوض / مؤجل)
   canEditFinalDecision(): boolean {
-    return this.selectedApplicant?.finalDecision?.resultID === this.POSTPONED_RESULT_ID;
+    return !!this.selectedApplicant?.finalDecision;
   }
 
   // ✅ تهيئة نموذج التعديل
@@ -612,6 +680,16 @@ export class ApplicantsListSupervisor implements OnInit {
   cancelEditDecision(): void {
     this.isEditingDecision = false;
     this.editDecisionModel = {};
+  }
+
+  loadDecisionHistory(fileNumber: string): void {
+    this.decisionHistory = [];
+    this.decisionService.getDecisionHistory(fileNumber).subscribe({
+      next: (list) => {
+        this.decisionHistory = list ?? [];
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   // ✅ تحديث القرار النهائي باستخدام PUT API
@@ -681,8 +759,7 @@ export class ApplicantsListSupervisor implements OnInit {
       next: (response) => {
         this.updatingDecision = false;
         if (response.succeeded) {
-          this.toastr.success('تم تحديث القرار النهائي بنجاح', 'نجاح');
-          // ✅ إعادة تحميل بيانات المنتسب
+          this.toastr.success('تم تحديث القرار النهائي بنجاح. يمكن إعادة التصدير للتجنيد من صفحة التصدير.', 'نجاح');
           const fileNumber = this.selectedApplicant!.fileNumber;
           this.applicantService.getApplicantByFileNumber$(fileNumber).subscribe({
             next: (details: ApplicantDetailsModel) => {
@@ -690,6 +767,11 @@ export class ApplicantsListSupervisor implements OnInit {
               this.buildTimeline(details, fileNumber);
               this.isEditingDecision = false;
               this.editDecisionModel = {};
+              // تحديث عمود النتيجة النهائية في الجدول
+              const desc = details.finalDecision?.result?.description ?? (details.finalDecision?.resultID != null ? this.getResultDescription(details.finalDecision.resultID) : null);
+              if (desc) this.finalResultByFile.set(fileNumber, desc);
+              this.loadDecisionHistory(fileNumber);
+              this.cdr.markForCheck();
             },
             error: () => {
               this.toastr.error('فشل في إعادة تحميل البيانات', 'خطأ');

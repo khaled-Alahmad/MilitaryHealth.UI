@@ -17,8 +17,9 @@ export class ApplicantService {
   createApplicant(applicant: ApplicantModel): Observable<ApiResponse<ApplicantModel>> {
     return this.http.post<ApiResponse<ApplicantModel>>(this.apiUrl, applicant);
   }
-  updateApplicant(id: number, applicant: ApplicantModel): Observable<ApiResponse<ApplicantModel>> {
-    return this.http.put<ApiResponse<ApplicantModel>>(`${this.apiUrl}/${id}`, applicant);
+  /** API returns the updated ApplicantModel directly (no ApiResponse wrapper). */
+  updateApplicant(id: number, applicant: ApplicantModel): Observable<ApplicantModel> {
+    return this.http.put<ApplicantModel>(`${this.apiUrl}/${id}`, applicant);
   }
 
   getApplicantById$(id: number): Observable<ApplicantModel> {
@@ -38,21 +39,29 @@ getApplicantByFileNumber$(fileNumber: string): Observable<ApplicantDetailsModel>
   getApplicants$(
     page: number = 1,
     pageSize: number = 10,
-    filter: string = ''
+    filter: string = '',
+    fromDate?: Date | null,
+    toDate?: Date | null
   ): Observable<PagedResponse<ApplicantModel>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
-      .set('sortBy', 'createdAt') // ✅ ترتيب حسب تاريخ الإنشاء
-      .set('sortDesc', true); // ✅ ترتيب تنازلي (الأحدث أولاً)
+      .set('sortBy', 'createdAt')
+      .set('sortDesc', true);
 
     if (filter) {
       params = params.set('filter', filter);
     }
+    if (fromDate) {
+      params = params.set('fromDate', fromDate.toISOString().slice(0, 10));
+    }
+    if (toDate) {
+      params = params.set('toDate', toDate.toISOString().slice(0, 10));
+    }
 
     return this.http.get<ApiResponse<PagedResponse<ApplicantModel>>>(this.apiUrl, { params })
       .pipe(
-        map(response => response.data) 
+        map(response => response.data)
       );
   }
   getStatistics(): Observable<ApplicantsStatisticsResponse> {

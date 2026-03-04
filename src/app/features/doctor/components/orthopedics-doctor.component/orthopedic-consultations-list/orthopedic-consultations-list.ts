@@ -12,7 +12,6 @@ import { PaginatorComponent } from "../../../../../shared/components/paginator/p
 import { Table, TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
-import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 
 @Component({
@@ -92,16 +91,19 @@ export class OrthopedicConsultationsList implements OnInit {
     const url = `${environment.apiUrl}/${attachment}`;
     window.open(url, '_blank');
   }
-  openEditDeferredOrthopedi(orthopedicExam: OrthopedicExam) {
+  openEditConsultationModal(consultation: Consultation) {
     const modalRef = this.modalService.open(EditConsultation, {
       size: 'lg',
       backdrop: 'static',
       keyboard: false,
       centered: true
     });
-    modalRef.componentInstance.consultation  = orthopedicExam;
-    modalRef.componentInstance.OrthopedicExamUpdated.subscribe(() => {
+    modalRef.componentInstance.consultation = consultation;
+    modalRef.componentInstance.consultationUpdated.subscribe(() => {
       this.loadConsultations();
+    });
+    modalRef.componentInstance.dialogClosed?.subscribe((updated: boolean) => {
+      if (updated) this.loadConsultations();
     });
   }
   getBadgeClass(result: any): string {

@@ -81,10 +81,10 @@
   width: 100%;
   margin-bottom: var(--spacing-md);
   padding: calc(var(--spacing-sm) + 2px) var(--spacing-md);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 248, 247, 0.92) 100%);
+  // background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 248, 247, 0.92) 100%);
   border: 1px solid rgba(5, 66, 57, 0.08);
   border-radius: var(--radius-xl);
-  box-shadow: 0 4px 14px rgba(5, 66, 57, 0.08);
+  // box-shadow: 0 4px 14px rgba(5, 66, 57, 0.08);
   transition:
     background-color 0.2s ease,
     box-shadow 0.2s ease;

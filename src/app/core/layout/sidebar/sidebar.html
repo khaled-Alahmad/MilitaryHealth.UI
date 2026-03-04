@@ -156,7 +156,10 @@
         <i class="pi pi-file-export"></i>
         <span>تصدير للتجنيد</span>
       </li>
-     
+      <li routerLink="supervisor/exported" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [attr.data-tooltip]="collapsed ? 'الملفات المُصدَّرة' : null">
+        <i class="pi pi-history"></i>
+        <span>الملفات المُصدَّرة</span>
+      </li>
     }
 
   </ul>

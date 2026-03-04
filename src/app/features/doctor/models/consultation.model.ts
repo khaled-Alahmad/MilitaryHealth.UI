@@ -8,7 +8,7 @@ export interface Doctor {
 
 export interface Consultation {
   consultationID?: number;
-  doctorID: number;
+  doctorID?: number | null;
   applicantFileNumber: string;
   consultationType: string;
   // referredDoctor: string; // ❌ تم حذفه حسب التقرير

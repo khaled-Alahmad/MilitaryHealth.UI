@@ -19,7 +19,9 @@ export interface PendingExportItem {
   supervisorEvaluationDate?: Date | string | null;
   recommendations?: string;
   reason?: string;
-  decisionID?: number; // ✅ إضافة decisionID
+  decisionID?: number;
+  /** تاريخ التصدير (للعناصر المُصدَّرة فقط) */
+  exportedAt?: Date | string | null;
 }
 
 export interface ExportToRecruitmentRequest {
@@ -43,6 +45,24 @@ export class RecruitmentExportService {
     return new HttpHeaders({ 
       Authorization: `Bearer ${token}` 
     });
+  }
+
+  /**
+   * الحصول على قائمة الملفات المُصدَّرة سابقاً للتجنيد (لتحميلها مرة ثانية)
+   */
+  getExportedToRecruitment(): Observable<PendingExportItem[]> {
+    return this.http.get<ApiResponse<PendingExportItem[]> | PendingExportItem[]>(`${this.apiUrl}/exported`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(response => {
+        let data: any[] = [];
+        if (Array.isArray(response)) data = response;
+        else if (response && (response as any).data && Array.isArray((response as any).data)) data = (response as any).data;
+        else if (response && (response as any).succeeded && Array.isArray((response as any).data)) data = (response as any).data;
+        return data.map((item: any) => this.normalizeExportItem(item));
+      }),
+      catchError(() => of([]))
+    );
   }
 
   /**
@@ -74,30 +94,27 @@ export class RecruitmentExportService {
   }
 
   /**
-   * تطبيع عنصر التصدير وملء الحقول الناقصة
+   * تطبيع عنصر التصدير وملء الحقول الناقصة (يدعم camelCase و PascalCase من الـ API)
    */
   private normalizeExportItem(item: any): PendingExportItem {
-    // ✅ استخدام decisionDate من finalDecision إذا كان supervisorEvaluationDate null
-    const evaluationDate = item.supervisorEvaluationDate ?? 
-                           item.evaluationDate ?? 
-                           (item.finalDecision?.decisionDate) ?? 
-                           (item.decisionDate) ?? 
-                           null;
-    
+    const evaluationDate = item.supervisorEvaluationDate ?? item.SupervisorEvaluationDate ??
+                           item.evaluationDate ?? (item.finalDecision?.decisionDate) ?? (item.decisionDate) ?? null;
+    const str = (v: any) => (v != null && v !== '') ? String(v) : null;
     return {
-      sequenceNumber: item.sequenceNumber ?? 0,
-      fileNumber: item.fileNumber ?? '',
-      fullName: item.fullName ?? 'غير محدد',
-      motherName: item.motherName ?? 'غير محدد',
-      maritalStatus: item.maritalStatus ?? 'غير محدد',
-      dateOfBirth: item.dateOfBirth ?? null,
-      bloodType: item.bloodType ?? 'غير محدد',
-      recruitmentCenter: item.recruitmentCenter ?? 'غير محدد',
-      result: item.result ?? 'غير محدد',
+      sequenceNumber: item.sequenceNumber ?? item.SequenceNumber ?? 0,
+      fileNumber: item.fileNumber ?? item.FileNumber ?? '',
+      fullName: str(item.fullName ?? item.FullName) ?? 'غير محدد',
+      motherName: str(item.motherName ?? item.MotherName) ?? undefined,
+      maritalStatus: str(item.maritalStatus ?? item.MaritalStatus) ?? undefined,
+      dateOfBirth: item.dateOfBirth ?? item.DateOfBirth ?? null,
+      bloodType: str(item.bloodType ?? item.BloodType) ?? undefined,
+      recruitmentCenter: str(item.recruitmentCenter ?? item.RecruitmentCenter) ?? undefined,
+      result: str(item.result ?? item.Result) ?? undefined,
       supervisorEvaluationDate: evaluationDate,
-      reason: item.reason ?? 'غير محدد',
-      decisionID: item.decisionID ?? item.decisionId ?? null,
-      recommendations: item.recommendations ?? item.recommendation ?? null
+      reason: str(item.reason ?? item.Reason) ?? undefined,
+      decisionID: item.decisionID ?? item.decisionId ?? item.DecisionID ?? undefined,
+      recommendations: item.recommendations ?? item.recommendation ?? undefined,
+      exportedAt: item.exportedAt ?? item.ExportedAt ?? undefined
     };
   }
 

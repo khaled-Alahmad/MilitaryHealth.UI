@@ -1,0 +1,90 @@
+<div class="recruitment-exported-page container-fluid">
+  <section class="table-shell glass-card">
+    <header class="table-headline">
+      <div>
+        <h2>الملفات المُصدَّرة للتجنيد</h2>
+        <p>عرض جميع الملفات التي تم تصديرها سابقاً. يمكنك تحميلها مرة ثانية عند الحاجة.</p>
+      </div>
+    </header>
+
+    <div class="table-controls toolbar-one-row">
+      <div class="search-wrapper">
+        <i class="pi pi-search"></i>
+        <input #searchInput type="text" class="search-input" placeholder="ابحث باسم المنتسب أو رقم الملف..."
+          [value]="globalFilter" (input)="onGlobalFilter($event)" />
+      </div>
+      <button class="btn-refresh" type="button" (click)="loadExported()" [disabled]="loading">
+        <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        <span>تحديث</span>
+      </button>
+      <div class="btn-divider" aria-hidden="true"></div>
+      <p-button label="تحميل المحدد مرة ثانية" icon="pi pi-download" severity="success" styleClass="toolbar-btn toolbar-btn-success"
+        [disabled]="selectedItems.length === 0 || downloading" (onClick)="downloadSelected()">
+      </p-button>
+      <p-button label="تحميل الكل مرة ثانية" icon="pi pi-file-pdf" severity="info" styleClass="toolbar-btn toolbar-btn-info"
+        [disabled]="exportedList.length === 0 || downloading" (onClick)="downloadAll()">
+      </p-button>
+    </div>
+
+    <p-table #exportedTable [value]="exportedList" [loading]="loading" [paginator]="true" [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [globalFilterFields]="['fileNumber', 'fullName']" [sortMode]="'single'"
+      responsiveLayout="scroll" [scrollable]="true" [scrollHeight]="tableHeight" [rowHover]="true"
+      dataKey="decisionID">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3.2rem">
+            <p-checkbox [binary]="true"
+              [ngModel]="selectedItems.length === exportedList.length && exportedList.length > 0"
+              (ngModelChange)="$event ? selectedItems = exportedList.slice() : selectedItems = []">
+            </p-checkbox>
+          </th>
+          <th pSortableColumn="sequenceNumber">#<p-sortIcon field="sequenceNumber"></p-sortIcon></th>
+          <th pSortableColumn="fileNumber">رقم الملف<p-sortIcon field="fileNumber"></p-sortIcon></th>
+          <th pSortableColumn="fullName">الاسم الكامل<p-sortIcon field="fullName"></p-sortIcon></th>
+          <th>النتيجة</th>
+          <th pSortableColumn="exportedAt">تاريخ التصدير<p-sortIcon field="exportedAt"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td class="text-center align-middle" (click)="$event.stopPropagation()">
+            <p-checkbox [binary]="true" [ngModel]="isSelected(item)"
+              (ngModelChange)="toggleSelection(item)" [inputId]="'cb-' + item.decisionID">
+            </p-checkbox>
+          </td>
+          <td class="text-center align-middle"><span class="badge-seq">{{ item.sequenceNumber }}</span></td>
+          <td class="text-center align-middle"><span class="file-number">{{ item.fileNumber }}</span></td>
+          <td class="text-center align-middle">{{ item.fullName || 'غير محدد' }}</td>
+          <td class="text-center align-middle">
+            <p-tag [value]="item.result || 'غير محدد'"
+              [severity]="item.result === 'مقبول' ? 'success' : item.result ? 'danger' : 'warn'"></p-tag>
+          </td>
+          <td class="text-center align-middle">
+            <span *ngIf="item.exportedAt">{{ item.exportedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
+            <span *ngIf="!item.exportedAt">—</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center py-5">
+            <div class="empty-state">
+              <i class="pi pi-inbox"></i>
+              <p class="mt-2">لا توجد ملفات مُصدَّرة للتجنيد حالياً.</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="loadingbody">
+        <tr>
+          <td colspan="6" class="text-center py-5">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+            <p class="mt-3">جاري تحميل البيانات...</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </section>
+</div>

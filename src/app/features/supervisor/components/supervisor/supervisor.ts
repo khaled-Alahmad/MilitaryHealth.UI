@@ -103,7 +103,7 @@ export class Supervisor implements OnInit {
 
   private readonly consultationUrl = `${environment.apiUrl}/api/Consultations`;
   private readonly investigationUrl = `${environment.apiUrl}/api/Investigations`;
-  private readonly fileUploadUrl = `${environment.apiUrl}/api/Files/upload`;
+  private readonly fileUploadUrl = `${environment.apiUrl}/api/FileUpload/upload`;
 
   // Modal states
   showConsultationModal: boolean = false;
@@ -1068,6 +1068,25 @@ export class Supervisor implements OnInit {
     }
   }
 
+  /** يُرجع doctorID طبيب التقييم الطبي للعيادة حسب التخصص (ليظهر مع الاستشارات/التحاليل). */
+  private getDoctorIdForSpecialization(specializationId: number): number | null {
+    if (!this.applicant) return null;
+    switch (specializationId) {
+      case this.EYE_SPECIALIZATION_ID:
+        return this.applicant.eyeExam?.doctorID ?? null;
+      case this.INTERNAL_SPECIALIZATION_ID:
+        return this.applicant.internalExam?.doctorID ?? null;
+      case this.SURGICAL_SPECIALIZATION_ID:
+        return this.applicant.surgicalExam?.doctorID ?? null;
+      case this.ORTHOPEDIC_SPECIALIZATION_ID:
+        return this.applicant.orthopedicExamDto?.doctorID ?? null;
+      case this.EAR_SPECIALIZATION_ID:
+        return this.applicant.earClinic?.doctorID ?? null;
+      default:
+        return null;
+    }
+  }
+
   // ==================== Consultation Methods ====================
   openEditConsultationModal(consultation: Consultation) {
     this.selectedConsultation = consultation;
@@ -1083,14 +1102,15 @@ export class Supervisor implements OnInit {
   }
 
   openAddConsultationModal(clinicName: string, specializationId: number) {
+    const clinicDoctorId = this.getDoctorIdForSpecialization(specializationId);
     this.selectedConsultation = {
       consultationID: 0,
       applicantFileNumber: this.applicant.fileNumber,
       consultationType: '',
-      referralReason: '', // âœ… Ø¬Ø¯ÙŠØ¯
+      referralReason: '', // ✅ جديد
       result: '',
       attachment: '',
-      doctorID: 0,
+      doctorID: clinicDoctorId ?? null,
     } as Consultation;
     this.consultationForm = this.fb.group({
       consultationType: ['', Validators.required],
@@ -1125,14 +1145,15 @@ export class Supervisor implements OnInit {
     reader.readAsDataURL(file);
 
     this.http
-      .post<ApiResponse<string>>(this.fileUploadUrl, formData, {
+      .post<{ succeeded?: boolean; path?: string }>(this.fileUploadUrl, formData, {
         headers: this.getAuthHeaders(),
       })
       .subscribe({
         next: (response) => {
-          if (response.succeeded && response.data) {
-            this.uploadedPath = response.data;
-            this.consultationForm.patchValue({ attachment: response.data });
+          const path = response.path ?? (response as any).data;
+          if (path) {
+            this.uploadedPath = path;
+            this.consultationForm.patchValue({ attachment: path });
             this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
           } else {
             this.toastr.error('فشل رفع الملف', 'خطأ');
@@ -1157,12 +1178,14 @@ export class Supervisor implements OnInit {
 
     if (!this.selectedConsultation) return;
 
-    const doctorID =
-      Number(this.authService.getDoctorId()) || Number(this.authService.getUserId()) || 0;
     const formValue = this.consultationForm.value;
+    const doctorID =
+      this.selectedConsultation.doctorID ??
+      this.authService.getDoctorId() ??
+      null;
     const updatedConsultation: Consultation = {
       ...this.selectedConsultation,
-      doctorID: doctorID || this.selectedConsultation.doctorID || 0,
+      doctorID,
       applicantFileNumber: this.applicant.fileNumber,
       consultationType: formValue.consultationType || this.selectedConsultation.consultationType,
       // referredDoctor: formValue.referredDoctor || this.selectedConsultation.referredDoctor, // âŒ ØªÙ… Ø­Ø°ÙÙ‡
@@ -1230,6 +1253,7 @@ export class Supervisor implements OnInit {
   }
 
   openAddInvestigationModal(clinicName: string, specializationId: number) {
+    const clinicDoctorId = this.getDoctorIdForSpecialization(specializationId);
     this.selectedInvestigation = {
       investigationID: 0,
       applicantFileNumber: this.applicant.fileNumber,
@@ -1237,7 +1261,7 @@ export class Supervisor implements OnInit {
       result: '',
       status: 'مؤجل',
       attachment: '',
-      doctorID: 0,
+      doctorID: clinicDoctorId ?? 0,
     } as Investigation;
     this.investigationForm = this.fb.group({
       type: ['', Validators.required],
@@ -1271,14 +1295,15 @@ export class Supervisor implements OnInit {
     reader.readAsDataURL(file);
 
     this.http
-      .post<ApiResponse<string>>(this.fileUploadUrl, formData, {
+      .post<{ succeeded?: boolean; path?: string }>(this.fileUploadUrl, formData, {
         headers: this.getAuthHeaders(),
       })
       .subscribe({
         next: (response) => {
-          if (response.succeeded && response.data) {
-            this.uploadedPath = response.data;
-            this.investigationForm.patchValue({ attachment: response.data });
+          const path = response.path ?? (response as any).data;
+          if (path) {
+            this.uploadedPath = path;
+            this.investigationForm.patchValue({ attachment: path });
             this.toastr.success('تم رفع الملف بنجاح', 'نجاح');
           } else {
             this.toastr.error('فشل رفع الملف', 'خطأ');
@@ -1304,11 +1329,20 @@ export class Supervisor implements OnInit {
     if (!this.selectedInvestigation) return;
 
     const doctorID =
-      Number(this.authService.getDoctorId()) || Number(this.authService.getUserId()) || 0;
+      this.selectedInvestigation.doctorID ||
+      this.authService.getDoctorId() ||
+      0;
+    if (!doctorID) {
+      this.toastr.error(
+        'لا يمكن إضافة التحليل: يجب إكمال التقييم الطبي للعيادة أولاً (لربط الطبيب بالعيادة)',
+        'خطأ',
+      );
+      return;
+    }
     const formValue = this.investigationForm.value;
     const updatedInvestigation: Investigation = {
       ...this.selectedInvestigation,
-      doctorID: doctorID || this.selectedInvestigation.doctorID || 0,
+      doctorID,
       applicantFileNumber: this.applicant.fileNumber,
       type: formValue.type || this.selectedInvestigation.type,
       result: formValue.result,

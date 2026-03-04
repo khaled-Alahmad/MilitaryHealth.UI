@@ -10,6 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap, switchMap, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
 import localAr from '@angular/common/locales/ar';
 import { registerLocaleData } from '@angular/common';
 
@@ -20,6 +21,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
 
 // Models and Services
 import { MaritalStatus } from '../../models/marital-status.model';
@@ -43,6 +45,7 @@ registerLocaleData(localAr);
     DatePickerModule,
     InputNumberModule,
     TextareaModule,
+    ToastModule,
   ],
   templateUrl: './add-edit-applicant.html',
   styleUrl: './add-edit-applicant.scss',
@@ -65,6 +68,7 @@ export class AddEditApplicant implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private barcodePrintService: BarcodePrintService,
     private cdr: ChangeDetectorRef,
   ) {
@@ -277,15 +281,14 @@ export class AddEditApplicant implements OnInit {
         });
     } else {
       this.applicantService.updateApplicant(this.applicantId, applicantModel).subscribe({
-        next: (res) => {
+        next: () => {
           this.loading = false;
-          if (res && res.succeeded === false) {
-            this.success = false;
-            this.toastr.error(res.message || 'فشل في تحديث بيانات المنتسب', 'خطأ');
-            return;
-          }
           this.success = true;
-          this.toastr.success('تم تحديث بيانات المنتسب بنجاح', 'نجاح');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'نجاح',
+            detail: 'تم تحديث بيانات المنتسب بنجاح',
+          });
         },
         error: (err) => {
           this.success = false;

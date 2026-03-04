@@ -1,6 +1,6 @@
 <div class="applicants-list-supervisor container-fluid">
   <!-- Header Section -->
-  <div class="page-header mb-4">
+  <div class="page-header applicants-list-header">
     <div class="header-content">
       <div class="header-icon">
         <i class="pi pi-users"></i>
@@ -11,17 +11,27 @@
       </div>
     </div>
     <div class="table-toolbar">
-      <div class="filter-reset-wrapper">
-        <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
-    <div class="search-wrapper">
-      <i class="fas fa-search search-icon"></i>
-      <input 
-            #searchInput
-        type="text" 
-        class="search-input" 
-        placeholder="ابحث عن رقم الملف أو الاسم..."
-        (input)="onFilterChange($event)"
-        [value]="globalFilter">
+      <div class="toolbar-filters">
+        <div class="filter-reset-wrap">
+          <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
+        </div>
+        <div class="date-filters-wrapper">
+          <div class="date-field">
+            <span class="date-label">من تاريخ</span>
+            <p-datepicker [(ngModel)]="dateFrom" [showIcon]="true" dateFormat="dd/mm/yy" [maxDate]="dateTo"
+              (onSelect)="onDateFilterChange()" [appendTo]="'body'" styleClass="date-picker-toolbar"></p-datepicker>
+          </div>
+          <div class="date-field">
+            <span class="date-label">إلى تاريخ</span>
+            <p-datepicker [(ngModel)]="dateTo" [showIcon]="true" dateFormat="dd/mm/yy" [minDate]="dateFrom"
+              [maxDate]="maxDate" (onSelect)="onDateFilterChange()" [appendTo]="'body'"
+              styleClass="date-picker-toolbar"></p-datepicker>
+          </div>
+        </div>
+        <div class="search-wrapper">
+          <i class="pi pi-search search-icon"></i>
+          <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم..."
+            (input)="onFilterChange($event)" [value]="globalFilter">
         </div>
       </div>
     </div>
@@ -29,31 +39,20 @@
 
   <!-- Table Section -->
   <div class="table-container">
-    <p-table 
-      #table
-      [value]="applicants" 
-      [loading]="loading"
-      [paginator]="true"
-      [rows]="pageSize"
-      [totalRecords]="totalRecords"
-      [lazy]="true"
-      (onLazyLoad)="onPageChange($event)"
-      [rowsPerPageOptions]="[10, 20, 50, 100]"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="عرض {first} إلى {last} من {totalRecords} سجل"
-      [scrollable]="true"
-      [scrollHeight]="tableHeight"
-      [globalFilterFields]="['fileNumber', 'fullName']"
-      responsiveLayout="scroll"
+    <p-table #table [value]="applicants" [loading]="loading" [paginator]="true" [rows]="pageSize"
+      [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)"
+      [rowsPerPageOptions]="[10, 20, 50, 100]" [showCurrentPageReport]="true"
+      currentPageReportTemplate="عرض {first} إلى {last} من {totalRecords} سجل" [scrollable]="true"
+      [scrollHeight]="tableHeight" [globalFilterFields]="['fileNumber', 'fullName']" responsiveLayout="scroll"
       class="custom-table">
-      
+
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="queueNumber">رقم الدور <p-sortIcon field="queueNumber"></p-sortIcon></th>
           <th pSortableColumn="fileNumber">رقم الملف <p-sortIcon field="fileNumber"></p-sortIcon></th>
           <th pSortableColumn="fullName">الاسم الكامل <p-sortIcon field="fullName"></p-sortIcon></th>
           <th pSortableColumn="createdAt">تاريخ الإضافة <p-sortIcon field="createdAt"></p-sortIcon></th>
-          <th pSortableColumn="job">العمل <p-sortIcon field="job"></p-sortIcon></th>
+          <th>النتيجة النهائية</th>
           <th>الحالة الاجتماعية</th>
           <th>زمرة الدم</th>
           <th pSortableColumn="height">الطول <p-sortIcon field="height"></p-sortIcon></th>
@@ -65,7 +64,8 @@
       <ng-template pTemplate="body" let-applicant>
         <tr>
           <td class="text-center align-middle">
-            <span class="fw-bold badge bg-primary text-white" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">{{ applicant.queueNumber || '-' }}</span>
+            <span class="fw-bold badge bg-primary text-white" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">{{
+              applicant.queueNumber || '-' }}</span>
           </td>
           <td class="text-center align-middle">
             <span class="fw-bold text-primary" style="font-size: 0.65rem;">{{ applicant.fileNumber }}</span>
@@ -73,7 +73,7 @@
           <td class="text-center align-middle">
             <span style="font-size: 0.65rem;">{{ applicant.fullName }}</span>
           </td>
-          
+
           <td class="text-center align-middle">
             <span *ngIf="applicant.createdAt" style="font-size: 0.65rem;">
               {{ applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}
@@ -81,7 +81,9 @@
             <span *ngIf="!applicant.createdAt" style="font-size: 0.65rem;">-</span>
           </td>
           <td class="text-center align-middle">
-            <span style="font-size: 0.65rem;">{{ applicant.job || '-' }}</span>
+            <span [ngClass]="getBadgeClass(getFinalResult(applicant.fileNumber))" style="font-size: 0.65rem;">
+              {{ getFinalResult(applicant.fileNumber) }}
+            </span>
           </td>
           <td class="text-center align-middle">
             <span *ngIf="applicant.maritalStatus" style="font-size: 0.65rem;">
@@ -90,7 +92,8 @@
             <span *ngIf="!applicant.maritalStatus" style="font-size: 0.65rem;">-</span>
           </td>
           <td class="text-center align-middle">
-            <span *ngIf="applicant.bloodType" class="badge bg-info text-white" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">
+            <span *ngIf="applicant.bloodType" class="badge bg-info text-white"
+              style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">
               {{ applicant.bloodType }}
             </span>
             <span *ngIf="!applicant.bloodType" style="font-size: 0.65rem;">-</span>
@@ -103,19 +106,11 @@
           </td>
           <td class="text-center align-middle">
             <div class="d-flex gap-1 justify-content-center">
-              <p-button 
-                icon="pi pi-eye" 
-                label="" 
-                styleClass="p-button-sm p-button-outlined"
-                (click)="viewDetails(applicant)"
-                title="عرض التفاصيل الكاملة">
+              <p-button icon="pi pi-eye" label="" styleClass="p-button-sm p-button-outlined"
+                (click)="viewDetails(applicant)" title="عرض التفاصيل الكاملة">
               </p-button>
-              <p-button
-                icon="pi pi-list"
-                label=""
-                styleClass="p-button-sm p-button-primary"
-                (click)="openRequestsDialog(applicant)"
-                title="عرض التحاليل والاستشارات">
+              <p-button icon="pi pi-list" label="" styleClass="p-button-sm p-button-primary"
+                (click)="openRequestsDialog(applicant)" title="عرض التحاليل والاستشارات">
               </p-button>
             </div>
           </td>
@@ -136,16 +131,10 @@
   </div>
 
   <!-- Details Dialog -->
-  <p-dialog 
-    [(visible)]="showDetailsDialog" 
-    [modal]="true" 
-    [style]="{width: '90vw', maxWidth: '1200px'}"
-    [closable]="true"
-    [draggable]="false"
-    [resizable]="true"
-    header="تفاصيل المنتسب الكاملة"
+  <p-dialog [(visible)]="showDetailsDialog" [modal]="true" [style]="{width: '90vw', maxWidth: '1200px'}"
+    [closable]="true" [draggable]="false" [resizable]="true" header="تفاصيل المنتسب الكاملة"
     (onHide)="closeDetailsDialog()">
-    
+
 
 
     <div *ngIf="!detailsLoading && selectedApplicant" class="applicant-details">
@@ -258,14 +247,16 @@
               <i class="pi pi-ruler"></i>
               <span>الطول</span>
             </div>
-            <div class="detail-value">{{ selectedApplicant.height ? selectedApplicant.height + ' سم' : 'غير محدد' }}</div>
+            <div class="detail-value">{{ selectedApplicant.height ? selectedApplicant.height + ' سم' : 'غير محدد' }}
+            </div>
           </div>
           <div class="detail-item">
             <div class="detail-label">
               <i class="pi pi-chart-line"></i>
               <span>الوزن</span>
             </div>
-            <div class="detail-value">{{ selectedApplicant.weight ? selectedApplicant.weight + ' كغ' : 'غير محدد' }}</div>
+            <div class="detail-value">{{ selectedApplicant.weight ? selectedApplicant.weight + ' كغ' : 'غير محدد' }}
+            </div>
           </div>
           <div class="detail-item">
             <div class="detail-label">
@@ -293,11 +284,8 @@
             <div class="timeline-content">
               <div class="timeline-header">
                 <h6 class="timeline-event-title">{{ event.event }}</h6>
-                <p-tag 
-                  *ngIf="event.date"
-                  [value]="getFormattedDate(event.date)" 
-                  [severity]="getTimelineSeverity(event.type)"
-                  styleClass="timeline-date">
+                <p-tag *ngIf="event.date" [value]="getFormattedDate(event.date)"
+                  [severity]="getTimelineSeverity(event.type)" styleClass="timeline-date">
                 </p-tag>
               </div>
               <p class="timeline-description">{{ event.description }}</p>
@@ -310,7 +298,33 @@
         </div>
       </div>
 
-      <!-- ✅ قسم تعديل القرار النهائي (فقط إذا كانت النتيجة "مؤجل") -->
+      <!-- ✅ سجل تغيير النتيجة (كان مرفوض → صار مقبول) -->
+      <div *ngIf="decisionHistory.length > 0" class="details-section decision-history-section">
+        <div class="section-header">
+          <div class="section-icon"><i class="pi pi-history"></i></div>
+          <div class="section-title-wrapper">
+            <h3 class="section-title">سجل تغيير النتيجة النهائية</h3>
+            <p class="section-subtitle">تاريخ التغييرات من نتيجة إلى أخرى</p>
+          </div>
+        </div>
+        <div class="history-list">
+          <div *ngFor="let item of decisionHistory" class="history-item">
+            <span class="history-change">
+              تم التعدبل من <strong>{{ item.previousResultDescription || 'غير محدد' }}</strong>
+
+              <i class="pi pi-arrow-left mx-2"></i>
+              <strong>{{ item.newResultDescription || 'غير محدد' }}</strong>
+            </span>
+            <span class="history-meta">
+              {{ item.changedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}
+              <span *ngIf="item.changedBy"> — {{ item.changedBy }}</span>
+            </span>
+            <p *ngIf="item.reason" class="history-reason">{{ item.reason }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ قسم تعديل القرار النهائي (لأي قرار: مقبول / مرفوض / مؤجل) -->
       <div *ngIf="canEditFinalDecision()" class="details-section edit-decision-section">
         <div class="section-header edit-section-header">
           <div class="section-icon edit-section-icon">
@@ -318,7 +332,8 @@
           </div>
           <div class="section-title-wrapper">
             <h3 class="section-title">تعديل القرار النهائي</h3>
-            <p class="section-subtitle">يمكنك تعديل النتيجة والتوصية لأن النتيجة الحالية هي "مؤجل"</p>
+            <p class="section-subtitle">يمكنك تغيير النتيجة (مقبول / مرفوض / مؤجل) وتعديل التوصية. بعد الحفظ يُسمح
+              بإعادة التصدير للتجنيد.</p>
           </div>
         </div>
 
@@ -328,16 +343,14 @@
               <i class="pi pi-info-circle"></i>
             </div>
             <div class="info-content">
-              <h6 class="info-title">النتيجة الحالية: مؤجل</h6>
-              <p class="info-text">يمكنك تغيير النتيجة إلى "مقبول" أو "مرفوض" وتعديل التوصية</p>
+              <h6 class="info-title">النتيجة الحالية: {{
+                getFinalResultDescription(selectedApplicant!.finalDecision?.resultID) }}</h6>
+              <p class="info-text">يمكنك تغيير النتيجة إلى أي من الخيارات (مقبول، مرفوض، مؤجل) وتعديل التوصية. بعد
+                التعديل يمكن إعادة تصدير البيانات للتجنيد.</p>
             </div>
           </div>
           <div class="edit-action-wrapper">
-            <p-button 
-              label="بدء التعديل" 
-              icon="pi pi-pencil" 
-              severity="warn"
-              (onClick)="initEditDecision()"
+            <p-button label="بدء التعديل" icon="pi pi-pencil" severity="warn" (onClick)="initEditDecision()"
               styleClass="edit-start-btn">
             </p-button>
           </div>
@@ -350,15 +363,9 @@
                 <i class="pi pi-list"></i>
                 <span>النتيجة <span class="required-star">*</span></span>
               </label>
-              <ng-select 
-                [items]="results" 
-                bindLabel="description" 
-                bindValue="resultID"
-                [(ngModel)]="editDecisionModel.resultID" 
-                placeholder="اختر النتيجة"
-                [clearable]="false"
-                [searchable]="false"
-                class="enhanced-select">
+              <ng-select [items]="results" bindLabel="description" bindValue="resultID"
+                [(ngModel)]="editDecisionModel.resultID" placeholder="اختر النتيجة" [clearable]="false"
+                [searchable]="false" class="enhanced-select">
               </ng-select>
             </div>
 
@@ -367,12 +374,8 @@
                 <i class="pi pi-comment"></i>
                 <span>التوصية / السبب</span>
               </label>
-              <textarea 
-                class="form-control-enhanced" 
-                [(ngModel)]="editDecisionModel.reason" 
-                rows="4"
-                placeholder="أدخل التوصية أو السبب..."
-                maxlength="500">
+              <textarea class="form-control-enhanced" [(ngModel)]="editDecisionModel.reason" rows="4"
+                placeholder="أدخل التوصية أو السبب..." maxlength="500">
               </textarea>
               <small class="form-hint">
                 <i class="pi pi-info-circle"></i>
@@ -382,22 +385,12 @@
           </div>
 
           <div class="form-actions">
-            <p-button 
-              label="حفظ التعديلات" 
-              icon="pi pi-check" 
-              severity="success"
-              (onClick)="updateFinalDecision()"
-              [loading]="updatingDecision"
-              [disabled]="updatingDecision || !editDecisionModel.resultID"
+            <p-button label="حفظ التعديلات" icon="pi pi-check" severity="success" (onClick)="updateFinalDecision()"
+              [loading]="updatingDecision" [disabled]="updatingDecision || !editDecisionModel.resultID"
               styleClass="save-btn enhanced-save-btn">
             </p-button>
-            <p-button 
-              label="إلغاء" 
-              icon="pi pi-times" 
-              severity="secondary"
-              (onClick)="cancelEditDecision()"
-              [disabled]="updatingDecision"
-              styleClass="cancel-btn enhanced-cancel-btn">
+            <p-button label="إلغاء" icon="pi pi-times" severity="secondary" (onClick)="cancelEditDecision()"
+              [disabled]="updatingDecision" styleClass="cancel-btn enhanced-cancel-btn">
             </p-button>
           </div>
         </div>
@@ -406,18 +399,12 @@
   </p-dialog>
 
   <!-- Requests Dialog -->
-  <p-dialog
-    [(visible)]="showRequestsDialog"
-    [modal]="true"
-    [style]="{width: '80vw', maxWidth: '1000px'}"
-    [closable]="true"
-    [draggable]="false"
-    [resizable]="false"
-    header="التحاليل والاستشارات"
+  <p-dialog [(visible)]="showRequestsDialog" [modal]="true" [style]="{width: '80vw', maxWidth: '1000px'}"
+    [closable]="true" [draggable]="false" [resizable]="false" header="التحاليل والاستشارات"
     (onHide)="closeRequestsDialog()">
 
     <div *ngIf="requestsLoading" class="text-center py-5">
-    
+
     </div>
 
     <div *ngIf="!requestsLoading" class="requests-dialog">
@@ -443,9 +430,7 @@
             <div class="request-card" *ngFor="let consultation of applicantConsultations">
               <div class="card-header">
                 <span class="request-title">{{ consultation.consultationType }}</span>
-                <p-tag
-                  [value]="consultation.result || 'غير محدد'"
-                  severity="secondary">
+                <p-tag [value]="consultation.result || 'غير محدد'" severity="secondary">
                 </p-tag>
               </div>
               <div class="card-body">
@@ -469,9 +454,7 @@
             <div class="request-card" *ngFor="let investigation of applicantInvestigations">
               <div class="card-header">
                 <span class="request-title">{{ investigation.type }}</span>
-                <p-tag
-                  [value]="investigation.status || 'غير محدد'"
-                  severity="info">
+                <p-tag [value]="investigation.status || 'غير محدد'" severity="info">
                 </p-tag>
               </div>
               <div class="card-body">
@@ -499,4 +482,3 @@
     </div>
   </p-dialog>
 </div>
-

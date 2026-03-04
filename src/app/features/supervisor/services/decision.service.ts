@@ -1,9 +1,23 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../shared/models/paged-response.model';
 import { FinalDecisionModel } from '../models/final-decision.model';
+
+export interface FinalDecisionHistoryItem {
+  id: number;
+  decisionID: number;
+  applicantFileNumber: string;
+  previousResultID?: number;
+  previousResultDescription?: string;
+  newResultID?: number;
+  newResultDescription?: string;
+  reason?: string;
+  changedAt: string;
+  changedBy?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +71,30 @@ export class DecisionService {
     return this.http.get<ApiResponse<FinalDecisionModel | null>>(`${this.apiUrl}/by-file/${fileNumber}`, {
       headers: this.getAuthHeaders()
     });
+  }
+
+  /** سجل تغيير النتيجة النهائية (كان مرفوض → صار مقبول) */
+  getDecisionHistory(applicantFileNumber: string): Observable<FinalDecisionHistoryItem[]> {
+    return this.http
+      .get<ApiResponse<FinalDecisionHistoryItem[]>>(
+        `${this.apiUrl}/History?applicantFileNumber=${encodeURIComponent(applicantFileNumber)}`,
+        { headers: this.getAuthHeaders() }
+      )
+      .pipe(map(res => (res as any)?.data ?? []));
+  }
+
+  /** جلب القرارات النهائية حسب أرقام الملفات (لعمود النتيجة النهائية في القائمة) */
+  getDecisionsByFileNumbers(fileNumbers: string[]): Observable<{ applicantFileNumber: string; result?: { description: string } }[]> {
+    if (!fileNumbers.length) {
+      return of([]);
+    }
+    const params = fileNumbers.map(fn => `fileNumbers=${encodeURIComponent(fn)}`).join('&');
+    return this.http
+      .get<ApiResponse<{ items: { applicantFileNumber: string; result?: { description: string } }[] }>>(
+        `${this.apiUrl}/ByFileNumbers?${params}`,
+        { headers: this.getAuthHeaders() }
+      )
+      .pipe(map(res => (res as any)?.data?.items ?? []));
   }
 
   // ✅ تحديث القرار النهائي باستخدام PUT

@@ -23,5 +23,12 @@ export const RECEPTION_ROUTES: Routes = [
       import('./components/recruitment-export/recruitment-export').then(m => m.RecruitmentExportComponent),
     canActivate: [authGuard],
     data: { roles: [UserRoles.Supervisor] }
+  },
+  {
+    path: 'exported',
+    loadComponent: () =>
+      import('./components/recruitment-exported/recruitment-exported').then(m => m.RecruitmentExportedComponent),
+    canActivate: [authGuard],
+    data: { roles: [UserRoles.Supervisor] }
   }
 ];

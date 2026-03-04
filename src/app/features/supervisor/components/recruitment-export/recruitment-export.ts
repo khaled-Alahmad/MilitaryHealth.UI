@@ -178,7 +178,7 @@ export class RecruitmentExportComponent implements OnInit {
         // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø£Ù† Ø§Ù„Ù€ blob ØµØ­ÙŠØ­
         if (blob && blob.size > 0) {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-          this.downloadFile(blob, `Recruitment_Export_${timestamp}.pdf`);
+          this.downloadFile(blob, `Recruitment_Export_${timestamp}.xlsx`);
           this.toastr.success(`تم تصدير ${decisionIds.length} منتسب بنجاح`, 'نجاح');
           this.exporting = false;
           this.selectedExports = [];
@@ -217,7 +217,7 @@ export class RecruitmentExportComponent implements OnInit {
         // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø£Ù† Ø§Ù„Ù€ blob ØµØ­ÙŠØ­
         if (blob && blob.size > 0) {
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-          this.downloadFile(blob, `Recruitment_Export_All_${timestamp}.pdf`);
+          this.downloadFile(blob, `Recruitment_Export_All_${timestamp}.xlsx`);
           this.toastr.success(`تم تصدير ${this.pendingExports.length} منتسب بنجاح`, 'نجاح');
           this.exporting = false;
           this.selectedExports = [];
