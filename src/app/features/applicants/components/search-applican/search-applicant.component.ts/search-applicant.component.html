@@ -214,18 +214,32 @@
     [header]="'مسح الباركود'"
     (onHide)="onCloseScanner()"
     styleClass="barcode-scanner-dialog">
-    <div class="scanner-wrapper">
-      <div #scannerContainer id="barcode-scanner" class="scanner-container"></div>
-      @if (scanning) {
-        <div class="scanner-overlay">
-          <div class="scanner-instructions">
-            <i class="pi pi-camera" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-            <p class="mb-2">ضع الباركود داخل الإطار</p>
-            <small class="text-muted">سيتم البحث تلقائياً عند قراءة الباركود</small>
+    @if (!isCameraAllowed) {
+      <div class="scanner-https-warning p-3 text-center">
+        <i class="pi pi-lock" style="font-size: 2.5rem; color: var(--orange-500); margin-bottom: 1rem;"></i>
+        <h6 class="mb-2">الكاميرا غير متاحة على اتصال HTTP</h6>
+        <p class="text-muted small mb-0">
+          المتصفحات تسمح بالوصول إلى الكاميرا فقط عندما يُفتح الموقع عبر <strong>HTTPS</strong> (اتصال آمن).
+          على السيرفر الحالي الموقع يعمل عبر HTTP لذلك يتم منع الكاميرا.
+        </p>
+        <p class="mt-2 mb-0 small">
+          <strong>الحل:</strong> تشغيل الموقع عبر HTTPS على السيرفر، أو إدخال الباركود يدوياً في حقل البحث.
+        </p>
+      </div>
+    } @else {
+      <div class="scanner-wrapper">
+        <div #scannerContainer id="barcode-scanner" class="scanner-container"></div>
+        @if (scanning) {
+          <div class="scanner-overlay">
+            <div class="scanner-instructions">
+              <i class="pi pi-camera" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+              <p class="mb-2">ضع الباركود داخل الإطار</p>
+              <small class="text-muted">سيتم البحث تلقائياً عند قراءة الباركود</small>
+            </div>
           </div>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    }
     <ng-template pTemplate="footer">
       <div class="d-flex justify-content-end gap-2">
         <p-button

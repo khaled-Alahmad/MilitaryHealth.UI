@@ -100,6 +100,18 @@
   }
 }
 
+/* ✅ تحذير عدم توفر الكاميرا (HTTP بدون HTTPS) */
+.scanner-https-warning {
+  background: var(--surface-100, #f8f9fa);
+  border-radius: 8px;
+  border: 1px solid var(--orange-200, #ffcc80);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ✅ تصميم ماسح الباركود */
 .scanner-wrapper {
   position: relative;

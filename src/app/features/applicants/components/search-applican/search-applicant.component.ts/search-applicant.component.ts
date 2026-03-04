@@ -458,8 +458,21 @@ export class SearchApplicantComponent implements OnInit, OnDestroy {
     };
   }
 
+  /** المتصفح يسمح بالكاميرا فقط عبر HTTPS أو localhost (سياق آمن) */
+  get isCameraAllowed(): boolean {
+    return typeof window !== 'undefined' && window.isSecureContext === true;
+  }
+
   onBarcodeScan(): void {
     this.showBarcodeScanner = true;
+    if (!this.isCameraAllowed) {
+      this.toastr.warning(
+        'استخدام الكاميرا غير متاح على اتصال HTTP. يرجى استخدام HTTPS أو إدخال الباركود يدوياً.',
+        'الكاميرا غير متاحة',
+        { timeOut: 6000 }
+      );
+      return;
+    }
     // ✅ بدء المسح بعد فتح الـ Dialog
     setTimeout(() => {
       this.startBarcodeScanner();
@@ -507,6 +520,8 @@ export class SearchApplicantComponent implements OnInit, OnDestroy {
           errorMsg = 'يرجى السماح بالوصول إلى الكاميرا في إعدادات المتصفح';
         } else if (err && err.toString().includes('NotFound')) {
           errorMsg = 'لم يتم العثور على كاميرا. تأكد من وجود كاميرا متصلة';
+        } else if (!this.isCameraAllowed || (err && (err.toString().includes('secure') || err.toString().includes('Camera streaming')))) {
+          errorMsg = 'الكاميرا غير متاحة على اتصال HTTP. يرجى فتح الموقع عبر HTTPS لاستخدام المسح بالكاميرا.';
         }
         this.toastr.error(errorMsg, 'خطأ');
         this.scanning = false;
