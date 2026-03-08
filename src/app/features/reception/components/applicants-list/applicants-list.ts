@@ -1,30 +1,41 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ApplicantModel } from '../../models/applicant.model';
 import { ApplicantService } from '../../services/applicant.service';
-import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
+import { PaginatorComponent } from '../../../../shared/components/paginator/paginator.component';
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { BarcodePrintService } from '../../services/barcode-print.service';
 import { MessageService } from 'primeng/api';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { Table } from 'primeng/table';
-import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { ToastModule } from 'primeng/toast';
+import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { ActionButtonsComponent, ActionButtonConfig } from '../../../../shared/components/action-buttons/action-buttons.component';
 
 @Component({
   selector: 'app-applicants-list',
+  standalone: true,
   imports: [
-    TableModule, 
-    CommonModule, 
-    PaginatorComponent, 
-    TagModule, 
+    TableModule,
+    CardModule,
+    CommonModule,
+    ToastModule,
+    PaginatorComponent,
+    TagModule,
     ButtonModule,
+    TooltipModule,
     GregorianDatePipe,
-    ResetFiltersButtonComponent
+    FilterBarComponent,
+    PageHeaderComponent,
+    ActionButtonsComponent
   ],
   templateUrl: './applicants-list.html',
   styleUrl: './applicants-list.scss',
@@ -42,7 +53,6 @@ export class ApplicantsList implements OnInit,AfterViewInit  {
   tableHeight = '400px';
   
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   
   constructor(
     private applicantService: ApplicantService,
@@ -84,16 +94,11 @@ onPageSizeChange(newSize: number) {
   this.loadApplicants();
 }
 
-onFilterChange(event: Event) {
-  const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-  this.globalFilter = value;
+onSearchChange(value: string): void {
+  this.globalFilter = (value || '').toLowerCase().trim();
   this.page = 1;
   this.loadApplicants();
-
-  // ✅ Scroll to Top بعد البحث
-  setTimeout(() => {
-    this.scrollService.scrollToTop(true);
-  }, 300);
+  setTimeout(() => this.scrollService.scrollToTop(true), 300);
 }
   ngAfterViewInit() {
     this.tableHeight = this.calculateTableHeight(); 
@@ -115,10 +120,10 @@ onFilterChange(event: Event) {
 
     this.tableHeight = (screenHeight - reservedSpace) + 'px';
   }
-  viewApplicant(applicant: ApplicantModel) {
-    this.router.navigate(['reception/applicants/details', applicant.fileNumber]);
+  viewApplicant(applicant: ApplicantModel): void {
+    this.router.navigate(['/reception/applicants/details', applicant.fileNumber]);
   }
-  
+
   editApplicant(applicant: ApplicantModel): void {
     if (!applicant?.applicantID) {
       this.messageService.add({
@@ -128,7 +133,7 @@ onFilterChange(event: Event) {
       });
       return;
     }
-    this.router.navigate(['reception', 'applicants', applicant.applicantID]);
+    this.router.navigate(['/reception/applicants', applicant.applicantID]);
   }
 
   printApplicant(applicant: ApplicantModel): void {
@@ -141,7 +146,6 @@ onFilterChange(event: Event) {
       return;
     }
 
-    // ✅ جلب البيانات الكاملة للحصول على queueNumber و fileNumber
     if (applicant.applicantID) {
       this.applicantService.getApplicantById$(applicant.applicantID).subscribe({
         next: (fullApplicantData: ApplicantModel) => {
@@ -176,13 +180,51 @@ onFilterChange(event: Event) {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();
     }
     this.loadApplicants();
+  }
+
+  goToAdd(): void {
+    this.router.navigate(['/reception/applicants/add']);
+  }
+
+  /** نص ملخص النتائج (عرض 1–10 من 42) */
+  get resultSummary(): string {
+    if (this.totalRecords === 0) return 'لا توجد نتائج';
+    const start = (this.page - 1) * this.rowsPerPage + 1;
+    const end = Math.min(this.page * this.rowsPerPage, this.totalRecords);
+    return `عرض ${start}–${end} من ${this.totalRecords}`;
+  }
+
+  /** عنوان حالة عدم وجود بيانات */
+  get emptyStateTitle(): string {
+    return this.globalFilter?.length ? 'لا توجد نتائج للبحث' : 'لا يوجد متقدمين';
+  }
+
+  /** نص فرعي في حالة عدم النتائج (عند وجود فلتر) */
+  get emptyStateSubtext(): string | null {
+    return this.globalFilter?.length ? 'جرّب تغيير كلمات البحث أو أعد تعيين الفلتر' : null;
+  }
+
+  /** أيقونة الحالة الفارغة */
+  get emptyStateIcon(): string {
+    return this.globalFilter?.length ? 'pi pi-search' : 'pi pi-users';
+  }
+
+  getRowActions(applicant: ApplicantModel): ActionButtonConfig[] {
+    return [
+      { id: 'view', label: '', icon: 'pi pi-eye', severity: 'secondary', outlined: true, tooltip: 'عرض التفاصيل' },
+      { id: 'edit', label: '', icon: 'pi pi-pencil', severity: 'success', outlined: false, tooltip: 'تعديل المنتسب' },
+      { id: 'print', label: '', icon: 'pi pi-print', severity: 'info', outlined: false, tooltip: 'طباعة الباركود' }
+    ];
+  }
+
+  onRowAction(actionId: string, applicant: ApplicantModel): void {
+    if (actionId === 'view') this.viewApplicant(applicant);
+    else if (actionId === 'edit') this.editApplicant(applicant);
+    else if (actionId === 'print') this.printApplicant(applicant);
   }
 }

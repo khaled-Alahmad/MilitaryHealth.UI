@@ -1,0 +1,221 @@
+/* Shared layout and content styles for reception feature */
+
+$reception-border: rgba(5, 66, 57, 0.12);
+$reception-bg-subtle: rgba(5, 66, 57, 0.06);
+
+.reception-page {
+  min-height: calc(100vh - 60px);
+  background-color: var(--neutral-light);
+  font-family: var(--font-family-primary);
+  --reception-border: #{$reception-border};
+  --reception-bg-subtle: #{$reception-bg-subtle};
+}
+
+
+
+/* شريط أدوات داخل البطاقة (فلاتر / بحث) */
+.reception-card-toolbar {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* شريط قائمة: خلفية خفيفة وحدود لتمييز منطقة البحث والنتائج */
+.reception-list-toolbar {
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  background: var(--reception-bg-subtle, rgba(5, 66, 57, 0.05));
+  border: 1px solid $reception-border;
+  border-radius: var(--radius-lg);
+}
+
+/* ملخص النتائج فوق الجدول */
+.reception-list-summary {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-medium);
+  margin-bottom: var(--spacing-md);
+}
+
+.reception-list-summary__count {
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+/* خلايا الجدول - محاذاة ونص */
+.reception-table-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.reception-table-cell--actions {
+  white-space: nowrap;
+}
+
+/* بطاقة موحدة: حدود وظل */
+.reception-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid $reception-border;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* هيدر البطاقة الموحد (لون الهوية) */
+.reception-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+
+  .pi {
+    color: var(--accent-gold);
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* قاسم أفقي موحد */
+.reception-divider {
+  margin: var(--spacing-xl) 0 var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid $reception-border;
+}
+
+.reception-divider__label {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: rgba(5, 66, 57, 0.08);
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  margin-top: -1px;
+}
+
+/* تذييل قسم (فاصل فوق الأزرار أو الترقيم) */
+.reception-section-footer {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid $reception-border;
+}
+
+/* Reusable loading and empty states */
+.reception-loading-state,
+.reception-empty-state {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-md);
+  color: var(--neutral-medium);
+}
+
+.reception-loading-state .pi,
+.reception-empty-state .pi {
+  font-size: var(--font-size-2xl);
+  display: block;
+  margin-bottom: var(--spacing-md);
+}
+
+.reception-empty-state .pi {
+  font-size: var(--font-size-3xl);
+}
+
+.reception-empty-state__title {
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.reception-empty-state__subtext {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-medium);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+/* Table cell text (use on wrapper span - لا نعدّل خلايا PrimeNG مباشرة) */
+.reception-cell-text {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  color: var(--neutral-medium);
+}
+
+.reception-cell-text--bold {
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+/* Detail / info sections */
+.info-section {
+  margin-bottom: var(--spacing-xl);
+
+  .section-title {
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    margin: 0 0 var(--spacing-lg) 0;
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+
+    .pi {
+      color: var(--accent-gold);
+    }
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    background: var(--neutral-light);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transition: box-shadow var(--transition-fast);
+
+    &:hover {
+      box-shadow: var(--shadow-sm);
+    }
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-size: var(--font-size-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+
+      &::before {
+        content: '';
+        width: 4px;
+        height: 14px;
+        background: var(--accent-gold);
+        border-radius: 2px;
+      }
+    }
+
+    .info-value {
+      font-size: var(--font-size-base);
+      color: var(--neutral-medium);
+      font-weight: 500;
+    }
+  }
+}
+
+/* List page container */
+.reception-list-page {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  margin: 0 auto var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,52 @@
+<div class="filter-bar">
+  <div class="filter-bar__search">
+    <p-iconfield iconPosition="right" styleClass="filter-bar__iconfield">
+      <p-inputicon>
+        @if (loading) {
+          <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+        } @else {
+          <i class="pi pi-search" aria-hidden="true"></i>
+        }
+      </p-inputicon>
+      <input
+        pInputText
+        type="text"
+        class="filter-bar__input"
+        [disabled]="disabled"
+        [value]="displayValue"
+        [placeholder]="searchPlaceholder"
+        (input)="onSearchInput($event)"
+        (keydown.enter)="onSearchEnter($event)"
+      />
+      @if (displayValue.length > 0 && !disabled) {
+        <p-inputicon>
+          <button
+            type="button"
+            class="filter-bar__clear-btn"
+            aria-label="مسح البحث"
+            (click)="clearSearch()"
+          >
+            <i class="pi pi-times" aria-hidden="true"></i>
+          </button>
+        </p-inputicon>
+      }
+    </p-iconfield>
+    @if (showSearchHint && !loading) {
+      <span class="filter-bar__hint">Enter للبحث</span>
+    }
+  </div>
+
+  <div class="filter-bar__extras">
+    <ng-content select="[extra-filters]"></ng-content>
+  </div>
+
+  @if (showReset) {
+    <div class="filter-bar__actions">
+      <app-reset-filters-button
+        [disabled]="disabled"
+        label="إعادة تعيين"
+        (reset)="reset.emit()">
+      </app-reset-filters-button>
+    </div>
+  }
+</div>

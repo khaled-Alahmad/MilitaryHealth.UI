@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-// PrimeNG Components
+// PrimeNG
 import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
+
+// Shared
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { ActionButtonsComponent, ActionButtonConfig } from '../../../../shared/components/action-buttons/action-buttons.component';
 
 // Models and Services
 import { ApplicantDetailsModel, ApplicantModel } from '../../models/applicant.model';
@@ -25,9 +27,10 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
     CommonModule,
     GregorianDatePipe,
     CardModule,
-    ButtonModule,
     ToastModule,
-    TagModule
+    TagModule,
+    PageHeaderComponent,
+    ActionButtonsComponent
   ],
   templateUrl: './applicant-details.html',
   styleUrl: './applicant-details.scss',
@@ -38,6 +41,15 @@ export class ApplicantDetailsComponent implements OnInit {
   loading = false;
   fileNumber: string = '';
   maritalStatuses: MaritalStatus[] = [];
+
+  get headerActions(): ActionButtonConfig[] {
+    const disabled = !this.applicant || this.loading;
+    return [
+      { id: 'back', label: 'رجوع', icon: 'pi pi-arrow-right', severity: 'secondary', outlined: true },
+      { id: 'print', label: 'طباعة الإيصال', icon: 'pi pi-print', severity: 'info', outlined: false, disabled, tooltip: 'طباعة الإيصال' },
+      { id: 'edit', label: 'تعديل', icon: 'pi pi-pencil', severity: 'success', outlined: false, disabled, tooltip: 'تعديل' }
+    ];
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -62,8 +74,7 @@ export class ApplicantDetailsComponent implements OnInit {
   loadMaritalStatuses(): void {
     this.maritalStatusService.getMaritalStatus().subscribe({
       next: (data) => (this.maritalStatuses = data),
-      error: (err) => {
-      }
+      error: () => {}
     });
   }
 
@@ -74,7 +85,7 @@ export class ApplicantDetailsComponent implements OnInit {
         this.applicant = data;
         this.loading = false;
       },
-      error: (err) => {
+      error: () => {
         this.loading = false;
         this.messageService.add({
           severity: 'error',
@@ -83,6 +94,12 @@ export class ApplicantDetailsComponent implements OnInit {
         });
       }
     });
+  }
+
+  onHeaderAction(actionId: string): void {
+    if (actionId === 'back') this.goBack();
+    else if (actionId === 'print') this.printReceipt();
+    else if (actionId === 'edit') this.editApplicant();
   }
 
   editApplicant(): void {
@@ -94,7 +111,7 @@ export class ApplicantDetailsComponent implements OnInit {
       });
       return;
     }
-    this.router.navigate(['reception', 'applicants', this.applicant.applicantID]);
+    this.router.navigate(['/reception/applicants', this.applicant.applicantID]);
   }
 
   getMaritalStatusDescription(maritalStatusID: number): string {
@@ -103,7 +120,7 @@ export class ApplicantDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['reception/applicants']);
+    this.router.navigate(['/reception/applicants']);
   }
 
   printReceipt(): void {

@@ -14,7 +14,7 @@ import { MessageService } from 'primeng/api';
 import localAr from '@angular/common/locales/ar';
 import { registerLocaleData } from '@angular/common';
 
-// PrimeNG Components
+// PrimeNG
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -22,6 +22,10 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
+import { FieldsetModule } from 'primeng/fieldset';
+
+// Shared
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 // Models and Services
 import { MaritalStatus } from '../../models/marital-status.model';
@@ -40,15 +44,18 @@ registerLocaleData(localAr);
     ReactiveFormsModule,
     FormsModule,
     CardModule,
+    FieldsetModule,
     InputTextModule,
     ButtonModule,
     DatePickerModule,
     InputNumberModule,
     TextareaModule,
     ToastModule,
+    PageHeaderComponent
   ],
   templateUrl: './add-edit-applicant.html',
   styleUrl: './add-edit-applicant.scss',
+  providers: [MessageService]
 })
 export class AddEditApplicant implements OnInit {
   applicantForm!: FormGroup;

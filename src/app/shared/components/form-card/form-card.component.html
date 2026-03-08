@@ -1,0 +1,17 @@
+<p-card [styleClass]="variant === 'banner' ? 'form-card form-card--banner' : 'form-card'">
+  <ng-template pTemplate="header">
+    <div class="form-card__header">
+      @if (icon) {
+        <i class="pi {{ icon }}" aria-hidden="true"></i>
+      }
+      <div>
+        <h3 class="form-card__title">{{ title }}</h3>
+        @if (subtitle) {
+          <p class="form-card__subtitle">{{ subtitle }}</p>
+        }
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-content></ng-content>
+</p-card>

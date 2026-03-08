@@ -1,0 +1,39 @@
+:host ::ng-deep .form-card .p-card-header {
+  padding: 0;
+}
+
+.form-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+}
+
+.form-card__title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.form-card__subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--neutral-medium);
+}
+
+:host ::ng-deep .form-card--banner .p-card-header .form-card__header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  color: white;
+
+  .form-card__title,
+  .form-card__subtitle {
+    color: white;
+  }
+
+  .form-card__subtitle {
+    opacity: 0.9;
+  }
+
+  .pi {
+    color: var(--accent-gold);
+  }
+}
