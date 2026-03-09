@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { EditInvestigation } from '../../Investigations/edit-investigation/edit-investigation';
@@ -10,12 +10,13 @@ import { ButtonModule } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-surgery-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
   templateUrl: './surgery-investigations-list.html',
   styleUrls: ['./surgery-investigations-list.scss']
 })
@@ -32,7 +33,6 @@ export class SurgeryInvestigationsList implements OnInit {
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: SurgicalExamService,
@@ -62,8 +62,8 @@ export class SurgeryInvestigationsList implements OnInit {
     });
   }
 
-  onFilterChange(event: Event) {
-    this.globalFilter = (event.target as HTMLInputElement).value;
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').trim();
     this.page = 1;
     this.loadInvestigations();
   }
@@ -127,9 +127,6 @@ export class SurgeryInvestigationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

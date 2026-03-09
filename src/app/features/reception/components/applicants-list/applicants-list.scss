@@ -1,4 +1,8 @@
-@use '../../../../shared/styles/reception-shared';
+@use '../../../../shared/styles/eye-clinic-list' as *;
+
+:host {
+  display: block;
+}
 
 .list-meta {
   display: flex;
@@ -18,66 +22,6 @@
   font-weight: 600;
 }
 
-.table-shell {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar {
-  margin-bottom: var(--spacing-sm);
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__controls {
-  width: 100%;
-  justify-content: flex-end;
-  direction: ltr;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__search-wrap {
-  min-width: min(100%, 360px);
-  width: 100%;
-  position: relative !important;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__search-wrap .pi-search {
-  position: absolute !important;
-  right: 0.75rem !important;
-  left: auto !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  margin-top: 0 !important;
-  color: var(--primary-medium);
-  pointer-events: none;
-  z-index: 1;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__search-input {
-  width: 100%;
-  direction: rtl;
-  text-align: right;
-  padding-right: 2.2rem !important;
-  padding-left: 0.75rem !important;
-  box-sizing: border-box;
-}
-
-:host ::ng-deep .reception-applicants-table .p-datatable-thead > tr > th {
-  background: var(--primary-dark);
-  color: #fff;
-  font-size: var(--font-size-xs);
-  text-align: center;
-  white-space: nowrap;
-}
-
-.cell-text {
-  font-size: var(--font-size-xs);
-  color: var(--neutral-dark);
-}
-
-.cell-text--bold {
-  font-weight: 700;
-}
-
 .queue-badge {
   display: inline-block;
   min-width: 2.25rem;
@@ -90,34 +34,9 @@
   line-height: 1.2;
 }
 
-.actions-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
-}
-
-.empty-state {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.empty-state__icon {
-  font-size: 2rem;
-  color: var(--neutral-medium);
-}
-
 .print-dialog__details {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
   font-size: var(--font-size-sm);
-}
-
-@media (max-width: 768px) {
-  :host ::ng-deep .reception-filter-bar .filter-bar__search-wrap {
-    min-width: 100%;
-  }
 }

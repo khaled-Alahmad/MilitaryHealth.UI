@@ -16,25 +16,22 @@ import { ApplicantService } from '../../../../reception/services/applicant.servi
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
-import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent, PageHeaderComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })
 export class DeferredEyeExamsComponent implements OnInit {
   exams: EyeExam[] = [];
-  filteredExams: EyeExam[] = [];
   globalFilter: string = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
   loading = false;
   tableHeight = '400px';
-  selectedExam: EyeExam | null = null;
   applicantsCache: Map<string, any> = new Map();
   refractionTypes: any[] = [];
   @ViewChild('table') table?: Table;
@@ -60,12 +57,8 @@ export class DeferredEyeExamsComponent implements OnInit {
       next: (data: PagedResponse<EyeExam>) => {
         // فرز الفحوصات حسب آخر معرف فحص مضاف
         this.exams = data.items.sort((a, b) => (b.eyeExamID || 0) - (a.eyeExamID || 0));
-        this.filteredExams = [...this.exams];
-  
         this.totalRecords = data.totalCount;
         this.loading = false;
-  
-        //this.loadApplicantsInfo(); // تحميل معلومات المنتسبين بشكل آمن
       },
       error: () => {
         this.toastr.error('فشل في جلب بيانات فحوصات العيون', 'خطأ');
@@ -155,7 +148,7 @@ openEditExam(eyeExam: EyeExam): void {
         
 
         const modalRef = this.modalService.open(EditEyeExam, {
-          size: 'xl',
+          size: 'lg',
           backdrop: 'static',
           keyboard: false,
           centered: true
@@ -164,22 +157,8 @@ openEditExam(eyeExam: EyeExam): void {
         modalRef.componentInstance.exam = examWithRefractions;
         this.loading = false;
 
-        // ✅ تحديث لحظي للجدول
-        modalRef.componentInstance.eyeExamUpdated.subscribe((updatedExam: EyeExam) => {
-          if (updatedExam) {
-            const index = this.exams.findIndex(e => e.eyeExamID === updatedExam.eyeExamID);
-        
-                    this.loadEyeExams();
-
-            //   if (index !== -1) {
-          //     this.exams[index] = { ...this.exams[index], ...updatedExam };
-          //     this.filteredExams = [...this.exams]; // تحديث الجدول
-          //   }
-          //   this.cdr.detectChanges();
-          // } else {
-          //   // fallback إذا ما رجع updatedExam
-          //   this.loadEyeExams();
-           }
+        modalRef.componentInstance.eyeExamUpdated.subscribe(() => {
+          this.loadEyeExams();
         });
 
       } else {
@@ -228,31 +207,6 @@ openEditExam(eyeExam: EyeExam): void {
       error: () => {
         this.loading = false;
         this.toastr.error('حدث خطأ أثناء جلب تفاصيل الفحص', 'خطأ');
-      }
-    });
-  }
-
-  // مساعدة لعرض معلومات المنتسب
-  getApplicantName(exam: EyeExam): string {
-    const cached = this.applicantsCache.get(exam.applicantFileNumber);
-    return cached?.fullName || 'جاري التحميل...';
-  }
-
-  getApplicantJob(exam: EyeExam): string {
-    const cached = this.applicantsCache.get(exam.applicantFileNumber);
-    return cached?.job || '';
-  }
-
-  private loadApplicantsInfo() {
-    const fileNumbers = [...new Set(this.exams.map(exam => exam.applicantFileNumber))];
-    
-    fileNumbers.forEach(fileNumber => {
-      if (!fileNumber) return;
-      if (!this.applicantsCache.has(fileNumber)) {
-        this.applicantService.getApplicantByFileNumber$(fileNumber).subscribe({
-          next: (applicant) => this.applicantsCache.set(fileNumber, applicant),
-          error: () => this.applicantsCache.set(fileNumber, { fullName: 'غير متوفر', job: '' })
-        });
       }
     });
   }

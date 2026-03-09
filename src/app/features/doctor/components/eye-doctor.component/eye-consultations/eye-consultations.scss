@@ -1,22 +1,5 @@
-@use '../eye-toolbar-shared.scss';
+@use '../../../../../shared/styles/eye-clinic-list' as *;
 
 :host {
   display: block;
-}
-
-.user-header-section {
-  background: #fff;
-  border: 1px solid #e9ecef;
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  padding: var(--spacing-md);
-  margin: 0 auto var(--spacing-md);
-}
-
-.custom-table {
-  direction: rtl;
-}
-
-.btn.btn-sm {
-  border-radius: 8px;
 }

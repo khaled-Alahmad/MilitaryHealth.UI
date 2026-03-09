@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/dialog-wrapper/dialog-wrapper.component.scss"],
+  "sourcesContent": [".dialog-wrapper__header {\r\n  display: flex;\r\n  align-items: center;\r\n  gap: var(--spacing-sm);\r\n}\r\n\r\n.dialog-wrapper__icon {\r\n  color: var(--primary-dark);\r\n  font-size: var(--font-size-lg);\r\n}\r\n\r\n.dialog-wrapper__title {\r\n  margin: 0;\r\n  color: var(--primary-dark);\r\n  font-size: var(--font-size-lg);\r\n}\r\n\r\n.dialog-wrapper__subtitle {\r\n  margin: 0.25rem 0 0;\r\n  color: var(--neutral-medium);\r\n  font-size: var(--font-size-sm);\r\n}\r\n\r\n.dialog-wrapper__content {\r\n  color: var(--neutral-dark);\r\n  line-height: 1.6;\r\n}\r\n\r\n.dialog-wrapper__footer {\r\n  display: flex;\r\n  justify-content: flex-end;\r\n  gap: var(--spacing-sm);\r\n}\r\n"],
+  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,eAAA;AACA,OAAA,IAAA;;AAGF,CAAA;AACE,SAAA,IAAA;AACA,aAAA,IAAA;;AAGF,CAAA;AACE,UAAA;AACA,SAAA,IAAA;AACA,aAAA,IAAA;;AAGF,CAAA;AACE,UAAA,QAAA,EAAA;AACA,SAAA,IAAA;AACA,aAAA,IAAA;;AAGF,CAAA;AACE,SAAA,IAAA;AACA,eAAA;;AAGF,CAAA;AACE,WAAA;AACA,mBAAA;AACA,OAAA,IAAA;;",
+  "names": []
+}

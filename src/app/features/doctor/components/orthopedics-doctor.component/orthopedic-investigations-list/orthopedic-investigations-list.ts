@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
@@ -10,11 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Table, TableModule } from "primeng/table";
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-orthopedic-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
   templateUrl: './orthopedic-investigations-list.html',
   styleUrl: './orthopedic-investigations-list.scss'
 })
@@ -30,7 +31,6 @@ export class OrthopedicInvestigationsList implements OnInit {
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private service: OrthopedicExamService,private toastr:ToastrService,
     private modalService: NgbModal,
@@ -64,9 +64,8 @@ export class OrthopedicInvestigationsList implements OnInit {
     this.loadInvestigations();
   }
 
-  onFilterChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-    this.globalFilter = value;
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').trim();
     this.page = 1;
     this.loadInvestigations();
   }
@@ -74,9 +73,6 @@ export class OrthopedicInvestigationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();
@@ -113,14 +109,14 @@ export class OrthopedicInvestigationsList implements OnInit {
       this.loadInvestigations();
     });
   }
-  
-  // getBadgeClass(result: any): string {
-  //   if (!result ) return 'badge bg-secondary';
-  //   switch (result) {
-  //     case 'مقبول': return 'badge bg-success';
-  //     case 'مرفوض': return 'badge bg-danger';
-  //     case 'مؤجل': return 'badge bg-warning text-dark';
-  //     default: return 'badge bg-secondary';
-  //   }
-  // }
+
+  getBadgeClass(status: string): string {
+    if (!status) return 'badge bg-secondary';
+    switch (status) {
+      case 'مكتمل': return 'badge bg-success';
+      case 'مرفوض': return 'badge bg-danger';
+      case 'مؤجل': return 'badge bg-warning text-dark';
+      default: return 'badge bg-secondary';
+    }
+  }
 }

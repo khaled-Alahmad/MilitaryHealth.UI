@@ -1,130 +1,147 @@
-<div class="reception-list-page container-fluid">
-    <app-page-header
-      title="قائمة المنتسبين"
-      subtitle="إدارة بيانات المنتسبين في العيادة العينية"
-      icon="pi pi-users">
-      <div header-actions>
-        <app-action-buttons
-          [actions]="headerActions"
-          (actionClick)="onHeaderAction($event)">
-        </app-action-buttons>
-      </div>
-    </app-page-header>
-
-    <app-filter-bar
-      class="reception-filter-bar"
-      [searchValue]="globalFilter"
-      searchPlaceholder="ابحث عن رقم الملف أو الاسم"
-      [showReset]="true"
-      (searchChange)="onSearchChange($event)"
-      (reset)="resetFilters()">
-    </app-filter-bar>
-
-    <div class="list-meta">
-      <span class="list-meta__chip">
-        <i class="pi pi-users"></i>
-        إجمالي السجلات: {{ totalRecords }}
-      </span>
+<div class="user-header-section p-3 container-fluid">
+  <app-page-header
+    title="قائمة المنتسبين"
+    subtitle="إدارة بيانات المنتسبين في العيادة العينية"
+    icon="pi pi-users">
+    <div header-actions>
+      <app-action-buttons
+        [actions]="headerActions"
+        (actionClick)="onHeaderAction($event)">
+      </app-action-buttons>
     </div>
+  </app-page-header>
 
-    <div class="table-shell">
-    <p-table #table
-        styleClass="reception-applicants-table"
-        [value]="applicants" 
-        [loading]="loading"
-        [rowHover]="true"
-        [stripedRows]="true"
-        [scrollable]="true" 
-        [scrollHeight]="tableHeight"
-        [globalFilterFields]="['fileNumber','fullName']"
-        [sortMode]="'single'"
-        responsiveLayout="scroll">
-        <ng-template pTemplate="header">
-            <tr>
-                <th pSortableColumn="queueNumber">رقم الدور <p-sortIcon field="queueNumber"></p-sortIcon></th>
-                <th pSortableColumn="fileNumber">رقم الملف <p-sortIcon field="fileNumber"></p-sortIcon></th>
-                <th pSortableColumn="fullName">الاسم الكامل <p-sortIcon field="fullName"></p-sortIcon></th>
-                <th pSortableColumn="job">العمل <p-sortIcon field="job"></p-sortIcon></th>
-                <th>الحالة الاجتماعية</th>
-                <th>وشم</th>
-                <th pSortableColumn="createdAt">تاريخ الإضافة <p-sortIcon field="createdAt"></p-sortIcon></th>
-                <th>إجراءات</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-applicant>
-            <tr>
-                <td class="text-center align-middle">
-                    <span class="queue-badge">{{applicant.queueNumber || '-'}}</span>
-                </td>
-                <td class="text-center align-middle">
-                    <span class="cell-text cell-text--bold">{{applicant.fileNumber || '-'}}</span>
-                </td>
-                <td class="text-center align-middle">
-                    <span class="cell-text">{{applicant.fullName || '-'}}</span>
-                </td>
-                <td class="text-center align-middle">
-                    <span class="cell-text">{{applicant.job || '-'}}</span>
-                </td>
-                <td class="text-center align-middle">
-                    <span class="cell-text">{{applicant.maritalStatus?.description || '-'}}</span>
-                </td>
-                <td class="text-center align-middle">
-                    <p-tag 
-                      [value]="applicant.tattoo ? 'نعم' : 'لا'" 
-                      [severity]="applicant.tattoo ? 'warn' : 'success'"
-                      styleClass="tattoo-tag"></p-tag>
-                </td>
-                <td class="text-center align-middle">
-                    <span class="cell-text">{{applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}</span>
-                </td>
-                <td class="text-center align-middle">
-                    <app-action-buttons
-                      class="actions-wrap"
-                      [actions]="rowActions"
-                      [iconOnly]="true"
-                      size="small"
-                      (actionClick)="onRowAction($event, applicant)">
-                    </app-action-buttons>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="8" class="text-center py-4">
-                    <div class="empty-state">
-                        <i class="pi pi-users empty-state__icon"></i>
-                        <span class="text-muted">لا يوجد منتسبون مطابقون للبحث</span>
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-    </div>
-
-    <app-paginator 
-        [totalRecords]="totalRecords" 
-        [pageSize]="rowsPerPage" 
-        [currentPage]="page"
-        (pageChange)="onPageChange($event)" 
-        (pageSizeChange)="onPageSizeChange($event)">
-    </app-paginator>
-
-    <app-dialog-wrapper
-      [(visible)]="printDialogVisible"
-      title="تأكيد طباعة الباركود"
-      subtitle="هل تريد طباعة إيصال الباركود لهذا المنتسب؟"
-      icon="pi pi-print"
-      confirmLabel="طباعة"
-      cancelLabel="إغلاق"
-      confirmSeverity="info"
-      [confirmLoading]="printLoading"
-      (confirm)="confirmPrintApplicant()"
-      (cancel)="closePrintDialog()"
-      (hide)="closePrintDialog()">
-      <div class="print-dialog__details">
-        <span>الاسم: {{ selectedApplicantForPrint?.fullName || '-' }}</span>
-        <span>رقم الملف: {{ selectedApplicantForPrint?.fileNumber || '-' }}</span>
+  <div class="table-toolbar">
+    <div class="filter-reset-wrapper">
+      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
+      <div class="search-wrapper">
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
+        <i class="fas fa-search search-icon"></i>
       </div>
-    </app-dialog-wrapper>
+    </div>
+  </div>
 
+  <div class="list-meta">
+    <span class="list-meta__chip">
+      <i class="pi pi-users"></i>
+      إجمالي السجلات: {{ totalRecords }}
+    </span>
+  </div>
+
+  <p-table
+    #table
+    [value]="applicants"
+    [loading]="loading"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table my-3"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="min-width: 90px" class="text-center">رقم الدور</th>
+        <th style="min-width: 100px" class="text-center">رقم الملف</th>
+        <th style="min-width: 140px" class="text-center">الاسم الكامل</th>
+        <th style="min-width: 120px" class="text-center">العمل</th>
+        <th style="min-width: 110px" class="text-center">الحالة الاجتماعية</th>
+        <th style="min-width: 80px" class="text-center">وشم</th>
+        <th style="min-width: 110px" class="text-center">تاريخ الإضافة</th>
+        <th style="min-width: 100px" class="text-center">إجراءات</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-applicant>
+      <tr>
+        <td class="text-center align-middle">
+          <span class="queue-badge">{{ applicant.queueNumber || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ applicant.fileNumber || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ applicant.fullName || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ applicant.job || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ applicant.maritalStatus?.description || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <p-tag
+            [value]="applicant.tattoo ? 'نعم' : 'لا'"
+            [severity]="applicant.tattoo ? 'warn' : 'success'"
+            styleClass="tattoo-tag"></p-tag>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="عرض التفاصيل"
+              tooltipPosition="top"
+              (click)="viewApplicant(applicant)">
+              <i class="pi pi-eye"></i>
+            </button>
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="تعديل المنتسب"
+              tooltipPosition="top"
+              (click)="editApplicant(applicant)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="طباعة الباركود"
+              tooltipPosition="top"
+              (click)="openPrintDialog(applicant)">
+              <i class="pi pi-print"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-3 align-middle small">
+          <span class="text-muted">لا يوجد منتسبون مطابقون للبحث</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-paginator>
 </div>
+
+<app-dialog-wrapper
+  [(visible)]="printDialogVisible"
+  title="تأكيد طباعة الباركود"
+  subtitle="هل تريد طباعة إيصال الباركود لهذا المنتسب؟"
+  icon="pi pi-print"
+  confirmLabel="طباعة"
+  cancelLabel="إغلاق"
+  confirmSeverity="info"
+  [confirmLoading]="printLoading"
+  (confirm)="confirmPrintApplicant()"
+  (cancel)="closePrintDialog()"
+  (hide)="closePrintDialog()">
+  <div class="print-dialog__details">
+    <span>الاسم: {{ selectedApplicantForPrint?.fullName || '-' }}</span>
+    <span>رقم الملف: {{ selectedApplicantForPrint?.fileNumber || '-' }}</span>
+  </div>
+</app-dialog-wrapper>

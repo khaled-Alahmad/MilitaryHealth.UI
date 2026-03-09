@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { InternalExamService } from '../../../services/internal-exam.service';
 import { EditInvestigation } from '../../Investigations/edit-investigation/edit-investigation';
@@ -10,11 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Table, TableModule } from "primeng/table";
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-internal-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
   templateUrl: './internal-investigations-list.html',
   styleUrl: './internal-investigations-list.scss'
 })
@@ -29,7 +30,7 @@ export class InternalInvestigationsList implements OnInit {
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
+
   constructor(
     private service: InternalExamService,
     private toastr: ToastrService,
@@ -63,20 +64,15 @@ export class InternalInvestigationsList implements OnInit {
     this.page = 1;
     this.loadInvestigations();
   }
-  onFilterChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-    this.globalFilter = value;
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').trim();
     this.page = 1;
     this.loadInvestigations();
-
   }
 
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

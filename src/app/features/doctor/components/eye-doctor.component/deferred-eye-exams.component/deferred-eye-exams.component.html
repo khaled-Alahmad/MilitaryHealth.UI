@@ -1,23 +1,16 @@
 <div class="user-header-section p-3 container-fluid">
-  <app-page-header
-    variant="banner"
-    title="الفحوصات العينية المؤجلة"
-    subtitle="عرض وإدارة الفحوصات المؤجلة"
-    icon="pi pi-clock">
-  </app-page-header>
-
   <div class="table-toolbar">
     <div class="filter-reset-wrapper">
       <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
-    <div class="search-wrapper">
-      <input
+      <div class="search-wrapper">
+        <input
           #searchInput
-        type="text"
-        class="search-input"
-        placeholder="ابحث عن رقم الملف أو الاسم"
-        (input)="onFilterChange($event)"
-      />
-      <i class="fas fa-search search-icon"></i>
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
+        <i class="fas fa-search search-icon"></i>
       </div>
     </div>
   </div>
@@ -28,8 +21,7 @@
     [rows]="rowsPerPage"
     [totalRecords]="totalRecords"
     class="custom-table my-3"
-    [tableStyle]="{ 'min-width': '50rem' }"
-  >
+    [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th style="min-width:100px" class="text-center">رقم الملف</th>
@@ -40,11 +32,10 @@
         <th style="min-width:80px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="body" let-exam>
       <tr>
         <td class="text-center align-middle">
-          <span class="fw-bold small ">{{ exam.applicantFileNumber }}</span>
+          <span class="fw-bold small">{{ exam.applicantFileNumber }}</span>
         </td>
         <td class="text-center align-middle">
           <div class="d-flex flex-column justify-content-center align-items-center gap-1">
@@ -104,10 +95,9 @@
         </td>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-3 align-middle">لا توجد فحوصات لعرضها.</td>
+        <td colspan="6" class="text-center py-3 align-middle">لا توجد فحوصات لعرضها.</td>
       </tr>
     </ng-template>
   </p-table>
@@ -117,6 +107,6 @@
     [pageSize]="rowsPerPage"
     [currentPage]="page"
     (pageChange)="onPageChange($event)"
-    (pageSizeChange)="onPageSizeChange($event)"
-  ></app-paginator>
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-paginator>
 </div>

@@ -6,11 +6,12 @@ import { Investigation } from '../../../models/investigation.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-investigation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule],
   templateUrl: './edit-investigation.html',
   styleUrl: './edit-investigation.scss'
 })
@@ -21,8 +22,7 @@ export class EditInvestigation {
   investigationForm!: FormGroup;
   uploadedPath: string | null = null;
   previewUrl: string | null = null;
-  loading: boolean = false;
-  showModal: boolean = true; // 🔹 التحكم بالظهور مباشرة
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -34,8 +34,8 @@ export class EditInvestigation {
 
   ngOnInit(): void {
   this.investigationForm = this.fb.group({
-    type: [this.investigation.type], // مخفي ولا يمكن تعديله
-    investigationReason: [this.investigation.investigationReason || ''], // ✅ جديد
+    type: [this.investigation.type],
+    investigationReason: [this.investigation.investigationReason || ''],
     result: [this.investigation.result || ''],
     status: [this.investigation.result ? 'مكتمل' : 'مؤجل', Validators.required],
     attachment: [this.investigation.attachment || null]
@@ -46,7 +46,6 @@ export class EditInvestigation {
     this.previewUrl = this.uploadedPath;
   }
 
-  // 🔹 مراقبة التغيرات على حقل النتيجة لتحديث الحالة تلقائيًا
   this.investigationForm.get('result')?.valueChanges.subscribe(value => {
     const statusControl = this.investigationForm.get('status');
     if (statusControl) {
@@ -87,7 +86,7 @@ export class EditInvestigation {
       doctorID,
       applicantFileNumber: this.investigation.applicantFileNumber,
       type: this.investigationForm.value.type,
-      investigationReason: this.investigationForm.value.investigationReason, // ✅ جديد
+      investigationReason: this.investigationForm.value.investigationReason,
       result: this.investigationForm.value.result,
       status: this.investigationForm.value.status,
       attachment: this.uploadedPath ?? ''
@@ -101,10 +100,8 @@ export class EditInvestigation {
       this.toastr.success('تم تعديل التحليل بنجاح', 'نجاح');
       this.loading = false;
 
-      // 🔹 إعلام الأب بحدوث تحديث
       this.investigationUpdated.emit(true);
-
-      this.cancel(); // إغلاق المودال
+      this.cancel();
     },
     error: () => {
       this.toastr.error('فشل التحديث', 'خطأ');

@@ -1,70 +1,77 @@
-<!-- المودال -->
-<div class="modal-content modal-lg">
-  <div class="modal-header">
-    <div class="dialog-header-content">
-      <i class="pi pi-file-edit dialog-header-icon"></i>
-      <div>
-        <h5 class="modal-title">إضافة نتيجة الاستقصاء</h5>
-        <p class="dialog-subtitle">تحديث النتيجة وحالة الاستقصاء والمرفقات</p>
-      </div>
+<div class="edit-dialog-root">
+  <div class="dialog-wrapper__header edit-dialog-header">
+    <i class="dialog-wrapper__icon pi pi-file-edit"></i>
+    <div>
+      <h3 class="dialog-wrapper__title">إضافة نتيجة الاستقصاء</h3>
+      <p class="dialog-wrapper__subtitle">تحديث النتيجة وحالة الاستقصاء والمرفقات</p>
     </div>
-    <button type="button" class="btn-close" aria-label="Close" (click)="cancel()"></button>
+    <button type="button" class="btn-close btn-close-dialog" aria-label="إغلاق" (click)="cancel()"></button>
   </div>
 
-  <div class="modal-body">
-    <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()" class="dialog-form">
+  <div class="dialog-wrapper__content edit-dialog-body">
+    <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()" class="edit-dialog-form">
+      <input type="hidden" formControlName="type" />
 
-      <!-- سبب التحليل -->
-      <div class="form-group">
-        <label class="form-label">
-          <i class="pi pi-info-circle"></i>
-          سبب التحليل
-        </label>
-        <textarea 
-          class="form-control" 
-          formControlName="investigationReason" 
-          rows="3" 
-          placeholder="أدخل سبب التحليل (اختياري)">
-        </textarea>
-      </div>
-
-      <!-- النتيجة -->
-      <div class="form-group">
-        <label class="form-label">النتيجة</label>
-        <textarea class="form-control" formControlName="result" rows="3" placeholder="أدخل النتيجة"></textarea>
-      </div>
-
-      <!-- حالة التحليل -->
-      <div class="form-group">
-        <label class="form-label">حالة التحليل</label>
-        <input type="text" class="form-control" formControlName="status" readonly />
-      </div>
-
-      <!-- الملف المرفق -->
-      <div class="form-group">
-        <label class="form-label">ملف مرفق</label>
-        <input type="file" class="form-control" (change)="onFileSelected($event)" />
-
-           <!-- ✅ عرض المعاينة -->
-            <div *ngIf="previewUrl && previewUrl.startsWith('data:')" class="preview-container mt-3">
-              <img [src]="previewUrl" 
-                  alt="معاينة المرفق" 
-                  class="img-fluid rounded" 
-                  style="max-height: 200px;">
-            </div>
-
-
+      <h6 class="section-title">سبب التحليل</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <label class="form-label mb-2">تفاصيل سبب التحليل (اختياري)</label>
+          <textarea
+            class="form-control"
+            formControlName="investigationReason"
+            rows="3"
+            placeholder="أدخل سبب التحليل (اختياري)"></textarea>
         </div>
-
-      <!-- الأزرار -->
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success" [disabled]="loading">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-          حفظ التعديل
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="cancel()">إلغاء</button>
       </div>
 
+      <h6 class="section-title mt-4">النتيجة</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <label class="form-label mb-2">النتيجة</label>
+          <textarea
+            class="form-control"
+            formControlName="result"
+            rows="3"
+            placeholder="أدخل النتيجة"></textarea>
+        </div>
+      </div>
+
+      <h6 class="section-title mt-4">حالة التحليل</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <label class="form-label mb-2">حالة التحليل</label>
+          <input type="text" class="form-control" formControlName="status" readonly />
+        </div>
+      </div>
+
+      <h6 class="section-title mt-4">الملف المرفق</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <label class="form-label mb-2">ملف مرفق</label>
+          <input type="file" class="form-control" (change)="onFileSelected($event)" />
+          @if (previewUrl && previewUrl.startsWith('data:')) {
+            <div class="preview-container mt-3">
+              <img [src]="previewUrl" alt="معاينة المرفق" class="img-fluid rounded preview-img" />
+            </div>
+          }
+        </div>
+      </div>
     </form>
+  </div>
+
+  <div class="dialog-wrapper__footer dialog-actions edit-dialog-footer">
+    <p-button
+      label="إلغاء"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="cancel()"></p-button>
+    <p-button
+      label="حفظ التعديل"
+      icon="pi pi-save"
+      severity="primary"
+      [disabled]="investigationForm.invalid || loading"
+      [loading]="loading"
+      (onClick)="onSubmit()"></p-button>
   </div>
 </div>

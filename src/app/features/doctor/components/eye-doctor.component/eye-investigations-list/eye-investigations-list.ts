@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Investigation } from '../../../models/investigation.model';
 import { FormsModule } from '@angular/forms';
@@ -8,17 +8,16 @@ import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
-import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
-import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
-import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-eye-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent, TooltipModule],
   templateUrl: './eye-investigations-list.html',
   styleUrl: './eye-investigations-list.scss'
 })
@@ -32,16 +31,13 @@ export class EyeInvestigationsList implements OnInit {
   loading = false;
   tableHeight = '360px';
 
-  selectedInvestigation: Investigation | null = null;
-  searchText = '';
-  environment = environment;
   @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EyeExamService,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
-    private router: Router,
     private modalService: NgbModal,
   ) {}
 
@@ -90,11 +86,11 @@ export class EyeInvestigationsList implements OnInit {
     this.page = 1;
     this.loadInvestigations();
   }
-  onFilterChange(value: string) {
-    this.globalFilter = (value || '').toLowerCase().trim();
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
     this.page = 1;
     this.loadInvestigations();
-
   }
   ngAfterViewInit() {
     this.tableHeight = this.calculateTableHeight();
@@ -132,6 +128,9 @@ export class EyeInvestigationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

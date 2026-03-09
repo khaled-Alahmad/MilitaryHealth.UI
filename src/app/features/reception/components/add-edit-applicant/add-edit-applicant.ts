@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { tap, switchMap, of } from 'rxjs';
@@ -35,6 +36,42 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
 import { ApiResponse } from '../../../../shared/models/paged-response.model';
 
 registerLocaleData(localAr);
+
+/** حدود التحقق: الطول، الصيغ، القياسات */
+const VALIDATION = {
+  fullNameMaxLength: 150,
+  motherNameMaxLength: 150,
+  recruitmentCenterMaxLength: 200,
+  jobMaxLength: 150,
+  associateNumberMaxLength: 50,
+  bloodPressureMaxLength: 20,
+  tattooDescriptionMaxLength: 500,
+  distinctiveMarksMaxLength: 500,
+  heightMin: 50,
+  heightMax: 250,
+  weightMin: 20,
+  weightMax: 300,
+  bmiMin: 10,
+  bmiMax: 80,
+  pulseMin: 30,
+  pulseMax: 250,
+} as const;
+
+/** صيغة ضغط الدم: فارغ أو رقم/رقم مثل 120/80 */
+const BLOOD_PRESSURE_PATTERN = /^(|\d{2,3}\s*\/\s*\d{2,3})$/;
+
+/** تحقق اختياري: يطبق min/max فقط عندما القيمة غير فارغة */
+function optionalMinMax(min: number, max: number) {
+  return (control: AbstractControl) => {
+    const v = control.value;
+    if (v === null || v === undefined || v === '') return null;
+    const n = Number(v);
+    if (isNaN(n)) return null;
+    if (n < min) return { min: { min } };
+    if (n > max) return { max: { max } };
+    return null;
+  };
+}
 
 @Component({
   selector: 'app-add-edit-applicant',
@@ -117,22 +154,61 @@ export class AddEditApplicant implements OnInit {
   loadForm() {
     const defaults = this.getFormDefaults();
     this.applicantForm = this.fb.group({
-      fullName: [defaults.fullName, Validators.required],
-      motherName: [defaults.motherName],
+      fullName: [
+        defaults.fullName,
+        [Validators.required, Validators.maxLength(VALIDATION.fullNameMaxLength)],
+      ],
+      motherName: [defaults.motherName, Validators.maxLength(VALIDATION.motherNameMaxLength)],
       dateOfBirth: [defaults.dateOfBirth],
-      recruitmentCenter: [defaults.recruitmentCenter],
+      recruitmentCenter: [
+        defaults.recruitmentCenter,
+        Validators.maxLength(VALIDATION.recruitmentCenterMaxLength),
+      ],
       bloodType: [defaults.bloodType],
       maritalStatusID: [defaults.maritalStatusID, Validators.required],
-      job: [defaults.job, Validators.required],
-      height: [defaults.height],
-      weight: [defaults.weight],
-      bmi: [defaults.bmi],
-      bloodPressure: [defaults.bloodPressure],
-      pulse: [defaults.pulse],
+      job: [
+        defaults.job,
+        [Validators.required, Validators.maxLength(VALIDATION.jobMaxLength)],
+      ],
+      height: [
+        defaults.height,
+        [optionalMinMax(VALIDATION.heightMin, VALIDATION.heightMax)],
+      ],
+      weight: [
+        defaults.weight,
+        [optionalMinMax(VALIDATION.weightMin, VALIDATION.weightMax)],
+      ],
+      bmi: [
+        defaults.bmi,
+        [optionalMinMax(VALIDATION.bmiMin, VALIDATION.bmiMax)],
+      ],
+      bloodPressure: [
+        defaults.bloodPressure,
+        [
+          Validators.maxLength(VALIDATION.bloodPressureMaxLength),
+          Validators.pattern(BLOOD_PRESSURE_PATTERN),
+        ],
+      ],
+      pulse: [
+        defaults.pulse,
+        [optionalMinMax(VALIDATION.pulseMin, VALIDATION.pulseMax)],
+      ],
       tattoo: [defaults.tattoo],
-      tattooDescription: [defaults.tattooDescription],
-      distinctiveMarks: [defaults.distinctiveMarks],
-      associateNumber: [defaults.associateNumber, Validators.required],
+      tattooDescription: [
+        defaults.tattooDescription,
+        Validators.maxLength(VALIDATION.tattooDescriptionMaxLength),
+      ],
+      distinctiveMarks: [
+        defaults.distinctiveMarks,
+        Validators.maxLength(VALIDATION.distinctiveMarksMaxLength),
+      ],
+      associateNumber: [
+        defaults.associateNumber,
+        [
+          Validators.required,
+          Validators.maxLength(VALIDATION.associateNumberMaxLength),
+        ],
+      ],
     });
   }
 
@@ -356,6 +432,23 @@ export class AddEditApplicant implements OnInit {
   controlHasError(validation: string, controlName: string): boolean {
     const control = this.f[controlName];
     return control.hasError(validation) && (control.dirty || control.touched || this.submitted);
+  }
+
+  getControlErrorMessage(controlName: string): string {
+    const control = this.f[controlName];
+    if (!control?.errors || !(control.dirty || control.touched || this.submitted)) {
+      return '';
+    }
+    const e = control.errors;
+    if (e['required']) return 'هذا الحقل مطلوب';
+    if (e['maxlength']) return `الحد الأقصى ${e['maxlength'].requiredLength} حرف`;
+    if (e['min']) return `الحد الأدنى ${e['min'].min}`;
+    if (e['max']) return `الحد الأقصى ${e['max'].max}`;
+    if (e['pattern']) {
+      if (controlName === 'bloodPressure') return 'صيغة غير صحيحة (مثال: 120/80)';
+      return 'صيغة غير صحيحة';
+    }
+    return '';
   }
 
   isControlTouched(controlName: string): boolean {

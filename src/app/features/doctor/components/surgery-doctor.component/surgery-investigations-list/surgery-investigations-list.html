@@ -1,67 +1,79 @@
-<div class="container">
-  <div class="table-toolbar my-2">
-    <div class="filter-reset-wrapper">
-      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
-      <div class="search-wrapper">
-        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-        (input)="onFilterChange($event)" />
-      <i class="fas fa-search search-icon"></i>
-      </div>
+<div class="list-page-section">
+  <app-page-header
+    variant="banner"
+    title="استقصاءات العيادة الجراحية"
+    subtitle="متابعة طلبات التحاليل ونتائجها"
+    icon="pi pi-file-search">
+  </app-page-header>
+
+  <div class="table-toolbar">
+    <div class="table-toolbar__filter">
+      <app-filter-bar
+        [searchValue]="globalFilter"
+        searchPlaceholder="ابحث عن رقم الملف أو الاسم"
+        [showReset]="true"
+        [loading]="loading"
+        [showSearchHint]="false"
+        (searchChange)="onFilterChange($event)"
+        (reset)="resetFilters()">
+      </app-filter-bar>
     </div>
   </div>
 
-  <p-table #table [value]="pagedInvestigations" [rows]="rowsPerPage" class="custom-table">
+  <p-table
+    #table
+    [value]="filteredInvestigations"
+    [loading]="loading"
+    class="custom-table compact-table"
+    [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم الملف</th>
-        <th>نوع التحليل</th>
-        <th>السبب</th>
-        <th>النتيجة</th>
-        <th>الملف المرفق</th>
-        <th>إجراءات</th>
+        <th style="width: 120px">رقم الملف</th>
+        <th style="width: 120px">نوع التحليل</th>
+        <th style="width: 120px">السبب</th>
+        <th style="width: 100px">النتيجة</th>
+        <th style="width: 90px">الملف المرفق</th>
+        <th style="width: 80px">إجراءات</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-i>
       <tr>
-        <td>{{ i.applicantFileNumber }}</td>
-        <td>{{ i.type }}</td>
-        <td>{{ i.investigationReason || '-' }}</td>
-        <td>{{ i.result }}</td>
+        <td><span class="fw-bold small">{{ i.applicantFileNumber || '-' }}</span></td>
+        <td><span class="fw-bold small">{{ i.type || '-' }}</span></td>
+        <td><span class="small">{{ i.investigationReason || '-' }}</span></td>
+        <td><span class="small">{{ i.result || '-' }}</span></td>
         <td class="text-center">
-          @if(i.attachment){
+          @if (i.attachment) {
             <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
-                (click)="openFile(i.attachment)">
-                <i class="bi bi-file-earmark-text me-1"></i>
-                فتح الملف
+              (click)="openFile(i.attachment)">
+              <i class="bi bi-file-earmark-text me-1"></i>
+              فتح الملف
             </button>
-            }
-            @else {
+          } @else {
             <span>لا يوجد ملف</span>
-            }        </td>
-
+          }
+        </td>
         <td class="text-center">
           <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
-          (click)="openEditInvestigation(i)">
-          <i class="pi pi-pen-to-square"></i>
+            (click)="openEditInvestigation(i)">
+            <i class="pi pi-pen-to-square"></i>
             إضافة نتيجة
-      </button>
-          <!-- <button type="button" class="btn btn-sm btn-primary" title="اضافة نتيجة" (click)="openEditInvestigation(i)">
-            <i class="bi bi-pencil-square me-1"></i>
-            اضافة نتيجة
-        </button> -->
+          </button>
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center">لا توجد تحاليل</td>
+        <td colspan="6" class="text-center py-2 small">لا توجد تحاليل</td>
       </tr>
     </ng-template>
   </p-table>
 
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-
-  <!-- مودال التعديل يبقى عبر NgbModal كما هو -->
 </div>

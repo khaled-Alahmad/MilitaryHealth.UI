@@ -31,9 +31,9 @@
               <span class="required">*</span>
             </label>
             <input pInputText type="text" formControlName="fullName" placeholder="أدخل الاسم الكامل"
-              [class.p-invalid]="isControlInvalid('fullName')" />
-            @if (controlHasError('required', 'fullName')) {
-            <small class="p-error">الاسم الكامل مطلوب</small>
+              [class.p-invalid]="isControlInvalid('fullName')" [maxlength]="150" />
+            @if (getControlErrorMessage('fullName')) {
+              <small class="p-error">{{ getControlErrorMessage('fullName') }}</small>
             }
           </div>
 
@@ -43,7 +43,11 @@
               <i class="pi pi-user"></i>
               اسم الأم
             </label>
-            <input pInputText type="text" formControlName="motherName" placeholder="أدخل اسم الأم" />
+            <input pInputText type="text" formControlName="motherName" placeholder="أدخل اسم الأم"
+              [class.p-invalid]="isControlInvalid('motherName')" [maxlength]="150" />
+            @if (getControlErrorMessage('motherName')) {
+              <small class="p-error">{{ getControlErrorMessage('motherName') }}</small>
+            }
           </div>
 
           <div class="form-group">
@@ -61,7 +65,11 @@
               <i class="pi pi-map-marker"></i>
               مركز التجنيد
             </label>
-            <input pInputText type="text" formControlName="recruitmentCenter" placeholder="أدخل مركز التجنيد" />
+            <input pInputText type="text" formControlName="recruitmentCenter" placeholder="أدخل مركز التجنيد"
+              [class.p-invalid]="isControlInvalid('recruitmentCenter')" [maxlength]="200" />
+            @if (getControlErrorMessage('recruitmentCenter')) {
+              <small class="p-error">{{ getControlErrorMessage('recruitmentCenter') }}</small>
+            }
           </div>
 
           <div class="form-group">
@@ -88,9 +96,9 @@
               <span class="required">*</span>
             </label>
             <input pInputText type="text" formControlName="job" placeholder="أدخل نوع العمل"
-              [class.p-invalid]="isControlInvalid('job')" />
-            @if (controlHasError('required', 'job')) {
-            <small class="p-error">نوع العمل مطلوب</small>
+              [class.p-invalid]="isControlInvalid('job')" [maxlength]="150" />
+            @if (getControlErrorMessage('job')) {
+              <small class="p-error">{{ getControlErrorMessage('job') }}</small>
             }
           </div>
 
@@ -106,8 +114,8 @@
               <option [value]="status.maritalStatusID">{{ status.description }}</option>
               }
             </select>
-            @if (controlHasError('required', 'maritalStatusID')) {
-            <small class="p-error">يرجى اختيار الحالة الاجتماعية</small>
+            @if (getControlErrorMessage('maritalStatusID')) {
+              <small class="p-error">{{ getControlErrorMessage('maritalStatusID') }}</small>
             }
           </div>
 
@@ -118,9 +126,9 @@
               <span class="required">*</span>
             </label>
             <input pInputText type="text" formControlName="associateNumber" placeholder="أدخل كود التجنيد"
-              [class.p-invalid]="isControlInvalid('associateNumber')" />
-            @if (controlHasError('required', 'associateNumber')) {
-            <small class="p-error">كود التجنيد مطلوب</small>
+              [class.p-invalid]="isControlInvalid('associateNumber')" [maxlength]="50" />
+            @if (getControlErrorMessage('associateNumber')) {
+              <small class="p-error">{{ getControlErrorMessage('associateNumber') }}</small>
             }
           </div>
         </div>
@@ -139,9 +147,12 @@
               <i class="pi pi-arrows-v"></i>
               الطول (سم)
             </label>
-            <p-inputNumber formControlName="height" [min]="0" [step]="0.1" placeholder="ادخل الطول"
-              [useGrouping]="false">
+            <p-inputNumber formControlName="height" [min]="50" [max]="250" [step]="0.1" placeholder="50–250 سم"
+              [useGrouping]="false" [class.ng-invalid]="isControlInvalid('height')">
             </p-inputNumber>
+            @if (getControlErrorMessage('height')) {
+              <small class="p-error">{{ getControlErrorMessage('height') }}</small>
+            }
           </div>
 
           <div class="form-group">
@@ -149,9 +160,12 @@
               <i class="pi pi-chart-line"></i>
               الوزن (كغ)
             </label>
-            <p-inputNumber formControlName="weight" [min]="0" [step]="0.1" placeholder="ادخل الوزن"
-              [useGrouping]="false">
+            <p-inputNumber formControlName="weight" [min]="20" [max]="300" [step]="0.1" placeholder="20–300 كغ"
+              [useGrouping]="false" [class.ng-invalid]="isControlInvalid('weight')">
             </p-inputNumber>
+            @if (getControlErrorMessage('weight')) {
+              <small class="p-error">{{ getControlErrorMessage('weight') }}</small>
+            }
           </div>
 
           <div class="form-group">
@@ -159,7 +173,11 @@
               <i class="pi pi-calculator"></i>
               مؤشر كتلة الجسم (BMI)
             </label>
-            <input pInputText type="number" min="0" formControlName="bmi" placeholder="أدخل مؤشر كتلة الجسم" />
+            <input pInputText type="number" formControlName="bmi" placeholder="10–80"
+              [class.p-invalid]="isControlInvalid('bmi')" min="10" max="80" />
+            @if (getControlErrorMessage('bmi')) {
+              <small class="p-error">{{ getControlErrorMessage('bmi') }}</small>
+            }
           </div>
 
           <div class="form-group">
@@ -167,7 +185,11 @@
               <i class="pi pi-heart"></i>
               ضغط الدم
             </label>
-            <input pInputText type="text" formControlName="bloodPressure" placeholder="مثال: 120/80" />
+            <input pInputText type="text" formControlName="bloodPressure" placeholder="مثال: 120/80"
+              [class.p-invalid]="isControlInvalid('bloodPressure')" maxlength="20" />
+            @if (getControlErrorMessage('bloodPressure')) {
+              <small class="p-error">{{ getControlErrorMessage('bloodPressure') }}</small>
+            }
           </div>
 
           <div class="form-group">
@@ -175,7 +197,11 @@
               <i class="pi pi-circle"></i>
               النبض (نبضة/دقيقة)
             </label>
-            <input pInputText type="number" min="0" formControlName="pulse" placeholder="أدخل معدل النبض" />
+            <input pInputText type="number" formControlName="pulse" placeholder="30–250"
+              [class.p-invalid]="isControlInvalid('pulse')" min="30" max="250" (keydown)="preventMinus($event)" />
+            @if (getControlErrorMessage('pulse')) {
+              <small class="p-error">{{ getControlErrorMessage('pulse') }}</small>
+            }
           </div>
         </div>
 
@@ -230,8 +256,12 @@
               <i class="pi pi-pencil"></i>
               وصف الوشم (اختياري)
             </label>
-            <textarea formControlName="tattooDescription" rows="2"
-              placeholder="وصف مفصل للوشم - الموقع، الحجم، الألوان، إلخ..." class="form-control"></textarea>
+            <textarea formControlName="tattooDescription" rows="2" maxlength="500"
+              placeholder="وصف مفصل للوشم - الموقع، الحجم، الألوان، إلخ..." class="form-control"
+              [class.p-invalid]="isControlInvalid('tattooDescription')"></textarea>
+            @if (getControlErrorMessage('tattooDescription')) {
+              <small class="p-error">{{ getControlErrorMessage('tattooDescription') }}</small>
+            }
           </div>
           }
         </div>
@@ -241,9 +271,12 @@
             <i class="pi pi-bookmark"></i>
             العلامات المميزة الأخرى
           </label>
-          <textarea formControlName="distinctiveMarks" rows="3"
+          <textarea formControlName="distinctiveMarks" rows="3" maxlength="500"
             placeholder="أدخل أي علامات مميزة أو ملاحظات مهمة (الندوب، الوحمات، إلخ...)"
-            class="form-control"></textarea>
+            class="form-control" [class.p-invalid]="isControlInvalid('distinctiveMarks')"></textarea>
+          @if (getControlErrorMessage('distinctiveMarks')) {
+            <small class="p-error">{{ getControlErrorMessage('distinctiveMarks') }}</small>
+          }
         </div>
       </div>
 

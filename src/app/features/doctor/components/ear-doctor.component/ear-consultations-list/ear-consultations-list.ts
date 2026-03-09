@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,12 +11,13 @@ import { EarClinicExamService } from '../../../services/ear-clinic-exam.service'
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarConsultationComponent } from '../edit-ear-consultation/edit-ear-consultation';
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-ear-consultations-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule, TooltipModule, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, TooltipModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
   templateUrl: './ear-consultations-list.html',
   styleUrls: ['./ear-consultations-list.scss']
 })
@@ -29,7 +30,6 @@ export class EarConsultationsList implements OnInit {
   totalRecords = 0
   loading = false
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EarClinicExamService,
@@ -68,9 +68,9 @@ export class EarConsultationsList implements OnInit {
     )
   }
   
-  onFilterChange(event: any) {
-    this.globalFilter = event.target.value;
-    this.page = 1; // إعادة تعيين الصفحة إلى الأولى عند البحث
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').trim();
+    this.page = 1;
     this.loadConsultations();
   }
 
@@ -126,9 +126,6 @@ export class EarConsultationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

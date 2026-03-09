@@ -1,18 +1,20 @@
-import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ApplicantModel } from '../../models/applicant.model';
 import { ApplicantService } from '../../services/applicant.service';
 import { PaginatorComponent } from '../../../../shared/components/paginator/paginator.component';
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import { BarcodePrintService } from '../../services/barcode-print.service';
 import { MessageService } from 'primeng/api';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { Table } from 'primeng/table';
-import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
+import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { ActionButtonsComponent, ActionButtonConfig } from '../../../../shared/components/action-buttons/action-buttons.component';
 import { DialogWrapperComponent } from '../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
@@ -22,10 +24,12 @@ import { DialogWrapperComponent } from '../../../../shared/components/dialog-wra
   imports: [
     TableModule,
     CommonModule,
+    FormsModule,
     PaginatorComponent,
     TagModule,
+    TooltipModule,
     GregorianDatePipe,
-    FilterBarComponent,
+    ResetFiltersButtonComponent,
     PageHeaderComponent,
     ActionButtonsComponent,
     DialogWrapperComponent
@@ -58,7 +62,8 @@ export class ApplicantsList implements OnInit, AfterViewInit {
   ];
   
   @ViewChild('table') table?: Table;
-  
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
+
   constructor(
     private applicantService: ApplicantService,
     private cdr: ChangeDetectorRef,
@@ -98,8 +103,9 @@ export class ApplicantsList implements OnInit, AfterViewInit {
     this.loadApplicants();
   }
 
-  onSearchChange(value: string): void {
-    this.globalFilter = (value || '').toLowerCase().trim();
+  onFilterChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
     this.page = 1;
     this.loadApplicants();
     setTimeout(() => this.scrollService.scrollToTop(true), 300);
@@ -136,20 +142,6 @@ export class ApplicantsList implements OnInit, AfterViewInit {
     }
   }
 
-  onRowAction(actionId: string, applicant: ApplicantModel): void {
-    if (actionId === 'view') {
-      this.viewApplicant(applicant);
-      return;
-    }
-    if (actionId === 'edit') {
-      this.editApplicant(applicant);
-      return;
-    }
-    if (actionId === 'print') {
-      this.openPrintDialog(applicant);
-    }
-  }
-  
   editApplicant(applicant: ApplicantModel): void {
     if (!applicant?.applicantID) {
       this.messageService.add({
@@ -227,6 +219,9 @@ export class ApplicantsList implements OnInit, AfterViewInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

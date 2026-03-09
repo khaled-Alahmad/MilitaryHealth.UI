@@ -1,5 +1,5 @@
 import { ToastModule } from 'primeng/toast';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
@@ -12,14 +12,15 @@ import { PaginatorComponent } from "../../../../../shared/components/paginator/p
 import { Table, TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-orthopedic-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule, FilterBarComponent, PageHeaderComponent],
   templateUrl: './orthopedic-consultations-list.html',
-  styleUrls: ['./orthopedic-consultations-list.scss'] // ✅ صحيح: styleUrls وليس styleUrl
+  styleUrls: ['./orthopedic-consultations-list.scss']
 })
 export class OrthopedicConsultationsList implements OnInit {
   consultations: Consultation[] = [];
@@ -33,7 +34,6 @@ export class OrthopedicConsultationsList implements OnInit {
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private service: OrthopedicExamService, private toastr: ToastrService,
     private modalService: NgbModal
@@ -68,12 +68,12 @@ export class OrthopedicConsultationsList implements OnInit {
     this.loadConsultations();
   }
 
-  onFilterChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-    this.globalFilter = value;
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').trim();
     this.page = 1;
     this.loadConsultations();
   }
+
   openEditDialog(c: Consultation) {
     this.selectedConsultation = { ...c };
   }
@@ -119,9 +119,6 @@ export class OrthopedicConsultationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

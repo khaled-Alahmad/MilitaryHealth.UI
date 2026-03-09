@@ -1,0 +1,97 @@
+/* ===========================================
+   List Page (Table + Filter) - Unified design
+   للاستشارات والاستقصاءات والفحوصات
+   =========================================== */
+
+.list-page-section,
+.user-header-section {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  margin: 0 auto var(--spacing-md);
+}
+
+.table-toolbar {
+  margin-bottom: var(--spacing-md);
+  padding: 0.75rem;
+  border: 1px solid #e7edf3;
+  border-radius: var(--border-radius-md);
+  background: #f8fafc;
+  display: flex;
+  justify-content: flex-end;
+  direction: rtl;
+}
+
+.table-toolbar__filter {
+  width: min(100%, 560px);
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+  flex: 0 0 auto;
+}
+
+.table-toolbar__filter app-filter-bar {
+  display: block;
+  width: 100%;
+}
+
+.custom-table {
+  direction: rtl;
+}
+
+.compact-table {
+  margin-top: 0;
+}
+
+.list-page-section .my-3,
+.user-header-section .my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.list-page-section .btn.btn-sm,
+.user-header-section .btn.btn-sm {
+  border-radius: 8px;
+}
+
+/* أزرار إجراءات الجدول (أيقونة فقط) - مثل صفحة الفحوصات العينية */
+.btn-icon-action {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-icon-action i {
+  font-size: 0.85rem;
+  color: var(--primary-dark);
+}
+
+.btn-icon-action:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.btn-icon-action:hover i {
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .table-toolbar {
+    padding: 0.65rem;
+  }
+
+  .table-toolbar__filter {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+}

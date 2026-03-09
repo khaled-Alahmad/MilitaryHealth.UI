@@ -1,89 +1,83 @@
-<div class="orthopedic-consultations-page deferred-exams-page container mt-4">
+<div class="list-page-section">
+  <app-page-header
+    variant="banner"
+    title="استشارات العيادة العظمية"
+    subtitle="متابعة طلبات الاستشارة ونتائجها"
+    icon="pi pi-comments">
+  </app-page-header>
 
-
-  <div class="table-toolbar mb-3">
-    <div class="filter-reset-wrapper">
-      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
-    <div class="search-wrapper">
-        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-        (input)="onFilterChange($event)" />
-      <i class="fas fa-search search-icon"></i>
-      </div>
+  <div class="table-toolbar">
+    <div class="table-toolbar__filter">
+      <app-filter-bar
+        [searchValue]="globalFilter"
+        searchPlaceholder="ابحث عن رقم الملف أو الاسم"
+        [showReset]="true"
+        [loading]="loading"
+        [showSearchHint]="false"
+        (searchChange)="onFilterChange($event)"
+        (reset)="resetFilters()">
+      </app-filter-bar>
     </div>
   </div>
 
-  <!-- جدول الاستشارات -->
-  <p-table #table 
-           [value]="filteredConsultations" 
-           [totalRecords]="totalRecords" 
-           [rows]="rowsPerPage" 
-           [sortMode]="'multiple'" 
-           class="custom-table">
-
+  <p-table
+    #table
+    [value]="filteredConsultations"
+    [loading]="loading"
+    class="custom-table compact-table"
+    [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم الملف</th>
-        <th>نوع الاستشارة</th>
-        <th>سبب الإحالة</th>
-        <th>اسم الطبيب</th>
-        <th>النتيجة</th>
-        <th>الملف المرفق</th> 
-        <th>إجراءات</th>
+        <th style="width: 120px">رقم ملف المريض</th>
+        <th style="width: 130px">نوع الاستشارة</th>
+        <th style="width: 130px">سبب الإحالة</th>
+        <th style="width: 120px">اسم الطبيب</th>
+        <th style="width: 100px">النتيجة</th>
+        <th style="width: 90px">الملف المرفق</th>
+        <th style="width: 80px">إجراءات</th>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="body" let-c>
       <tr>
-        <td>{{ c.applicantFileNumber || '-' }}</td>
-        <td>{{ c.consultationType || '-' }}</td>
-        <td>{{ c.referralReason || '-' }}</td>
-        <td>{{ c.doctor.fullName || '-' }}</td>
+        <td><span class="fw-bold small">{{ c.applicantFileNumber || '-' }}</span></td>
+        <td><span class="fw-bold small">{{ c.consultationType || '-' }}</span></td>
+        <td><span class="fw-bold small">{{ c.referralReason || '-' }}</span></td>
+        <td><span class="fw-bold small">{{ c.doctor?.fullName || '-' }}</span></td>
         <td>
-          <span [ngClass]="getBadgeClass(c.result)">{{ c.result || '-' }}</span>
+          <span [ngClass]="getBadgeClass(c.result)" class="small">{{ c.result || '-' }}</span>
         </td>
-        
         <td class="text-center">
-          @if(c.attachment){
+          @if (c.attachment) {
             <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
-                (click)="openFile(c.attachment)">
-                <i class="bi bi-file-earmark-text me-1"></i>
-                فتح الملف
+              (click)="openFile(c.attachment)">
+              <i class="bi bi-file-earmark-text me-1"></i>
+              فتح الملف
             </button>
-            }
-            @else {
+          } @else {
             <span>لا يوجد ملف</span>
-            }
+          }
         </td>
-        
         <td class="text-center">
           <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
-          (click)="openEditConsultationModal(c)">
-          <i class="pi pi-pen-to-square"></i>
+            (click)="openEditConsultationModal(c)">
+            <i class="pi pi-pen-to-square"></i>
             إضافة نتيجة
-      </button>
-          <!-- <button type="button" class="btn btn-sm btn-primary" title="اضافة نتيجة" (click)="openEditConsultationModal(c)">
-            <i class="bi bi-pencil-square me-1"></i>
-            اضافة نتيجة
-        </button> -->
+          </button>
         </td>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center">لا توجد استشارات</td>
+        <td colspan="7" class="text-center py-2 small">لا توجد استشارات</td>
       </tr>
     </ng-template>
   </p-table>
 
-  <!-- المرقم -->
-  <app-paginator [totalRecords]="totalRecords"
-                 [pageSize]="rowsPerPage"
-                 [currentPage]="page"
-                 (pageChange)="onPageChange($event)"
-                 (pageSizeChange)="onPageSizeChange($event)">
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-
-
-
 </div>

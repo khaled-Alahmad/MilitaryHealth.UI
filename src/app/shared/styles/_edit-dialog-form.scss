@@ -1,0 +1,123 @@
+/* تنسيق موحد لديالوغات إضافة/تعديل (استشارة، استقصاء) = مطابق لـ app-dialog-wrapper */
+
+.edit-dialog-root {
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.edit-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.dialog-wrapper__icon {
+  color: var(--primary-dark);
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.dialog-wrapper__title {
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.dialog-wrapper__subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--neutral-medium);
+  font-size: var(--font-size-sm);
+}
+
+.btn-close-dialog {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.edit-dialog-body {
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+  flex: 1;
+  color: var(--neutral-dark);
+  line-height: 1.6;
+}
+
+.edit-dialog-form {
+  direction: rtl;
+  overflow: visible;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 1.25rem 0 0.9rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(5, 66, 57, 0.15);
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+  display: block;
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #428177;
+  box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1);
+}
+
+textarea.form-control {
+  min-height: 80px;
+}
+
+.form-control[readonly] {
+  background-color: #f3f4f6;
+  cursor: default;
+}
+
+.preview-container {
+  margin-top: 0.75rem;
+}
+
+.preview-img {
+  max-height: 200px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.edit-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid #e9ecef;
+  background: #f8fafc;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  width: 100%;
+}

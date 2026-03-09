@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditConsultation } from '../../Consultations/edit-consultation/edit-consultation';
 import { Consultation } from '../../../models/consultation.model';
@@ -10,12 +10,13 @@ import { ButtonModule } from 'primeng/button';
 import { Table, TableModule } from "primeng/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-surgery-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
   templateUrl: './surgery-consultations-list.html',
   styleUrls: ['./surgery-consultations-list.scss']
 })
@@ -30,7 +31,7 @@ export class SurgeryConsultationsList implements OnInit {
   totalRecords = 0;
   globalFilter: string = '';
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
+
   constructor(
     private service: SurgicalExamService,
     private toastr: ToastrService,
@@ -67,12 +68,10 @@ export class SurgeryConsultationsList implements OnInit {
     this.page = 1;
     this.loadConsultations();
   }
-  onFilterChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-    this.globalFilter = value;
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').trim();
     this.page = 1;
     this.loadConsultations();
-
   }
 
   openEditDialog(c: Consultation) { 
@@ -105,12 +104,17 @@ export class SurgeryConsultationsList implements OnInit {
     });
   }
 
+  getBadgeClass(result: string): string {
+    if (!result) return 'badge bg-secondary';
+    if (result === 'مقبول') return 'badge bg-success';
+    if (result === 'مرفوض') return 'badge bg-danger';
+    if (result === 'مؤجل') return 'badge bg-warning text-dark';
+    return 'badge bg-secondary';
+  }
+
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Consultation } from '../../../models/consultation.model';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-consultation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule],
   templateUrl: './edit-consultation.html',
   styleUrls: ['./edit-consultation.scss']
 })
@@ -18,14 +19,10 @@ export class EditConsultation {
   @Input() consultation!: Consultation;
   @Output() consultationUpdated = new EventEmitter<any>();
 
-  
-  @Output() dialogClosed = new EventEmitter<boolean>();
-
   consultationForm!: FormGroup;
   uploadedPath: string | null = null;
   previewUrl: string | null = null;
   loading = false;
-  showModal = true;
 
   constructor(
     private fb: FormBuilder,
@@ -37,9 +34,8 @@ export class EditConsultation {
 
   ngOnInit(): void {
     this.consultationForm = this.fb.group({
-      consultationType: [this.consultation.consultationType], // مخفي
-      // referredDoctor: [this.consultation.referredDoctor], // ❌ تم حذفه
-      referralReason: [this.consultation.referralReason || ''], // ✅ جديد
+      consultationType: [this.consultation.consultationType],
+      referralReason: [this.consultation.referralReason || ''],
       result: [this.consultation.result || ''],
       attachment: [this.consultation.attachment || null]
     });
@@ -51,10 +47,7 @@ export class EditConsultation {
   }
 
   closeModal() {
-    this.showModal = false;
-    this.dialogClosed.emit(false);
     this.modalService.dismissAll();
-
   }
 
   onFileSelected(event: any) {
@@ -89,8 +82,7 @@ export class EditConsultation {
       doctorID,
       applicantFileNumber: this.consultation.applicantFileNumber,
       consultationType: this.consultationForm.value.consultationType,
-      // referredDoctor: this.consultationForm.value.referredDoctor, // ❌ تم حذفه
-      referralReason: this.consultationForm.value.referralReason, // ✅ جديد
+      referralReason: this.consultationForm.value.referralReason,
       result: this.consultationForm.value.result,
       attachment: this.uploadedPath ?? ''
     };
@@ -105,7 +97,6 @@ export class EditConsultation {
 
       // 🔹 إطلاق الحدث لإعلام الأب أن التحديث تم
       this.consultationUpdated.emit(true);
-
       this.closeModal();
     },
     error: () => {

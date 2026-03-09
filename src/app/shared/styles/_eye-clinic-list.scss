@@ -1,0 +1,233 @@
+/* ===========================================
+   العيادة العينية - تصميم موحد للجدول والفلتر
+   (الفحوصات المؤجلة، الاستشارات، الاستقصاءات)
+   =========================================== */
+
+.user-header-section {
+  background: white !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: var(--spacing-xl) !important;
+  margin-bottom: var(--spacing-xl) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.table-toolbar {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: flex-end;
+  direction: rtl;
+}
+
+.filter-reset-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.625rem 2.5rem 0.625rem 1rem;
+  border: 2px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--font-size-sm) !important;
+  font-family: var(--font-family-primary) !important;
+  transition: all var(--transition-fast) !important;
+
+  &:focus {
+    border-color: var(--primary-medium) !important;
+    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1) !important;
+    outline: none !important;
+  }
+}
+
+.search-icon {
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-dark) !important;
+  font-size: var(--font-size-base) !important;
+}
+
+/* ===========================================
+   جدول PrimeNG - تنسيق موحد
+   =========================================== */
+
+:host ::ng-deep .p-datatable {
+  background: white !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--shadow-xl) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #054239 !important;
+  color: #ffffff !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 0.75rem 1rem !important;
+  text-align: center !important;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+
+  &:first-child {
+    border-top-right-radius: 15px !important;
+  }
+
+  &:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-top-left-radius: 15px !important;
+  }
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+
+  &:nth-child(even) {
+    background: #f8f9fa !important;
+  }
+
+  &:hover {
+    background: #e8ecef !important;
+
+    td {
+      font-weight: 500 !important;
+    }
+  }
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  white-space: nowrap;
+  vertical-align: middle !important;
+  border-bottom: 2px solid #e0e0e0 !important;
+  border-right: 1px solid #e0e0e0 !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+  color: #34495e !important;
+
+  &:last-child {
+    border-right: 1px solid #e0e0e0 !important;
+  }
+
+  .fw-bold {
+    color: #054239 !important;
+    font-weight: 600 !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+
+  small {
+    color: #7f8c8d !important;
+    font-size: 0.7rem !important;
+  }
+}
+
+/* Badges */
+:host ::ng-deep .p-datatable .p-datatable-tbody .badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all var(--transition-fast) !important;
+
+  &.bg-success,
+  &.bg-primary,
+  &.bg-primary-subtle {
+    background: #054239 !important;
+    color: white !important;
+  }
+
+  &.bg-warning,
+  &.bg-warning-subtle {
+    background: #b9a779 !important;
+    color: white !important;
+  }
+
+  &.bg-danger {
+    background: #6b1f2a !important;
+    color: white !important;
+  }
+
+  &.bg-secondary,
+  &.bg-secondary-subtle {
+    background: #3d3a3b !important;
+    color: white !important;
+  }
+
+  &.bg-info {
+    background: #428177 !important;
+    color: white !important;
+  }
+
+  .text-primary-emphasis,
+  .text-secondary-emphasis {
+    color: white !important;
+  }
+}
+
+/* أزرار الإجراءات (أيقونة فقط) */
+:host ::ng-deep .p-datatable .p-datatable-tbody .btn-icon-action {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 50% !important;
+  border: 2px solid #ddd !important;
+  background: white !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+
+  i {
+    font-size: 0.875rem !important;
+    color: #054239 !important;
+  }
+
+  &:hover {
+    background: #054239 !important;
+    border-color: #054239 !important;
+    transform: scale(1.1) !important;
+
+    i {
+      color: white !important;
+    }
+  }
+
+  &:active {
+    transform: scale(0.95) !important;
+  }
+}
+
+/* Tooltip */
+:host ::ng-deep .p-tooltip .p-tooltip-text {
+  font-size: 0.7rem !important;
+  padding: 0.375rem 0.5rem !important;
+  font-weight: 500 !important;
+}
+
+@media (max-width: 768px) {
+  .search-wrapper {
+    width: 100%;
+  }
+}
