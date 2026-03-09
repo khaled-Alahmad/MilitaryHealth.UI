@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, of, Observable } from 'rxjs';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 import { EyeExam } from '../../../models/eye-exam.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, normalizeHealthStatus, resolveHealthStatusValue } from '../../../constants/health-status-options';
@@ -15,7 +17,7 @@ import { PagedResponse } from '../../../../../shared/models/paged-response.model
 
 @Component({
   selector: 'app-edit-eye-exam',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './edit-eye-exam.html',
   styleUrl: './edit-eye-exam.scss'
 })
@@ -97,8 +99,8 @@ export class EditEyeExam implements OnInit {
     }
 
     this.examForm = this.fb.group({
-      vision: [vision, Validators.required],
-      visionLeft: [visionLeft, Validators.required],
+      vision: [vision, [Validators.required, Validators.min(0), Validators.max(10)]],
+      visionLeft: [visionLeft, [Validators.required, Validators.min(0), Validators.max(10)]],
       colorTest: [colorTestNormalized.status, Validators.required],
       colorTestOther: [colorTestNormalized.other],
       colorTestLeft: [colorTestLeftNormalized.status, Validators.required],
@@ -413,5 +415,31 @@ private updateRefractions(
       const rightEyeArray = this.examForm.get('rightEye.refractions') as FormArray;
       rightEyeArray.clear();
     }
+  }
+
+  // ---------------------- VALIDATION HELPERS ----------------------
+  getErrorMessage(controlName: string): string {
+    const control = this.examForm.get(controlName);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) {
+        return 'هذا الحقل مطلوب';
+      }
+      if (controlName === 'vision' || controlName === 'visionLeft') {
+        if (control.errors?.['min'] || control.errors?.['max']) {
+          return 'يجب أن تكون القيمة بين 0 و 10';
+        }
+      }
+    }
+    return '';
+  }
+
+  isFieldValid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.valid && control?.touched);
+  }
+
+  isFieldInvalid(controlName: string): boolean {
+    const control = this.examForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
   }
 }

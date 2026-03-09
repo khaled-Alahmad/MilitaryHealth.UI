@@ -1,79 +1,87 @@
-/* Import unified modal styles */
-@use '../../shared-modal-styles.scss' as *;
-
-/* Custom overrides for this component */
-.dialog-card {
-  background: #edebe0 !important;
+.exam-form {
+  direction: rtl;
+  overflow: visible;
 }
 
-.dialog-form {
-  padding: 2rem;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.dialog-header-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.dialog-header-icon {
-  font-size: 1.25rem;
-  color: var(--accent-gold);
-}
-
-.dialog-subtitle {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.85rem;
-}
-
-.modal-footer {
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
 .input-group-q {
   position: relative;
   display: flex;
   align-items: stretch;
   width: 100%;
   flex-direction: row-reverse;
+  border-radius: 10px;
+  overflow: hidden;
 }
-// تحسين Radio Buttons و Checkboxes
+
 .form-check {
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem !important;
+  gap: 0.4rem;
+}
 
-  .form-check-input {
-    margin-top: 0 !important;
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-    margin-bottom: 0 !important;
-    width: 1.1rem !important;
-    height: 1.1rem !important;
-    flex-shrink: 0;
-  }
+.form-check-input {
+  margin: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+}
 
-  .form-check-label {
-    margin: 0 !important;
-    padding: 0 !important;
-    cursor: pointer;
-    font-weight: 500;
-  }
+.form-check-label {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .form-check-inline {
-  margin-left: 0;
-  margin-right: 1rem;
+  margin-inline-start: 0;
+  margin-inline-end: 1rem;
+}
 
-  &:last-child {
-    margin-right: 0;
-  }
+.form-check-inline:last-child {
+  margin-inline-end: 0;
+}
+
+.refraction-choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.eye-toggle-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 1.25rem 0 0.9rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(5, 66, 57, 0.15);
+}
+
+.card {
+  border: 1px solid rgba(5, 66, 57, 0.14);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.card-header {
+  background: rgba(5, 66, 57, 0.05);
+  border-bottom: 1px solid rgba(5, 66, 57, 0.1);
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
 }

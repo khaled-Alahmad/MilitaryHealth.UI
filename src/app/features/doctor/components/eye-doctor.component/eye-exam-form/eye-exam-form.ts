@@ -52,8 +52,8 @@ export class EyeExamForm implements OnInit {
   // ---------------------- INIT FORM ----------------------
   private initForm() {
     this.examForm = this.fb.group({
-      vision: ['', Validators.required],
-      visionLeft: ['', Validators.required],
+      vision: ['', [Validators.required, Validators.min(0), Validators.max(10)]],
+      visionLeft: ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       colorTest: ['سليم', Validators.required],
       colorTestOther: [''],
       colorTestLeft: ['سليم', Validators.required],
@@ -337,6 +337,11 @@ private buildExamData(doctorID: number) {
     if (control?.invalid && control?.touched) {
       if (control.errors?.['required']) {
         return 'هذا الحقل مطلوب';
+      }
+      if (controlName === 'vision' || controlName === 'visionLeft') {
+        if (control.errors?.['min'] || control.errors?.['max']) {
+          return 'يجب أن تكون القيمة بين 0 و 10';
+        }
       }
     }
     return '';

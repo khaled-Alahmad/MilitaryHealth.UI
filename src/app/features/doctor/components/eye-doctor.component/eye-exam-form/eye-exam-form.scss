@@ -23,6 +23,20 @@
   border-bottom: 1px solid rgba(5, 66, 57, 0.1);
 }
 
+.input-group-q {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  flex-direction: row-reverse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.input-group-q .form-control,
+.input-group-q .input-group-text {
+  border: 0;
+}
+
 .form-control,
 .form-select {
   border-radius: 10px;

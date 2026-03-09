@@ -1,23 +1,16 @@
-<div class="professional-modal-container">
-  <div class="modal-header-professional">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-eye"></i>
-      </div>
-      <div class="header-text">
-        <h3 class="modal-title-professional">تفاصيل الفحص العيني</h3>
-        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }} - {{ getApplicantName() }}</span>
-      </div>
-    </div>
-    <button type="button" class="btn-close-professional" (click)="close()">
-      <i class="pi pi-times"></i>
-    </button>
-  </div>
-
-  <div class="modal-body-professional">
+<app-dialog-wrapper
+  [visible]="true"
+  title="تفاصيل الفحص العيني"
+  [subtitle]="'رقم الملف: ' + exam.applicantFileNumber + ' - ' + getApplicantName()"
+  icon="pi pi-eye"
+  width="70rem"
+  [useDefaultFooter]="false"
+  [closable]="true"
+  (hide)="close()">
+  <div class="eye-exam-details-body">
     <div class="details-grid">
       <div class="info-card">
-        <h4>القدرة البصرية</h4>
+        <h6 class="details-section-title">القدرة البصرية</h6>
         <div class="inline-values">
           <span class="info-chip">R: {{ exam.vision || 'غير محدد' }} /10</span>
           <span class="info-chip">L: {{ exam.visionLeft || 'غير محدد' }} /10</span>
@@ -25,7 +18,7 @@
       </div>
 
       <div class="info-card">
-        <h4>اختبار الألوان</h4>
+        <h6 class="details-section-title">اختبار الألوان</h6>
         <div class="inline-values">
           <span class="info-chip">R: {{ exam.colorTest || 'غير محدد' }}</span>
           <span class="info-chip">L: {{ exam.colorTestLeft || 'غير محدد' }}</span>
@@ -33,7 +26,7 @@
       </div>
 
       <div class="info-card">
-        <h4>أسوأ الانكسار</h4>
+        <h6 class="details-section-title">أسوأ الانكسار</h6>
         <div class="inline-values">
           <span class="info-chip">R: {{ exam.worstRefractionRight || '-' }}</span>
           <span class="info-chip">L: {{ exam.worstRefractionLeft || '-' }}</span>
@@ -41,44 +34,52 @@
       </div>
 
       <div class="info-card">
-        <h4>النتيجة</h4>
-        <div class="info-value result-badge" 
-             [class.result-accepted]="exam.result?.description === 'مقبول'" 
-             [class.result-rejected]="exam.result?.description === 'مرفوض'"
-             [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
+        <h6 class="details-section-title">النتيجة</h6>
+        <div
+          class="info-value result-badge"
+          [class.result-accepted]="exam.result?.description === 'مقبول'"
+          [class.result-rejected]="exam.result?.description === 'مرفوض'"
+          [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
           {{ getResultName(exam.resultID) }}
         </div>
       </div>
     </div>
 
-    <div class="section-header"><h4>انكسارات العين اليمنى</h4></div>
+    <h6 class="details-section-title">انكسارات العين اليمنى</h6>
     <div class="refraction-list" *ngIf="rightEyeRefractions.length > 0; else noRight">
       <div class="refraction-item" *ngFor="let refraction of rightEyeRefractions">
         <span>{{ getRefractionTypeName(refraction.refractionTypeID) }}</span>
         <strong>{{ refraction.refractionValue || 'غير محدد' }}</strong>
       </div>
     </div>
-    <ng-template #noRight><div class="no-data-message">لا توجد قياسات انكسار للعين اليمنى</div></ng-template>
+    <ng-template #noRight>
+      <div class="no-data-message">لا توجد قياسات انكسار للعين اليمنى</div>
+    </ng-template>
 
-    <div class="section-header"><h4>انكسارات العين اليسرى</h4></div>
+    <h6 class="details-section-title">انكسارات العين اليسرى</h6>
     <div class="refraction-list" *ngIf="leftEyeRefractions.length > 0; else noLeft">
       <div class="refraction-item" *ngFor="let refraction of leftEyeRefractions">
         <span>{{ getRefractionTypeName(refraction.refractionTypeID) }}</span>
         <strong>{{ refraction.refractionValue || 'غير محدد' }}</strong>
       </div>
     </div>
-    <ng-template #noLeft><div class="no-data-message">لا توجد قياسات انكسار للعين اليسرى</div></ng-template>
+    <ng-template #noLeft>
+      <div class="no-data-message">لا توجد قياسات انكسار للعين اليسرى</div>
+    </ng-template>
 
-    <div class="section-header"><h4>ملاحظات إضافية</h4></div>
+    <h6 class="details-section-title">ملاحظات إضافية</h6>
     <div class="info-value">{{ exam.otherDiseases || 'لا توجد أمراض أخرى مسجلة' }}</div>
     @if (exam.reason) {
       <div class="info-value mt-2">{{ exam.reason }}</div>
     }
   </div>
 
-  <div class="modal-footer-professional">
-    <button type="button" class="btn btn-secondary" (click)="close()">
-      <i class="pi pi-times me-2"></i> إغلاق
-    </button>
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إغلاق"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="close()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

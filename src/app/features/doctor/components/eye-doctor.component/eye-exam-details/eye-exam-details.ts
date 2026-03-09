@@ -5,11 +5,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { EyeExam } from '../../../models/eye-exam.model';
 import { ApplicantService } from '../../../../reception/services/applicant.service';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-eye-exam-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './eye-exam-details.html',
   styleUrls: ['./eye-exam-details.scss']
 })

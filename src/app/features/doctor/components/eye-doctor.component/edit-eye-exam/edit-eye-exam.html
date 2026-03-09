@@ -1,36 +1,54 @@
-<div class="modal-content modal-lg">
-  <div class="modal-header">
-    <div class="dialog-header-content">
-      <i class="pi pi-pencil dialog-header-icon"></i>
-      <div>
-        <h4 class="modal-title">تعديل الفحص العيني</h4>
-        <p class="dialog-subtitle">تحديث بيانات الفحص والانكسارات</p>
-      </div>
-    </div>
-    <button type="button" class="btn-close btn-close-black" aria-label="Close" (click)="cancel()"></button>
-  </div>
+<app-dialog-wrapper
+  [visible]="true"
+  title="تعديل الفحص العيني"
+  subtitle="تحديث بيانات الفحص والانكسارات"
+  icon="pi pi-pencil"
+  width="90rem"
+  [useDefaultFooter]="false"
+  [closable]="true"
+  (hide)="cancel()">
+  <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="exam-form">
 
-  <div class="modal-body">
-    <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="dialog-form">
-
-      <div class="row mb-3">
+      <!-- القدرة البصرية -->
+      <h6 class="section-title">القدرة البصرية</h6>
+      <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label">القدرة البصرية R:</label>
-          <div class="input-group-q ">
+          <div class="input-group-q">
             <span class="input-group-text">/10</span>
-            <input type="number" class="form-control" formControlName="vision" placeholder="أدخل الرقم" />
+            <input
+              type="number"
+              class="form-control"
+              formControlName="vision"
+              placeholder="أدخل الرقم"
+              [class.is-invalid]="isFieldInvalid('vision')"
+              [class.is-valid]="isFieldValid('vision')" />
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="getErrorMessage('vision')">
+            <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('vision') }}
           </div>
         </div>
         <div class="col-md-6">
           <label class="form-label">القدرة البصرية L:</label>
           <div class="input-group-q">
             <span class="input-group-text">/10</span>
-            <input type="number" class="form-control" formControlName="visionLeft" placeholder="أدخل الرقم" />
+            <input
+              type="number"
+              class="form-control"
+              formControlName="visionLeft"
+              placeholder="أدخل الرقم"
+              [class.is-invalid]="isFieldInvalid('visionLeft')"
+              [class.is-valid]="isFieldValid('visionLeft')" />
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="getErrorMessage('visionLeft')">
+            <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('visionLeft') }}
           </div>
         </div>
       </div>
 
-      <div class="row mb-3">
+      <!-- اختبار الألوان -->
+      <h6 class="section-title mt-4">اختبار الألوان</h6>
+      <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label mb-2">اختبار الألوان R:</label>
           <div class="d-flex flex-wrap gap-3">
@@ -67,44 +85,73 @@
         </div>
       </div>
 
-      <div class="row mb-3">
+      <!-- أسوأ الانكسار -->
+      <h6 class="section-title mt-4">أسوأ الانكسار</h6>
+      <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label mb-2">R: أسوأ الانكسار</label>
-          <div class="d-flex flex-wrap gap-3 ms-3">
+          <label class="form-label mb-2">R: أسوأ الانكسار <span class="text-danger">*</span></label>
+          <div class="refraction-choice-group">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
-                id="worstRefractionRightNotImportantEdit" value="غير مهمة" />
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="worstRefractionRight"
+                id="worstRefractionRightNotImportantEdit"
+                value="غير مهمة" />
               <label class="form-check-label" for="worstRefractionRightNotImportantEdit">غير مهمة</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
-                id="worstRefractionRightImportantEdit" value="مهمة" />
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="worstRefractionRight"
+                id="worstRefractionRightImportantEdit"
+                value="مهمة" />
               <label class="form-check-label" for="worstRefractionRightImportantEdit">مهمة</label>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <label class="form-label mb-2">L: أسوأ الانكسار</label>
-          <div class="ms-3 d-flex flex-wrap gap-3">
-
+          <label class="form-label mb-2">L: أسوأ الانكسار <span class="text-danger">*</span></label>
+          <div class="refraction-choice-group">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
-                id="worstRefractionLeftNotImportantEdit" value="غير مهمة" />
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="worstRefractionLeft"
+                id="worstRefractionLeftNotImportantEdit"
+                value="غير مهمة" />
               <label class="form-check-label" for="worstRefractionLeftNotImportantEdit">غير مهمة</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
-                id="worstRefractionLeftImportantEdit" value="مهمة" />
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="worstRefractionLeft"
+                id="worstRefractionLeftImportantEdit"
+                value="مهمة" />
               <label class="form-check-label" for="worstRefractionLeftImportantEdit">مهمة</label>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- أزرار إظهار/إخفاء العيون -->
+      <div class="eye-toggle-actions mt-2 mb-3">
+        <button type="button" class="btn btn-outline-primary" (click)="toggleRightEye()">
+          <i [class]="showRightEye ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          {{ showRightEye ? 'إخفاء العين اليمنى' : 'إضافة العين اليمنى' }}
+        </button>
+        <button type="button" class="btn btn-outline-primary" (click)="toggleLeftEye()">
+          <i [class]="showLeftEye ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          {{ showLeftEye ? 'إخفاء العين اليسرى' : 'إضافة العين اليسرى' }}
+        </button>
+      </div>
+
       <!-- قسم فحوصات الانكسار -->
       <div class="refraction-sections">
         <!-- العين اليمنى -->
-        <div class="card mb-3">
+        <div class="card mb-3" *ngIf="showRightEye">
           <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h6 class="mb-0">فحص الانكسار - العين اليمنى</h6>
             <button type="button" class="btn btn-sm btn-primary" (click)="addRefraction('rightEye')">
@@ -148,25 +195,14 @@
           </div>
         </div>
 
-        <!-- زر إضافة العين اليسرى -->
-        <div class="text-center mb-3" *ngIf="!showLeftEye">
-          <button type="button" class="btn btn-outline-primary" (click)="toggleLeftEye()">
-            <i class="fas fa-plus-circle"></i>
-            إضافة فحص العين اليسرى
-          </button>
-        </div>
-
         <!-- العين اليسرى -->
         <div class="card mb-3" *ngIf="showLeftEye">
           <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h6 class="mb-0">فحص الانكسار - العين اليسرى</h6>
-            <div>
-              <button type="button" class="btn btn-sm btn-primary me-2" (click)="addRefraction('leftEye')">
-                <i class="pi pi-plus me-1"></i>
-                إضافة انكسار
-              </button>
-              <button type="button" class="btn-close" (click)="toggleLeftEye()"></button>
-            </div>
+            <button type="button" class="btn btn-sm btn-primary" (click)="addRefraction('leftEye')">
+              <i class="pi pi-plus me-1"></i>
+              إضافة انكسار
+            </button>
           </div>
           <div class="card-body" formGroupName="leftEye">
             <div formArrayName="refractions">
@@ -217,22 +253,38 @@
       <div class="row mb-3">
         <div class="col-md-6">
           <label class="form-label">النتيجة</label>
-          <select class="form-select" formControlName="resultID">
+          <select
+            class="form-select"
+            formControlName="resultID"
+            [class.is-invalid]="isFieldInvalid('resultID')"
+            [class.is-valid]="isFieldValid('resultID')">
             <option *ngFor="let r of results" [value]="r.resultID">
               {{ r.description }}
             </option>
           </select>
+          <div class="invalid-feedback d-block" *ngIf="getErrorMessage('resultID')">
+            <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('resultID') }}
+          </div>
         </div>
         <div class="col-md-6">
           <label class="form-label">السبب</label>
           <textarea class="form-control" formControlName="reason" placeholder="أدخل السبب إذا وجد"></textarea>
         </div>
       </div>
-    </form>
-  </div>
+  </form>
 
-  <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="cancel()">إلغاء</button>
-    <button type="submit" class="btn btn-primary" [disabled]="!examForm.valid" (click)="onSubmit()">حفظ</button>
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إلغاء"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="cancel()"></p-button>
+    <p-button
+      label="حفظ التعديلات"
+      icon="pi pi-save"
+      severity="primary"
+      [disabled]="examForm.invalid"
+      (onClick)="onSubmit()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

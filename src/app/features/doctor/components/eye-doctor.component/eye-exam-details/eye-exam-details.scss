@@ -1,8 +1,5 @@
-@use '../../../components/shared-modal-styles.scss' as *;
-
-.professional-modal-container {
-  max-width: 950px !important;
-  width: 100% !important;
+.eye-exam-details-body {
+  padding: 1.5rem;
 }
 
 .details-grid {
@@ -19,9 +16,10 @@
   background: #fff;
 }
 
-.info-card h4 {
+.details-section-title {
   margin: 0 0 0.6rem;
   font-size: 0.95rem;
+  font-weight: 700;
   color: #0f3f35;
 }
 
@@ -50,19 +48,6 @@
   align-items: center;
   font-weight: 500;
   word-break: break-word;
-}
-
-.section-header {
-  margin: 1rem 0 0.75rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid #e5e7eb;
-
-  h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #212529;
-    margin: 0;
-  }
 }
 
 .refraction-list {
@@ -94,26 +79,26 @@
 }
 
 .result-badge {
-  text-align: center !important;
-  justify-content: center !important;
-  
-  &.result-accepted {
-    background: #10b981 !important;
-    color: white !important;
-    font-weight: 600 !important;
-  }
-  
-  &.result-rejected {
-    background: #dc2626 !important;
-    color: white !important;
-    font-weight: 600 !important;
-  }
-  
-  &.result-postponed {
-    background: #f59e0b !important;
-    color: white !important;
-    font-weight: 600 !important;
-  }
+  text-align: center;
+  justify-content: center;
+}
+
+.result-badge.result-accepted {
+  background: #10b981;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.result-badge.result-rejected {
+  background: #dc2626;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.result-badge.result-postponed {
+  background: #f59e0b;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
@@ -121,7 +106,8 @@
     grid-template-columns: 1fr;
   }
 
-  .modal-body-professional {
-    padding: 1.5rem !important;
+  .eye-exam-details-body {
+    padding: 1rem;
   }
 }
+

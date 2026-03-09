@@ -8,16 +8,17 @@
   (hide)="closeModal()">
   <form [formGroup]="examForm" novalidate class="exam-form">
       <!-- القسم الأول -->
-      <h6 class="section-title">القدرة البصرية</h6>
+      <h6 class="section-title">القدرة البصرية (من 0 إلى 10)</h6>
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label">R: <span class="text-danger">*</span></label>
-          <div class="input-group">
-            <input type="number" class="form-control" formControlName="vision" placeholder="أدخل الرقم"
-              [class.is-invalid]="examForm.get('vision')?.invalid && examForm.get('vision')?.touched"
-              [class.is-valid]="isFieldValid('vision')" />
-            <span class="input-group-text">/10</span>
-          </div>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="vision"
+            placeholder="أدخل قيمة من 0 إلى 10"
+            [class.is-invalid]="examForm.get('vision')?.invalid && examForm.get('vision')?.touched"
+            [class.is-valid]="isFieldValid('vision')" />
           <div class="invalid-feedback d-block" *ngIf="getErrorMessage('vision')">
             <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('vision') }}
           </div>
@@ -25,12 +26,13 @@
 
         <div class="col-md-6">
           <label class="form-label">L: <span class="text-danger">*</span></label>
-          <div class="input-group">
-            <input type="number" class="form-control" formControlName="visionLeft" placeholder="أدخل الرقم"
-              [class.is-invalid]="examForm.get('visionLeft')?.invalid && examForm.get('visionLeft')?.touched"
-              [class.is-valid]="isFieldValid('visionLeft')" />
-            <span class="input-group-text">/10</span>
-          </div>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="visionLeft"
+            placeholder="أدخل قيمة من 0 إلى 10"
+            [class.is-invalid]="examForm.get('visionLeft')?.invalid && examForm.get('visionLeft')?.touched"
+            [class.is-valid]="isFieldValid('visionLeft')" />
           <div class="invalid-feedback d-block" *ngIf="getErrorMessage('visionLeft')">
             <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('visionLeft') }}
           </div>
