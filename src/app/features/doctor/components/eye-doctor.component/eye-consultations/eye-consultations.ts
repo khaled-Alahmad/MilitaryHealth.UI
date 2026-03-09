@@ -134,7 +134,7 @@ export class EyeConsultations implements OnInit {
 
   openEditConsultation(consultation: Consultation) {
     const modalRef = this.modalService.open(EditConsultation, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       centered: true

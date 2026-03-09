@@ -1,5 +1,4 @@
 <div class="professional-modal-container">
-  <!-- Modal Header -->
   <div class="modal-header-professional">
     <div class="header-content">
       <div class="header-icon">
@@ -7,7 +6,7 @@
       </div>
       <div class="header-text">
         <h3 class="modal-title-professional">تفاصيل الفحص العيني</h3>
-        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }}</span>
+        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }} - {{ getApplicantName() }}</span>
       </div>
     </div>
     <button type="button" class="btn-close-professional" (click)="close()">
@@ -16,123 +15,33 @@
   </div>
 
   <div class="modal-body-professional">
-    <!-- القدرة البصرية -->
-    <div class="section-header">
-      <i class="pi pi-eye"></i>
-      <h4>القدرة البصرية</h4>
-    </div>
-    
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-eye"></i> R:</label>
-        <div class="info-value">{{ exam.vision || 'غير محدد' }} /10</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-eye"></i> L:</label>
-        <div class="info-value">{{ exam.visionLeft || 'غير محدد' }} /10</div>
-      </div>
-    </div>
-
-    <!-- اختبار الألوان -->
-    <div class="section-header">
-      <i class="pi pi-palette"></i>
-      <h4>اختبار الألوان</h4>
-    </div>
-    
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-check-circle"></i> R:</label>
-        <div class="info-value">{{ exam.colorTest || 'غير محدد' }}</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-check-circle"></i> L:</label>
-        <div class="info-value">{{ exam.colorTestLeft || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <!-- أسواء الانكسار -->
-    <div class="section-header">
-      <i class="pi pi-sync"></i>
-      <h4>أسواء الانكسار</h4>
-    </div>
-    
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-info-circle"></i> أسواء الانكسار:</label>
-        <div class="info-value">{{ exam['refractiveError'] || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <!-- فحص الانكسار - العين اليمنى -->
-    <div class="section-header">
-      <i class="pi pi-eye"></i>
-      <h4>فحص الانكسار - العين اليمنى</h4>
-    </div>
-    
-    <div class="refraction-list" *ngIf="rightEyeRefractions.length > 0">
-      <div class="refraction-item" *ngFor="let refraction of rightEyeRefractions">
-        <div class="refraction-info">
-          <label><i class="pi pi-circle"></i> نوع الانكسار:</label>
-          <div class="info-value">{{ getRefractionTypeName(refraction.refractionTypeID) }}</div>
-        </div>
-        <div class="refraction-info">
-          <label><i class="pi pi-chart-line"></i> نسبة الانكسار:</label>
-          <div class="info-value">{{ refraction.refractionValue || 'غير محدد' }}</div>
+    <div class="details-grid">
+      <div class="info-card">
+        <h4>القدرة البصرية</h4>
+        <div class="inline-values">
+          <span class="info-chip">R: {{ exam.vision || 'غير محدد' }} /10</span>
+          <span class="info-chip">L: {{ exam.visionLeft || 'غير محدد' }} /10</span>
         </div>
       </div>
-    </div>
-    
-    <div class="no-data-message" *ngIf="!rightEyeRefractions || rightEyeRefractions.length === 0">
-      <i class="pi pi-info-circle"></i>
-      لا توجد قياسات انكسار مسجلة للعين اليمنى
-    </div>
 
-    <!-- فحص الانكسار - العين اليسرى -->
-    <div class="section-header">
-      <i class="pi pi-eye"></i>
-      <h4>فحص الانكسار - العين اليسرى</h4>
-    </div>
-    
-    <div class="refraction-list" *ngIf="leftEyeRefractions.length > 0">
-      <div class="refraction-item" *ngFor="let refraction of leftEyeRefractions">
-        <div class="refraction-info">
-          <label><i class="pi pi-circle"></i> نوع الانكسار:</label>
-          <div class="info-value">{{ getRefractionTypeName(refraction.refractionTypeID) }}</div>
-        </div>
-        <div class="refraction-info">
-          <label><i class="pi pi-chart-line"></i> نسبة الانكسار:</label>
-          <div class="info-value">{{ refraction.refractionValue || 'غير محدد' }}</div>
+      <div class="info-card">
+        <h4>اختبار الألوان</h4>
+        <div class="inline-values">
+          <span class="info-chip">R: {{ exam.colorTest || 'غير محدد' }}</span>
+          <span class="info-chip">L: {{ exam.colorTestLeft || 'غير محدد' }}</span>
         </div>
       </div>
-    </div>
-    
-    <div class="no-data-message" *ngIf="!leftEyeRefractions || leftEyeRefractions.length === 0">
-      <i class="pi pi-info-circle"></i>
-      لا توجد قياسات انكسار مسجلة للعين اليسرى
-    </div>
 
-    <!-- أمراض أخرى -->
-    <div class="section-header">
-      <i class="pi pi-exclamation-triangle"></i>
-      <h4>أمراض أخرى</h4>
-    </div>
-    
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-file-edit"></i> أمراض أخرى:</label>
-        <div class="info-value">{{ exam.otherDiseases || 'غير محدد' }}</div>
+      <div class="info-card">
+        <h4>أسوأ الانكسار</h4>
+        <div class="inline-values">
+          <span class="info-chip">R: {{ exam.worstRefractionRight || '-' }}</span>
+          <span class="info-chip">L: {{ exam.worstRefractionLeft || '-' }}</span>
+        </div>
       </div>
-    </div>
 
-    <!-- النتيجة -->
-    <div class="section-header">
-      <i class="pi pi-check-circle"></i>
-      <h4>النتيجة</h4>
-    </div>
-    
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-flag"></i> النتيجة:</label>
+      <div class="info-card">
+        <h4>النتيجة</h4>
         <div class="info-value result-badge" 
              [class.result-accepted]="exam.result?.description === 'مقبول'" 
              [class.result-rejected]="exam.result?.description === 'مرفوض'"
@@ -140,12 +49,31 @@
           {{ getResultName(exam.resultID) }}
         </div>
       </div>
-      <div class="form-field" *ngIf="exam.reason">
-        <label><i class="pi pi-file"></i> السبب:</label>
-        <div class="info-value">{{ exam.reason || 'غير محدد' }}</div>
-      </div>
     </div>
 
+    <div class="section-header"><h4>انكسارات العين اليمنى</h4></div>
+    <div class="refraction-list" *ngIf="rightEyeRefractions.length > 0; else noRight">
+      <div class="refraction-item" *ngFor="let refraction of rightEyeRefractions">
+        <span>{{ getRefractionTypeName(refraction.refractionTypeID) }}</span>
+        <strong>{{ refraction.refractionValue || 'غير محدد' }}</strong>
+      </div>
+    </div>
+    <ng-template #noRight><div class="no-data-message">لا توجد قياسات انكسار للعين اليمنى</div></ng-template>
+
+    <div class="section-header"><h4>انكسارات العين اليسرى</h4></div>
+    <div class="refraction-list" *ngIf="leftEyeRefractions.length > 0; else noLeft">
+      <div class="refraction-item" *ngFor="let refraction of leftEyeRefractions">
+        <span>{{ getRefractionTypeName(refraction.refractionTypeID) }}</span>
+        <strong>{{ refraction.refractionValue || 'غير محدد' }}</strong>
+      </div>
+    </div>
+    <ng-template #noLeft><div class="no-data-message">لا توجد قياسات انكسار للعين اليسرى</div></ng-template>
+
+    <div class="section-header"><h4>ملاحظات إضافية</h4></div>
+    <div class="info-value">{{ exam.otherDiseases || 'لا توجد أمراض أخرى مسجلة' }}</div>
+    @if (exam.reason) {
+      <div class="info-value mt-2">{{ exam.reason }}</div>
+    }
   </div>
 
   <div class="modal-footer-professional">

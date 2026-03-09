@@ -155,7 +155,7 @@ openEditExam(eyeExam: EyeExam): void {
         
 
         const modalRef = this.modalService.open(EditEyeExam, {
-          size: 'lg',
+          size: 'xl',
           backdrop: 'static',
           keyboard: false,
           centered: true

@@ -104,8 +104,8 @@ export class EditEyeExam implements OnInit {
       colorTestLeft: [colorTestLeftNormalized.status, Validators.required],
       colorTestLeftOther: [colorTestLeftNormalized.other],
       refractiveError: [(this.exam as any).refractiveError || ''], // حقل قديم - للتوافق
-      worstRefractionRight: [worstRefractionRight || '', Validators.required],
-      worstRefractionLeft: [worstRefractionLeft || '', Validators.required],
+      worstRefractionRight: [worstRefractionRight || ''],
+      worstRefractionLeft: [worstRefractionLeft || ''],
       otherDiseases: [(this.exam.otherDiseases || '').trim()],
       resultID: [this.exam.resultID, Validators.required],
       reason: [(this.exam.reason || '').trim()],
@@ -202,8 +202,8 @@ export class EditEyeExam implements OnInit {
     leftEyeRefractions.forEach((refraction) => {
       if (refraction.refractionTypeID && refraction.refractionValue !== null && refraction.refractionValue !== undefined) {
         const refractionGroup = this.fb.group({
-        refractionTypeID: [refraction.refractionTypeID, Validators.required],
-        refractionValue: [refraction.refractionValue, Validators.required]
+        refractionTypeID: [refraction.refractionTypeID],
+        refractionValue: [refraction.refractionValue]
         });
         leftEyeFormArray.push(refractionGroup);
       }
@@ -217,8 +217,8 @@ export class EditEyeExam implements OnInit {
     rightEyeRefractions.forEach((refraction) => {
       if (refraction.refractionTypeID && refraction.refractionValue !== null && refraction.refractionValue !== undefined) {
         const refractionGroup = this.fb.group({
-        refractionTypeID: [refraction.refractionTypeID, Validators.required],
-        refractionValue: [refraction.refractionValue, Validators.required]
+        refractionTypeID: [refraction.refractionTypeID],
+        refractionValue: [refraction.refractionValue]
         });
         rightEyeFormArray.push(refractionGroup);
       }
@@ -233,8 +233,8 @@ export class EditEyeExam implements OnInit {
   addRefraction(eye: 'rightEye' | 'leftEye') {
     const refractions = this.examForm.get(`${eye}.refractions`) as FormArray;
     refractions.push(this.fb.group({
-      refractionTypeID: [null, Validators.required],
-      refractionValue: [null, Validators.required]
+      refractionTypeID: [null],
+      refractionValue: [null]
     }));
   }
 
@@ -257,11 +257,6 @@ export class EditEyeExam implements OnInit {
 
   const leftEyeRefractions = (this.examForm.get('leftEye.refractions') as FormArray).value;
   const rightEyeRefractions = (this.examForm.get('rightEye.refractions') as FormArray).value;
-
-  if (!leftEyeRefractions.length && !rightEyeRefractions.length) {
-    this.toastr.warning('يجب إدخال قياس الانكسار لعين واحدة على الأقل', 'تنبيه');
-    return;
-  }
 
   const v = this.examForm.value;
   // تحويل كل القيم بشكل صريح لضمان إرسالها بالشكل الذي يتوقعه الـ API

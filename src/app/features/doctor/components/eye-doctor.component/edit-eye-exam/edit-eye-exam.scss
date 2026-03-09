@@ -9,6 +9,34 @@
 .dialog-form {
   padding: 2rem;
 }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dialog-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dialog-header-icon {
+  font-size: 1.25rem;
+  color: var(--accent-gold);
+}
+
+.dialog-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+}
+
+.modal-footer {
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
 .input-group-q {
   position: relative;
   display: flex;

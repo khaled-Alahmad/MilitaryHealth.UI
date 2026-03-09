@@ -118,7 +118,7 @@ export class EyeInvestigationsList implements OnInit {
   }
   openEditInvestigation(investigation: Investigation) {
       const modalRef = this.modalService.open(EditInvestigation, {
-        size: 'lg',
+        size: 'xl',
         backdrop: 'static',
         keyboard: false,
         centered: true

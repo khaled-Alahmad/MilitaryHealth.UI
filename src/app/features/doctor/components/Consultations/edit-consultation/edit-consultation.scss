@@ -1,31 +1,70 @@
 /* Import unified modal styles */
 @use '../../shared-modal-styles.scss' as *;
 
-/* Custom overrides for this component */
 .modal-content {
-  background: #EDEBE0 !important;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-/* Ensure form styling applies */
-form {
-  .form-label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #374151;
-    display: block;
-  }
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .form-control {
-    padding: 0.75rem 1rem;
-    border: 2px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
+.dialog-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
-    &:focus {
-      outline: none;
-      border-color: #428177;
-      box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1);
-    }
+.dialog-header-icon {
+  font-size: 1.35rem;
+  color: var(--accent-gold);
+}
+
+.dialog-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #428177;
+    box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1);
   }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
