@@ -6,6 +6,8 @@ import { InternalExamService } from '../../../services/internal-exam.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, resolveHealthStatusValue } from '../../../constants/health-status-options';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 interface StatusSection {
   control: string;
@@ -15,9 +17,9 @@ interface StatusSection {
 
 @Component({
   selector: 'app-internal-exam-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './internal-exam-form.html',
-  styleUrl: './internal-exam-form.scss'
+  styleUrl: './internal-exam-form.scss',
 })
 export class InternalExamForm implements OnInit {
   @Input() applicantFileNumber: string = '';

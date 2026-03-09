@@ -18,12 +18,9 @@ export class DialogWrapperComponent {
   @Input() subtitle = '';
   @Input() icon = '';
 
+  /** أحجام موحّدة: 90rem (نموذج فحص)، 70rem (تفاصيل)، 40rem (استشارة/تحليل/تأكيد) */
   @Input() width = '32rem';
-  @Input() modal = true;
   @Input() closable = true;
-  @Input() dismissableMask = true;
-  @Input() closeOnEscape = true;
-  @Input() blockScroll = true;
 
   @Input() useDefaultFooter = true;
   @Input() cancelLabel = 'إلغاء';

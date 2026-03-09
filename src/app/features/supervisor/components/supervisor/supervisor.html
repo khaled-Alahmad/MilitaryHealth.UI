@@ -994,7 +994,8 @@
   </div>
 
   <!-- Consultation Modal -->
-  <p-dialog [(visible)]="showConsultationModal" [modal]="true" [dismissableMask]="false" [style]="{width: '600px'}"
+  <p-dialog [(visible)]="showConsultationModal" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
+    [style]="{width: '40rem', minWidth: '40rem'}"
     [closable]="true" [draggable]="false" [resizable]="false" (onHide)="closeConsultationModal()"
     [header]="(selectedConsultation?.consultationID ?? 0) > 0 ? 'تعديل الاستشارة' : 'إضافة استشارة جديدة'">
 
@@ -1057,7 +1058,8 @@
   </p-dialog>
 
   <!-- Investigation Modal -->
-  <p-dialog [(visible)]="showInvestigationModal" [modal]="true" [dismissableMask]="false" [style]="{width: '600px'}"
+  <p-dialog [(visible)]="showInvestigationModal" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
+    [style]="{width: '40rem', minWidth: '40rem'}"
     [closable]="true" [draggable]="false" [resizable]="false" (onHide)="closeInvestigationModal()"
     [header]="(selectedInvestigation?.investigationID ?? 0) > 0 ? 'تعديل التحليل' : 'إضافة تحليل جديد'">
 

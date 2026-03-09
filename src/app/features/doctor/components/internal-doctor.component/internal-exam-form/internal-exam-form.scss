@@ -1,247 +1,59 @@
-.modal-backdrop {
-  position: fixed; inset: 0;
-  display: flex; justify-content: center; align-items: center;
-  background: rgba(0,0,0,.7); z-index: 1050;
-  backdrop-filter: blur(3px); /* 🔹 تأثير ضبابي جميل */
+@use '../../../../../shared/styles/edit-dialog-form' as *;
+
+:host {
+  display: block;
 }
 
-.modal-content {
-  background: #fff;
-  border-radius: 16px;
-  max-width: 700px; width: 100%;
-  max-height: 85vh;
-  display: flex; flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0,0,0,.35); /* 🔹 ظل أعمق */
-  animation: fadeIn 0.35s ease;
-}
-
-/* Modal backdrop and content styles moved to use CSS variables */
-
-.modal-content {
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
-}
-
-.modal-header {
-  background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
-  border-bottom: 2px solid #B9A779 !important;
-  border-radius: 16px 16px 0 0 !important;
-  padding: 1.5rem 2rem !important;
-}
-
-.modal-header .modal-title {
-  font-size: 1.5rem !important;
-  font-weight: 700 !important;
-  color: white !important;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.modal-body {
-  padding: var(--spacing-xl);
-  overflow-y: auto;
-  max-height: calc(85vh - 100px);
-  
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: var(--neutral-light);
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: var(--primary-medium);
-    border-radius: var(--radius-sm);
-    
-    &:hover {
-      background: var(--primary-dark);
-    }
-  }
-}
-
-.section-title {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin: var(--spacing-lg) 0 var(--spacing-md);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--primary-medium);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  
-  &::before {
-    content: '';
-    width: 4px;
-    height: 20px;
-    background: var(--accent-gold);
-    border-radius: var(--radius-sm);
-  }
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: var(--primary-medium) !important;
-  box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1) !important;
-}
-
-.btn-primary {
-  background: #054239 !important;
-  border: 2px solid #054239 !important;
-  color: white !important;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #428177 !important;
-  border-color: #428177 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.btn-secondary {
-  background: #3D3A3B !important;
-  border: 2px solid #3D3A3B !important;
-  color: white !important;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: #161616 !important;
-  border-color: #161616 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: white;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 16px;
-}
-
-@keyframes fadeIn {
-  from {opacity:0; transform:translateY(-20px);}
-  to {opacity:1; transform:translateY(0);}
-}
-
-/* Medical System Row Styling - Like Paper Form */
 .medical-system-row {
   display: flex;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 0;
   border-bottom: 1px solid #e5e7eb;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f9fafb;
-  }
 
   .system-label {
     flex: 1;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #1f2937;
-    min-width: 250px;
+    min-width: 220px;
   }
 
   .system-options {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     align-items: center;
+    flex-wrap: wrap;
 
     .form-check {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       margin: 0;
 
       .form-check-input {
         margin: 0;
-        width: 1.2rem;
-        height: 1.2rem;
-        border: 2px solid #6b7280;
+        width: 1.1rem;
+        height: 1.1rem;
         cursor: pointer;
-
-        &:checked {
-          background-color: #054239;
-          border-color: #054239;
-        }
       }
 
       .form-check-label {
         margin: 0;
         cursor: pointer;
-        font-size: 1rem;
+        font-size: 0.95rem;
         color: #374151;
-        font-weight: 500;
       }
     }
   }
 }
 
-/* Result Section Styling */
-.result-section {
-  padding: 1.5rem 1.5rem;
-  background: #f9fafb;
-  border-top: 2px solid #054239;
-  border-bottom: 2px solid #054239;
-  margin: 2rem 0 1rem 0;
-
-  .form-label {
-    font-weight: 700;
-    font-size: 1.125rem;
-    color: #1f2937;
-  }
-
-  .form-select {
-    border: 2px solid #d1d5db;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-
-    &:focus {
-      border-color: #054239;
-      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
-    }
-  }
+.other-input-row {
+  padding: 0 0 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
-/* Reason Section */
-.reason-section {
-  padding: 1.5rem 1.5rem;
-  margin-top: 1rem;
-
-  .form-label {
-    font-weight: 600;
-    font-size: 1rem;
-    color: #1f2937;
-    margin-bottom: 0.75rem;
-  }
-
-  .form-control {
-    border: 2px solid #d1d5db;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-
-    &:focus {
-      border-color: #054239;
-      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.1);
-    }
-  }
-}
-
-/* Modal adjustments for better layout */
-.modal-content {
-  max-width: 800px !important;
-}
-
-.modal-body {
-  max-height: calc(85vh - 150px) !important;
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }

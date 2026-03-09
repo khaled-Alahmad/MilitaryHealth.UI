@@ -203,14 +203,16 @@
   </div>
   }
 
-  <!-- ✅ Dialog لمسح الباركود -->
+  <!-- Dialog لمسح الباركود: نفس آلية المشروع 40rem -->
   <p-dialog
     [(visible)]="showBarcodeScanner"
     [modal]="true"
+    [dismissableMask]="false"
+    [closeOnEscape]="true"
     [closable]="true"
     [draggable]="false"
     [resizable]="false"
-    [style]="{ width: '90vw', maxWidth: '500px' }"
+    [style]="{ width: '40rem', minWidth: '40rem' }"
     [header]="'مسح الباركود'"
     (onHide)="onCloseScanner()"
     styleClass="barcode-scanner-dialog">

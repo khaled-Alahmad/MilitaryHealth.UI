@@ -1,48 +1,69 @@
-<div class="internal-exams-page container mt-2">
-  <div class="table-toolbar mb-2">
+<div class="user-header-section p-3 container-fluid">
+  <app-page-header
+    variant="banner"
+    title="الفحوصات الداخلية المؤجلة"
+    subtitle="عرض وإدارة الفحوصات الداخلية"
+    icon="pi pi-clock">
+  </app-page-header>
+
+  <div class="table-toolbar">
     <div class="filter-reset-wrapper">
       <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
       <div class="search-wrapper">
-        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-          (input)="onFilterChange($event)" />
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
         <i class="fas fa-search search-icon"></i>
       </div>
     </div>
   </div>
 
-
-  <!-- جدول النتائج (PrimeNG) -->
-  <p-table #table [value]="filteredExams" [rows]="rowsPerPage" [totalRecords]="totalRecords" class="custom-table">
+  <p-table
+    #table
+    [value]="exams"
+    [loading]="loading"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table my-3"
+    [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم الملف</th>
-        <th>النتيجة</th>
-        <th>السبب</th>
-        <th>إجراءات</th>
+        <th style="min-width: 100px" class="text-center">رقم الملف</th>
+        <th style="min-width: 120px" class="text-center">النتيجة</th>
+        <th style="min-width: 160px" class="text-center">السبب</th>
+        <th style="min-width: 100px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-exam>
       <tr>
-        <td>{{ exam.applicantFileNumber }}</td>
-        <td>
-          <span [ngClass]="getBadgeClass(exam.result)">
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ exam.applicantFileNumber }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span [ngClass]="getBadgeClass(exam.result)" class="small d-inline-block">
             {{ exam.result?.description || 'غير محدد' }}
           </span>
         </td>
-        <td>{{ exam.reason || '-' }}</td>
-        <td class="text-center">
-          <div class="action-buttons">
-            <button 
-              type="button" 
-              class="btn-icon-action" 
+        <td class="text-center align-middle">
+          <span class="small">{{ exam.reason || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <button
+              type="button"
+              class="btn-icon-action"
               pTooltip="عرض التفاصيل"
               tooltipPosition="top"
               (click)="viewDetails(exam)">
               <i class="pi pi-eye"></i>
             </button>
-            <button 
-              type="button" 
-              class="btn-icon-action" 
+            <button
+              type="button"
+              class="btn-icon-action"
               pTooltip="تعديل الفحص"
               tooltipPosition="top"
               (click)="openEditDialog(exam)">
@@ -54,26 +75,16 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="4" class="text-center">لا توجد فحوصات داخلية.</td>
+        <td colspan="4" class="text-center py-3 align-middle small">لا توجد فحوصات داخلية.</td>
       </tr>
     </ng-template>
   </p-table>
 
-  <!-- Pagination -->
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-
-
-  <!-- مودال التعديل -->
-  <app-edit-internal-exam-component *ngIf="selectedExam" [exam]="selectedExam" (dialogClosed)="onDialogClose($event)">
-  </app-edit-internal-exam-component>
-
-  <!-- مودال التفاصيل -->
-  <div class="modal-backdrop" *ngIf="selectedExamDetails">
-    <div class="modal-content-details" (click)="$event.stopPropagation()">
-      <app-internal-exam-details [exam]="selectedExamDetails" (close)="closeDetailsModal()"></app-internal-exam-details>
-    </div>
-  </div>
-
 </div>

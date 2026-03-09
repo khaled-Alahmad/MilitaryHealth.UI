@@ -17,7 +17,7 @@ import {
 } from "./chunk-P4WCBYBH.js";
 import {
   DialogWrapperComponent
-} from "./chunk-MH7HOQ25.js";
+} from "./chunk-544Z4HCU.js";
 import "./chunk-5TBOZ7YP.js";
 import {
   PaginatorComponent
@@ -716,7 +716,7 @@ var EditEyeExam = class _EditEyeExam {
   static \u0275fac = function EditEyeExam_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _EditEyeExam)(\u0275\u0275directiveInject(FormBuilder), \u0275\u0275directiveInject(EyeExamService), \u0275\u0275directiveInject(ToastrService), \u0275\u0275directiveInject(NgbModal));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _EditEyeExam, selectors: [["app-edit-eye-exam"]], inputs: { exam: "exam" }, outputs: { eyeExamUpdated: "eyeExamUpdated", dialogClosed: "dialogClosed" }, decls: 97, vars: 32, consts: [["title", "\u062A\u0639\u062F\u064A\u0644 \u0627\u0644\u0641\u062D\u0635 \u0627\u0644\u0639\u064A\u0646\u064A", "subtitle", "\u062A\u062D\u062F\u064A\u062B \u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0641\u062D\u0635 \u0648\u0627\u0644\u0627\u0646\u0643\u0633\u0627\u0631\u0627\u062A", "icon", "pi pi-pencil", "width", "90rem", 3, "hide", "visible", "useDefaultFooter", "closable"], [1, "exam-form", 3, "ngSubmit", "formGroup"], [1, "section-title"], [1, "row", "g-3"], [1, "col-md-6"], [1, "form-label"], [1, "input-group-q"], [1, "input-group-text"], ["type", "number", "formControlName", "vision", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0631\u0642\u0645", 1, "form-control"], ["class", "invalid-feedback d-block", 4, "ngIf"], ["type", "number", "formControlName", "visionLeft", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0631\u0642\u0645", 1, "form-control"], [1, "section-title", "mt-4"], [1, "form-label", "mb-2"], [1, "d-flex", "flex-wrap", "gap-3"], [1, "form-check", "form-check-inline"], [1, "mt-2"], [1, "text-danger"], [1, "refraction-choice-group"], ["type", "radio", "formControlName", "worstRefractionRight", "id", "worstRefractionRightNotImportantEdit", "value", "\u063A\u064A\u0631 \u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionRightNotImportantEdit", 1, "form-check-label"], ["type", "radio", "formControlName", "worstRefractionRight", "id", "worstRefractionRightImportantEdit", "value", "\u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionRightImportantEdit", 1, "form-check-label"], ["type", "radio", "formControlName", "worstRefractionLeft", "id", "worstRefractionLeftNotImportantEdit", "value", "\u063A\u064A\u0631 \u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionLeftNotImportantEdit", 1, "form-check-label"], ["type", "radio", "formControlName", "worstRefractionLeft", "id", "worstRefractionLeftImportantEdit", "value", "\u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionLeftImportantEdit", 1, "form-check-label"], [1, "eye-toggle-actions", "mt-2", "mb-3"], ["type", "button", 1, "btn", "btn-outline-primary", 3, "click"], [1, "refraction-sections"], ["class", "card mb-3", 4, "ngIf"], [1, "mb-3"], ["formControlName", "otherDiseases", "rows", "3", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u0623\u062E\u0631\u0649 \u0625\u0646 \u0648\u062C\u062F\u062A", 1, "form-control"], [1, "row", "mb-3"], ["formControlName", "resultID", 1, "form-select"], [3, "value", 4, "ngFor", "ngForOf"], ["formControlName", "reason", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0633\u0628\u0628 \u0625\u0630\u0627 \u0648\u062C\u062F", 1, "form-control"], ["dialog-footer", "", 1, "dialog-actions"], ["label", "\u0625\u0644\u063A\u0627\u0621", "icon", "pi pi-times", "severity", "secondary", 3, "onClick", "outlined"], ["label", "\u062D\u0641\u0638 \u0627\u0644\u062A\u0639\u062F\u064A\u0644\u0627\u062A", "icon", "pi pi-save", "severity", "primary", 3, "onClick", "disabled"], [1, "invalid-feedback", "d-block"], [1, "pi", "pi-exclamation-circle", "me-1"], ["type", "radio", "formControlName", "colorTest", 1, "form-check-input", 3, "id", "value"], [1, "form-check-label", 3, "for"], ["type", "text", "formControlName", "colorTestOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], ["type", "radio", "formControlName", "colorTestLeft", 1, "form-check-input", 3, "id", "value"], ["type", "text", "formControlName", "colorTestLeftOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], [1, "card", "mb-3"], [1, "card-header", "bg-light", "d-flex", "justify-content-between", "align-items-center"], [1, "mb-0"], ["type", "button", 1, "btn", "btn-sm", "btn-primary", 3, "click"], [1, "pi", "pi-plus", "me-1"], ["formGroupName", "rightEye", 1, "card-body"], ["formArrayName", "refractions"], ["class", "card mb-3", 3, "formGroupName", 4, "ngFor", "ngForOf"], ["class", "text-muted small", 4, "ngIf"], [1, "card", "mb-3", 3, "formGroupName"], [1, "card-body"], [1, "col-md-5"], ["formControlName", "refractionTypeID", 1, "form-select"], ["type", "number", "formControlName", "refractionValue", 1, "form-control"], [1, "col-md-2"], ["type", "button", 1, "btn", "btn-danger", "mt-4", 3, "click"], [1, "pi", "pi-trash"], [3, "value"], [1, "text-muted", "small"], ["formGroupName", "leftEye", 1, "card-body"], ["value", ""]], template: function EditEyeExam_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _EditEyeExam, selectors: [["app-edit-eye-exam"]], inputs: { exam: "exam" }, outputs: { eyeExamUpdated: "eyeExamUpdated", dialogClosed: "dialogClosed" }, decls: 97, vars: 31, consts: [["title", "\u062A\u0639\u062F\u064A\u0644 \u0627\u0644\u0641\u062D\u0635 \u0627\u0644\u0639\u064A\u0646\u064A", "subtitle", "\u062A\u062D\u062F\u064A\u062B \u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0641\u062D\u0635 \u0648\u0627\u0644\u0627\u0646\u0643\u0633\u0627\u0631\u0627\u062A", "icon", "pi pi-pencil", "width", "90rem", 3, "hide", "visible", "useDefaultFooter"], [1, "exam-form", 3, "ngSubmit", "formGroup"], [1, "section-title"], [1, "row", "g-3"], [1, "col-md-6"], [1, "form-label"], [1, "input-group-q"], [1, "input-group-text"], ["type", "number", "formControlName", "vision", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0631\u0642\u0645", 1, "form-control"], ["class", "invalid-feedback d-block", 4, "ngIf"], ["type", "number", "formControlName", "visionLeft", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0631\u0642\u0645", 1, "form-control"], [1, "section-title", "mt-4"], [1, "form-label", "mb-2"], [1, "d-flex", "flex-wrap", "gap-3"], [1, "form-check", "form-check-inline"], [1, "mt-2"], [1, "text-danger"], [1, "refraction-choice-group"], ["type", "radio", "formControlName", "worstRefractionRight", "id", "worstRefractionRightNotImportantEdit", "value", "\u063A\u064A\u0631 \u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionRightNotImportantEdit", 1, "form-check-label"], ["type", "radio", "formControlName", "worstRefractionRight", "id", "worstRefractionRightImportantEdit", "value", "\u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionRightImportantEdit", 1, "form-check-label"], ["type", "radio", "formControlName", "worstRefractionLeft", "id", "worstRefractionLeftNotImportantEdit", "value", "\u063A\u064A\u0631 \u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionLeftNotImportantEdit", 1, "form-check-label"], ["type", "radio", "formControlName", "worstRefractionLeft", "id", "worstRefractionLeftImportantEdit", "value", "\u0645\u0647\u0645\u0629", 1, "form-check-input"], ["for", "worstRefractionLeftImportantEdit", 1, "form-check-label"], [1, "eye-toggle-actions", "mt-2", "mb-3"], ["type", "button", 1, "btn", "btn-outline-primary", 3, "click"], [1, "refraction-sections"], ["class", "card mb-3", 4, "ngIf"], [1, "mb-3"], ["formControlName", "otherDiseases", "rows", "3", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u0623\u062E\u0631\u0649 \u0625\u0646 \u0648\u062C\u062F\u062A", 1, "form-control"], [1, "row", "mb-3"], ["formControlName", "resultID", 1, "form-select"], [3, "value", 4, "ngFor", "ngForOf"], ["formControlName", "reason", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u0633\u0628\u0628 \u0625\u0630\u0627 \u0648\u062C\u062F", 1, "form-control"], ["dialog-footer", "", 1, "dialog-actions"], ["label", "\u0625\u0644\u063A\u0627\u0621", "icon", "pi pi-times", "severity", "secondary", 3, "onClick", "outlined"], ["label", "\u062D\u0641\u0638 \u0627\u0644\u062A\u0639\u062F\u064A\u0644\u0627\u062A", "icon", "pi pi-save", "severity", "primary", 3, "onClick", "disabled"], [1, "invalid-feedback", "d-block"], [1, "pi", "pi-exclamation-circle", "me-1"], ["type", "radio", "formControlName", "colorTest", 1, "form-check-input", 3, "id", "value"], [1, "form-check-label", 3, "for"], ["type", "text", "formControlName", "colorTestOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], ["type", "radio", "formControlName", "colorTestLeft", 1, "form-check-input", 3, "id", "value"], ["type", "text", "formControlName", "colorTestLeftOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], [1, "card", "mb-3"], [1, "card-header", "bg-light", "d-flex", "justify-content-between", "align-items-center"], [1, "mb-0"], ["type", "button", 1, "btn", "btn-sm", "btn-primary", 3, "click"], [1, "pi", "pi-plus", "me-1"], ["formGroupName", "rightEye", 1, "card-body"], ["formArrayName", "refractions"], ["class", "card mb-3", 3, "formGroupName", 4, "ngFor", "ngForOf"], ["class", "text-muted small", 4, "ngIf"], [1, "card", "mb-3", 3, "formGroupName"], [1, "card-body"], [1, "col-md-5"], ["formControlName", "refractionTypeID", 1, "form-select"], ["type", "number", "formControlName", "refractionValue", 1, "form-control"], [1, "col-md-2"], ["type", "button", 1, "btn", "btn-danger", "mt-4", 3, "click"], [1, "pi", "pi-trash"], [3, "value"], [1, "text-muted", "small"], ["formGroupName", "leftEye", 1, "card-body"], ["value", ""]], template: function EditEyeExam_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "app-dialog-wrapper", 0);
       \u0275\u0275listener("hide", function EditEyeExam_Template_app_dialog_wrapper_hide_0_listener() {
@@ -848,9 +848,9 @@ var EditEyeExam = class _EditEyeExam {
       \u0275\u0275elementEnd()()();
     }
     if (rf & 2) {
-      let tmp_11_0;
-      let tmp_13_0;
-      \u0275\u0275property("visible", true)("useDefaultFooter", false)("closable", true);
+      let tmp_10_0;
+      let tmp_12_0;
+      \u0275\u0275property("visible", true)("useDefaultFooter", false);
       \u0275\u0275advance();
       \u0275\u0275property("formGroup", ctx.examForm);
       \u0275\u0275advance(10);
@@ -864,11 +864,11 @@ var EditEyeExam = class _EditEyeExam {
       \u0275\u0275advance(8);
       \u0275\u0275repeater(ctx.healthStatusOptions);
       \u0275\u0275advance(2);
-      \u0275\u0275conditional(((tmp_11_0 = ctx.examForm.get("colorTest")) == null ? null : tmp_11_0.value) === ctx.otherOptionValue ? 30 : -1);
+      \u0275\u0275conditional(((tmp_10_0 = ctx.examForm.get("colorTest")) == null ? null : tmp_10_0.value) === ctx.otherOptionValue ? 30 : -1);
       \u0275\u0275advance(5);
       \u0275\u0275repeater(ctx.healthStatusOptions);
       \u0275\u0275advance(2);
-      \u0275\u0275conditional(((tmp_13_0 = ctx.examForm.get("colorTestLeft")) == null ? null : tmp_13_0.value) === ctx.otherOptionValue ? 37 : -1);
+      \u0275\u0275conditional(((tmp_12_0 = ctx.examForm.get("colorTestLeft")) == null ? null : tmp_12_0.value) === ctx.otherOptionValue ? 37 : -1);
       \u0275\u0275advance(34);
       \u0275\u0275classMap(ctx.showRightEye ? "pi pi-eye-slash" : "pi pi-eye");
       \u0275\u0275advance();
@@ -904,7 +904,6 @@ var EditEyeExam = class _EditEyeExam {
   icon="pi pi-pencil"\r
   width="90rem"\r
   [useDefaultFooter]="false"\r
-  [closable]="true"\r
   (hide)="cancel()">\r
   <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="exam-form">\r
 \r
@@ -1367,7 +1366,7 @@ var EyeExamDetails = class _EyeExamDetails {
   static \u0275fac = function EyeExamDetails_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _EyeExamDetails)(\u0275\u0275directiveInject(NgbActiveModal), \u0275\u0275directiveInject(ApplicantService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _EyeExamDetails, selectors: [["app-eye-exam-details"]], inputs: { exam: "exam", showRefractionsOnly: "showRefractionsOnly" }, decls: 49, vars: 24, consts: [["noRight", ""], ["noLeft", ""], ["title", "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0641\u062D\u0635 \u0627\u0644\u0639\u064A\u0646\u064A", "icon", "pi pi-eye", "width", "70rem", 3, "hide", "visible", "subtitle", "useDefaultFooter", "closable"], [1, "eye-exam-details-body"], [1, "details-grid"], [1, "info-card"], [1, "details-section-title"], [1, "inline-values"], [1, "info-chip"], [1, "info-value", "result-badge"], ["class", "refraction-list", 4, "ngIf", "ngIfElse"], [1, "info-value"], [1, "info-value", "mt-2"], ["dialog-footer", "", 1, "dialog-actions"], ["label", "\u0625\u063A\u0644\u0627\u0642", "icon", "pi pi-times", "severity", "secondary", 3, "onClick", "outlined"], [1, "refraction-list"], ["class", "refraction-item", 4, "ngFor", "ngForOf"], [1, "refraction-item"], [1, "no-data-message"]], template: function EyeExamDetails_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _EyeExamDetails, selectors: [["app-eye-exam-details"]], inputs: { exam: "exam", showRefractionsOnly: "showRefractionsOnly" }, decls: 49, vars: 23, consts: [["noRight", ""], ["noLeft", ""], ["title", "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0641\u062D\u0635 \u0627\u0644\u0639\u064A\u0646\u064A", "icon", "pi pi-eye", "width", "70rem", 3, "hide", "visible", "subtitle", "useDefaultFooter"], [1, "eye-exam-details-body"], [1, "details-grid"], [1, "info-card"], [1, "details-section-title"], [1, "inline-values"], [1, "info-chip"], [1, "info-value", "result-badge"], ["class", "refraction-list", 4, "ngIf", "ngIfElse"], [1, "info-value"], [1, "info-value", "mt-2"], ["dialog-footer", "", 1, "dialog-actions"], ["label", "\u0625\u063A\u0644\u0627\u0642", "icon", "pi pi-times", "severity", "secondary", 3, "onClick", "outlined"], [1, "refraction-list"], ["class", "refraction-item", 4, "ngFor", "ngForOf"], [1, "refraction-item"], [1, "no-data-message"]], template: function EyeExamDetails_Template(rf, ctx) {
     if (rf & 1) {
       const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275elementStart(0, "app-dialog-wrapper", 2);
@@ -1434,7 +1433,7 @@ var EyeExamDetails = class _EyeExamDetails {
     if (rf & 2) {
       const noRight_r5 = \u0275\u0275reference(36);
       const noLeft_r6 = \u0275\u0275reference(41);
-      \u0275\u0275property("visible", true)("subtitle", "\u0631\u0642\u0645 \u0627\u0644\u0645\u0644\u0641: " + ctx.exam.applicantFileNumber + " - " + ctx.getApplicantName())("useDefaultFooter", false)("closable", true);
+      \u0275\u0275property("visible", true)("subtitle", "\u0631\u0642\u0645 \u0627\u0644\u0645\u0644\u0641: " + ctx.exam.applicantFileNumber + " - " + ctx.getApplicantName())("useDefaultFooter", false);
       \u0275\u0275advance(8);
       \u0275\u0275textInterpolate1("R: ", ctx.exam.vision || "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F", " /10");
       \u0275\u0275advance(2);
@@ -1474,7 +1473,6 @@ var EyeExamDetails = class _EyeExamDetails {
   icon="pi pi-eye"\r
   width="70rem"\r
   [useDefaultFooter]="false"\r
-  [closable]="true"\r
   (hide)="close()">\r
   <div class="eye-exam-details-body">\r
     <div class="details-grid">\r
@@ -2116,4 +2114,4 @@ var DeferredEyeExamsComponent = class _DeferredEyeExamsComponent {
 export {
   DeferredEyeExamsComponent
 };
-//# sourceMappingURL=chunk-CYGK2QQR.js.map
+//# sourceMappingURL=chunk-S3A75MCU.js.map

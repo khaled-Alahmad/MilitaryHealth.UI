@@ -9,6 +9,7 @@ import { InternalExamForm } from './internal-exam-form/internal-exam-form';
 import { InvestigationForm } from '../Investigations/investigation-form/investigation-form';
 import { ConsultationFormComponent } from '../Consultations/consultation-form.component/consultation-form.component';
 import { InternalExamService } from '../../services/internal-exam.service';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-internal-doctor',
@@ -16,6 +17,7 @@ import { InternalExamService } from '../../services/internal-exam.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    PageHeaderComponent,
     SearchApplicantComponent,
     InternalExamForm,
     ConsultationFormComponent,
@@ -27,6 +29,7 @@ import { InternalExamService } from '../../services/internal-exam.service';
 export class InternalDoctorComponent {
   selectedApplicant: Applicant | null = null;
   hasInternalExam = false;
+  checkingInternalExam = false;
 
   @ViewChild(InternalExamForm) internalForm!: InternalExamForm;
   @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
@@ -37,16 +40,27 @@ export class InternalDoctorComponent {
     private examService: InternalExamService
   ) {}
 
-onApplicantSelected(applicant: Applicant) {
-  this.selectedApplicant = applicant;
+  onApplicantSelected(applicant: Applicant) {
+    this.selectedApplicant = applicant;
+    this.hasInternalExam = false;
+    this.checkingInternalExam = true;
 
-  this.examService.getByFileNumber(applicant.fileNumber).subscribe({
-    next: (exam) => {
-      this.hasInternalExam = !!(exam && exam.internalExamID); 
-    },
-    error: () => this.hasInternalExam = false
-  });
-}
+    if (!applicant?.fileNumber) {
+      this.checkingInternalExam = false;
+      return;
+    }
+
+    this.examService.getByFileNumber(applicant.fileNumber).subscribe({
+      next: (exam) => {
+        this.checkingInternalExam = false;
+        this.hasInternalExam = !!(exam && exam.internalExamID);
+      },
+      error: () => {
+        this.checkingInternalExam = false;
+        this.hasInternalExam = false;
+      }
+    });
+  }
 
 
   addInternalExam() {

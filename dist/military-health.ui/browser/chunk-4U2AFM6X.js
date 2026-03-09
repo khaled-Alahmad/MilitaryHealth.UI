@@ -15,13 +15,13 @@ import "./chunk-YTJKKLZA.js";
 var RECEPTION_ROUTES = [
   {
     path: "",
-    loadComponent: () => import("./chunk-NV26Z7B2.js").then((m) => m.Supervisor),
+    loadComponent: () => import("./chunk-3S5ORJTC.js").then((m) => m.Supervisor),
     canActivate: [authGuard],
     data: { roles: [UserRoles.Supervisor] }
   },
   {
     path: "list",
-    loadComponent: () => import("./chunk-XA5XEFSQ.js").then((m) => m.ApplicantsListSupervisor),
+    loadComponent: () => import("./chunk-NN4IQVID.js").then((m) => m.ApplicantsListSupervisor),
     canActivate: [authGuard],
     data: { roles: [UserRoles.Supervisor] }
   },
@@ -41,4 +41,4 @@ var RECEPTION_ROUTES = [
 export {
   RECEPTION_ROUTES
 };
-//# sourceMappingURL=chunk-GHABQJ43.js.map
+//# sourceMappingURL=chunk-4U2AFM6X.js.map

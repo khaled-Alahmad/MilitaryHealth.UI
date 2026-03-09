@@ -15,7 +15,7 @@ import "./chunk-YTJKKLZA.js";
 var RECEPTION_ROUTES = [
   {
     path: "applicants",
-    loadComponent: () => import("./chunk-CLY46SFT.js").then((m) => m.ApplicantsList),
+    loadComponent: () => import("./chunk-DCNSOQNS.js").then((m) => m.ApplicantsList),
     canActivate: [authGuard],
     data: { roles: [UserRoles.Receptionist, UserRoles.Supervisor] }
   },
@@ -27,7 +27,7 @@ var RECEPTION_ROUTES = [
   },
   {
     path: "applicants/details/:fileNumber",
-    loadComponent: () => import("./chunk-AJBFP2NY.js").then((m) => m.ApplicantDetailsComponent),
+    loadComponent: () => import("./chunk-75E6HGZM.js").then((m) => m.ApplicantDetailsComponent),
     canActivate: [authGuard],
     data: { roles: [UserRoles.Receptionist, UserRoles.Supervisor] }
   },
@@ -41,4 +41,4 @@ var RECEPTION_ROUTES = [
 export {
   RECEPTION_ROUTES
 };
-//# sourceMappingURL=chunk-UM5Z3IEI.js.map
+//# sourceMappingURL=chunk-R2BAWSBO.js.map

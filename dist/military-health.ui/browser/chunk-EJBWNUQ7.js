@@ -1,13 +1,13 @@
 import {
-  OrthopedicExamService
-} from "./chunk-R2N3C4MN.js";
+  SurgicalExamService
+} from "./chunk-MBPCAIOT.js";
 import {
   ConsultationFormComponent,
   InvestigationForm
-} from "./chunk-WQO5OFZX.js";
+} from "./chunk-GRU57U67.js";
 import {
   SearchApplicantComponent
-} from "./chunk-5SMVM3T5.js";
+} from "./chunk-ZN4S5WAA.js";
 import "./chunk-2OSA6QLT.js";
 import "./chunk-T2JR7AGY.js";
 import {
@@ -16,7 +16,7 @@ import {
 import {
   ToastrService
 } from "./chunk-P4WCBYBH.js";
-import "./chunk-MH7HOQ25.js";
+import "./chunk-544Z4HCU.js";
 import "./chunk-5TBOZ7YP.js";
 import "./chunk-7K53XEFX.js";
 import "./chunk-R2DZOQST.js";
@@ -75,24 +75,38 @@ import {
   ɵɵviewQuery
 } from "./chunk-YTJKKLZA.js";
 
-// src/app/features/doctor/components/orthopedics-doctor.component/orthopedic-exam-form.component/orthopedic-exam-form.component.ts
-function OrthopedicExamFormComponent_div_0_div_27_Template(rf, ctx) {
+// src/app/features/doctor/components/surgery-doctor.component/surgical-exam-form/surgical-exam-form.ts
+function SurgicalExamForm_div_0_div_26_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 38);
-    \u0275\u0275element(1, "input", 39);
+    \u0275\u0275elementStart(0, "div", 50);
+    \u0275\u0275element(1, "input", 51);
     \u0275\u0275elementEnd();
   }
 }
-function OrthopedicExamFormComponent_div_0_div_46_Template(rf, ctx) {
+function SurgicalExamForm_div_0_div_45_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 38);
-    \u0275\u0275element(1, "input", 40);
+    \u0275\u0275elementStart(0, "div", 50);
+    \u0275\u0275element(1, "input", 52);
     \u0275\u0275elementEnd();
   }
 }
-function OrthopedicExamFormComponent_div_0_option_53_Template(rf, ctx) {
+function SurgicalExamForm_div_0_div_64_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "option", 41);
+    \u0275\u0275elementStart(0, "div", 50);
+    \u0275\u0275element(1, "input", 53);
+    \u0275\u0275elementEnd();
+  }
+}
+function SurgicalExamForm_div_0_div_83_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275elementStart(0, "div", 50);
+    \u0275\u0275element(1, "input", 54);
+    \u0275\u0275elementEnd();
+  }
+}
+function SurgicalExamForm_div_0_option_90_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275elementStart(0, "option", 55);
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
@@ -103,10 +117,10 @@ function OrthopedicExamFormComponent_div_0_option_53_Template(rf, ctx) {
     \u0275\u0275textInterpolate(r_r3.description);
   }
 }
-function OrthopedicExamFormComponent_div_0_div_54_Template(rf, ctx) {
+function SurgicalExamForm_div_0_div_91_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 42);
-    \u0275\u0275element(1, "i", 43);
+    \u0275\u0275elementStart(0, "div", 56);
+    \u0275\u0275element(1, "i", 57);
     \u0275\u0275text(2);
     \u0275\u0275elementEnd();
   }
@@ -116,119 +130,166 @@ function OrthopedicExamFormComponent_div_0_div_54_Template(rf, ctx) {
     \u0275\u0275textInterpolate1("", ctx_r1.getErrorMessage("resultID"), " ");
   }
 }
-function OrthopedicExamFormComponent_div_0_span_63_Template(rf, ctx) {
+function SurgicalExamForm_div_0_span_100_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275element(0, "span", 44);
+    \u0275\u0275element(0, "span", 58);
   }
 }
-function OrthopedicExamFormComponent_div_0_Template(rf, ctx) {
+function SurgicalExamForm_div_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "div", 1)(1, "div", 2);
-    \u0275\u0275listener("click", function OrthopedicExamFormComponent_div_0_Template_div_click_1_listener($event) {
+    \u0275\u0275listener("click", function SurgicalExamForm_div_0_Template_div_click_1_listener($event) {
       \u0275\u0275restoreView(_r1);
       return \u0275\u0275resetView($event.stopPropagation());
     });
     \u0275\u0275elementStart(2, "div", 3)(3, "h5", 4);
-    \u0275\u0275text(4, "\u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645");
+    \u0275\u0275text(4, "\u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u062C\u0631\u0627\u062D\u064A");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(5, "button", 5);
-    \u0275\u0275listener("click", function OrthopedicExamFormComponent_div_0_Template_button_click_5_listener() {
+    \u0275\u0275listener("click", function SurgicalExamForm_div_0_Template_button_click_5_listener() {
       \u0275\u0275restoreView(_r1);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.closeModal());
     });
-    \u0275\u0275text(6, "\xD7");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(7, "div", 6)(8, "form", 7);
-    \u0275\u0275listener("ngSubmit", function OrthopedicExamFormComponent_div_0_Template_form_ngSubmit_8_listener() {
+    \u0275\u0275elementStart(6, "div", 6)(7, "form", 7);
+    \u0275\u0275listener("ngSubmit", function SurgicalExamForm_div_0_Template_form_ngSubmit_7_listener() {
       \u0275\u0275restoreView(_r1);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.onSubmit());
     });
-    \u0275\u0275elementStart(9, "div", 8)(10, "div", 9);
-    \u0275\u0275text(11, "\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0647\u0627\u0632 \u0627\u0644\u062D\u0631\u0643\u064A \u0648\u0627\u0644\u0647\u064A\u0643\u0644\u064A ");
-    \u0275\u0275elementStart(12, "span", 10);
-    \u0275\u0275text(13, "*");
+    \u0275\u0275elementStart(8, "div", 8)(9, "div", 9);
+    \u0275\u0275text(10, "\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0639\u0627\u0645\u0629 ");
+    \u0275\u0275elementStart(11, "span", 10);
+    \u0275\u0275text(12, "*");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(14, "div", 11)(15, "div", 12);
-    \u0275\u0275element(16, "input", 13);
-    \u0275\u0275elementStart(17, "label", 14);
-    \u0275\u0275text(18, "\u0633\u0644\u064A\u0645");
+    \u0275\u0275elementStart(13, "div", 11)(14, "div", 12);
+    \u0275\u0275element(15, "input", 13);
+    \u0275\u0275elementStart(16, "label", 14);
+    \u0275\u0275text(17, "\u0633\u0644\u064A\u0645");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(19, "div", 12);
-    \u0275\u0275element(20, "input", 15);
-    \u0275\u0275elementStart(21, "label", 16);
-    \u0275\u0275text(22, "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645");
+    \u0275\u0275elementStart(18, "div", 12);
+    \u0275\u0275element(19, "input", 15);
+    \u0275\u0275elementStart(20, "label", 16);
+    \u0275\u0275text(21, "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(23, "div", 12);
-    \u0275\u0275element(24, "input", 17);
-    \u0275\u0275elementStart(25, "label", 18);
-    \u0275\u0275text(26, "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275elementStart(22, "div", 12);
+    \u0275\u0275element(23, "input", 17);
+    \u0275\u0275elementStart(24, "label", 18);
+    \u0275\u0275text(25, "\u063A\u064A\u0631 \u0630\u0644\u0643");
     \u0275\u0275elementEnd()()()();
-    \u0275\u0275template(27, OrthopedicExamFormComponent_div_0_div_27_Template, 2, 0, "div", 19);
-    \u0275\u0275elementStart(28, "div", 8)(29, "div", 9);
-    \u0275\u0275text(30, "\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0639\u0635\u0628\u064A\u0629 ");
-    \u0275\u0275elementStart(31, "span", 10);
-    \u0275\u0275text(32, "*");
+    \u0275\u0275template(26, SurgicalExamForm_div_0_div_26_Template, 2, 0, "div", 19);
+    \u0275\u0275elementStart(27, "div", 8)(28, "div", 9);
+    \u0275\u0275text(29, "\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0628\u0648\u0644\u064A\u0629 ");
+    \u0275\u0275elementStart(30, "span", 10);
+    \u0275\u0275text(31, "*");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(33, "div", 11)(34, "div", 12);
-    \u0275\u0275element(35, "input", 20);
-    \u0275\u0275elementStart(36, "label", 21);
-    \u0275\u0275text(37, "\u0633\u0644\u064A\u0645");
+    \u0275\u0275elementStart(32, "div", 11)(33, "div", 12);
+    \u0275\u0275element(34, "input", 20);
+    \u0275\u0275elementStart(35, "label", 21);
+    \u0275\u0275text(36, "\u0633\u0644\u064A\u0645");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(38, "div", 12);
-    \u0275\u0275element(39, "input", 22);
-    \u0275\u0275elementStart(40, "label", 23);
-    \u0275\u0275text(41, "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645");
+    \u0275\u0275elementStart(37, "div", 12);
+    \u0275\u0275element(38, "input", 22);
+    \u0275\u0275elementStart(39, "label", 23);
+    \u0275\u0275text(40, "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(42, "div", 12);
-    \u0275\u0275element(43, "input", 24);
-    \u0275\u0275elementStart(44, "label", 25);
-    \u0275\u0275text(45, "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275elementStart(41, "div", 12);
+    \u0275\u0275element(42, "input", 24);
+    \u0275\u0275elementStart(43, "label", 25);
+    \u0275\u0275text(44, "\u063A\u064A\u0631 \u0630\u0644\u0643");
     \u0275\u0275elementEnd()()()();
-    \u0275\u0275template(46, OrthopedicExamFormComponent_div_0_div_46_Template, 2, 0, "div", 19);
-    \u0275\u0275elementStart(47, "div", 26)(48, "label", 27);
-    \u0275\u0275text(49, "\u0627\u0644\u0646\u062A\u064A\u062C\u0629 ");
-    \u0275\u0275elementStart(50, "span", 10);
-    \u0275\u0275text(51, "*");
+    \u0275\u0275template(45, SurgicalExamForm_div_0_div_45_Template, 2, 0, "div", 19);
+    \u0275\u0275elementStart(46, "div", 8)(47, "div", 9);
+    \u0275\u0275text(48, "\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0648\u0639\u0627\u0626\u064A\u0629 ");
+    \u0275\u0275elementStart(49, "span", 10);
+    \u0275\u0275text(50, "*");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(52, "select", 28);
-    \u0275\u0275template(53, OrthopedicExamFormComponent_div_0_option_53_Template, 2, 2, "option", 29);
+    \u0275\u0275elementStart(51, "div", 11)(52, "div", 12);
+    \u0275\u0275element(53, "input", 26);
+    \u0275\u0275elementStart(54, "label", 27);
+    \u0275\u0275text(55, "\u0633\u0644\u064A\u0645");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(56, "div", 12);
+    \u0275\u0275element(57, "input", 28);
+    \u0275\u0275elementStart(58, "label", 29);
+    \u0275\u0275text(59, "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(60, "div", 12);
+    \u0275\u0275element(61, "input", 30);
+    \u0275\u0275elementStart(62, "label", 31);
+    \u0275\u0275text(63, "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275elementEnd()()()();
+    \u0275\u0275template(64, SurgicalExamForm_div_0_div_64_Template, 2, 0, "div", 19);
+    \u0275\u0275elementStart(65, "div", 8)(66, "div", 9);
+    \u0275\u0275text(67, "\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0635\u062F\u0631\u064A\u0629 ");
+    \u0275\u0275elementStart(68, "span", 10);
+    \u0275\u0275text(69, "*");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(70, "div", 11)(71, "div", 12);
+    \u0275\u0275element(72, "input", 32);
+    \u0275\u0275elementStart(73, "label", 33);
+    \u0275\u0275text(74, "\u0633\u0644\u064A\u0645");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(75, "div", 12);
+    \u0275\u0275element(76, "input", 34);
+    \u0275\u0275elementStart(77, "label", 35);
+    \u0275\u0275text(78, "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(79, "div", 12);
+    \u0275\u0275element(80, "input", 36);
+    \u0275\u0275elementStart(81, "label", 37);
+    \u0275\u0275text(82, "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275elementEnd()()()();
+    \u0275\u0275template(83, SurgicalExamForm_div_0_div_83_Template, 2, 0, "div", 19);
+    \u0275\u0275elementStart(84, "div", 38)(85, "label", 39);
+    \u0275\u0275text(86, "\u0627\u0644\u0646\u062A\u064A\u062C\u0629 ");
+    \u0275\u0275elementStart(87, "span", 10);
+    \u0275\u0275text(88, "*");
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(89, "select", 40);
+    \u0275\u0275template(90, SurgicalExamForm_div_0_option_90_Template, 2, 2, "option", 41);
     \u0275\u0275elementEnd();
-    \u0275\u0275template(54, OrthopedicExamFormComponent_div_0_div_54_Template, 3, 1, "div", 30);
+    \u0275\u0275template(91, SurgicalExamForm_div_0_div_91_Template, 3, 1, "div", 42);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(55, "div", 31)(56, "label", 32);
-    \u0275\u0275text(57, "\u0627\u0644\u0633\u0628\u0628 (\u0625\u0646 \u0648\u062C\u062F)");
+    \u0275\u0275elementStart(92, "div", 43)(93, "label", 44);
+    \u0275\u0275text(94, "\u0627\u0644\u0633\u0628\u0628 (\u0625\u0646 \u0648\u062C\u062F)");
     \u0275\u0275elementEnd();
-    \u0275\u0275element(58, "textarea", 33);
+    \u0275\u0275element(95, "textarea", 45);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(59, "div", 34)(60, "button", 35);
-    \u0275\u0275listener("click", function OrthopedicExamFormComponent_div_0_Template_button_click_60_listener() {
+    \u0275\u0275elementStart(96, "div", 46)(97, "button", 47);
+    \u0275\u0275listener("click", function SurgicalExamForm_div_0_Template_button_click_97_listener() {
       \u0275\u0275restoreView(_r1);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.closeModal());
     });
-    \u0275\u0275text(61, "\u0625\u0644\u063A\u0627\u0621");
+    \u0275\u0275text(98, "\u0625\u0644\u063A\u0627\u0621");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(62, "button", 36);
-    \u0275\u0275template(63, OrthopedicExamFormComponent_div_0_span_63_Template, 1, 0, "span", 37);
-    \u0275\u0275text(64, " \u062D\u0641\u0638 ");
+    \u0275\u0275elementStart(99, "button", 48);
+    \u0275\u0275template(100, SurgicalExamForm_div_0_span_100_Template, 1, 0, "span", 49);
+    \u0275\u0275text(101, " \u062D\u0641\u0638 ");
     \u0275\u0275elementEnd()()()()()();
   }
   if (rf & 2) {
     let tmp_2_0;
     let tmp_3_0;
     let tmp_4_0;
+    let tmp_5_0;
+    let tmp_6_0;
     const ctx_r1 = \u0275\u0275nextContext();
-    \u0275\u0275advance(8);
+    \u0275\u0275advance(7);
     \u0275\u0275property("formGroup", ctx_r1.examForm);
     \u0275\u0275advance(19);
-    \u0275\u0275property("ngIf", ((tmp_2_0 = ctx_r1.examForm.get("musculoskeletal")) == null ? null : tmp_2_0.value) === "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275property("ngIf", ((tmp_2_0 = ctx_r1.examForm.get("generalSurgery")) == null ? null : tmp_2_0.value) === "\u063A\u064A\u0631 \u0630\u0644\u0643");
     \u0275\u0275advance(19);
-    \u0275\u0275property("ngIf", ((tmp_3_0 = ctx_r1.examForm.get("neurologicalSurgery")) == null ? null : tmp_3_0.value) === "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275property("ngIf", ((tmp_3_0 = ctx_r1.examForm.get("urinarySurgery")) == null ? null : tmp_3_0.value) === "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275advance(19);
+    \u0275\u0275property("ngIf", ((tmp_4_0 = ctx_r1.examForm.get("vascularSurgery")) == null ? null : tmp_4_0.value) === "\u063A\u064A\u0631 \u0630\u0644\u0643");
+    \u0275\u0275advance(19);
+    \u0275\u0275property("ngIf", ((tmp_5_0 = ctx_r1.examForm.get("thoracicSurgery")) == null ? null : tmp_5_0.value) === "\u063A\u064A\u0631 \u0630\u0644\u0643");
     \u0275\u0275advance(6);
-    \u0275\u0275classProp("is-invalid", ((tmp_4_0 = ctx_r1.examForm.get("resultID")) == null ? null : tmp_4_0.invalid) && ((tmp_4_0 = ctx_r1.examForm.get("resultID")) == null ? null : tmp_4_0.touched))("is-valid", ctx_r1.isFieldValid("resultID"));
+    \u0275\u0275classProp("is-invalid", ((tmp_6_0 = ctx_r1.examForm.get("resultID")) == null ? null : tmp_6_0.invalid) && ((tmp_6_0 = ctx_r1.examForm.get("resultID")) == null ? null : tmp_6_0.touched))("is-valid", ctx_r1.isFieldValid("resultID"));
     \u0275\u0275advance();
     \u0275\u0275property("ngForOf", ctx_r1.results);
     \u0275\u0275advance();
@@ -239,7 +300,7 @@ function OrthopedicExamFormComponent_div_0_Template(rf, ctx) {
     \u0275\u0275property("ngIf", ctx_r1.loading);
   }
 }
-var OrthopedicExamFormComponent = class _OrthopedicExamFormComponent {
+var SurgicalExamForm = class _SurgicalExamForm {
   fb;
   examService;
   authService;
@@ -258,10 +319,14 @@ var OrthopedicExamFormComponent = class _OrthopedicExamFormComponent {
   }
   ngOnInit() {
     this.examForm = this.fb.group({
-      musculoskeletal: ["\u0633\u0644\u064A\u0645", Validators.required],
-      musculoskeletalOther: [""],
-      neurologicalSurgery: ["\u0633\u0644\u064A\u0645", Validators.required],
-      neurologicalSurgeryOther: [""],
+      generalSurgery: ["\u0633\u0644\u064A\u0645", Validators.required],
+      generalSurgeryOther: [""],
+      urinarySurgery: ["\u0633\u0644\u064A\u0645", Validators.required],
+      urinarySurgeryOther: [""],
+      vascularSurgery: ["\u0633\u0644\u064A\u0645", Validators.required],
+      vascularSurgeryOther: [""],
+      thoracicSurgery: ["\u0633\u0644\u064A\u0645", Validators.required],
+      thoracicSurgeryOther: [""],
       resultID: [null, Validators.required],
       reason: [""]
     });
@@ -300,15 +365,17 @@ var OrthopedicExamFormComponent = class _OrthopedicExamFormComponent {
     const exam = {
       applicantFileNumber: this.applicantFileNumber,
       doctorID,
-      musculoskeletal: formData.musculoskeletal === "\u063A\u064A\u0631 \u0630\u0644\u0643" ? formData.musculoskeletalOther || "" : formData.musculoskeletal,
-      neurologicalSurgery: formData.neurologicalSurgery === "\u063A\u064A\u0631 \u0630\u0644\u0643" ? formData.neurologicalSurgeryOther || "" : formData.neurologicalSurgery,
+      generalSurgery: formData.generalSurgery === "\u063A\u064A\u0631 \u0630\u0644\u0643" ? formData.generalSurgeryOther || "" : formData.generalSurgery,
+      urinarySurgery: formData.urinarySurgery === "\u063A\u064A\u0631 \u0630\u0644\u0643" ? formData.urinarySurgeryOther || "" : formData.urinarySurgery,
+      vascularSurgery: formData.vascularSurgery === "\u063A\u064A\u0631 \u0630\u0644\u0643" ? formData.vascularSurgeryOther || "" : formData.vascularSurgery,
+      thoracicSurgery: formData.thoracicSurgery === "\u063A\u064A\u0631 \u0630\u0644\u0643" ? formData.thoracicSurgeryOther || "" : formData.thoracicSurgery,
       resultID: Number(formData.resultID),
       reason: formData.reason || ""
     };
     this.loading = true;
-    this.examService.addOrthopedicExam(exam).subscribe({
+    this.examService.addSurgicalExam(exam).subscribe({
       next: () => {
-        this.toastr.success("\u2705 \u062A\u0645\u062A \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645 \u0628\u0646\u062C\u0627\u062D");
+        this.toastr.success("\u2705 \u062A\u0645\u062A \u0625\u0636\u0627\u0641\u0629 \u0627\u0644\u0641\u062D\u0635 \u0627\u0644\u062C\u0631\u0627\u062D\u064A \u0628\u0646\u062C\u0627\u062D");
         this.examForm.reset();
         this.loading = false;
         this.closeModal();
@@ -316,20 +383,20 @@ var OrthopedicExamFormComponent = class _OrthopedicExamFormComponent {
       },
       error: (err) => {
         this.loading = false;
-        if (err?.error) {
-          this.toastr.error(JSON.stringify(err.error));
+        if (err?.error?.errors?.detail?.includes("Applicant already registered before")) {
+          this.toastr.warning("\u26A0\uFE0F \u0647\u0630\u0627 \u0627\u0644\u0645\u0631\u064A\u0636 \u0645\u0633\u062C\u0651\u0644 \u0645\u0633\u0628\u0642\u064B\u0627. \u0644\u0627 \u064A\u0645\u0643\u0646 \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u062C\u062F\u064A\u062F \u0644\u0646\u0641\u0633 \u0627\u0644\u0631\u0642\u0645.");
         } else {
-          this.toastr.error("\u062D\u062F\u062B \u062E\u0637\u0623 \u0623\u062B\u0646\u0627\u0621 \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645");
+          this.toastr.error("\u274C \u062D\u062F\u062B \u062E\u0637\u0623 \u0623\u062B\u0646\u0627\u0621 \u0625\u0636\u0627\u0641\u0629 \u0627\u0644\u0641\u062D\u0635 \u0627\u0644\u062C\u0631\u0627\u062D\u064A");
         }
       }
     });
   }
-  static \u0275fac = function OrthopedicExamFormComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _OrthopedicExamFormComponent)(\u0275\u0275directiveInject(FormBuilder), \u0275\u0275directiveInject(OrthopedicExamService), \u0275\u0275directiveInject(AuthService), \u0275\u0275directiveInject(ToastrService));
+  static \u0275fac = function SurgicalExamForm_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _SurgicalExamForm)(\u0275\u0275directiveInject(FormBuilder), \u0275\u0275directiveInject(SurgicalExamService), \u0275\u0275directiveInject(AuthService), \u0275\u0275directiveInject(ToastrService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _OrthopedicExamFormComponent, selectors: [["app-orthopedic-exam-form"]], inputs: { applicantFileNumber: "applicantFileNumber" }, outputs: { examAdded: "examAdded" }, decls: 1, vars: 1, consts: [["class", "modal-backdrop", 4, "ngIf"], [1, "modal-backdrop"], [1, "modal-content", 3, "click"], [1, "modal-header"], [1, "modal-title"], ["type", "button", 1, "btn-close", 3, "click"], [1, "modal-body"], ["novalidate", "", 3, "ngSubmit", "formGroup"], [1, "medical-system-row"], [1, "system-label"], [1, "text-danger"], [1, "system-options"], [1, "form-check"], ["type", "radio", "name", "musculoskeletal", "id", "musculoskeletal_healthy", "value", "\u0633\u0644\u064A\u0645", "formControlName", "musculoskeletal", 1, "form-check-input"], ["for", "musculoskeletal_healthy", 1, "form-check-label"], ["type", "radio", "name", "musculoskeletal", "id", "musculoskeletal_unhealthy", "value", "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645", "formControlName", "musculoskeletal", 1, "form-check-input"], ["for", "musculoskeletal_unhealthy", 1, "form-check-label"], ["type", "radio", "name", "musculoskeletal", "id", "musculoskeletal_other", "value", "\u063A\u064A\u0631 \u0630\u0644\u0643", "formControlName", "musculoskeletal", 1, "form-check-input"], ["for", "musculoskeletal_other", 1, "form-check-label"], ["class", "other-input-row", 4, "ngIf"], ["type", "radio", "name", "neurologicalSurgery", "id", "neurologicalSurgery_healthy", "value", "\u0633\u0644\u064A\u0645", "formControlName", "neurologicalSurgery", 1, "form-check-input"], ["for", "neurologicalSurgery_healthy", 1, "form-check-label"], ["type", "radio", "name", "neurologicalSurgery", "id", "neurologicalSurgery_unhealthy", "value", "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645", "formControlName", "neurologicalSurgery", 1, "form-check-input"], ["for", "neurologicalSurgery_unhealthy", 1, "form-check-label"], ["type", "radio", "name", "neurologicalSurgery", "id", "neurologicalSurgery_other", "value", "\u063A\u064A\u0631 \u0630\u0644\u0643", "formControlName", "neurologicalSurgery", 1, "form-check-input"], ["for", "neurologicalSurgery_other", 1, "form-check-label"], [1, "result-section"], [1, "form-label", "mb-3"], ["formControlName", "resultID", 1, "form-select"], [3, "value", 4, "ngFor", "ngForOf"], ["class", "invalid-feedback", 4, "ngIf"], [1, "reason-section"], [1, "form-label"], ["formControlName", "reason", "rows", "3", "placeholder", "\u064A\u0645\u0643\u0646\u0643 \u0643\u062A\u0627\u0628\u0629 \u0627\u0644\u0633\u0628\u0628 \u0625\u0646 \u0648\u062C\u062F", 1, "form-control"], [1, "modal-footer", "mt-4"], ["type", "button", 1, "btn", "btn-secondary", 3, "click"], ["type", "submit", 1, "btn", "btn-success", 3, "disabled"], ["class", "spinner-border spinner-border-sm me-2", 4, "ngIf"], [1, "other-input-row"], ["type", "text", "formControlName", "musculoskeletalOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], ["type", "text", "formControlName", "neurologicalSurgeryOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], [3, "value"], [1, "invalid-feedback"], [1, "pi", "pi-exclamation-circle"], [1, "spinner-border", "spinner-border-sm", "me-2"]], template: function OrthopedicExamFormComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _SurgicalExamForm, selectors: [["app-surgical-exam-form"]], inputs: { applicantFileNumber: "applicantFileNumber" }, outputs: { examAdded: "examAdded" }, decls: 1, vars: 1, consts: [["class", "modal-backdrop", 4, "ngIf"], [1, "modal-backdrop"], [1, "modal-content", 3, "click"], [1, "modal-header"], [1, "modal-title"], ["type", "button", 1, "btn-close", 3, "click"], [1, "modal-body"], ["novalidate", "", 3, "ngSubmit", "formGroup"], [1, "medical-system-row"], [1, "system-label"], [1, "text-danger"], [1, "system-options"], [1, "form-check"], ["type", "radio", "name", "generalSurgery", "id", "generalSurgery_healthy", "value", "\u0633\u0644\u064A\u0645", "formControlName", "generalSurgery", 1, "form-check-input"], ["for", "generalSurgery_healthy", 1, "form-check-label"], ["type", "radio", "name", "generalSurgery", "id", "generalSurgery_unhealthy", "value", "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645", "formControlName", "generalSurgery", 1, "form-check-input"], ["for", "generalSurgery_unhealthy", 1, "form-check-label"], ["type", "radio", "name", "generalSurgery", "id", "generalSurgery_other", "value", "\u063A\u064A\u0631 \u0630\u0644\u0643", "formControlName", "generalSurgery", 1, "form-check-input"], ["for", "generalSurgery_other", 1, "form-check-label"], ["class", "other-input-row", 4, "ngIf"], ["type", "radio", "name", "urinarySurgery", "id", "urinarySurgery_healthy", "value", "\u0633\u0644\u064A\u0645", "formControlName", "urinarySurgery", 1, "form-check-input"], ["for", "urinarySurgery_healthy", 1, "form-check-label"], ["type", "radio", "name", "urinarySurgery", "id", "urinarySurgery_unhealthy", "value", "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645", "formControlName", "urinarySurgery", 1, "form-check-input"], ["for", "urinarySurgery_unhealthy", 1, "form-check-label"], ["type", "radio", "name", "urinarySurgery", "id", "urinarySurgery_other", "value", "\u063A\u064A\u0631 \u0630\u0644\u0643", "formControlName", "urinarySurgery", 1, "form-check-input"], ["for", "urinarySurgery_other", 1, "form-check-label"], ["type", "radio", "name", "vascularSurgery", "id", "vascularSurgery_healthy", "value", "\u0633\u0644\u064A\u0645", "formControlName", "vascularSurgery", 1, "form-check-input"], ["for", "vascularSurgery_healthy", 1, "form-check-label"], ["type", "radio", "name", "vascularSurgery", "id", "vascularSurgery_unhealthy", "value", "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645", "formControlName", "vascularSurgery", 1, "form-check-input"], ["for", "vascularSurgery_unhealthy", 1, "form-check-label"], ["type", "radio", "name", "vascularSurgery", "id", "vascularSurgery_other", "value", "\u063A\u064A\u0631 \u0630\u0644\u0643", "formControlName", "vascularSurgery", 1, "form-check-input"], ["for", "vascularSurgery_other", 1, "form-check-label"], ["type", "radio", "name", "thoracicSurgery", "id", "thoracicSurgery_healthy", "value", "\u0633\u0644\u064A\u0645", "formControlName", "thoracicSurgery", 1, "form-check-input"], ["for", "thoracicSurgery_healthy", 1, "form-check-label"], ["type", "radio", "name", "thoracicSurgery", "id", "thoracicSurgery_unhealthy", "value", "\u063A\u064A\u0631 \u0633\u0644\u064A\u0645", "formControlName", "thoracicSurgery", 1, "form-check-input"], ["for", "thoracicSurgery_unhealthy", 1, "form-check-label"], ["type", "radio", "name", "thoracicSurgery", "id", "thoracicSurgery_other", "value", "\u063A\u064A\u0631 \u0630\u0644\u0643", "formControlName", "thoracicSurgery", 1, "form-check-input"], ["for", "thoracicSurgery_other", 1, "form-check-label"], [1, "result-section"], [1, "form-label", "mb-3"], ["formControlName", "resultID", 1, "form-select"], [3, "value", 4, "ngFor", "ngForOf"], ["class", "invalid-feedback", 4, "ngIf"], [1, "reason-section"], [1, "form-label"], ["formControlName", "reason", "rows", "3", "placeholder", "\u064A\u0645\u0643\u0646\u0643 \u0643\u062A\u0627\u0628\u0629 \u0627\u0644\u0633\u0628\u0628 \u0625\u0646 \u0648\u062C\u062F", 1, "form-control"], [1, "modal-footer", "mt-4"], ["type", "button", 1, "btn", "btn-secondary", 3, "click"], ["type", "submit", 1, "btn", "btn-success", 3, "disabled"], ["class", "spinner-border spinner-border-sm me-2", 4, "ngIf"], [1, "other-input-row"], ["type", "text", "formControlName", "generalSurgeryOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], ["type", "text", "formControlName", "urinarySurgeryOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], ["type", "text", "formControlName", "vascularSurgeryOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], ["type", "text", "formControlName", "thoracicSurgeryOther", "placeholder", "\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644", 1, "form-control"], [3, "value"], [1, "invalid-feedback"], [1, "pi", "pi-exclamation-circle"], [1, "spinner-border", "spinner-border-sm", "me-2"]], template: function SurgicalExamForm_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, OrthopedicExamFormComponent_div_0_Template, 65, 11, "div", 0);
+      \u0275\u0275template(0, SurgicalExamForm_div_0_Template, 102, 13, "div", 0);
     }
     if (rf & 2) {
       \u0275\u0275property("ngIf", ctx.showModal);
@@ -1315,24 +1382,15 @@ textarea[_ngcontent-%COMP%]:hover {
 }
 .modal-content[_ngcontent-%COMP%] {
   background: #fff;
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   max-width: 700px;
   width: 100%;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-xl);
   animation: _ngcontent-%COMP%_fadeIn 0.35s ease;
   border-top: 5px solid var(--primary-medium);
-}
-.modal-header[_ngcontent-%COMP%] {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid #eee;
-  background: #f8f9fa;
-  border-radius: 16px 16px 0 0;
 }
 .modal-header[_ngcontent-%COMP%] {
   background:
@@ -1340,9 +1398,9 @@ textarea[_ngcontent-%COMP%]:hover {
       135deg,
       #054239 0%,
       #428177 100%) !important;
+  padding: 1.5rem 2rem !important;
   border-bottom: 2px solid #B9A779 !important;
   border-radius: 16px 16px 0 0 !important;
-  padding: 1.5rem 2rem !important;
 }
 .modal-header[_ngcontent-%COMP%]   .modal-title[_ngcontent-%COMP%] {
   font-size: 1.5rem !important;
@@ -1425,7 +1483,7 @@ textarea[_ngcontent-%COMP%]:hover {
   padding: 1.5rem 2rem;
   background: white;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 16px;
 }
 @keyframes _ngcontent-%COMP%_fadeIn {
   from {
@@ -1545,67 +1603,112 @@ textarea[_ngcontent-%COMP%]:hover {
 .modal-body[_ngcontent-%COMP%] {
   max-height: calc(85vh - 150px) !important;
 }
-/*# sourceMappingURL=orthopedic-exam-form.component.css.map */`] });
+/*# sourceMappingURL=surgical-exam-form.css.map */`] });
 };
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(OrthopedicExamFormComponent, [{
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(SurgicalExamForm, [{
     type: Component,
-    args: [{ selector: "app-orthopedic-exam-form", standalone: true, imports: [ReactiveFormsModule, CommonModule], template: `<!-- \u0627\u0644\u0645\u0648\u062F\u0627\u0644 -->\r
+    args: [{ selector: "app-surgical-exam-form", imports: [ReactiveFormsModule, CommonModule], template: `\r
+<!-- \u0627\u0644\u0645\u0648\u062F\u0627\u0644 -->\r
 <div class="modal-backdrop" *ngIf="showModal">\r
   <div class="modal-content" (click)="$event.stopPropagation()">\r
-    \r
+\r
     <!-- \u0627\u0644\u0647\u064A\u062F\u0631 -->\r
     <div class="modal-header">\r
-      <h5 class="modal-title">\u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645</h5>\r
-      <button type="button" class="btn-close" (click)="closeModal()">\xD7</button>\r
+      <h5 class="modal-title">\u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u062C\u0631\u0627\u062D\u064A</h5>\r
+      <button type="button" class="btn-close" (click)="closeModal()"></button>\r
     </div>\r
 \r
     <!-- \u0627\u0644\u0628\u0648\u062F\u064A -->\r
     <div class="modal-body">\r
       <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>\r
-        \r
-        <!-- \u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0647\u0627\u0632 \u0627\u0644\u062D\u0631\u0643\u064A \u0648\u0627\u0644\u0647\u064A\u0643\u0644\u064A -->\r
+\r
+        <!-- \u062C\u0631\u0627\u062D\u0629 \u0639\u0627\u0645\u0629 -->\r
         <div class="medical-system-row">\r
-          <div class="system-label">\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0647\u0627\u0632 \u0627\u0644\u062D\u0631\u0643\u064A \u0648\u0627\u0644\u0647\u064A\u0643\u0644\u064A <span class="text-danger">*</span></div>\r
+          <div class="system-label">\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0639\u0627\u0645\u0629 <span class="text-danger">*</span></div>\r
           <div class="system-options">\r
             <div class="form-check">\r
-              <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_healthy" value="\u0633\u0644\u064A\u0645" formControlName="musculoskeletal">\r
-              <label class="form-check-label" for="musculoskeletal_healthy">\u0633\u0644\u064A\u0645</label>\r
+              <input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_healthy" value="\u0633\u0644\u064A\u0645" formControlName="generalSurgery">\r
+              <label class="form-check-label" for="generalSurgery_healthy">\u0633\u0644\u064A\u0645</label>\r
             </div>\r
             <div class="form-check">\r
-              <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_unhealthy" value="\u063A\u064A\u0631 \u0633\u0644\u064A\u0645" formControlName="musculoskeletal">\r
-              <label class="form-check-label" for="musculoskeletal_unhealthy">\u063A\u064A\u0631 \u0633\u0644\u064A\u0645</label>\r
+              <input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_unhealthy" value="\u063A\u064A\u0631 \u0633\u0644\u064A\u0645" formControlName="generalSurgery">\r
+              <label class="form-check-label" for="generalSurgery_unhealthy">\u063A\u064A\u0631 \u0633\u0644\u064A\u0645</label>\r
             </div>\r
             <div class="form-check">\r
-              <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_other" value="\u063A\u064A\u0631 \u0630\u0644\u0643" formControlName="musculoskeletal">\r
-              <label class="form-check-label" for="musculoskeletal_other">\u063A\u064A\u0631 \u0630\u0644\u0643</label>\r
+              <input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_other" value="\u063A\u064A\u0631 \u0630\u0644\u0643" formControlName="generalSurgery">\r
+              <label class="form-check-label" for="generalSurgery_other">\u063A\u064A\u0631 \u0630\u0644\u0643</label>\r
             </div>\r
           </div>\r
         </div>\r
-        <div *ngIf="examForm.get('musculoskeletal')?.value === '\u063A\u064A\u0631 \u0630\u0644\u0643'" class="other-input-row">\r
-          <input type="text" class="form-control" formControlName="musculoskeletalOther" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644">\r
+        <div *ngIf="examForm.get('generalSurgery')?.value === '\u063A\u064A\u0631 \u0630\u0644\u0643'" class="other-input-row">\r
+          <input type="text" class="form-control" formControlName="generalSurgeryOther" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644">\r
         </div>\r
 \r
-        <!-- \u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0639\u0635\u0628\u064A\u0629 -->\r
+        <!-- \u062C\u0631\u0627\u062D\u0629 \u0628\u0648\u0644\u064A\u0629 -->\r
         <div class="medical-system-row">\r
-          <div class="system-label">\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0639\u0635\u0628\u064A\u0629 <span class="text-danger">*</span></div>\r
+          <div class="system-label">\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0628\u0648\u0644\u064A\u0629 <span class="text-danger">*</span></div>\r
           <div class="system-options">\r
             <div class="form-check">\r
-              <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_healthy" value="\u0633\u0644\u064A\u0645" formControlName="neurologicalSurgery">\r
-              <label class="form-check-label" for="neurologicalSurgery_healthy">\u0633\u0644\u064A\u0645</label>\r
+              <input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_healthy" value="\u0633\u0644\u064A\u0645" formControlName="urinarySurgery">\r
+              <label class="form-check-label" for="urinarySurgery_healthy">\u0633\u0644\u064A\u0645</label>\r
             </div>\r
             <div class="form-check">\r
-              <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_unhealthy" value="\u063A\u064A\u0631 \u0633\u0644\u064A\u0645" formControlName="neurologicalSurgery">\r
-              <label class="form-check-label" for="neurologicalSurgery_unhealthy">\u063A\u064A\u0631 \u0633\u0644\u064A\u0645</label>\r
+              <input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_unhealthy" value="\u063A\u064A\u0631 \u0633\u0644\u064A\u0645" formControlName="urinarySurgery">\r
+              <label class="form-check-label" for="urinarySurgery_unhealthy">\u063A\u064A\u0631 \u0633\u0644\u064A\u0645</label>\r
             </div>\r
             <div class="form-check">\r
-              <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_other" value="\u063A\u064A\u0631 \u0630\u0644\u0643" formControlName="neurologicalSurgery">\r
-              <label class="form-check-label" for="neurologicalSurgery_other">\u063A\u064A\u0631 \u0630\u0644\u0643</label>\r
+              <input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_other" value="\u063A\u064A\u0631 \u0630\u0644\u0643" formControlName="urinarySurgery">\r
+              <label class="form-check-label" for="urinarySurgery_other">\u063A\u064A\u0631 \u0630\u0644\u0643</label>\r
             </div>\r
           </div>\r
         </div>\r
-        <div *ngIf="examForm.get('neurologicalSurgery')?.value === '\u063A\u064A\u0631 \u0630\u0644\u0643'" class="other-input-row">\r
-          <input type="text" class="form-control" formControlName="neurologicalSurgeryOther" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644">\r
+        <div *ngIf="examForm.get('urinarySurgery')?.value === '\u063A\u064A\u0631 \u0630\u0644\u0643'" class="other-input-row">\r
+          <input type="text" class="form-control" formControlName="urinarySurgeryOther" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644">\r
+        </div>\r
+\r
+        <!-- \u062C\u0631\u0627\u062D\u0629 \u0648\u0639\u0627\u0626\u064A\u0629 -->\r
+        <div class="medical-system-row">\r
+          <div class="system-label">\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0648\u0639\u0627\u0626\u064A\u0629 <span class="text-danger">*</span></div>\r
+          <div class="system-options">\r
+            <div class="form-check">\r
+              <input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_healthy" value="\u0633\u0644\u064A\u0645" formControlName="vascularSurgery">\r
+              <label class="form-check-label" for="vascularSurgery_healthy">\u0633\u0644\u064A\u0645</label>\r
+            </div>\r
+            <div class="form-check">\r
+              <input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_unhealthy" value="\u063A\u064A\u0631 \u0633\u0644\u064A\u0645" formControlName="vascularSurgery">\r
+              <label class="form-check-label" for="vascularSurgery_unhealthy">\u063A\u064A\u0631 \u0633\u0644\u064A\u0645</label>\r
+            </div>\r
+            <div class="form-check">\r
+              <input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_other" value="\u063A\u064A\u0631 \u0630\u0644\u0643" formControlName="vascularSurgery">\r
+              <label class="form-check-label" for="vascularSurgery_other">\u063A\u064A\u0631 \u0630\u0644\u0643</label>\r
+            </div>\r
+          </div>\r
+        </div>\r
+        <div *ngIf="examForm.get('vascularSurgery')?.value === '\u063A\u064A\u0631 \u0630\u0644\u0643'" class="other-input-row">\r
+          <input type="text" class="form-control" formControlName="vascularSurgeryOther" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644">\r
+        </div>\r
+\r
+        <!-- \u062C\u0631\u0627\u062D\u0629 \u0635\u062F\u0631\u064A\u0629 -->\r
+        <div class="medical-system-row">\r
+          <div class="system-label">\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062C\u0631\u0627\u062D\u0629 \u0627\u0644\u0635\u062F\u0631\u064A\u0629 <span class="text-danger">*</span></div>\r
+          <div class="system-options">\r
+            <div class="form-check">\r
+              <input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_healthy" value="\u0633\u0644\u064A\u0645" formControlName="thoracicSurgery">\r
+              <label class="form-check-label" for="thoracicSurgery_healthy">\u0633\u0644\u064A\u0645</label>\r
+            </div>\r
+            <div class="form-check">\r
+              <input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_unhealthy" value="\u063A\u064A\u0631 \u0633\u0644\u064A\u0645" formControlName="thoracicSurgery">\r
+              <label class="form-check-label" for="thoracicSurgery_unhealthy">\u063A\u064A\u0631 \u0633\u0644\u064A\u0645</label>\r
+            </div>\r
+            <div class="form-check">\r
+              <input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_other" value="\u063A\u064A\u0631 \u0630\u0644\u0643" formControlName="thoracicSurgery">\r
+              <label class="form-check-label" for="thoracicSurgery_other">\u063A\u064A\u0631 \u0630\u0644\u0643</label>\r
+            </div>\r
+          </div>\r
+        </div>\r
+        <div *ngIf="examForm.get('thoracicSurgery')?.value === '\u063A\u064A\u0631 \u0630\u0644\u0643'" class="other-input-row">\r
+          <input type="text" class="form-control" formControlName="thoracicSurgeryOther" placeholder="\u0623\u062F\u062E\u0644 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644">\r
         </div>\r
 \r
         <!-- \u0627\u0644\u0646\u062A\u064A\u062C\u0629 -->\r
@@ -1645,7 +1748,7 @@ textarea[_ngcontent-%COMP%]:hover {
 </div>\r
 `, styles: [`@charset "UTF-8";
 
-/* src/app/features/doctor/components/orthopedics-doctor.component/orthopedic-exam-form.component/orthopedic-exam-form.component.scss */
+/* src/app/features/doctor/components/surgery-doctor.component/surgical-exam-form/surgical-exam-form.scss */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -2623,24 +2726,15 @@ textarea:hover {
 }
 .modal-content {
   background: #fff;
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   max-width: 700px;
   width: 100%;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-xl);
   animation: fadeIn 0.35s ease;
   border-top: 5px solid var(--primary-medium);
-}
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid #eee;
-  background: #f8f9fa;
-  border-radius: 16px 16px 0 0;
 }
 .modal-header {
   background:
@@ -2648,9 +2742,9 @@ textarea:hover {
       135deg,
       #054239 0%,
       #428177 100%) !important;
+  padding: 1.5rem 2rem !important;
   border-bottom: 2px solid #B9A779 !important;
   border-radius: 16px 16px 0 0 !important;
-  padding: 1.5rem 2rem !important;
 }
 .modal-header .modal-title {
   font-size: 1.5rem !important;
@@ -2733,7 +2827,7 @@ textarea:hover {
   padding: 1.5rem 2rem;
   background: white;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 16px;
 }
 @keyframes fadeIn {
   from {
@@ -2853,38 +2947,38 @@ textarea:hover {
 .modal-body {
   max-height: calc(85vh - 150px) !important;
 }
-/*# sourceMappingURL=orthopedic-exam-form.component.css.map */
+/*# sourceMappingURL=surgical-exam-form.css.map */
 `] }]
-  }], () => [{ type: FormBuilder }, { type: OrthopedicExamService }, { type: AuthService }, { type: ToastrService }], { applicantFileNumber: [{
+  }], () => [{ type: FormBuilder }, { type: SurgicalExamService }, { type: AuthService }, { type: ToastrService }], { applicantFileNumber: [{
     type: Input
   }], examAdded: [{
     type: Output
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(OrthopedicExamFormComponent, { className: "OrthopedicExamFormComponent", filePath: "src/app/features/doctor/components/orthopedics-doctor.component/orthopedic-exam-form.component/orthopedic-exam-form.component.ts", lineNumber: 16 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(SurgicalExamForm, { className: "SurgicalExamForm", filePath: "src/app/features/doctor/components/surgery-doctor.component/surgical-exam-form/surgical-exam-form.ts", lineNumber: 15 });
 })();
 
-// src/app/features/doctor/components/orthopedics-doctor.component/orthopedics-doctor.component.ts
+// src/app/features/doctor/components/surgery-doctor.component/surgery-doctor.component.ts
 var _c0 = ["class", "component"];
-function OrthopedicsDoctorComponent_button_4_Template(rf, ctx) {
+function SurgeryDoctorComponent_button_4_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 8);
-    \u0275\u0275listener("click", function OrthopedicsDoctorComponent_button_4_Template_button_click_0_listener() {
+    \u0275\u0275elementStart(0, "button", 7);
+    \u0275\u0275listener("click", function SurgeryDoctorComponent_button_4_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r1);
       const ctx_r1 = \u0275\u0275nextContext();
-      return \u0275\u0275resetView(ctx_r1.addOrthopedicExam());
+      return \u0275\u0275resetView(ctx_r1.addSurgicalExam());
     });
-    \u0275\u0275text(1, " \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645 ");
+    \u0275\u0275text(1, " \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u062C\u0631\u0627\u062D\u064A ");
     \u0275\u0275elementEnd();
   }
 }
-function OrthopedicsDoctorComponent_button_5_Template(rf, ctx) {
+function SurgeryDoctorComponent_button_5_Template(rf, ctx) {
   if (rf & 1) {
     const _r3 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 8);
-    \u0275\u0275listener("click", function OrthopedicsDoctorComponent_button_5_Template_button_click_0_listener() {
+    \u0275\u0275elementStart(0, "button", 7);
+    \u0275\u0275listener("click", function SurgeryDoctorComponent_button_5_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r3);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.addConsultation());
@@ -2893,11 +2987,11 @@ function OrthopedicsDoctorComponent_button_5_Template(rf, ctx) {
     \u0275\u0275elementEnd();
   }
 }
-function OrthopedicsDoctorComponent_button_6_Template(rf, ctx) {
+function SurgeryDoctorComponent_button_6_Template(rf, ctx) {
   if (rf & 1) {
     const _r4 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 8);
-    \u0275\u0275listener("click", function OrthopedicsDoctorComponent_button_6_Template_button_click_0_listener() {
+    \u0275\u0275elementStart(0, "button", 7);
+    \u0275\u0275listener("click", function SurgeryDoctorComponent_button_6_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r4);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.addInvestigation());
@@ -2906,14 +3000,14 @@ function OrthopedicsDoctorComponent_button_6_Template(rf, ctx) {
     \u0275\u0275elementEnd();
   }
 }
-function OrthopedicsDoctorComponent_app_orthopedic_exam_form_7_Template(rf, ctx) {
+function SurgeryDoctorComponent_app_surgical_exam_form_7_Template(rf, ctx) {
   if (rf & 1) {
     const _r5 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "app-orthopedic-exam-form", 9);
-    \u0275\u0275listener("examAdded", function OrthopedicsDoctorComponent_app_orthopedic_exam_form_7_Template_app_orthopedic_exam_form_examAdded_0_listener() {
+    \u0275\u0275elementStart(0, "app-surgical-exam-form", 8);
+    \u0275\u0275listener("examAdded", function SurgeryDoctorComponent_app_surgical_exam_form_7_Template_app_surgical_exam_form_examAdded_0_listener() {
       \u0275\u0275restoreView(_r5);
       const ctx_r1 = \u0275\u0275nextContext();
-      return \u0275\u0275resetView(ctx_r1.onOrthopedicExamAdded());
+      return \u0275\u0275resetView(ctx_r1.onSurgicalExamAdded());
     });
     \u0275\u0275elementEnd();
   }
@@ -2922,51 +3016,52 @@ function OrthopedicsDoctorComponent_app_orthopedic_exam_form_7_Template(rf, ctx)
     \u0275\u0275property("applicantFileNumber", ctx_r1.selectedApplicant.fileNumber);
   }
 }
-function OrthopedicsDoctorComponent_app_consultation_form_8_Template(rf, ctx) {
+function SurgeryDoctorComponent_app_consultation_form_8_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275element(0, "app-consultation-form", 10);
+    \u0275\u0275element(0, "app-consultation-form", 9);
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275property("applicantFileNumber", ctx_r1.selectedApplicant.fileNumber);
   }
 }
-function OrthopedicsDoctorComponent_app_investigation_form_9_Template(rf, ctx) {
+function SurgeryDoctorComponent_app_investigation_form_9_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275element(0, "app-investigation-form", 10, 0);
+    \u0275\u0275element(0, "app-investigation-form", 9);
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275property("applicantFileNumber", ctx_r1.selectedApplicant.fileNumber);
   }
 }
-var OrthopedicsDoctorComponent = class _OrthopedicsDoctorComponent {
+var SurgeryDoctorComponent = class _SurgeryDoctorComponent {
   toastr;
-  orthopedicService;
+  surgicalService;
   selectedApplicant = null;
-  hasOrthopedicExam = false;
-  orthopedicForm;
+  hasSurgicalExam = false;
+  // ✅
+  surgicalExamForm;
   consultationForm;
   investigationForm;
-  constructor(toastr, orthopedicService) {
+  constructor(toastr, surgicalService) {
     this.toastr = toastr;
-    this.orthopedicService = orthopedicService;
+    this.surgicalService = surgicalService;
   }
   onApplicantSelected(applicant) {
     this.selectedApplicant = applicant;
     if (applicant?.fileNumber) {
-      this.orthopedicService.getByFileNumber(applicant.fileNumber).subscribe({
-        next: (exam) => this.hasOrthopedicExam = !!exam,
-        error: () => this.hasOrthopedicExam = false
+      this.surgicalService.getByFileNumber(applicant.fileNumber).subscribe({
+        next: (exam) => this.hasSurgicalExam = !!exam,
+        error: () => this.hasSurgicalExam = false
       });
     }
   }
-  addOrthopedicExam() {
+  addSurgicalExam() {
     if (!this.selectedApplicant) {
       this.toastr.warning("\u064A\u0631\u062C\u0649 \u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u0631\u064A\u0636 \u0623\u0648\u0644\u0627\u064B");
       return;
     }
-    this.orthopedicForm.openModal();
+    this.surgicalExamForm.openModal();
   }
   addConsultation() {
     if (!this.selectedApplicant) {
@@ -2982,40 +3077,40 @@ var OrthopedicsDoctorComponent = class _OrthopedicsDoctorComponent {
     }
     this.investigationForm.openModal();
   }
-  onOrthopedicExamAdded() {
-    this.hasOrthopedicExam = true;
+  onSurgicalExamAdded() {
+    this.hasSurgicalExam = true;
   }
-  static \u0275fac = function OrthopedicsDoctorComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _OrthopedicsDoctorComponent)(\u0275\u0275directiveInject(ToastrService), \u0275\u0275directiveInject(OrthopedicExamService));
+  static \u0275fac = function SurgeryDoctorComponent_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _SurgeryDoctorComponent)(\u0275\u0275directiveInject(ToastrService), \u0275\u0275directiveInject(SurgicalExamService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _OrthopedicsDoctorComponent, selectors: [["app-orthopedics-doctor", 8, "component"]], viewQuery: function OrthopedicsDoctorComponent_Query(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _SurgeryDoctorComponent, selectors: [["app-surgery-doctor", 8, "component"]], viewQuery: function SurgeryDoctorComponent_Query(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275viewQuery(OrthopedicExamFormComponent, 5);
+      \u0275\u0275viewQuery(SurgicalExamForm, 5);
       \u0275\u0275viewQuery(ConsultationFormComponent, 5);
       \u0275\u0275viewQuery(InvestigationForm, 5);
     }
     if (rf & 2) {
       let _t;
-      \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.orthopedicForm = _t.first);
+      \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.surgicalExamForm = _t.first);
       \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.consultationForm = _t.first);
       \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.investigationForm = _t.first);
     }
-  }, attrs: _c0, decls: 10, vars: 6, consts: [["investigationForm", ""], [1, "container", "mt-3"], [1, "mb-3"], [3, "applicantSelected"], [1, "button-group", "mb-3", "d-flex", "gap-2"], ["class", "btn btn-outline-primary", 3, "click", 4, "ngIf"], [3, "applicantFileNumber", "examAdded", 4, "ngIf"], [3, "applicantFileNumber", 4, "ngIf"], [1, "btn", "btn-outline-primary", 3, "click"], [3, "examAdded", "applicantFileNumber"], [3, "applicantFileNumber"]], template: function OrthopedicsDoctorComponent_Template(rf, ctx) {
+  }, attrs: _c0, decls: 10, vars: 6, consts: [[1, "container", "mt-3"], [1, "mb-3"], [3, "applicantSelected"], [1, "button-group", "mb-3", "d-flex", "gap-2"], ["class", "btn btn-outline-primary", 3, "click", 4, "ngIf"], [3, "applicantFileNumber", "examAdded", 4, "ngIf"], [3, "applicantFileNumber", 4, "ngIf"], [1, "btn", "btn-outline-primary", 3, "click"], [3, "examAdded", "applicantFileNumber"], [3, "applicantFileNumber"]], template: function SurgeryDoctorComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275elementStart(0, "div", 1)(1, "div", 2)(2, "app-search-applicant", 3);
-      \u0275\u0275listener("applicantSelected", function OrthopedicsDoctorComponent_Template_app_search_applicant_applicantSelected_2_listener($event) {
+      \u0275\u0275elementStart(0, "div", 0)(1, "div", 1)(2, "app-search-applicant", 2);
+      \u0275\u0275listener("applicantSelected", function SurgeryDoctorComponent_Template_app_search_applicant_applicantSelected_2_listener($event) {
         return ctx.onApplicantSelected($event);
       });
       \u0275\u0275elementEnd()();
-      \u0275\u0275elementStart(3, "div", 4);
-      \u0275\u0275template(4, OrthopedicsDoctorComponent_button_4_Template, 2, 0, "button", 5)(5, OrthopedicsDoctorComponent_button_5_Template, 2, 0, "button", 5)(6, OrthopedicsDoctorComponent_button_6_Template, 2, 0, "button", 5);
+      \u0275\u0275elementStart(3, "div", 3);
+      \u0275\u0275template(4, SurgeryDoctorComponent_button_4_Template, 2, 0, "button", 4)(5, SurgeryDoctorComponent_button_5_Template, 2, 0, "button", 4)(6, SurgeryDoctorComponent_button_6_Template, 2, 0, "button", 4);
       \u0275\u0275elementEnd();
-      \u0275\u0275template(7, OrthopedicsDoctorComponent_app_orthopedic_exam_form_7_Template, 1, 1, "app-orthopedic-exam-form", 6)(8, OrthopedicsDoctorComponent_app_consultation_form_8_Template, 1, 1, "app-consultation-form", 7)(9, OrthopedicsDoctorComponent_app_investigation_form_9_Template, 2, 1, "app-investigation-form", 7);
+      \u0275\u0275template(7, SurgeryDoctorComponent_app_surgical_exam_form_7_Template, 1, 1, "app-surgical-exam-form", 5)(8, SurgeryDoctorComponent_app_consultation_form_8_Template, 1, 1, "app-consultation-form", 6)(9, SurgeryDoctorComponent_app_investigation_form_9_Template, 1, 1, "app-investigation-form", 6);
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
       \u0275\u0275advance(4);
-      \u0275\u0275property("ngIf", !ctx.hasOrthopedicExam && ctx.selectedApplicant);
+      \u0275\u0275property("ngIf", !ctx.hasSurgicalExam && ctx.selectedApplicant);
       \u0275\u0275advance();
       \u0275\u0275property("ngIf", ctx.selectedApplicant);
       \u0275\u0275advance();
@@ -3029,26 +3124,26 @@ var OrthopedicsDoctorComponent = class _OrthopedicsDoctorComponent {
     }
   }, dependencies: [
     SearchApplicantComponent,
-    OrthopedicExamFormComponent,
+    SurgicalExamForm,
     CommonModule,
     NgIf,
     ConsultationFormComponent,
     InvestigationForm
-  ], styles: ['@charset "UTF-8";\n\n\n\n.container[_ngcontent-%COMP%] {\n  background: white;\n  border-radius: var(--border-radius-md);\n  box-shadow: var(--shadow-sm);\n  padding: var(--spacing-md);\n  margin-bottom: var(--spacing-md);\n  border: 1px solid #e9ecef;\n}\n.button-group[_ngcontent-%COMP%] {\n  display: flex;\n  gap: 15px;\n  flex-wrap: wrap;\n}\nbutton.btn-outline-primary[_ngcontent-%COMP%] {\n  background: transparent !important;\n  color: var(--primary-dark) !important;\n  border: 2px solid var(--primary-dark) !important;\n}\nbutton.btn-outline-primary[_ngcontent-%COMP%]:hover {\n  background:\n    linear-gradient(\n      135deg,\n      var(--primary-dark) 0%,\n      var(--primary-medium) 100%) !important;\n  color: white !important;\n  border-color: var(--primary-dark) !important;\n}\nbutton.btn-secondary[_ngcontent-%COMP%] {\n  background: transparent !important;\n  color: var(--neutral-dark) !important;\n  border: 2px solid var(--neutral-medium) !important;\n}\nbutton.btn-secondary[_ngcontent-%COMP%]:hover {\n  background: var(--neutral-light) !important;\n  color: var(--neutral-dark) !important;\n  border-color: var(--neutral-medium) !important;\n}\nbutton.btn-success[_ngcontent-%COMP%] {\n  background: transparent !important;\n  color: #28a745 !important;\n  border: 2px solid #28a745 !important;\n}\nbutton.btn-success[_ngcontent-%COMP%]:hover {\n  background: #28a745 !important;\n  color: white !important;\n  border-color: #28a745 !important;\n}\n.app-search-applicant[_ngcontent-%COMP%] {\n  width: 100%;\n  margin-bottom: 15px;\n}\n/*# sourceMappingURL=orthopedics-doctor.component.css.map */'] });
+  ], styles: ['@charset "UTF-8";\n\n\n\n.container[_ngcontent-%COMP%] {\n  background: white;\n  border-radius: var(--border-radius-md);\n  box-shadow: var(--shadow-sm);\n  padding: var(--spacing-md);\n  margin-bottom: var(--spacing-md);\n  border: 1px solid #e9ecef;\n}\n.button-group[_ngcontent-%COMP%] {\n  display: flex;\n  gap: 15px;\n  flex-wrap: wrap;\n}\nbutton.btn-outline-primary[_ngcontent-%COMP%] {\n  background: transparent !important;\n  color: var(--primary-dark) !important;\n  border: 2px solid var(--primary-dark) !important;\n}\nbutton.btn-outline-primary[_ngcontent-%COMP%]:hover {\n  background:\n    linear-gradient(\n      135deg,\n      var(--primary-dark) 0%,\n      var(--primary-medium) 100%) !important;\n  color: white !important;\n  border-color: var(--primary-dark) !important;\n}\nbutton.btn-secondary[_ngcontent-%COMP%] {\n  background: transparent !important;\n  color: var(--neutral-dark) !important;\n  border: 2px solid var(--neutral-medium) !important;\n}\nbutton.btn-secondary[_ngcontent-%COMP%]:hover {\n  background: var(--neutral-light) !important;\n  color: var(--neutral-dark) !important;\n  border-color: var(--neutral-medium) !important;\n}\nbutton.btn-success[_ngcontent-%COMP%] {\n  background: transparent !important;\n  color: #28a745 !important;\n  border: 2px solid #28a745 !important;\n}\nbutton.btn-success[_ngcontent-%COMP%]:hover {\n  background: #28a745 !important;\n  color: white !important;\n  border-color: #28a745 !important;\n}\n.app-search-applicant[_ngcontent-%COMP%] {\n  width: 100%;\n  margin-bottom: 15px;\n}\n/*# sourceMappingURL=surgery-doctor.component.css.map */'] });
 };
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(OrthopedicsDoctorComponent, [{
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(SurgeryDoctorComponent, [{
     type: Component,
-    args: [{ selector: "app-orthopedics-doctor.component", standalone: true, imports: [
+    args: [{ selector: "app-surgery-doctor.component", imports: [
       SearchApplicantComponent,
-      OrthopedicExamFormComponent,
+      SurgicalExamForm,
       CommonModule,
       ConsultationFormComponent,
       InvestigationForm
-    ], template: '<div class="container mt-3">\r\n  <!-- \u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0627\u0644\u0645\u0631\u064A\u0636 -->\r\n  <div class="mb-3">\r\n    <app-search-applicant (applicantSelected)="onApplicantSelected($event)"></app-search-applicant>\r\n  </div>\r\n\r\n  <!-- \u0623\u0632\u0631\u0627\u0631 \u0627\u0644\u0625\u0636\u0627\u0641\u0629 -->\r\n  <div class="button-group mb-3 d-flex gap-2">\r\n    <button \r\n      class="btn btn-outline-primary" \r\n      (click)="addOrthopedicExam()" \r\n      *ngIf="!hasOrthopedicExam && selectedApplicant">\r\n      \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645\r\n    </button>\r\n\r\n    <button \r\n      class="btn btn-outline-primary" \r\n      (click)="addConsultation()" \r\n      *ngIf="selectedApplicant">\r\n      \u0637\u0644\u0628 \u0627\u0633\u062A\u0634\u0627\u0631\u0629\r\n    </button>\r\n\r\n    <button \r\n      class="btn btn-outline-primary" \r\n      (click)="addInvestigation()" \r\n      *ngIf="selectedApplicant ">\r\n      \u0637\u0644\u0628 \u062A\u062D\u0644\u064A\u0644\r\n    </button>\r\n  </div>\r\n\r\n  <!-- \u0645\u0648\u062F\u0627\u0644 \u0641\u062D\u0635 \u0627\u0644\u0639\u0638\u0627\u0645 -->\r\n  <app-orthopedic-exam-form\r\n    *ngIf="selectedApplicant"\r\n    [applicantFileNumber]="selectedApplicant.fileNumber"\r\n    (examAdded)="onOrthopedicExamAdded()">\r\n  </app-orthopedic-exam-form>\r\n\r\n  <!-- \u0645\u0648\u062F\u0627\u0644 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 -->\r\n  <app-consultation-form\r\n    *ngIf="selectedApplicant"\r\n    [applicantFileNumber]="selectedApplicant.fileNumber">\r\n  </app-consultation-form>\r\n\r\n  <!-- \u0641\u0648\u0631\u0645 \u0627\u0644\u062A\u062D\u0644\u064A\u0644 -->\r\n  <app-investigation-form\r\n    *ngIf="selectedApplicant"\r\n    #investigationForm\r\n    [applicantFileNumber]="selectedApplicant.fileNumber">\r\n  </app-investigation-form>\r\n</div>\r\n', styles: ['@charset "UTF-8";\n\n/* src/app/features/doctor/components/orthopedics-doctor.component/orthopedics-doctor.component.scss */\n.container {\n  background: white;\n  border-radius: var(--border-radius-md);\n  box-shadow: var(--shadow-sm);\n  padding: var(--spacing-md);\n  margin-bottom: var(--spacing-md);\n  border: 1px solid #e9ecef;\n}\n.button-group {\n  display: flex;\n  gap: 15px;\n  flex-wrap: wrap;\n}\nbutton.btn-outline-primary {\n  background: transparent !important;\n  color: var(--primary-dark) !important;\n  border: 2px solid var(--primary-dark) !important;\n}\nbutton.btn-outline-primary:hover {\n  background:\n    linear-gradient(\n      135deg,\n      var(--primary-dark) 0%,\n      var(--primary-medium) 100%) !important;\n  color: white !important;\n  border-color: var(--primary-dark) !important;\n}\nbutton.btn-secondary {\n  background: transparent !important;\n  color: var(--neutral-dark) !important;\n  border: 2px solid var(--neutral-medium) !important;\n}\nbutton.btn-secondary:hover {\n  background: var(--neutral-light) !important;\n  color: var(--neutral-dark) !important;\n  border-color: var(--neutral-medium) !important;\n}\nbutton.btn-success {\n  background: transparent !important;\n  color: #28a745 !important;\n  border: 2px solid #28a745 !important;\n}\nbutton.btn-success:hover {\n  background: #28a745 !important;\n  color: white !important;\n  border-color: #28a745 !important;\n}\n.app-search-applicant {\n  width: 100%;\n  margin-bottom: 15px;\n}\n/*# sourceMappingURL=orthopedics-doctor.component.css.map */\n'] }]
-  }], () => [{ type: ToastrService }, { type: OrthopedicExamService }], { orthopedicForm: [{
+    ], template: '<div class="container mt-3">\r\n  <!-- \u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0627\u0644\u0645\u0631\u064A\u0636 -->\r\n  <div class="mb-3">\r\n    <app-search-applicant (applicantSelected)="onApplicantSelected($event)"></app-search-applicant>\r\n  </div>\r\n\r\n  <!-- \u0623\u0632\u0631\u0627\u0631 \u0627\u0644\u0625\u0636\u0627\u0641\u0629 -->\r\n  <div class="button-group mb-3 d-flex gap-2">\r\n  <button \r\n    class="btn btn-outline-primary" \r\n    (click)="addSurgicalExam()" \r\n    *ngIf="!hasSurgicalExam && selectedApplicant">\r\n    \u0625\u0636\u0627\u0641\u0629 \u0641\u062D\u0635 \u062C\u0631\u0627\u062D\u064A\r\n  </button>\r\n\r\n  <button class="btn btn-outline-primary" (click)="addConsultation()" *ngIf="selectedApplicant">\r\n    \u0637\u0644\u0628 \u0627\u0633\u062A\u0634\u0627\u0631\u0629\r\n  </button>\r\n  <button class="btn btn-outline-primary" (click)="addInvestigation()" *ngIf="selectedApplicant">\r\n    \u0637\u0644\u0628 \u062A\u062D\u0644\u064A\u0644\r\n  </button>\r\n</div>\r\n\r\n  <!-- \u0627\u0644\u0645\u0643\u0648\u0646\u0627\u062A -->\r\n  <app-surgical-exam-form\r\n    *ngIf="selectedApplicant"\r\n    [applicantFileNumber]="selectedApplicant.fileNumber"\r\n    (examAdded)="onSurgicalExamAdded()">\r\n  </app-surgical-exam-form>\r\n\r\n  <app-consultation-form\r\n    *ngIf="selectedApplicant"\r\n    [applicantFileNumber]="selectedApplicant.fileNumber">\r\n  </app-consultation-form>\r\n\r\n  <app-investigation-form\r\n    *ngIf="selectedApplicant"\r\n    [applicantFileNumber]="selectedApplicant.fileNumber">\r\n  </app-investigation-form>\r\n</div>\r\n', styles: ['@charset "UTF-8";\n\n/* src/app/features/doctor/components/surgery-doctor.component/surgery-doctor.component.scss */\n.container {\n  background: white;\n  border-radius: var(--border-radius-md);\n  box-shadow: var(--shadow-sm);\n  padding: var(--spacing-md);\n  margin-bottom: var(--spacing-md);\n  border: 1px solid #e9ecef;\n}\n.button-group {\n  display: flex;\n  gap: 15px;\n  flex-wrap: wrap;\n}\nbutton.btn-outline-primary {\n  background: transparent !important;\n  color: var(--primary-dark) !important;\n  border: 2px solid var(--primary-dark) !important;\n}\nbutton.btn-outline-primary:hover {\n  background:\n    linear-gradient(\n      135deg,\n      var(--primary-dark) 0%,\n      var(--primary-medium) 100%) !important;\n  color: white !important;\n  border-color: var(--primary-dark) !important;\n}\nbutton.btn-secondary {\n  background: transparent !important;\n  color: var(--neutral-dark) !important;\n  border: 2px solid var(--neutral-medium) !important;\n}\nbutton.btn-secondary:hover {\n  background: var(--neutral-light) !important;\n  color: var(--neutral-dark) !important;\n  border-color: var(--neutral-medium) !important;\n}\nbutton.btn-success {\n  background: transparent !important;\n  color: #28a745 !important;\n  border: 2px solid #28a745 !important;\n}\nbutton.btn-success:hover {\n  background: #28a745 !important;\n  color: white !important;\n  border-color: #28a745 !important;\n}\n.app-search-applicant {\n  width: 100%;\n  margin-bottom: 15px;\n}\n/*# sourceMappingURL=surgery-doctor.component.css.map */\n'] }]
+  }], () => [{ type: ToastrService }, { type: SurgicalExamService }], { surgicalExamForm: [{
     type: ViewChild,
-    args: [OrthopedicExamFormComponent]
+    args: [SurgicalExamForm]
   }], consultationForm: [{
     type: ViewChild,
     args: [ConsultationFormComponent]
@@ -3058,9 +3153,9 @@ var OrthopedicsDoctorComponent = class _OrthopedicsDoctorComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(OrthopedicsDoctorComponent, { className: "OrthopedicsDoctorComponent", filePath: "src/app/features/doctor/components/orthopedics-doctor.component/orthopedics-doctor.component.ts", lineNumber: 24 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(SurgeryDoctorComponent, { className: "SurgeryDoctorComponent", filePath: "src/app/features/doctor/components/surgery-doctor.component/surgery-doctor.component.ts", lineNumber: 22 });
 })();
 export {
-  OrthopedicsDoctorComponent
+  SurgeryDoctorComponent
 };
-//# sourceMappingURL=chunk-OC3QPEKZ.js.map
+//# sourceMappingURL=chunk-EJBWNUQ7.js.map

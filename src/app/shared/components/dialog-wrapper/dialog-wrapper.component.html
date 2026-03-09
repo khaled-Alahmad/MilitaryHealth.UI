@@ -1,13 +1,13 @@
 <p-dialog
   [visible]="visible"
-  [modal]="modal"
+  [modal]="true"
   [closable]="closable"
-  [dismissableMask]="dismissableMask"
-  [closeOnEscape]="closeOnEscape"
-  [blockScroll]="blockScroll"
+  [dismissableMask]="false"
+  [closeOnEscape]="true"
+  [blockScroll]="true"
   [draggable]="false"
   [resizable]="false"
-  [style]="{ width: width }"
+  [style]="{ width: width, minWidth: width }"
   (visibleChange)="onVisibleChange($event)"
   (onHide)="onHide()"
 >

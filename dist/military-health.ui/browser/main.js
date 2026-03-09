@@ -191,7 +191,7 @@ var routes = [
       },
       {
         path: "applicants",
-        loadComponent: () => import("./chunk-CLY46SFT.js").then((m5) => m5.ApplicantsList),
+        loadComponent: () => import("./chunk-DCNSOQNS.js").then((m5) => m5.ApplicantsList),
         canActivate: [authGuard],
         data: { roles: [UserRoles.Admin] }
       },
@@ -201,17 +201,17 @@ var routes = [
       },
       {
         path: "reception",
-        loadChildren: () => import("./chunk-UM5Z3IEI.js").then((m5) => m5.RECEPTION_ROUTES),
+        loadChildren: () => import("./chunk-R2BAWSBO.js").then((m5) => m5.RECEPTION_ROUTES),
         data: { roles: [UserRoles.Receptionist] }
       },
       {
         path: "doctor",
-        loadChildren: () => import("./chunk-YGGDB5KZ.js").then((m5) => m5.Doctor_ROUTES),
+        loadChildren: () => import("./chunk-TBG4Z5OJ.js").then((m5) => m5.Doctor_ROUTES),
         data: { roles: [UserRoles.Doctor] }
       },
       {
         path: "supervisor",
-        loadChildren: () => import("./chunk-GHABQJ43.js").then((m5) => m5.RECEPTION_ROUTES),
+        loadChildren: () => import("./chunk-4U2AFM6X.js").then((m5) => m5.RECEPTION_ROUTES),
         data: { roles: [UserRoles.Supervisor, UserRoles.Receptionist] }
       },
       {

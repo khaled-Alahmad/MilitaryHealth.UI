@@ -13,12 +13,12 @@ import "./chunk-YTJKKLZA.js";
 var Doctor_ROUTES = [
   {
     path: "eye",
-    loadComponent: () => import("./chunk-KVO7MMXD.js").then((m) => m.EyeDoctorComponent),
+    loadComponent: () => import("./chunk-52NKQNKK.js").then((m) => m.EyeDoctorComponent),
     canActivate: [authGuard]
   },
   {
     path: "eye/deferred",
-    loadComponent: () => import("./chunk-CYGK2QQR.js").then((m) => m.DeferredEyeExamsComponent),
+    loadComponent: () => import("./chunk-S3A75MCU.js").then((m) => m.DeferredEyeExamsComponent),
     canActivate: [authGuard]
   },
   {
@@ -34,27 +34,27 @@ var Doctor_ROUTES = [
   },
   {
     path: "internal",
-    loadComponent: () => import("./chunk-R7KFE32E.js").then((m) => m.InternalDoctorComponent),
+    loadComponent: () => import("./chunk-M56YT4DX.js").then((m) => m.InternalDoctorComponent),
     canActivate: [authGuard]
   },
   {
     path: "internal/medications",
-    loadComponent: () => import("./chunk-TXOXCPYD.js").then((m) => m.DeferredInternalExamsComponent),
+    loadComponent: () => import("./chunk-W3EJ5VFT.js").then((m) => m.DeferredInternalExamsComponent),
     canActivate: [authGuard]
   },
   {
     path: "internal/consultations",
-    loadComponent: () => import("./chunk-R72UDFCU.js").then((m) => m.InternalConsultationsList),
+    loadComponent: () => import("./chunk-6MV3HRRX.js").then((m) => m.InternalConsultationsList),
     canActivate: [authGuard]
   },
   {
     path: "internal/investigations",
-    loadComponent: () => import("./chunk-ZGI5DH4R.js").then((m) => m.InternalInvestigationsList),
+    loadComponent: () => import("./chunk-N6KD3RZS.js").then((m) => m.InternalInvestigationsList),
     canActivate: [authGuard]
   },
   {
     path: "orthopedics",
-    loadComponent: () => import("./chunk-OC3QPEKZ.js").then((m) => m.OrthopedicsDoctorComponent),
+    loadComponent: () => import("./chunk-P22FYJME.js").then((m) => m.OrthopedicsDoctorComponent),
     canActivate: [authGuard]
   },
   {
@@ -74,7 +74,7 @@ var Doctor_ROUTES = [
   },
   {
     path: "surgery",
-    loadComponent: () => import("./chunk-2ZVNBZTX.js").then((m) => m.SurgeryDoctorComponent),
+    loadComponent: () => import("./chunk-EJBWNUQ7.js").then((m) => m.SurgeryDoctorComponent),
     canActivate: [authGuard]
   },
   {
@@ -94,7 +94,7 @@ var Doctor_ROUTES = [
   },
   {
     path: "ear",
-    loadComponent: () => import("./chunk-HMG77R2R.js").then((m) => m.EarDoctorComponent),
+    loadComponent: () => import("./chunk-NLSP7HNE.js").then((m) => m.EarDoctorComponent),
     canActivate: [authGuard]
   },
   {
@@ -117,4 +117,4 @@ var Doctor_ROUTES = [
 export {
   Doctor_ROUTES
 };
-//# sourceMappingURL=chunk-YGGDB5KZ.js.map
+//# sourceMappingURL=chunk-TBG4Z5OJ.js.map

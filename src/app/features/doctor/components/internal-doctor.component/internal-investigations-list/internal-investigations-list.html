@@ -1,4 +1,4 @@
-<div class="list-page-section">
+<div class="user-header-section p-3 container-fluid">
   <app-page-header
     variant="banner"
     title="استقصاءات العيادة الباطنية"
@@ -7,16 +7,18 @@
   </app-page-header>
 
   <div class="table-toolbar">
-    <div class="table-toolbar__filter">
-      <app-filter-bar
-        [searchValue]="globalFilter"
-        searchPlaceholder="ابحث عن رقم الملف أو الاسم"
-        [showReset]="true"
-        [loading]="loading"
-        [showSearchHint]="false"
-        (searchChange)="onFilterChange($event)"
-        (reset)="resetFilters()">
-      </app-filter-bar>
+    <div class="filter-reset-wrapper">
+      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
+      <div class="search-wrapper">
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
+        <i class="fas fa-search search-icon"></i>
+      </div>
     </div>
   </div>
 
@@ -24,53 +26,73 @@
     #table
     [value]="filteredInvestigations"
     [loading]="loading"
-    class="custom-table compact-table"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table my-3"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 100px">رقم الملف</th>
-        <th style="width: 120px">نوع التحليل</th>
-        <th style="width: 120px">السبب</th>
-        <th style="width: 100px">النتيجة</th>
-        <th style="width: 100px">الحالة</th>
-        <th style="width: 120px">الطبيب</th>
-        <th style="width: 90px">الملف المرفق</th>
-        <th style="width: 80px">إجراءات</th>
+        <th style="min-width: 100px" class="text-center">رقم الملف</th>
+        <th style="min-width: 120px" class="text-center">نوع التحليل</th>
+        <th style="min-width: 120px" class="text-center">السبب</th>
+        <th style="min-width: 100px" class="text-center">النتيجة</th>
+        <th style="min-width: 100px" class="text-center">الحالة</th>
+        <th style="min-width: 120px" class="text-center">الطبيب</th>
+        <th style="min-width: 90px" class="text-center">الملف المرفق</th>
+        <th style="min-width: 80px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-i>
       <tr>
-        <td><span class="fw-bold small">{{ i.applicantFileNumber || '-' }}</span></td>
-        <td><span class="fw-bold small">{{ i.type || '-' }}</span></td>
-        <td><span class="small">{{ i.investigationReason || '-' }}</span></td>
-        <td><span class="small">{{ i.result || '-' }}</span></td>
-        <td>
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ i.applicantFileNumber || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ i.type || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ i.investigationReason || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ i.result || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
           <span [ngClass]="getBadgeClass(i.status)" class="small">{{ i.status || '-' }}</span>
         </td>
-        <td><span class="fw-bold small">{{ i.doctor?.fullName || '-' }}</span></td>
-        <td class="text-center">
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ i.doctor?.fullName || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
           @if (i.attachment) {
-            <button type="button" class="btn btn-sm btn-outline-secondary" title="فتح الملف"
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="فتح الملف"
+              tooltipPosition="top"
               (click)="openFile(i.attachment)">
-              <i class="bi bi-file-earmark-text me-1"></i>
-              فتح الملف
+              <i class="pi pi-file"></i>
             </button>
           } @else {
-            <span>لا يوجد ملف</span>
+            <span class="text-muted small">لا يوجد</span>
           }
         </td>
-        <td class="text-center">
-          <button type="button" class="btn btn-sm btn-outline-secondary" title="إضافة نتيجة"
-            (click)="openEditInvestigation(i)">
-            <i class="pi pi-pen-to-square"></i>
-            إضافة نتيجة
-          </button>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="إضافة نتيجة"
+              tooltipPosition="top"
+              (click)="openEditInvestigation(i)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-2 small">لا توجد تحاليل</td>
+        <td colspan="8" class="text-center py-3 align-middle small">لا توجد تحاليل</td>
       </tr>
     </ng-template>
   </p-table>

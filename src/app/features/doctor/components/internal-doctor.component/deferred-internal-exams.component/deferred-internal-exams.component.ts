@@ -6,28 +6,33 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { RippleModule } from 'primeng/ripple';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditInternalExamComponent } from '../edit-internal-exam-component/edit-internal-exam-component';
 import { InternalExamDetailsComponent } from '../exam-details/exam-details.component';
 import { ToastrService } from 'ngx-toastr';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-deferred-internal-exams.component',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, EditInternalExamComponent, InternalExamDetailsComponent, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent,
+  ],
   templateUrl: './deferred-internal-exams.component.html',
-  styleUrl: './deferred-internal-exams.component.scss'
+  styleUrl: './deferred-internal-exams.component.scss',
 })
 export class DeferredInternalExamsComponent implements OnInit {
   exams: InternalExam[] = [];
-  filteredExams: InternalExam[] = [];
-  globalFilter: string = '';
+  globalFilter = '';
   loading = true;
-  selectedExam: InternalExam | null = null;
-  selectedExamDetails: InternalExam | null = null;
-  searchTerm: string = '';
-
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
@@ -36,7 +41,8 @@ export class DeferredInternalExamsComponent implements OnInit {
 
   constructor(
     private examService: InternalExamService,
-    private toastr: ToastrService // ✅ أضفنا toastr
+    private toastr: ToastrService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -46,57 +52,61 @@ export class DeferredInternalExamsComponent implements OnInit {
   loadExams() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.examService.getAllInternalExams(this.page, this.rowsPerPage,filter).subscribe({
+    this.examService.getAllInternalExams(this.page, this.rowsPerPage, filter).subscribe({
       next: (data: any) => {
-        this.exams = data.items;
-        this.filteredExams = [...this.exams];
-        this.totalRecords = data.totalCount; // يمكن تعديل حسب ما يرجعه السيرفر
+        this.exams = data.items || [];
+        this.totalRecords = data.totalCount || 0;
         this.loading = false;
       },
-      error: () => { 
-        this.toastr.error('❌ فشل في جلب الفحوصات الداخلية', 'خطأ');
-        this.loading = false; 
-      }
+      error: () => {
+        this.toastr.error('فشل في جلب الفحوصات الداخلية', 'خطأ');
+        this.loading = false;
+      },
     });
   }
+
   onPageChange(newPage: number) {
     this.page = newPage;
     this.loadExams();
   }
+
   onPageSizeChange(newSize: number) {
     this.rowsPerPage = newSize;
     this.page = 1;
     this.loadExams();
   }
+
   onFilterChange(event: Event) {
     const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
     this.globalFilter = value;
     this.page = 1;
     this.loadExams();
-
-  }
-  onEnterSearch() {
-    this.page = 1;
-    this.loadExams();
-  }
-  openEditDialog(exam: InternalExam) { 
-    this.selectedExam = { ...exam }; 
   }
 
-  onDialogClose(updated: boolean) {
-    this.selectedExam = null;
-    if (updated) {
-      this.toastr.success('✅ تم تحديث الفحص بنجاح', 'نجاح');
-      this.loadExams();
-    }
+  openEditDialog(exam: InternalExam) {
+    const modalRef = this.modalService.open(EditInternalExamComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+    });
+    modalRef.componentInstance.exam = { ...exam };
+    modalRef.componentInstance.dialogClosed.subscribe((updated: boolean) => {
+      modalRef.close();
+      if (updated) {
+        this.toastr.success('تم تحديث الفحص بنجاح', 'نجاح');
+        this.loadExams();
+      }
+    });
   }
 
   viewDetails(exam: InternalExam) {
-    this.selectedExamDetails = { ...exam };
-  }
-
-  closeDetailsModal() {
-    this.selectedExamDetails = null;
+    const modalRef = this.modalService.open(InternalExamDetailsComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.exam = exam;
+    modalRef.componentInstance.close.subscribe(() => modalRef.close());
   }
   getBadgeClass(result: any): string {
     // إذا لم تكن النتيجة موجودة أو ليس لها description

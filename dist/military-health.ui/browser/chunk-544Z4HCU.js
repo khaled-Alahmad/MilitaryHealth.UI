@@ -33,7 +33,7 @@ import {
   ɵɵprojection,
   ɵɵprojectionDef,
   ɵɵproperty,
-  ɵɵpureFunction1,
+  ɵɵpureFunction2,
   ɵɵresetView,
   ɵɵrestoreView,
   ɵɵstyleMap,
@@ -45,7 +45,7 @@ import {
 // src/app/shared/components/dialog-wrapper/dialog-wrapper.component.ts
 var _c0 = ["*", [["", "dialog-footer", ""]]];
 var _c1 = ["*", "[dialog-footer]"];
-var _c2 = (a0) => ({ width: a0 });
+var _c2 = (a0, a1) => ({ width: a0, minWidth: a1 });
 function DialogWrapperComponent_ng_template_1_Conditional_1_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275element(0, "i", 8);
@@ -134,12 +134,9 @@ var DialogWrapperComponent = class _DialogWrapperComponent {
   title = "";
   subtitle = "";
   icon = "";
+  /** أحجام موحّدة: 90rem (نموذج فحص)، 70rem (تفاصيل)، 40rem (استشارة/تحليل/تأكيد) */
   width = "32rem";
-  modal = true;
   closable = true;
-  dismissableMask = true;
-  closeOnEscape = true;
-  blockScroll = true;
   useDefaultFooter = true;
   cancelLabel = "\u0625\u0644\u063A\u0627\u0621";
   confirmLabel = "\u062A\u0623\u0643\u064A\u062F";
@@ -172,7 +169,7 @@ var DialogWrapperComponent = class _DialogWrapperComponent {
   static \u0275fac = function DialogWrapperComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DialogWrapperComponent)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DialogWrapperComponent, selectors: [["app-dialog-wrapper"]], inputs: { visible: "visible", title: "title", subtitle: "subtitle", icon: "icon", width: "width", modal: "modal", closable: "closable", dismissableMask: "dismissableMask", closeOnEscape: "closeOnEscape", blockScroll: "blockScroll", useDefaultFooter: "useDefaultFooter", cancelLabel: "cancelLabel", confirmLabel: "confirmLabel", confirmSeverity: "confirmSeverity", confirmDisabled: "confirmDisabled", confirmLoading: "confirmLoading" }, outputs: { visibleChange: "visibleChange", confirm: "confirm", cancel: "cancel", hide: "hide" }, ngContentSelectors: _c1, decls: 6, vars: 13, consts: [[3, "visibleChange", "onHide", "visible", "modal", "closable", "dismissableMask", "closeOnEscape", "blockScroll", "draggable", "resizable"], ["pTemplate", "header"], [1, "dialog-wrapper__content"], ["pTemplate", "footer"], [1, "dialog-wrapper__header"], [1, "dialog-wrapper__icon", 3, "class"], [1, "dialog-wrapper__title"], [1, "dialog-wrapper__subtitle"], [1, "dialog-wrapper__icon"], [1, "dialog-wrapper__footer"], ["severity", "secondary", 3, "onClick", "label", "outlined"], [3, "onClick", "label", "severity", "disabled", "loading"]], template: function DialogWrapperComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DialogWrapperComponent, selectors: [["app-dialog-wrapper"]], inputs: { visible: "visible", title: "title", subtitle: "subtitle", icon: "icon", width: "width", closable: "closable", useDefaultFooter: "useDefaultFooter", cancelLabel: "cancelLabel", confirmLabel: "confirmLabel", confirmSeverity: "confirmSeverity", confirmDisabled: "confirmDisabled", confirmLoading: "confirmLoading" }, outputs: { visibleChange: "visibleChange", confirm: "confirm", cancel: "cancel", hide: "hide" }, ngContentSelectors: _c1, decls: 6, vars: 14, consts: [[3, "visibleChange", "onHide", "visible", "modal", "closable", "dismissableMask", "closeOnEscape", "blockScroll", "draggable", "resizable"], ["pTemplate", "header"], [1, "dialog-wrapper__content"], ["pTemplate", "footer"], [1, "dialog-wrapper__header"], [1, "dialog-wrapper__icon", 3, "class"], [1, "dialog-wrapper__title"], [1, "dialog-wrapper__subtitle"], [1, "dialog-wrapper__icon"], [1, "dialog-wrapper__footer"], ["severity", "secondary", 3, "onClick", "label", "outlined"], [3, "onClick", "label", "severity", "disabled", "loading"]], template: function DialogWrapperComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275projectionDef(_c0);
       \u0275\u0275elementStart(0, "p-dialog", 0);
@@ -189,8 +186,8 @@ var DialogWrapperComponent = class _DialogWrapperComponent {
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
-      \u0275\u0275styleMap(\u0275\u0275pureFunction1(11, _c2, ctx.width));
-      \u0275\u0275property("visible", ctx.visible)("modal", ctx.modal)("closable", ctx.closable)("dismissableMask", ctx.dismissableMask)("closeOnEscape", ctx.closeOnEscape)("blockScroll", ctx.blockScroll)("draggable", false)("resizable", false);
+      \u0275\u0275styleMap(\u0275\u0275pureFunction2(11, _c2, ctx.width, ctx.width));
+      \u0275\u0275property("visible", ctx.visible)("modal", true)("closable", ctx.closable)("dismissableMask", false)("closeOnEscape", true)("blockScroll", true)("draggable", false)("resizable", false);
       \u0275\u0275advance(4);
       \u0275\u0275conditional(ctx.useDefaultFooter ? 4 : 5);
     }
@@ -199,7 +196,7 @@ var DialogWrapperComponent = class _DialogWrapperComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(DialogWrapperComponent, [{
     type: Component,
-    args: [{ selector: "app-dialog-wrapper", standalone: true, imports: [CommonModule, DialogModule, ButtonModule], template: '<p-dialog\r\n  [visible]="visible"\r\n  [modal]="modal"\r\n  [closable]="closable"\r\n  [dismissableMask]="dismissableMask"\r\n  [closeOnEscape]="closeOnEscape"\r\n  [blockScroll]="blockScroll"\r\n  [draggable]="false"\r\n  [resizable]="false"\r\n  [style]="{ width: width }"\r\n  (visibleChange)="onVisibleChange($event)"\r\n  (onHide)="onHide()"\r\n>\r\n  <ng-template pTemplate="header">\r\n    <div class="dialog-wrapper__header">\r\n      @if (iconClass) {\r\n        <i class="dialog-wrapper__icon" [class]="iconClass"></i>\r\n      }\r\n      <div>\r\n        <h3 class="dialog-wrapper__title">{{ title }}</h3>\r\n        @if (subtitle) {\r\n          <p class="dialog-wrapper__subtitle">{{ subtitle }}</p>\r\n        }\r\n      </div>\r\n    </div>\r\n  </ng-template>\r\n\r\n  <div class="dialog-wrapper__content">\r\n    <ng-content></ng-content>\r\n  </div>\r\n\r\n  @if (useDefaultFooter) {\r\n    <ng-template pTemplate="footer">\r\n      <div class="dialog-wrapper__footer">\r\n        <p-button\r\n          [label]="cancelLabel"\r\n          severity="secondary"\r\n          [outlined]="true"\r\n          (onClick)="onCancel()"\r\n        ></p-button>\r\n        <p-button\r\n          [label]="confirmLabel"\r\n          [severity]="confirmSeverity"\r\n          [disabled]="confirmDisabled"\r\n          [loading]="confirmLoading"\r\n          (onClick)="onConfirm()"\r\n        ></p-button>\r\n      </div>\r\n    </ng-template>\r\n  } @else {\r\n    <ng-template pTemplate="footer">\r\n      <ng-content select="[dialog-footer]"></ng-content>\r\n    </ng-template>\r\n  }\r\n</p-dialog>\r\n', styles: ["/* src/app/shared/components/dialog-wrapper/dialog-wrapper.component.scss */\n.dialog-wrapper__header {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm);\n}\n.dialog-wrapper__icon {\n  color: var(--primary-dark);\n  font-size: var(--font-size-lg);\n}\n.dialog-wrapper__title {\n  margin: 0;\n  color: var(--primary-dark);\n  font-size: var(--font-size-lg);\n}\n.dialog-wrapper__subtitle {\n  margin: 0.25rem 0 0;\n  color: var(--neutral-medium);\n  font-size: var(--font-size-sm);\n}\n.dialog-wrapper__content {\n  color: var(--neutral-dark);\n  line-height: 1.6;\n}\n.dialog-wrapper__footer {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--spacing-sm);\n}\n/*# sourceMappingURL=dialog-wrapper.component.css.map */\n"] }]
+    args: [{ selector: "app-dialog-wrapper", standalone: true, imports: [CommonModule, DialogModule, ButtonModule], template: '<p-dialog\r\n  [visible]="visible"\r\n  [modal]="true"\r\n  [closable]="closable"\r\n  [dismissableMask]="false"\r\n  [closeOnEscape]="true"\r\n  [blockScroll]="true"\r\n  [draggable]="false"\r\n  [resizable]="false"\r\n  [style]="{ width: width, minWidth: width }"\r\n  (visibleChange)="onVisibleChange($event)"\r\n  (onHide)="onHide()"\r\n>\r\n  <ng-template pTemplate="header">\r\n    <div class="dialog-wrapper__header">\r\n      @if (iconClass) {\r\n        <i class="dialog-wrapper__icon" [class]="iconClass"></i>\r\n      }\r\n      <div>\r\n        <h3 class="dialog-wrapper__title">{{ title }}</h3>\r\n        @if (subtitle) {\r\n          <p class="dialog-wrapper__subtitle">{{ subtitle }}</p>\r\n        }\r\n      </div>\r\n    </div>\r\n  </ng-template>\r\n\r\n  <div class="dialog-wrapper__content">\r\n    <ng-content></ng-content>\r\n  </div>\r\n\r\n  @if (useDefaultFooter) {\r\n    <ng-template pTemplate="footer">\r\n      <div class="dialog-wrapper__footer">\r\n        <p-button\r\n          [label]="cancelLabel"\r\n          severity="secondary"\r\n          [outlined]="true"\r\n          (onClick)="onCancel()"\r\n        ></p-button>\r\n        <p-button\r\n          [label]="confirmLabel"\r\n          [severity]="confirmSeverity"\r\n          [disabled]="confirmDisabled"\r\n          [loading]="confirmLoading"\r\n          (onClick)="onConfirm()"\r\n        ></p-button>\r\n      </div>\r\n    </ng-template>\r\n  } @else {\r\n    <ng-template pTemplate="footer">\r\n      <ng-content select="[dialog-footer]"></ng-content>\r\n    </ng-template>\r\n  }\r\n</p-dialog>\r\n', styles: ["/* src/app/shared/components/dialog-wrapper/dialog-wrapper.component.scss */\n.dialog-wrapper__header {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm);\n}\n.dialog-wrapper__icon {\n  color: var(--primary-dark);\n  font-size: var(--font-size-lg);\n}\n.dialog-wrapper__title {\n  margin: 0;\n  color: var(--primary-dark);\n  font-size: var(--font-size-lg);\n}\n.dialog-wrapper__subtitle {\n  margin: 0.25rem 0 0;\n  color: var(--neutral-medium);\n  font-size: var(--font-size-sm);\n}\n.dialog-wrapper__content {\n  color: var(--neutral-dark);\n  line-height: 1.6;\n}\n.dialog-wrapper__footer {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--spacing-sm);\n}\n/*# sourceMappingURL=dialog-wrapper.component.css.map */\n"] }]
   }], null, { visible: [{
     type: Input
   }], visibleChange: [{
@@ -212,15 +209,7 @@ var DialogWrapperComponent = class _DialogWrapperComponent {
     type: Input
   }], width: [{
     type: Input
-  }], modal: [{
-    type: Input
   }], closable: [{
-    type: Input
-  }], dismissableMask: [{
-    type: Input
-  }], closeOnEscape: [{
-    type: Input
-  }], blockScroll: [{
     type: Input
   }], useDefaultFooter: [{
     type: Input
@@ -249,4 +238,4 @@ var DialogWrapperComponent = class _DialogWrapperComponent {
 export {
   DialogWrapperComponent
 };
-//# sourceMappingURL=chunk-MH7HOQ25.js.map
+//# sourceMappingURL=chunk-544Z4HCU.js.map

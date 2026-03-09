@@ -1,130 +1,73 @@
-<div class="professional-modal-container">
-  <!-- Modal Header with Brand Identity -->
-  <div class="modal-header-professional">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-file-medical"></i>
+<app-dialog-wrapper
+  [visible]="true"
+  title="تفاصيل الفحص الداخلي"
+  [subtitle]="'رقم الملف: ' + (exam.applicantFileNumber || '')"
+  icon="pi pi-heart"
+  width="70rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <div class="internal-exam-details-body">
+    <div class="details-grid">
+      <div class="info-card">
+        <h6 class="details-section-title">القلب والدورة الدموية</h6>
+        <div class="info-value">{{ exam.heart || 'غير محدد' }}</div>
       </div>
-      <div class="header-text">
-        <h3 class="modal-title-professional">تفاصيل الفحص الداخلي</h3>
-        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }}</span>
+      <div class="info-card">
+        <h6 class="details-section-title">الجهاز التنفسي</h6>
+        <div class="info-value">{{ exam.respiratory || 'غير محدد' }}</div>
       </div>
-    </div>
-    <button type="button" class="btn-close-professional" (click)="closeModal()">
-      <i class="pi pi-times"></i>
-    </button>
-  </div>
-
-  <div class="modal-body-professional">
-    <!-- نظرة عامة على الفحص -->
-    <div class="exam-overview">
-      <div class="result-card">
-        <div class="result-icon">
-          <i class="pi pi-flag"></i>
+      <div class="info-card">
+        <h6 class="details-section-title">جهاز الهضم</h6>
+        <div class="info-value">{{ exam.digestive || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">الغدد الصم والتغذية</h6>
+        <div class="info-value">{{ exam.endocrine || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">الأمراض العصبية</h6>
+        <div class="info-value">{{ exam.neurology || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الدم</h6>
+        <div class="info-value">{{ exam.blood || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">المفاصل</h6>
+        <div class="info-value">{{ exam.joints || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">الكلية</h6>
+        <div class="info-value">{{ exam.kidney || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">الأمراض الجلدية</h6>
+        <div class="info-value">{{ exam.skin || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">النتيجة</h6>
+        <div
+          class="info-value result-badge"
+          [class.result-accepted]="exam.result?.description === 'مقبول'"
+          [class.result-rejected]="exam.result?.description === 'مرفوض'"
+          [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
+          {{ exam.result?.description || 'غير محدد' }}
         </div>
-        <div class="result-content">
-          <h5>النتيجة النهائية</h5>
-          <div class="info-value result-badge"
-               [class.result-accepted]="exam.result?.description === 'مقبول'"
-               [class.result-rejected]="exam.result?.description === 'مرفوض'"
-               [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
-            {{ exam.result?.description || 'غير محدد' }}
-          </div>
-        </div>
       </div>
     </div>
 
-    <!-- جهاز القلب والتنفس -->
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-heart"></i>
-        <h4>القلب والدورة الدموية</h4>
-      </div>
-      <div class="system-value">{{ exam.heart || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-cloud"></i>
-        <h4>الجهاز التنفسي</h4>
-      </div>
-      <div class="system-value">{{ exam.respiratory || 'غير محدد' }}</div>
-    </div>
-
-    <!-- الجهاز الهضمي والغدد -->
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-briefcase"></i>
-        <h4>الجهاز الهضمي</h4>
-      </div>
-      <div class="system-value">{{ exam.digestive || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-chart-line"></i>
-        <h4>الغدد الصماء</h4>
-      </div>
-      <div class="system-value">{{ exam.endocrine || 'غير محدد' }}</div>
-    </div>
-
-    <!-- الجهاز العصبي والدم -->
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-shield"></i>
-        <h4>الجهاز العصبي</h4>
-      </div>
-      <div class="system-value">{{ exam.neurology || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-drop"></i>
-        <h4>الدم</h4>
-      </div>
-      <div class="system-value">{{ exam.blood || 'غير محدد' }}</div>
-    </div>
-
-    <!-- المفاصل والكلى -->
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-link"></i>
-        <h4>المفاصل</h4>
-      </div>
-      <div class="system-value">{{ exam.joints || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-filter"></i>
-        <h4>الكلى</h4>
-      </div>
-      <div class="system-value">{{ exam.kidney || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-circle"></i>
-        <h4>البشرة</h4>
-      </div>
-      <div class="system-value">{{ exam.skin || 'غير محدد' }}</div>
-    </div>
-
-    <!-- السبب -->
-    <div class="system-section reason-section" *ngIf="exam.reason">
-      <div class="system-header">
-        <i class="pi pi-info-circle"></i>
-        <h4>السبب</h4>
-      </div>
-      <div class="system-value reason-text">{{ exam.reason }}</div>
-    </div>
-
+    @if (exam.reason) {
+      <h6 class="details-section-title">السبب</h6>
+      <div class="info-value">{{ exam.reason }}</div>
+    }
   </div>
 
-  <div class="modal-footer-professional">
-    <button type="button" class="btn btn-secondary" (click)="closeModal()">
-      <i class="pi pi-times me-2"></i> إغلاق
-    </button>
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إغلاق"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeModal()"></p-button>
   </div>
-</div>
-
+</app-dialog-wrapper>

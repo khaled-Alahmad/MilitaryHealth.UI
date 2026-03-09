@@ -21,7 +21,7 @@ import {
 } from "./chunk-JQ4Y5HNR.js";
 import {
   DialogWrapperComponent
-} from "./chunk-MH7HOQ25.js";
+} from "./chunk-544Z4HCU.js";
 import "./chunk-5TBOZ7YP.js";
 import "./chunk-ABC4ZTWT.js";
 import "./chunk-OY2VKGI7.js";
@@ -473,7 +473,7 @@ var ApplicantDetailsComponent = class _ApplicantDetailsComponent {
   static \u0275fac = function ApplicantDetailsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ApplicantDetailsComponent)(\u0275\u0275directiveInject(ActivatedRoute), \u0275\u0275directiveInject(Router), \u0275\u0275directiveInject(ApplicantService), \u0275\u0275directiveInject(MessageService), \u0275\u0275directiveInject(MaritalStatusService), \u0275\u0275directiveInject(BarcodePrintService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _ApplicantDetailsComponent, selectors: [["app-applicant-details"]], features: [\u0275\u0275ProvidersFeature([MessageService])], decls: 14, vars: 8, consts: [[1, "reception-page"], [1, "container-fluid", "py-4"], ["title", "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0645\u0646\u062A\u0633\u0628", "icon", "pi pi-user"], ["header-actions", ""], ["size", "large", 3, "actionClick", "actions"], ["class", "text-center py-5", 4, "ngIf"], ["styleClass", "reception-details-card", 4, "ngIf"], ["title", "\u062A\u0623\u0643\u064A\u062F \u0627\u0644\u0637\u0628\u0627\u0639\u0629", "subtitle", "\u0647\u0644 \u062A\u0631\u064A\u062F \u0637\u0628\u0627\u0639\u0629 \u0625\u064A\u0635\u0627\u0644 \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F \u0644\u0647\u0630\u0627 \u0627\u0644\u0645\u0646\u062A\u0633\u0628\u061F", "icon", "pi pi-print", "confirmLabel", "\u0637\u0628\u0627\u0639\u0629", "confirmSeverity", "info", 3, "visibleChange", "confirm", "cancel", "hide", "visible", "confirmLoading"], [1, "print-dialog-text"], [1, "text-center", "py-5"], [1, "pi", "pi-spin", "pi-spinner", 2, "font-size", "2rem"], [1, "mt-3"], ["styleClass", "reception-details-card"], ["pTemplate", "header"], [1, "card-body"], [1, "info-section"], [1, "section-title"], [1, "pi", "pi-id-card", "ms-2"], [1, "info-grid"], [1, "info-item"], [1, "info-label"], [1, "info-value"], ["severity", "info", 3, "value"], ["severity", "danger", 3, "value"], [3, "value", "severity"], ["class", "info-item full-width", 4, "ngIf"], [1, "info-item", "full-width"], [1, "section-title", "mt-4"], [1, "pi", "pi-heartbeat", "ms-2"], [1, "details-card-header"], [1, "details-card-header__icon"], ["aria-hidden", "true", 1, "pi", "pi-user"], [1, "details-card-header__text"], [1, "details-card-header__title"], [1, "details-card-header__subtitle"], [1, "pi", "pi-exclamation-triangle", "text-muted", 2, "font-size", "3rem"], [1, "mt-3", "text-muted"]], template: function ApplicantDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _ApplicantDetailsComponent, selectors: [["app-applicant-details"]], features: [\u0275\u0275ProvidersFeature([MessageService])], decls: 14, vars: 8, consts: [[1, "reception-page"], [1, "container-fluid", "py-4"], ["title", "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0645\u0646\u062A\u0633\u0628", "icon", "pi pi-user"], ["header-actions", ""], ["size", "large", 3, "actionClick", "actions"], ["class", "text-center py-5", 4, "ngIf"], ["styleClass", "reception-details-card", 4, "ngIf"], ["title", "\u062A\u0623\u0643\u064A\u062F \u0627\u0644\u0637\u0628\u0627\u0639\u0629", "subtitle", "\u0647\u0644 \u062A\u0631\u064A\u062F \u0637\u0628\u0627\u0639\u0629 \u0625\u064A\u0635\u0627\u0644 \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F \u0644\u0647\u0630\u0627 \u0627\u0644\u0645\u0646\u062A\u0633\u0628\u061F", "icon", "pi pi-print", "width", "40rem", "confirmLabel", "\u0637\u0628\u0627\u0639\u0629", "confirmSeverity", "info", 3, "visibleChange", "confirm", "cancel", "hide", "visible", "confirmLoading"], [1, "print-dialog-text"], [1, "text-center", "py-5"], [1, "pi", "pi-spin", "pi-spinner", 2, "font-size", "2rem"], [1, "mt-3"], ["styleClass", "reception-details-card"], ["pTemplate", "header"], [1, "card-body"], [1, "info-section"], [1, "section-title"], [1, "pi", "pi-id-card", "ms-2"], [1, "info-grid"], [1, "info-item"], [1, "info-label"], [1, "info-value"], ["severity", "info", 3, "value"], ["severity", "danger", 3, "value"], [3, "value", "severity"], ["class", "info-item full-width", 4, "ngIf"], [1, "info-item", "full-width"], [1, "section-title", "mt-4"], [1, "pi", "pi-heartbeat", "ms-2"], [1, "details-card-header"], [1, "details-card-header__icon"], ["aria-hidden", "true", 1, "pi", "pi-user"], [1, "details-card-header__text"], [1, "details-card-header__title"], [1, "details-card-header__subtitle"], [1, "pi", "pi-exclamation-triangle", "text-muted", 2, "font-size", "3rem"], [1, "mt-3", "text-muted"]], template: function ApplicantDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0)(1, "div", 1)(2, "app-page-header", 2)(3, "div", 3)(4, "app-action-buttons", 4);
       \u0275\u0275listener("actionClick", function ApplicantDetailsComponent_Template_app_action_buttons_actionClick_4_listener($event) {
@@ -692,6 +692,7 @@ var ApplicantDetailsComponent = class _ApplicantDetailsComponent {
     title="\u062A\u0623\u0643\u064A\u062F \u0627\u0644\u0637\u0628\u0627\u0639\u0629"
     subtitle="\u0647\u0644 \u062A\u0631\u064A\u062F \u0637\u0628\u0627\u0639\u0629 \u0625\u064A\u0635\u0627\u0644 \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F \u0644\u0647\u0630\u0627 \u0627\u0644\u0645\u0646\u062A\u0633\u0628\u061F"
     icon="pi pi-print"
+    width="40rem"
     confirmLabel="\u0637\u0628\u0627\u0639\u0629"
     confirmSeverity="info"
     [confirmLoading]="printLoading"
@@ -712,4 +713,4 @@ var ApplicantDetailsComponent = class _ApplicantDetailsComponent {
 export {
   ApplicantDetailsComponent
 };
-//# sourceMappingURL=chunk-AJBFP2NY.js.map
+//# sourceMappingURL=chunk-75E6HGZM.js.map

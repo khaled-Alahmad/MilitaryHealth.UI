@@ -130,9 +130,10 @@
     </p-table>
   </div>
 
-  <!-- Details Dialog -->
-  <p-dialog [(visible)]="showDetailsDialog" [modal]="true" [style]="{width: '90vw', maxWidth: '1200px'}"
-    [closable]="true" [draggable]="false" [resizable]="true" header="تفاصيل المنتسب الكاملة"
+  <!-- Details Dialog: نفس آلية وحجم تفاصيل الفحص العيني 70rem -->
+  <p-dialog [(visible)]="showDetailsDialog" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
+    [style]="{width: '70rem', minWidth: '70rem'}"
+    [closable]="true" [draggable]="false" [resizable]="false" header="تفاصيل المنتسب الكاملة"
     (onHide)="closeDetailsDialog()">
 
 
@@ -398,8 +399,9 @@
     </div>
   </p-dialog>
 
-  <!-- Requests Dialog -->
-  <p-dialog [(visible)]="showRequestsDialog" [modal]="true" [style]="{width: '80vw', maxWidth: '1000px'}"
+  <!-- Requests Dialog: نفس حجم طلب استشارة/تحليل 40rem -->
+  <p-dialog [(visible)]="showRequestsDialog" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
+    [style]="{width: '40rem', minWidth: '40rem'}"
     [closable]="true" [draggable]="false" [resizable]="false" header="التحاليل والاستشارات"
     (onHide)="closeRequestsDialog()">
 

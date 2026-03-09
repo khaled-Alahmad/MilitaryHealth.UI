@@ -29458,7 +29458,7 @@ var ApplicantService2 = class _ApplicantService {
 // src/app/features/applicants/components/search-applican/search-applicant.component.ts/search-applicant.component.ts
 var _c0 = ["barcodeInput"];
 var _c1 = ["scannerContainer"];
-var _c2 = () => ({ width: "90vw", maxWidth: "500px" });
+var _c2 = () => ({ width: "40rem", minWidth: "40rem" });
 var _forTrack0 = ($index, $item) => $item.applicantID;
 function SearchApplicantComponent_Conditional_17_Template(rf, ctx) {
   if (rf & 1) {
@@ -30301,7 +30301,7 @@ var SearchApplicantComponent = class _SearchApplicantComponent {
       \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.barcodeInput = _t.first);
       \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.scannerContainer = _t.first);
     }
-  }, inputs: { hideApplicantDetails: "hideApplicantDetails" }, outputs: { applicantSelected: "applicantSelected", applicantDetailsSelected: "applicantDetailsSelected" }, decls: 30, vars: 30, consts: [["scannerContainer", ""], [1, "search-applicant-container", "container"], [1, "row", "justify-content-center", "mb-3"], [1, "col-12", "col-md-8"], [1, "search-type-selector", "d-flex", "gap-2", "justify-content-center", "mb-3"], ["type", "button", 1, "btn", 3, "click"], [1, "pi", "pi-file", "me-2"], [1, "pi", "pi-qrcode", "me-2"], [1, "pi", "pi-user", "me-2"], [1, "search-wrapper", "d-flex", "gap-2", 3, "ngSubmit", "formGroup"], ["type", "text", "formControlName", "searchValue", "autofocus", "", 1, "form-control", "search-input", 3, "keypress", "placeholder"], ["type", "button", "title", "\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F", 1, "btn", "btn-outline-secondary"], ["type", "submit", 1, "btn", "btn-primary", "search-btn", 3, "disabled"], [1, "spinner-border", "spinner-border-sm", "me-2"], [1, "pi", "pi-search", "me-2"], ["role", "alert", 1, "alert", "alert-warning", "mt-3"], [1, "row", "g-4", "mt-4"], ["styleClass", "barcode-scanner-dialog", 3, "visibleChange", "onHide", "visible", "modal", "closable", "draggable", "resizable", "header"], [1, "scanner-https-warning", "p-3", "text-center"], [1, "scanner-wrapper"], ["pTemplate", "footer"], ["type", "button", "title", "\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F", 1, "btn", "btn-outline-secondary", 3, "click"], [1, "pi", "pi-camera"], [1, "pi", "pi-exclamation-triangle", "me-2"], [1, "search-results", "card"], [1, "card-header"], [1, "mb-0"], [1, "pi", "pi-list", "me-2"], [1, "card-body", "p-0"], [1, "list-group", "list-group-flush"], [1, "list-group-item", "list-group-item-action", 2, "cursor", "pointer"], [1, "list-group-item", "list-group-item-action", 2, "cursor", "pointer", 3, "click"], [1, "d-flex", "justify-content-between", "align-items-center"], [1, "text-muted"], [1, "pi", "pi-arrow-left"], [1, "badge", "bg-info", "text-white"], [1, "col-12"], [1, "card", "applicant-card", "shadow-lg", "border-0"], [1, "card-header", "text-white"], [1, "fas", "fa-user", "me-2"], [1, "card-body", "p-4"], [1, "row", "g-3"], [1, "col-md-6"], [1, "list-group", "list-group-flush", "rounded-3", "overflow-hidden"], [1, "list-group-item", "d-flex", "justify-content-between", "align-items-center"], [1, "badge", "bg-secondary", "text-white"], [1, "pi", "pi-lock", 2, "font-size", "2.5rem", "color", "var(--orange-500)", "margin-bottom", "1rem"], [1, "mb-2"], [1, "text-muted", "small", "mb-0"], [1, "mt-2", "mb-0", "small"], ["id", "barcode-scanner", 1, "scanner-container"], [1, "scanner-overlay"], [1, "scanner-instructions"], [1, "pi", "pi-camera", 2, "font-size", "2rem", "margin-bottom", "1rem"], [1, "d-flex", "justify-content-end", "gap-2"], ["label", "\u0625\u0644\u063A\u0627\u0621", "icon", "pi pi-times", "severity", "secondary", 3, "onClick"]], template: function SearchApplicantComponent_Template(rf, ctx) {
+  }, inputs: { hideApplicantDetails: "hideApplicantDetails" }, outputs: { applicantSelected: "applicantSelected", applicantDetailsSelected: "applicantDetailsSelected" }, decls: 30, vars: 32, consts: [["scannerContainer", ""], [1, "search-applicant-container", "container"], [1, "row", "justify-content-center", "mb-3"], [1, "col-12", "col-md-8"], [1, "search-type-selector", "d-flex", "gap-2", "justify-content-center", "mb-3"], ["type", "button", 1, "btn", 3, "click"], [1, "pi", "pi-file", "me-2"], [1, "pi", "pi-qrcode", "me-2"], [1, "pi", "pi-user", "me-2"], [1, "search-wrapper", "d-flex", "gap-2", 3, "ngSubmit", "formGroup"], ["type", "text", "formControlName", "searchValue", "autofocus", "", 1, "form-control", "search-input", 3, "keypress", "placeholder"], ["type", "button", "title", "\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F", 1, "btn", "btn-outline-secondary"], ["type", "submit", 1, "btn", "btn-primary", "search-btn", 3, "disabled"], [1, "spinner-border", "spinner-border-sm", "me-2"], [1, "pi", "pi-search", "me-2"], ["role", "alert", 1, "alert", "alert-warning", "mt-3"], [1, "row", "g-4", "mt-4"], ["styleClass", "barcode-scanner-dialog", 3, "visibleChange", "onHide", "visible", "modal", "dismissableMask", "closeOnEscape", "closable", "draggable", "resizable", "header"], [1, "scanner-https-warning", "p-3", "text-center"], [1, "scanner-wrapper"], ["pTemplate", "footer"], ["type", "button", "title", "\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F", 1, "btn", "btn-outline-secondary", 3, "click"], [1, "pi", "pi-camera"], [1, "pi", "pi-exclamation-triangle", "me-2"], [1, "search-results", "card"], [1, "card-header"], [1, "mb-0"], [1, "pi", "pi-list", "me-2"], [1, "card-body", "p-0"], [1, "list-group", "list-group-flush"], [1, "list-group-item", "list-group-item-action", 2, "cursor", "pointer"], [1, "list-group-item", "list-group-item-action", 2, "cursor", "pointer", 3, "click"], [1, "d-flex", "justify-content-between", "align-items-center"], [1, "text-muted"], [1, "pi", "pi-arrow-left"], [1, "badge", "bg-info", "text-white"], [1, "col-12"], [1, "card", "applicant-card", "shadow-lg", "border-0"], [1, "card-header", "text-white"], [1, "fas", "fa-user", "me-2"], [1, "card-body", "p-4"], [1, "row", "g-3"], [1, "col-md-6"], [1, "list-group", "list-group-flush", "rounded-3", "overflow-hidden"], [1, "list-group-item", "d-flex", "justify-content-between", "align-items-center"], [1, "badge", "bg-secondary", "text-white"], [1, "pi", "pi-lock", 2, "font-size", "2.5rem", "color", "var(--orange-500)", "margin-bottom", "1rem"], [1, "mb-2"], [1, "text-muted", "small", "mb-0"], [1, "mt-2", "mb-0", "small"], ["id", "barcode-scanner", 1, "scanner-container"], [1, "scanner-overlay"], [1, "scanner-instructions"], [1, "pi", "pi-camera", 2, "font-size", "2rem", "margin-bottom", "1rem"], [1, "d-flex", "justify-content-end", "gap-2"], ["label", "\u0625\u0644\u063A\u0627\u0621", "icon", "pi pi-times", "severity", "secondary", 3, "onClick"]], template: function SearchApplicantComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 1)(1, "div", 2)(2, "div", 3)(3, "div", 4)(4, "button", 5);
       \u0275\u0275listener("click", function SearchApplicantComponent_Template_button_click_4_listener() {
@@ -30379,9 +30379,9 @@ var SearchApplicantComponent = class _SearchApplicantComponent {
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.applicant && !ctx.hideApplicantDetails ? 25 : -1);
       \u0275\u0275advance();
-      \u0275\u0275styleMap(\u0275\u0275pureFunction0(29, _c2));
+      \u0275\u0275styleMap(\u0275\u0275pureFunction0(31, _c2));
       \u0275\u0275twoWayProperty("visible", ctx.showBarcodeScanner);
-      \u0275\u0275property("modal", true)("closable", true)("draggable", false)("resizable", false)("header", "\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F");
+      \u0275\u0275property("modal", true)("dismissableMask", false)("closeOnEscape", true)("closable", true)("draggable", false)("resizable", false)("header", "\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F");
       \u0275\u0275advance();
       \u0275\u0275conditional(!ctx.isCameraAllowed ? 27 : 28);
     }
@@ -30618,14 +30618,16 @@ var SearchApplicantComponent = class _SearchApplicantComponent {
   </div>\r
   }\r
 \r
-  <!-- \u2705 Dialog \u0644\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F -->\r
+  <!-- Dialog \u0644\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F: \u0646\u0641\u0633 \u0622\u0644\u064A\u0629 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 40rem -->\r
   <p-dialog\r
     [(visible)]="showBarcodeScanner"\r
     [modal]="true"\r
+    [dismissableMask]="false"\r
+    [closeOnEscape]="true"\r
     [closable]="true"\r
     [draggable]="false"\r
     [resizable]="false"\r
-    [style]="{ width: '90vw', maxWidth: '500px' }"\r
+    [style]="{ width: '40rem', minWidth: '40rem' }"\r
     [header]="'\u0645\u0633\u062D \u0627\u0644\u0628\u0627\u0631\u0643\u0648\u062F'"\r
     (onHide)="onCloseScanner()"\r
     styleClass="barcode-scanner-dialog">\r
@@ -30689,4 +30691,4 @@ var SearchApplicantComponent = class _SearchApplicantComponent {
 export {
   SearchApplicantComponent
 };
-//# sourceMappingURL=chunk-5SMVM3T5.js.map
+//# sourceMappingURL=chunk-ZN4S5WAA.js.map

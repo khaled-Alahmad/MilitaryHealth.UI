@@ -1,23 +1,19 @@
-<!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<app-dialog-wrapper
+  [(visible)]="showModal"
+  title="إضافة فحص باطني"
+  subtitle="إدخال بيانات الفحص الداخلي للأجهزة والنتيجة"
+  icon="pi pi-heart"
+  width="90rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate class="exam-form">
 
-    <!-- الهيدر -->
-    <div class="modal-header">
-      <h5 class="modal-title">إضافة فحص باطني </h5>
-      <button type="button" class="btn-close ms-0 me-auto" (click)="closeModal()"></button>
-    </div>
-
-
-    <!-- البودي -->
-    <div class="modal-body">
-      <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>
-
-        @for (section of statusSections; track section.control; let sectionIndex = $index) {
-        <div class="medical-system-row">
-          <div class="system-label">{{ section.label }}</div>
-          <div class="system-options">
-            @for (option of healthStatusOptions; track option.value; let optionIndex = $index) {
+    <h6 class="section-title">حالة الأجهزة الطبية</h6>
+    @for (section of statusSections; track section.control; let sectionIndex = $index) {
+      <div class="medical-system-row">
+        <div class="system-label">{{ section.label }}</div>
+        <div class="system-options">
+          @for (option of healthStatusOptions; track option.value; let optionIndex = $index) {
             <div class="form-check">
               <input
                 class="form-check-input"
@@ -25,54 +21,68 @@
                 [name]="section.control"
                 [id]="section.control + '_' + optionIndex"
                 [value]="option.value"
-                [formControlName]="section.control">
+                [formControlName]="section.control" />
               <label class="form-check-label" [for]="section.control + '_' + optionIndex">
                 {{ option.label }}
               </label>
             </div>
-            }
-          </div>
+          }
         </div>
-        @if (examForm.get(section.control)?.value === otherOptionValue) {
+      </div>
+      @if (examForm.get(section.control)?.value === otherOptionValue) {
         <div class="other-input-row">
           <input
             type="text"
             class="form-control"
             [formControlName]="section.otherControl"
-            placeholder="أدخل التفاصيل">
+            placeholder="أدخل التفاصيل" />
         </div>
-        }
-        }
+      }
+    }
 
-        <!-- النتيجة -->
-        <div class="result-section">
-          <label class="form-label mb-3">النتيجة <span class="text-danger">*</span></label>
-          <select class="form-select" formControlName="resultID"
-                  [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
-                  [class.is-valid]="isFieldValid('resultID')">
-            <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
-          </select>
-          <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">
-            <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('resultID') }}
-          </div>
+    <h6 class="section-title mt-4">النتيجة</h6>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label mb-2">النتيجة <span class="text-danger">*</span></label>
+        <select
+          class="form-select"
+          formControlName="resultID"
+          [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
+          [class.is-valid]="isFieldValid('resultID')">
+          <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
+        </select>
+        <div class="invalid-feedback d-block" *ngIf="getErrorMessage('resultID')">
+          <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('resultID') }}
         </div>
-
-        <!-- السبب -->
-        <div class="reason-section">
-          <label class="form-label">السبب (إن وجد)</label>
-          <textarea class="form-control" formControlName="reason" rows="3" placeholder="يمكنك كتابة السبب إن وجد"></textarea>
-        </div>
-
-        <!-- الأزرار -->
-        <div class="modal-footer mt-4">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">إلغاء</button>
-          <button type="submit" class="btn btn-success" [disabled]="examForm.invalid || loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-            حفظ
-          </button>
-        </div>
-
-      </form>
+      </div>
     </div>
+
+    <h6 class="section-title mt-4">السبب (إن وجد)</h6>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label mb-2">السبب</label>
+        <textarea
+          class="form-control"
+          formControlName="reason"
+          rows="3"
+          placeholder="يمكنك كتابة السبب إن وجد"></textarea>
+      </div>
+    </div>
+  </form>
+
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إلغاء"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeModal()"></p-button>
+    <p-button
+      label="حفظ الفحص"
+      icon="pi pi-save"
+      severity="primary"
+      [loading]="loading"
+      [disabled]="examForm.invalid || loading"
+      (onClick)="onSubmit()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

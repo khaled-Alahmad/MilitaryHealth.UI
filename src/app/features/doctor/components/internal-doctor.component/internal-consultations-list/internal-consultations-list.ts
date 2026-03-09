@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { InternalExamService } from '../../../services/internal-exam.service';
 import { EditConsultation } from '../../Consultations/edit-consultation/edit-consultation';
@@ -9,34 +9,41 @@ import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { RippleModule } from 'primeng/ripple';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
-import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-internal-consultations-list',
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, RippleModule, FormsModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent,
+  ],
   templateUrl: './internal-consultations-list.html',
-  styleUrl: './internal-consultations-list.scss'
+  styleUrl: './internal-consultations-list.scss',
 })
 export class InternalConsultationsList implements OnInit {
   consultations: Consultation[] = [];
   filteredConsultations: Consultation[] = [];
-  globalFilter: string = '';
-  selectedConsultation: Consultation | null = null;
+  globalFilter = '';
   loading = false;
-  searchText = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: InternalExamService,
-    private toastr: ToastrService ,
-    private modalService: NgbModal,// ✅ toastr
+    private toastr: ToastrService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit() { this.loadConsultations(); }
@@ -66,8 +73,9 @@ export class InternalConsultationsList implements OnInit {
     this.page = 1;
     this.loadConsultations();
   }
-  onFilterChange(value: string) {
-    this.globalFilter = (value || '').trim();
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    this.globalFilter = value;
     this.page = 1;
     this.loadConsultations();
   }
@@ -75,6 +83,9 @@ export class InternalConsultationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();
@@ -90,14 +101,7 @@ export class InternalConsultationsList implements OnInit {
     return 'badge bg-secondary';
   }
 
-  openEditDialog(c: Consultation) { this.selectedConsultation = { ...c }; }
-
-  onDialogClose(updated: boolean) {
-    this.selectedConsultation = null;
-    if (updated) this.loadConsultations();
-  }
-
-   openFile(attachment: string) {
+  openFile(attachment: string) {
     if (!attachment) {
       this.toastr.warning('⚠️ لا يوجد ملف مرفق', 'تنبيه');
       return;
@@ -107,12 +111,12 @@ export class InternalConsultationsList implements OnInit {
   }
   openEditConsultation(consultation: Consultation) {
     const modalRef = this.modalService.open(EditConsultation, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
-      centered: true
+      centered: true,
     });
-    modalRef.componentInstance.consultation  = consultation;
+    modalRef.componentInstance.consultation = consultation;
     modalRef.componentInstance.consultationUpdated.subscribe(() => {
       this.loadConsultations();
     });
