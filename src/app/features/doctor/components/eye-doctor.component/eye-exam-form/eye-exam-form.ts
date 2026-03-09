@@ -10,11 +10,13 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { HEALTH_STATUS_OPTIONS, OTHER_OPTION_VALUE, resolveHealthStatusValue } from '../../../constants/health-status-options';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-eye-exam-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './eye-exam-form.html',
   styleUrls: ['./eye-exam-form.scss']
 })
@@ -26,6 +28,7 @@ export class EyeExamForm implements OnInit {
   results: Result[] = [];
   loading = false;
   showModal = false;
+  showRightEye = true;
   showLeftEye = false;
   readonly healthStatusOptions = HEALTH_STATUS_OPTIONS;
   readonly otherOptionValue = OTHER_OPTION_VALUE;
@@ -57,7 +60,7 @@ export class EyeExamForm implements OnInit {
       colorTestLeftOther: [''],
       refractiveError: [''], // حقل قديم - للتوافق مع البيانات القديمة
       worstRefractionRight: ['', Validators.required], // أسوأ انكسار العين اليمنى
-      worstRefractionLeft: ['', Validators.required], // أسوأ انكسار العين اليسرى
+      worstRefractionLeft: [''], // أسوأ انكسار العين اليسرى (يُفعل عند إظهار العين اليسرى)
       otherDiseases: [''],
       resultID: [null, Validators.required],
       reason: [''],
@@ -91,10 +94,35 @@ export class EyeExamForm implements OnInit {
 
   toggleLeftEye() {
     this.showLeftEye = !this.showLeftEye;
+    const leftWorstRefractionControl = this.examForm.get('worstRefractionLeft');
+    if (this.showLeftEye) {
+      leftWorstRefractionControl?.setValidators([Validators.required]);
+    } else {
+      leftWorstRefractionControl?.clearValidators();
+      leftWorstRefractionControl?.reset('');
+    }
+    leftWorstRefractionControl?.updateValueAndValidity();
+
     if (!this.showLeftEye) {
       const leftEyeRefractions = this.examForm.get('leftEye.refractions') as FormArray;
       while (leftEyeRefractions.length) leftEyeRefractions.removeAt(0);
     }
+  }
+
+  toggleRightEye() {
+    this.showRightEye = !this.showRightEye;
+    const rightWorstRefractionControl = this.examForm.get('worstRefractionRight');
+    if (this.showRightEye) {
+      rightWorstRefractionControl?.setValidators([Validators.required]);
+    } else {
+      rightWorstRefractionControl?.clearValidators();
+      rightWorstRefractionControl?.reset('');
+      const rightEyeRefractions = this.examForm.get('rightEye.refractions') as FormArray;
+      while (rightEyeRefractions.length) {
+        rightEyeRefractions.removeAt(0);
+      }
+    }
+    rightWorstRefractionControl?.updateValueAndValidity();
   }
 
   // ---------------------- REFRACTIONS ----------------------
@@ -298,6 +326,7 @@ private buildExamData(doctorID: number) {
     }
 
     this.showLeftEye = false;
+    this.showRightEye = true;
     this.loading = false;
     this.closeModal();
   }

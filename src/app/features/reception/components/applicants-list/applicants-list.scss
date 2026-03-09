@@ -1,69 +1,5 @@
 @use '../../../../shared/styles/reception-shared';
 
-/* Reception list filter bar alignment (search on right) */
-:host ::ng-deep .reception-filter-bar .filter-bar {
-  justify-content: flex-end;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__controls {
-  width: 100%;
-  justify-content: flex-end;
-  margin-inline-start: auto;
-  direction: ltr;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__search-wrap {
-  order: 2;
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__search-wrap .pi-search {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-:host ::ng-deep .reception-filter-bar .filter-bar__search-input {
-  padding-right: 2rem;
-}
-
-/* Layout + controlled table styling for reception list */
-:host ::ng-deep .reception-applicants-table .p-datatable-wrapper {
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-:host ::ng-deep .reception-applicants-table .p-datatable-thead > tr > th {
-  background: var(--primary-dark);
-  color: #fff;
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-  text-align: center;
-  white-space: nowrap;
-  padding: 0.6rem 0.5rem;
-}
-
-:host ::ng-deep .reception-applicants-table .p-datatable-tbody > tr > td {
-  font-size: var(--font-size-xs);
-  padding: 0.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-:host ::ng-deep .reception-applicants-table .p-datatable-tbody > tr:nth-child(even) {
-  background: #fafafa;
-}
-
-:host ::ng-deep .reception-applicants-table .p-datatable-tbody > tr:hover {
-  background: rgba(5, 66, 57, 0.04);
-}
-
-:host ::ng-deep .reception-applicants-table .p-datatable-emptymessage td {
-  border: none;
-  padding: var(--spacing-2xl);
-  text-align: center;
-  color: var(--neutral-medium);
-}
-
 .cell-text {
   font-size: var(--font-size-xs);
   color: var(--neutral-dark);
@@ -89,20 +25,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
-}
-
-:host ::ng-deep .table-action-btn {
-  width: 2rem;
-  height: 2rem;
-}
-
-:host ::ng-deep .table-action-btn .p-button-label {
-  display: none;
-}
-
-:host ::ng-deep .tattoo-tag {
-  font-size: var(--font-size-xs);
+  gap: var(--spacing-xs);
 }
 
 .empty-state {
@@ -115,4 +38,11 @@
 .empty-state__icon {
   font-size: 2rem;
   color: var(--neutral-medium);
+}
+
+.print-dialog__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
 }

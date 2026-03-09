@@ -1,0 +1,55 @@
+<p-dialog
+  [visible]="visible"
+  [modal]="modal"
+  [closable]="closable"
+  [dismissableMask]="dismissableMask"
+  [closeOnEscape]="closeOnEscape"
+  [blockScroll]="blockScroll"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: width }"
+  (visibleChange)="onVisibleChange($event)"
+  (onHide)="onHide()"
+>
+  <ng-template pTemplate="header">
+    <div class="dialog-wrapper__header">
+      @if (iconClass) {
+        <i class="dialog-wrapper__icon" [class]="iconClass"></i>
+      }
+      <div>
+        <h3 class="dialog-wrapper__title">{{ title }}</h3>
+        @if (subtitle) {
+          <p class="dialog-wrapper__subtitle">{{ subtitle }}</p>
+        }
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="dialog-wrapper__content">
+    <ng-content></ng-content>
+  </div>
+
+  @if (useDefaultFooter) {
+    <ng-template pTemplate="footer">
+      <div class="dialog-wrapper__footer">
+        <p-button
+          [label]="cancelLabel"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="onCancel()"
+        ></p-button>
+        <p-button
+          [label]="confirmLabel"
+          [severity]="confirmSeverity"
+          [disabled]="confirmDisabled"
+          [loading]="confirmLoading"
+          (onClick)="onConfirm()"
+        ></p-button>
+      </div>
+    </ng-template>
+  } @else {
+    <ng-template pTemplate="footer">
+      <ng-content select="[dialog-footer]"></ng-content>
+    </ng-template>
+  }
+</p-dialog>

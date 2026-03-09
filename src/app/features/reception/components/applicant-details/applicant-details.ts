@@ -12,6 +12,7 @@ import { TagModule } from 'primeng/tag';
 // Shared
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { ActionButtonsComponent, ActionButtonConfig } from '../../../../shared/components/action-buttons/action-buttons.component';
+import { DialogWrapperComponent } from '../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
 
 // Models and Services
 import { ApplicantDetailsModel, ApplicantModel } from '../../models/applicant.model';
@@ -30,7 +31,8 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
     ToastModule,
     TagModule,
     PageHeaderComponent,
-    ActionButtonsComponent
+    ActionButtonsComponent,
+    DialogWrapperComponent
   ],
   templateUrl: './applicant-details.html',
   styleUrl: './applicant-details.scss',
@@ -39,6 +41,8 @@ import { BarcodePrintService } from '../../services/barcode-print.service';
 export class ApplicantDetailsComponent implements OnInit {
   applicant: ApplicantDetailsModel | null = null;
   loading = false;
+  printLoading = false;
+  printDialogVisible = false;
   fileNumber: string = '';
   maritalStatuses: MaritalStatus[] = [];
 
@@ -98,7 +102,7 @@ export class ApplicantDetailsComponent implements OnInit {
 
   onHeaderAction(actionId: string): void {
     if (actionId === 'back') this.goBack();
-    else if (actionId === 'print') this.printReceipt();
+    else if (actionId === 'print') this.openPrintDialog();
     else if (actionId === 'edit') this.editApplicant();
   }
 
@@ -123,7 +127,24 @@ export class ApplicantDetailsComponent implements OnInit {
     this.router.navigate(['reception/applicants']);
   }
 
-  printReceipt(): void {
+  openPrintDialog(): void {
+    if (!this.applicant) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'تحذير',
+        detail: 'لا توجد بيانات منتسب للطباعة'
+      });
+      return;
+    }
+    this.printDialogVisible = true;
+  }
+
+  closePrintDialog(): void {
+    this.printDialogVisible = false;
+    this.printLoading = false;
+  }
+
+  confirmPrintReceipt(): void {
     if (!this.applicant) {
       this.messageService.add({
         severity: 'warn',
@@ -133,7 +154,7 @@ export class ApplicantDetailsComponent implements OnInit {
       return;
     }
 
-    // ✅ جلب البيانات الكاملة للحصول على queueNumber و fileNumber
+    this.printLoading = true;
     if (this.applicant.applicantID) {
       this.applicantService.getApplicantById$(this.applicant.applicantID).subscribe({
         next: (fullApplicantData: ApplicantModel) => {
@@ -144,9 +165,9 @@ export class ApplicantDetailsComponent implements OnInit {
               detail: 'فشل في طباعة الإيصال'
             });
           });
+          this.closePrintDialog();
         },
         error: () => {
-          // محاولة الطباعة بالبيانات المتوفرة
           const applicantForPrint: ApplicantModel = {
             applicantID: this.applicant!.applicantID,
             fileNumber: this.applicant!.fileNumber,
@@ -175,10 +196,13 @@ export class ApplicantDetailsComponent implements OnInit {
               detail: 'فشل في طباعة الإيصال'
             });
           });
+          this.closePrintDialog();
+        },
+        complete: () => {
+          this.printLoading = false;
         }
       });
     } else {
-      // إذا لم يكن applicantID موجوداً، استخدم البيانات المتوفرة
       const applicantForPrint: ApplicantModel = {
         applicantID: this.applicant.applicantID,
         fileNumber: this.applicant.fileNumber,
@@ -207,6 +231,7 @@ export class ApplicantDetailsComponent implements OnInit {
           detail: 'فشل في طباعة الإيصال'
         });
       });
+      this.closePrintDialog();
     }
   }
 }

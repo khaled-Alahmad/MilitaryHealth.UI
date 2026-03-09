@@ -1,0 +1,33 @@
+.dialog-wrapper__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.dialog-wrapper__icon {
+  color: var(--primary-dark);
+  font-size: var(--font-size-lg);
+}
+
+.dialog-wrapper__title {
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: var(--font-size-lg);
+}
+
+.dialog-wrapper__subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--neutral-medium);
+  font-size: var(--font-size-sm);
+}
+
+.dialog-wrapper__content {
+  color: var(--neutral-dark);
+  line-height: 1.6;
+}
+
+.dialog-wrapper__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}

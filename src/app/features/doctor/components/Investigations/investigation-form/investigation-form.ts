@@ -5,11 +5,15 @@
   import { Investigation } from '../../../models/investigation.model';
   import { ToastrService } from 'ngx-toastr';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 
   @Component({
     selector: 'app-investigation-form',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, DialogWrapperComponent, ButtonModule, InputTextModule, TextareaModule],
     templateUrl: './investigation-form.html',
     styleUrls: ['./investigation-form.scss']
   })
@@ -21,6 +25,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
 
   investigationForm!: FormGroup;
   uploadedPath: string | null = null;
+  loading = false;
   
   previewUrl: string | null = null;
 
@@ -98,6 +103,7 @@ import { EyeExamService } from '../../../services/eye-exam.service';
       ? this.service.updateInvestigation(this.investigationToEdit.investigationID!, investigation)
       : this.service.addInvestigation(investigation);
 
+    this.loading = true;
     request$.subscribe({
       next: () => {
         this.toastr.success(
@@ -107,9 +113,11 @@ import { EyeExamService } from '../../../services/eye-exam.service';
         this.investigationForm.reset();
         this.uploadedPath = null;
         this.previewUrl = null;
+        this.loading = false;
         this.closeModal();
       },
       error: () => {
+        this.loading = false;
         this.toastr.error('فشل في العملية', 'خطأ');
       }
     });

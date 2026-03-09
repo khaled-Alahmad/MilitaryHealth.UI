@@ -138,4 +138,21 @@
   </div>
 
   <p-toast></p-toast>
+
+  <app-dialog-wrapper
+    [(visible)]="printDialogVisible"
+    title="تأكيد الطباعة"
+    subtitle="هل تريد طباعة إيصال الباركود لهذا المنتسب؟"
+    icon="pi pi-print"
+    confirmLabel="طباعة"
+    confirmSeverity="info"
+    [confirmLoading]="printLoading"
+    (confirm)="confirmPrintReceipt()"
+    (cancel)="closePrintDialog()"
+    (hide)="closePrintDialog()">
+    <p class="print-dialog-text">
+      الاسم: {{ applicant?.fullName || '-' }}<br />
+      رقم الملف: {{ applicant?.fileNumber || '-' }}
+    </p>
+  </app-dialog-wrapper>
 </div>

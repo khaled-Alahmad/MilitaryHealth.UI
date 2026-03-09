@@ -1,12 +1,15 @@
 <div class="action-buttons">
-  @for (action of actions; track action.id) {
+  @for (action of visibleActions; track action.id) {
     <p-button
-      [label]="action.label"
+      [label]="iconOnly ? '' : action.label"
       [icon]="action.icon"
       [size]="size"
       [severity]="action.severity || 'secondary'"
       [outlined]="action.outlined ?? true"
       [disabled]="action.disabled || false"
+      [rounded]="action.rounded ?? iconOnly"
+      [text]="action.text ?? false"
+      [styleClass]="getStyleClass(action)"
       [pTooltip]="action.tooltip || action.label"
       tooltipPosition="top"
       (onClick)="onActionClick(action.id)"

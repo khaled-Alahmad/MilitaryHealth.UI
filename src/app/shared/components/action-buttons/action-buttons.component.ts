@@ -11,6 +11,10 @@ export interface ActionButtonConfig {
   outlined?: boolean;
   disabled?: boolean;
   tooltip?: string;
+  rounded?: boolean;
+  text?: boolean;
+  styleClass?: string;
+  visible?: boolean;
 }
 
 @Component({
@@ -23,7 +27,17 @@ export interface ActionButtonConfig {
 export class ActionButtonsComponent {
   @Input() actions: ActionButtonConfig[] = [];
   @Input() size: 'small' | 'large' = 'small';
+  @Input() iconOnly = false;
+  @Input() buttonClass = '';
   @Output() actionClick = new EventEmitter<string>();
+
+  get visibleActions(): ActionButtonConfig[] {
+    return this.actions.filter((action) => action.visible !== false);
+  }
+
+  getStyleClass(action: ActionButtonConfig): string {
+    return [this.buttonClass, action.styleClass].filter(Boolean).join(' ');
+  }
 
   onActionClick(actionId: string): void {
     this.actionClick.emit(actionId);

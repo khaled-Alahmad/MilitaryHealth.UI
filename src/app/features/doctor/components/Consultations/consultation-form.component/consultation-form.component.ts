@@ -5,11 +5,15 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { EyeExamService } from '../../../services/eye-exam.service';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-consultation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DialogWrapperComponent, ButtonModule, InputTextModule, TextareaModule],
   templateUrl: './consultation-form.component.html',
   styleUrls: ['./consultation-form.component.scss']
 })

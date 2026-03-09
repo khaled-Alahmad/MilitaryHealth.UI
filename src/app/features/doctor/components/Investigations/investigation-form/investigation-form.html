@@ -1,89 +1,48 @@
-@if (showModal) {
-  <!-- Backdrop -->
-  <div class="modal-backdrop"></div>
-  
-  <!-- Professional Investigation Form Modal -->
-  <div class="professional-modal-container">
-  <!-- Modal Header -->
-  <div class="modal-header-professional">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-flask"></i>
-      </div>
-      <div class="header-text">
-        <h5 class="modal-title-professional">طلب تحليل طبي</h5>
-        <p class="modal-subtitle">أدخل نوع التحليل المطلوب</p>
-      </div>
+<app-dialog-wrapper
+  [(visible)]="showModal"
+  title="طلب تحليل طبي"
+  subtitle="إدخال نوع التحليل وسبب الطلب"
+  icon="pi pi-file-search"
+  width="40rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <form [formGroup]="investigationForm" class="investigation-form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label>نوع التحليل <span class="required">*</span></label>
+      <input
+        pInputText
+        type="text"
+        formControlName="type"
+        placeholder="أدخل نوع التحليل"
+        [class.p-invalid]="investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched" />
+      @if (investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched) {
+        <small class="error-message">نوع التحليل مطلوب</small>
+      }
     </div>
-    <button type="button" class="btn-close-professional" (click)="closeModal()">
-      <i class="pi pi-times"></i>
-    </button>
-  </div>
 
-  <!-- Modal Body -->
-  <div class="modal-body-professional">
-    <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()">
-      
-      <div class="form-section">
-        <div class="section-header">
-          <i class="pi pi-file-check"></i>
-          <h4>بيانات التحليل</h4>
-        </div>
+    <div class="form-field">
+      <label>سبب التحليل</label>
+      <textarea
+        pTextarea
+        formControlName="investigationReason"
+        placeholder="أدخل سبب التحليل (اختياري)"
+        rows="4"></textarea>
+    </div>
+  </form>
 
-        <div class="form-row">
-          <div class="form-field">
-            <label>
-              <i class="pi pi-tag"></i>
-              نوع التحليل
-              <span class="required">*</span>
-            </label>
-            <input 
-              type="text" 
-              class="form-control" 
-              formControlName="type"
-              placeholder="أدخل نوع التحليل"
-              [class.is-invalid]="investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched">
-            @if (investigationForm.get('type')?.invalid && investigationForm.get('type')?.touched) {
-              <div class="error-message">
-                نوع التحليل مطلوب
-              </div>
-            }
-          </div>
-
-          <div class="form-field">
-            <label>
-              <i class="pi pi-info-circle"></i>
-              سبب التحليل
-            </label>
-            <textarea 
-              class="form-control" 
-              formControlName="investigationReason"
-              placeholder="أدخل سبب التحليل (اختياري)"
-              rows="3">
-            </textarea>
-          </div>
-        </div>
-      </div>
-    </form>
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إلغاء"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeModal()"></p-button>
+    <p-button
+      label="حفظ طلب التحليل"
+      icon="pi pi-save"
+      severity="primary"
+      [loading]="loading"
+      [disabled]="loading || investigationForm.invalid"
+      (onClick)="onSubmit()"></p-button>
   </div>
-
-  <!-- Modal Footer -->
-  <div class="modal-footer-professional">
-    <button 
-      type="button" 
-      class="btn btn-secondary" 
-      (click)="closeModal()">
-      <i class="pi pi-times me-2"></i>
-      إلغاء
-    </button>
-    <button 
-      type="button" 
-      class="btn btn-primary" 
-      (click)="onSubmit()" 
-      [disabled]="investigationForm.invalid">
-      <i class="pi pi-save me-2"></i>
-      حفظ طلب التحليل
-    </button>
-  </div>
-  </div>
-}
+</app-dialog-wrapper>

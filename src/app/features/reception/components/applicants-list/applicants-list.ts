@@ -7,14 +7,15 @@ import { PaginatorComponent } from '../../../../shared/components/paginator/pagi
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
 import { BarcodePrintService } from '../../services/barcode-print.service';
 import { MessageService } from 'primeng/api';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { Table } from 'primeng/table';
 import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { ActionButtonsComponent, ActionButtonConfig } from '../../../../shared/components/action-buttons/action-buttons.component';
+import { DialogWrapperComponent } from '../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
 
 @Component({
   selector: 'app-applicants-list',
@@ -23,10 +24,11 @@ import { FilterBarComponent } from '../../../../shared/components/filter-bar/fil
     CommonModule,
     PaginatorComponent,
     TagModule,
-    ButtonModule,
-    TooltipModule,
     GregorianDatePipe,
-    FilterBarComponent
+    FilterBarComponent,
+    PageHeaderComponent,
+    ActionButtonsComponent,
+    DialogWrapperComponent
   ],
   templateUrl: './applicants-list.html',
   styleUrl: './applicants-list.scss',
@@ -35,12 +37,25 @@ import { FilterBarComponent } from '../../../../shared/components/filter-bar/fil
 export class ApplicantsList implements OnInit, AfterViewInit {
   applicants: ApplicantModel[] = [];
   globalFilter: string = '';
+  selectedApplicantForPrint: ApplicantModel | null = null;
+  printDialogVisible = false;
+  printLoading = false;
   
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
   loading = false;
   tableHeight = '400px';
+
+  readonly headerActions: ActionButtonConfig[] = [
+    { id: 'add', label: 'إضافة منتسب', icon: 'pi pi-plus', severity: 'primary', outlined: false }
+  ];
+
+  readonly rowActions: ActionButtonConfig[] = [
+    { id: 'view', label: 'عرض', icon: 'pi pi-eye', severity: 'secondary', outlined: true, tooltip: 'عرض التفاصيل' },
+    { id: 'edit', label: 'تعديل', icon: 'pi pi-pencil', severity: 'success', outlined: false, tooltip: 'تعديل المنتسب' },
+    { id: 'print', label: 'طباعة', icon: 'pi pi-print', severity: 'info', outlined: false, tooltip: 'طباعة الباركود' }
+  ];
   
   @ViewChild('table') table?: Table;
   
@@ -114,6 +129,26 @@ export class ApplicantsList implements OnInit, AfterViewInit {
   viewApplicant(applicant: ApplicantModel) {
     this.router.navigate(['reception/applicants/details', applicant.fileNumber]);
   }
+
+  onHeaderAction(actionId: string): void {
+    if (actionId === 'add') {
+      this.router.navigate(['reception/applicants/add']);
+    }
+  }
+
+  onRowAction(actionId: string, applicant: ApplicantModel): void {
+    if (actionId === 'view') {
+      this.viewApplicant(applicant);
+      return;
+    }
+    if (actionId === 'edit') {
+      this.editApplicant(applicant);
+      return;
+    }
+    if (actionId === 'print') {
+      this.openPrintDialog(applicant);
+    }
+  }
   
   editApplicant(applicant: ApplicantModel): void {
     if (!applicant?.applicantID) {
@@ -127,7 +162,7 @@ export class ApplicantsList implements OnInit, AfterViewInit {
     this.router.navigate(['reception', 'applicants', applicant.applicantID]);
   }
 
-  printApplicant(applicant: ApplicantModel): void {
+  openPrintDialog(applicant: ApplicantModel): void {
     if (!applicant) {
       this.messageService.add({
         severity: 'warn',
@@ -136,28 +171,41 @@ export class ApplicantsList implements OnInit, AfterViewInit {
       });
       return;
     }
+    this.selectedApplicantForPrint = applicant;
+    this.printDialogVisible = true;
+  }
 
-    // ✅ جلب البيانات الكاملة للحصول على queueNumber و fileNumber
+  confirmPrintApplicant(): void {
+    const applicant = this.selectedApplicantForPrint;
+    if (!applicant) {
+      return;
+    }
+
+    this.printLoading = true;
     if (applicant.applicantID) {
       this.applicantService.getApplicantById$(applicant.applicantID).subscribe({
         next: (fullApplicantData: ApplicantModel) => {
-          this.barcodePrintService.printBarcodeReceipt(fullApplicantData).catch(error => {
+          this.barcodePrintService.printBarcodeReceipt(fullApplicantData).catch(() => {
             this.messageService.add({
               severity: 'error',
               summary: 'خطأ',
               detail: 'فشل في طباعة الإيصال'
             });
           });
+          this.closePrintDialog();
         },
-        error: (err) => {
-          // محاولة الطباعة بالبيانات المتوفرة
-          this.barcodePrintService.printBarcodeReceipt(applicant).catch(error => {
+        error: () => {
+          this.barcodePrintService.printBarcodeReceipt(applicant).catch(() => {
             this.messageService.add({
               severity: 'error',
               summary: 'خطأ',
               detail: 'فشل في طباعة الإيصال'
             });
           });
+          this.closePrintDialog();
+        },
+        complete: () => {
+          this.printLoading = false;
         }
       });
     } else {
@@ -166,7 +214,14 @@ export class ApplicantsList implements OnInit, AfterViewInit {
         summary: 'تحذير',
         detail: 'لا يمكن طباعة الإيصال - بيانات ناقصة'
       });
+      this.printLoading = false;
     }
+  }
+
+  closePrintDialog(): void {
+    this.printDialogVisible = false;
+    this.printLoading = false;
+    this.selectedApplicantForPrint = null;
   }
 
   resetFilters(): void {

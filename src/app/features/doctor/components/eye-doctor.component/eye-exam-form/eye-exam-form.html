@@ -1,14 +1,12 @@
-<!-- المودال -->
-@if (showModal) {
-<div class="modal-content modal-lg">
-  <div class="modal-header d-flex justify-content-between align-items-center">
-    <button type="button" class="btn-close btn-close-black" aria-label="Close" (click)="closeModal()"></button>
-    <h4 class="modal-title text-center flex-grow-1">اضافة الفحص الطبي</h4>
-    <div class="invisible" style="width: 1.5rem;"></div> <!-- عنصر توازن غير مرئي -->
-  </div>
-
-  <div class="modal-body">
-    <form [formGroup]="examForm" novalidate>
+<app-dialog-wrapper
+  [(visible)]="showModal"
+  title="إضافة الفحص الطبي"
+  subtitle="إدخال بيانات الفحص العيني بشكل كامل"
+  icon="pi pi-eye"
+  width="90rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <form [formGroup]="examForm" novalidate class="exam-form">
       <!-- القسم الأول -->
       <h6 class="section-title">القدرة البصرية</h6>
       <div class="row g-3">
@@ -80,9 +78,10 @@
 
       <h6 class="section-title mt-4">أسوأ الانكسار</h6>
       <div class="row g-3">
+        @if (showRightEye) {
         <div class="col-md-6">
           <label class="form-label mb-2">R: أسوأ الانكسار <span class="text-danger">*</span></label>
-          <div class="ms-3">
+          <div class="refraction-choice-group">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" formControlName="worstRefractionRight"
                 id="worstRefractionRightNotImportant" value="غير مهمة"
@@ -100,9 +99,11 @@
             <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('worstRefractionRight') }}
           </div>
         </div>
+        }
+        @if (showLeftEye) {
         <div class="col-md-6">
           <label class="form-label mb-2">L: أسوأ الانكسار <span class="text-danger">*</span></label>
-          <div class="ms-3">
+          <div class="refraction-choice-group">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" formControlName="worstRefractionLeft"
                 id="worstRefractionLeftNotImportant" value="غير مهمة"
@@ -120,9 +121,23 @@
             <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('worstRefractionLeft') }}
           </div>
         </div>
+        }
+      </div>
+
+      <div class="eye-toggle-actions">
+        <button type="button" class="btn btn-outline-primary mt-3" (click)="toggleRightEye()">
+          <i [class]="showRightEye ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          {{ showRightEye ? 'إخفاء العين اليمنى' : 'إضافة العين اليمنى' }}
+        </button>
+
+        <button type="button" class="btn btn-outline-primary mt-3" (click)="toggleLeftEye()">
+          <i [class]="showLeftEye ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          {{ showLeftEye ? 'إخفاء العين اليسرى' : 'إضافة العين اليسرى' }}
+        </button>
       </div>
 
       <!-- العين اليمنى -->
+      @if (showRightEye) {
       <div class="card mt-3">
         <div class="card-header">
           <h6 class="mb-0">العين اليمنى</h6>
@@ -175,12 +190,7 @@
           </div>
         </div>
       </div>
-
-      <!-- زر إضافة العين اليسرى -->
-      <button type="button" class="btn btn-outline-primary mt-3" (click)="toggleLeftEye()">
-        <i [class]="showLeftEye ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-        {{ showLeftEye ? 'إخفاء العين اليسرى' : 'إضافة العين اليسرى' }}
-      </button>
+      }
 
       <!-- العين اليسرى -->
       @if (showLeftEye) {
@@ -270,22 +280,21 @@
           <textarea class="form-control" formControlName="reason" rows="2"></textarea>
         </div>
       </div>
-    </form>
+  </form>
+
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إلغاء"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeModal()"></p-button>
+    <p-button
+      label="حفظ الفحص الطبي"
+      icon="pi pi-save"
+      severity="primary"
+      [loading]="loading"
+      [disabled]="examForm.invalid || loading"
+      (onClick)="onSubmit()"></p-button>
   </div>
-
-  <!-- الأزرار -->
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="closeModal()">
-      <i class="pi pi-times me-2"></i> إلغاء
-    </button>
-    <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="examForm.invalid || loading">
-      @if (loading) {
-      <span class="spinner-border spinner-border-sm me-2"></span>
-      }
-      <i class="pi pi-save me-2"></i> حفظ الفحص الطبي
-    </button>
-  </div>
-</div>
-
-
-}
+</app-dialog-wrapper>

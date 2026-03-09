@@ -22,6 +22,25 @@
   width: 100%;
 }
 
+:host ::ng-deep .table-toolbar__filter .eye-filter-bar .filter-bar__controls {
+  direction: ltr;
+}
+
+:host ::ng-deep .table-toolbar__filter .eye-filter-bar .filter-bar__search-wrap {
+  position: relative;
+}
+
+:host ::ng-deep .table-toolbar__filter .eye-filter-bar .filter-bar__search-wrap .pi-search {
+  position: absolute;
+  inset-inline-end: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+:host ::ng-deep .table-toolbar__filter .eye-filter-bar .filter-bar__search-input {
+  padding-inline-end: 2rem;
+}
+
 @media (max-width: 768px) {
   .table-toolbar {
     padding: 0.65rem;
