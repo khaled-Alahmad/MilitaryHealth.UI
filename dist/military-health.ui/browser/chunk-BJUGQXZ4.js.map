@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/services/lookup.service.ts"],
+  "sourcesContent": ["import { HttpClient } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { Observable, map } from 'rxjs';\r\nimport { environment } from '../../../environments/environment';\r\nimport { ApiResponse, PagedResponse } from '../models/paged-response.model';\r\nimport { Result } from '../models/result.model';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class LookupService {\r\n    private apiUrl = `${environment.apiUrl}/api/Results`;\r\n  constructor(private http: HttpClient) {}\r\n\r\ngetResults(): Observable<Result[]> {\r\n  return this.http.get<ApiResponse<PagedResponse<Result>>>(`${this.apiUrl}?sortDesc=false&page=1&pageSize=20`)\r\n    .pipe(\r\n      map(response => response.data.items)\r\n    );\r\n}\r\n}\r\n"],
+  "mappings": ";;;;;;;;;;;;;AAUM,IAAO,gBAAP,MAAO,eAAa;EAEJ;EADV,SAAS,GAAG,YAAY,MAAM;EACxC,YAAoB,MAAgB;AAAhB,SAAA,OAAA;EAAmB;EAEzC,aAAU;AACR,WAAO,KAAK,KAAK,IAAwC,GAAG,KAAK,MAAM,oCAAoC,EACxG,KACC,IAAI,cAAY,SAAS,KAAK,KAAK,CAAC;EAE1C;;qCATa,gBAAa,mBAAA,UAAA,CAAA;EAAA;4EAAb,gBAAa,SAAb,eAAa,WAAA,YAFZ,OAAM,CAAA;;;sEAEP,eAAa,CAAA;UAHzB;WAAW;MACV,YAAY;KACb;;;",
+  "names": []
+}

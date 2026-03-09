@@ -1,0 +1,34 @@
+.table-toolbar {
+  margin-bottom: var(--spacing-md);
+  padding: 0.75rem;
+  border: 1px solid #e7edf3;
+  border-radius: var(--border-radius-md);
+  background: linear-gradient(135deg, #f9fbff 0%, #f2f7ff 100%);
+  display: flex;
+  justify-content: flex-end;
+  direction: rtl;
+}
+
+.table-toolbar__filter {
+  margin-top: 0;
+  width: min(100%, 560px) !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  flex: 0 0 auto;
+}
+
+.table-toolbar__filter .eye-filter-bar {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .table-toolbar {
+    padding: 0.65rem;
+  }
+
+  .table-toolbar__filter {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+}

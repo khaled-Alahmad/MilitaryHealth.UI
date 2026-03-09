@@ -1,123 +1,105 @@
-<p-toast position="top-center"></p-toast>
-<div class="reception-page">
-  <div class="reception-container">
-    <app-page-header
-      variant="banner"
-      title="قائمة المتقدمين"
-      subtitle="عرض وإدارة بيانات المتقدمين للفحص الطبي"
-      icon="pi pi-users">
-      <div header-actions>
-        <p-button
-          label="إضافة منتسب"
-          icon="pi pi-plus"
-          severity="success"
-          (onClick)="goToAdd()">
-        </p-button>
-      </div>
-    </app-page-header>
+<div class="reception-list-page container-fluid">
+    <app-filter-bar
+      class="reception-filter-bar"
+      [searchValue]="globalFilter"
+      searchPlaceholder="ابحث عن رقم الملف أو الاسم"
+      [showReset]="true"
+      (searchChange)="onSearchChange($event)"
+      (reset)="resetFilters()">
+    </app-filter-bar>
 
-    <p-card styleClass="reception-card applicants-list-card">
-      <ng-template pTemplate="header">
-        <div class="reception-card-header">
-          <i class="pi pi-list" aria-hidden="true"></i>
-          <span>المتقدمين</span>
-        </div>
-      </ng-template>
-
-      <div class="reception-card-toolbar reception-list-toolbar">
-        <app-filter-bar
-          [searchValue]="globalFilter"
-          searchPlaceholder="رقم الملف أو الاسم..."
-          [showReset]="true"
-          [loading]="loading"
-          [showSearchHint]="true"
-          (searchChange)="onSearchChange($event)"
-          (reset)="resetFilters()">
-        </app-filter-bar>
-        <p class="reception-list-summary">
-          <span class="reception-list-summary__count">{{ resultSummary }}</span>
-        </p>
-      </div>
-
-      <p-table
-        #table
-        [value]="applicants"
+    <p-table #table
+        styleClass="reception-applicants-table"
+        [value]="applicants" 
         [loading]="loading"
-        [scrollable]="true"
+        [scrollable]="true" 
         [scrollHeight]="tableHeight"
         [globalFilterFields]="['fileNumber','fullName']"
         [sortMode]="'single'"
-        responsiveLayout="scroll"
-        styleClass="applicants-table">
+        responsiveLayout="scroll">
         <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="queueNumber">رقم الدور <p-sortIcon field="queueNumber"></p-sortIcon></th>
-            <th pSortableColumn="fileNumber">رقم الملف <p-sortIcon field="fileNumber"></p-sortIcon></th>
-            <th pSortableColumn="fullName">الاسم الكامل <p-sortIcon field="fullName"></p-sortIcon></th>
-            <th pSortableColumn="job">العمل <p-sortIcon field="job"></p-sortIcon></th>
-            <th>الحالة الاجتماعية</th>
-            <th>وشم</th>
-            <th pSortableColumn="createdAt">تاريخ الإضافة <p-sortIcon field="createdAt"></p-sortIcon></th>
-            <th>إجراءات</th>
-          </tr>
+            <tr>
+                <th pSortableColumn="queueNumber">رقم الدور <p-sortIcon field="queueNumber"></p-sortIcon></th>
+                <th pSortableColumn="fileNumber">رقم الملف <p-sortIcon field="fileNumber"></p-sortIcon></th>
+                <th pSortableColumn="fullName">الاسم الكامل <p-sortIcon field="fullName"></p-sortIcon></th>
+                <th pSortableColumn="job">العمل <p-sortIcon field="job"></p-sortIcon></th>
+                <th>الحالة الاجتماعية</th>
+                <th>وشم</th>
+                <th pSortableColumn="createdAt">تاريخ الإضافة <p-sortIcon field="createdAt"></p-sortIcon></th>
+                <th>إجراءات</th>
+            </tr>
         </ng-template>
         <ng-template pTemplate="body" let-applicant>
-          <tr>
-            <td class="reception-table-cell">
-              <p-tag [value]="applicant.queueNumber?.toString() || '-'" severity="info"></p-tag>
-            </td>
-            <td class="reception-table-cell">
-              <span class="reception-cell-text reception-cell-text--bold">{{ applicant.fileNumber || '-' }}</span>
-            </td>
-            <td class="reception-table-cell">
-              <span class="reception-cell-text">{{ applicant.fullName || '-' }}</span>
-            </td>
-            <td class="reception-table-cell">
-              <span class="reception-cell-text">{{ applicant.job || '-' }}</span>
-            </td>
-            <td class="reception-table-cell">
-              <span class="reception-cell-text">{{ applicant.maritalStatus?.description || '-' }}</span>
-            </td>
-            <td class="reception-table-cell">
-              <p-tag [value]="applicant.tattoo ? 'نعم' : 'لا'" [severity]="applicant.tattoo ? 'warn' : 'success'"></p-tag>
-            </td>
-            <td class="reception-table-cell">
-              <span class="reception-cell-text">{{ applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}</span>
-            </td>
-            <td class="reception-table-cell reception-table-cell--actions">
-              <app-action-buttons
-                [actions]="getRowActions(applicant)"
-                size="small"
-                (actionClick)="onRowAction($event, applicant)">
-              </app-action-buttons>
-            </td>
-          </tr>
+            <tr>
+                <td class="text-center align-middle">
+                    <span class="queue-badge">{{applicant.queueNumber || '-'}}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span class="cell-text cell-text--bold">{{applicant.fileNumber || '-'}}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span class="cell-text">{{applicant.fullName || '-'}}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span class="cell-text">{{applicant.job || '-'}}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span class="cell-text">{{applicant.maritalStatus?.description || '-'}}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <p-tag 
+                      [value]="applicant.tattoo ? 'نعم' : 'لا'" 
+                      [severity]="applicant.tattoo ? 'warn' : 'success'"
+                      styleClass="tattoo-tag"></p-tag>
+                </td>
+                <td class="text-center align-middle">
+                    <span class="cell-text">{{applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}</span>
+                </td>
+                <td class="text-center align-middle">
+                    <div class="actions-wrap">
+                    <p-button
+                        icon="pi pi-eye"
+                        label=""
+                        styleClass="p-button-sm p-button-outlined table-action-btn"
+                        pTooltip="عرض التفاصيل"
+                        tooltipPosition="top"
+                        (onClick)="viewApplicant(applicant)"></p-button>
+                    <p-button
+                        icon="pi pi-pencil"
+                        label=""
+                        styleClass="p-button-sm p-button-success table-action-btn"
+                        pTooltip="تعديل المنتسب"
+                        tooltipPosition="top"
+                        (onClick)="editApplicant(applicant)"></p-button>
+                    <p-button
+                        icon="pi pi-print"
+                        label=""
+                        styleClass="p-button-sm p-button-info table-action-btn"
+                        pTooltip="طباعة الباركود"
+                        tooltipPosition="top"
+                        (onClick)="printApplicant(applicant)"></p-button>
+                    </div>
+                </td>
+            </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="8">
-              <div class="reception-empty-state">
-                <i class="pi {{ emptyStateIcon }}" aria-hidden="true"></i>
-                <p class="reception-empty-state__title">{{ emptyStateTitle }}</p>
-                @if (emptyStateSubtext) {
-                  <p class="reception-empty-state__subtext">{{ emptyStateSubtext }}</p>
-                  <p-button label="إعادة تعيين الفلتر" icon="pi pi-filter-slash" severity="secondary" [outlined]="true" size="small" (onClick)="resetFilters()"></p-button>
-                }
-              </div>
-            </td>
-          </tr>
+            <tr>
+                <td colspan="8" class="text-center py-4">
+                    <div class="empty-state">
+                        <i class="pi pi-users empty-state__icon"></i>
+                        <span class="text-muted">لا يوجد متقدمين</span>
+                    </div>
+                </td>
+            </tr>
         </ng-template>
-      </p-table>
+    </p-table>
 
-      <div class="reception-section-footer">
-        <app-paginator
-          [totalRecords]="totalRecords"
-          [pageSize]="rowsPerPage"
-          [currentPage]="page"
-          (pageChange)="onPageChange($event)"
-          (pageSizeChange)="onPageSizeChange($event)">
-        </app-paginator>
-      </div>
-    </p-card>
-  </div>
+    <app-paginator 
+        [totalRecords]="totalRecords" 
+        [pageSize]="rowsPerPage" 
+        [currentPage]="page"
+        (pageChange)="onPageChange($event)" 
+        (pageSizeChange)="onPageSizeChange($event)">
+    </app-paginator>
+
 </div>

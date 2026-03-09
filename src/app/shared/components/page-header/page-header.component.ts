@@ -14,4 +14,11 @@ export class PageHeaderComponent {
   @Input() icon = '';
   /** 'default' | 'banner' — banner shows gradient background and white text */
   @Input() variant: 'default' | 'banner' = 'default';
+
+  get iconClass(): string {
+    if (!this.icon) {
+      return '';
+    }
+    return this.icon.includes('pi ') ? this.icon : `pi ${this.icon}`;
+  }
 }

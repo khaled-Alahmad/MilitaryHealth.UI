@@ -1,7 +1,7 @@
 <div class="page-header" [class.page-header--banner]="variant === 'banner'">
   <div class="page-header__content">
     @if (icon) {
-      <i class="pi {{ icon }}" aria-hidden="true"></i>
+      <i [class]="iconClass" aria-hidden="true"></i>
     }
     <div>
       <h2 class="page-header__title">{{ title }}</h2>

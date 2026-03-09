@@ -1,0 +1,23 @@
+<p-card [styleClass]="cardClass">
+  <div class="section-card__header" [class.section-card__header--neutral]="headerVariant === 'neutral'">
+    <div class="section-card__heading">
+      @if (icon) {
+        <i class="pi {{ icon }}" aria-hidden="true"></i>
+      }
+      <div class="section-card__text">
+        <h3 class="section-card__title">{{ title }}</h3>
+        @if (subtitle) {
+          <p class="section-card__subtitle">{{ subtitle }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="section-card__actions">
+      <ng-content select="[card-actions]"></ng-content>
+    </div>
+  </div>
+
+  <div class="section-card__content" [class.section-card__content--md]="contentPadding === 'md'">
+    <ng-content></ng-content>
+  </div>
+</p-card>

@@ -111,7 +111,7 @@ export class ApplicantDetailsComponent implements OnInit {
       });
       return;
     }
-    this.router.navigate(['/reception/applicants', this.applicant.applicantID]);
+    this.router.navigate(['reception', 'applicants', this.applicant.applicantID]);
   }
 
   getMaritalStatusDescription(maritalStatusID: number): string {
@@ -120,7 +120,7 @@ export class ApplicantDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/reception/applicants']);
+    this.router.navigate(['reception/applicants']);
   }
 
   printReceipt(): void {
@@ -137,7 +137,7 @@ export class ApplicantDetailsComponent implements OnInit {
     if (this.applicant.applicantID) {
       this.applicantService.getApplicantById$(this.applicant.applicantID).subscribe({
         next: (fullApplicantData: ApplicantModel) => {
-          this.barcodePrintService.printBarcodeReceipt(fullApplicantData).catch(error => {
+          this.barcodePrintService.printBarcodeReceipt(fullApplicantData).catch(() => {
             this.messageService.add({
               severity: 'error',
               summary: 'خطأ',
@@ -145,7 +145,7 @@ export class ApplicantDetailsComponent implements OnInit {
             });
           });
         },
-        error: (err) => {
+        error: () => {
           // محاولة الطباعة بالبيانات المتوفرة
           const applicantForPrint: ApplicantModel = {
             applicantID: this.applicant!.applicantID,
@@ -168,7 +168,7 @@ export class ApplicantDetailsComponent implements OnInit {
             associateNumber: this.applicant!.associateNumber || '',
             maritalStatus: { maritalStatusID: this.applicant!.maritalStatusID, description: '' }
           };
-          this.barcodePrintService.printBarcodeReceipt(applicantForPrint).catch(error => {
+          this.barcodePrintService.printBarcodeReceipt(applicantForPrint).catch(() => {
             this.messageService.add({
               severity: 'error',
               summary: 'خطأ',
@@ -200,8 +200,7 @@ export class ApplicantDetailsComponent implements OnInit {
         associateNumber: this.applicant.associateNumber || '',
         maritalStatus: { maritalStatusID: this.applicant.maritalStatusID, description: '' }
       };
-      this.barcodePrintService.printBarcodeReceipt(applicantForPrint).catch(error => {
-        console.error('خطأ في طباعة الباركود:', error);
+      this.barcodePrintService.printBarcodeReceipt(applicantForPrint).catch(() => {
         this.messageService.add({
           severity: 'error',
           summary: 'خطأ',

@@ -16,11 +16,12 @@ import { ApplicantService } from '../../../../reception/services/applicant.servi
 import { EyeExamService } from '../../../services/eye-exam.service';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-deferred-eye-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent, PageHeaderComponent],
   templateUrl: './deferred-eye-exams.component.html',
   styleUrls: ['./deferred-eye-exams.component.scss']
 })

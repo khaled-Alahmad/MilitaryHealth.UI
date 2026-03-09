@@ -1,18 +1,19 @@
 @use '../../../../shared/styles/reception-shared';
 
-:host {
-  display: block;
-  width: 100%;
+.add-edit-page {
+  max-width: 100%;
+  margin: 0;
+  padding: var(--spacing-lg) 0;
 }
 
 .file-number-badge {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-sm);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 
   .pi {
     color: var(--accent-gold);
@@ -25,88 +26,68 @@
   }
 }
 
-/* بطاقة الإضافة/التعديل: هيدر بنفس الهوية البصرية (الهيدر الموحد من reception-card-header) */
-:host ::ng-deep .add-edit-card.p-card .p-card-header {
-  padding: 0;
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
-}
-
-:host ::ng-deep .add-edit-card .p-card-body {
+.form-section {
+  margin-bottom: var(--spacing-2xl);
   padding: var(--spacing-xl);
-}
-
-.add-edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2xl);
-}
-
-/* Fieldset: حدود وترويسة واضحة مع الهوية البصرية */
-:host ::ng-deep .add-edit-fieldset {
+  background: white;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--reception-border);
-  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
 
-  .p-fieldset-legend {
-    background: var(--reception-bg-subtle);
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--neutral-light);
+
+  .pi {
     color: var(--primary-dark);
-    font-weight: 700;
-    font-size: var(--font-size-base);
-    padding: var(--spacing-md) var(--spacing-lg);
-    border: none;
-    border-radius: 0;
+    font-size: var(--font-size-lg);
   }
 
-  .p-fieldset-content {
-    padding: var(--spacing-lg);
+  h3 {
+    color: var(--primary-dark);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0;
   }
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
-.form-field {
+.form-group {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
 
-  &--full {
+  &.full-width {
     grid-column: 1 / -1;
   }
 }
 
 .form-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   font-weight: 600;
-  color: var(--primary-dark);
+  color: var(--neutral-dark);
   font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+
+  .pi {
+    color: var(--primary-dark);
+  }
 
   .required {
     color: var(--status-danger);
     font-weight: 700;
-  }
-}
-
-.w-full {
-  width: 100%;
-}
-
-.form-select {
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius-md);
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-base);
-  background: white;
-  transition: border-color var(--transition-fast);
-
-  &:focus {
-    outline: none;
-    border-color: var(--primary-medium);
-    box-shadow: 0 0 0 2px rgba(5, 66, 57, 0.15);
   }
 }
 
@@ -116,96 +97,139 @@
   margin-top: var(--spacing-xs);
 }
 
-.tattoo-choice-group {
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-}
-
-.tattoo-choice {
-  flex: 1 1 200px;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  border: 2px solid rgba(5, 66, 57, 0.15);
-  background: white;
-  cursor: pointer;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
-  text-align: right;
-  color: inherit;
-  outline: none;
-
-  &:focus-visible {
-    box-shadow: 0 0 0 3px rgba(185, 167, 121, 0.3);
-    border-color: var(--accent-gold);
+/* Tattoo section */
+.tattoo-section {
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neutral-light), transparent);
+    margin: var(--spacing-xl) 0;
   }
 
-  &:hover {
-    border-color: var(--primary-medium);
-    background: rgba(5, 66, 57, 0.04);
-  }
-
-  &.active {
-    border-color: var(--primary-dark);
-    background: rgba(5, 66, 57, 0.08);
-  }
-
-  .choice-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    display: inline-flex;
+  .section-subtitle {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-lg);
-
-    &.success {
-      background: rgba(5, 66, 57, 0.12);
-      color: var(--primary-dark);
-    }
-
-    &.neutral {
-      background: rgba(61, 58, 59, 0.1);
-      color: var(--neutral-medium);
-    }
-  }
-
-  .choice-title {
-    font-weight: 600;
+    gap: var(--spacing-md);
     color: var(--primary-dark);
-  }
-}
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: var(--spacing-lg) 0;
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--neutral-light);
 
-.tattoo-details-field {
-  padding: var(--spacing-md);
-  background: rgba(5, 66, 57, 0.04);
-  border-radius: var(--radius-md);
-  border-inline-start: 4px solid var(--accent-gold);
+    .pi {
+      color: var(--accent-gold);
+    }
+  }
+
+  .tattoo-details-field {
+    padding: var(--spacing-md);
+    background: #f8f9fa;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--accent-gold);
+  }
+
+  .tattoo-choice-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+
+    .tattoo-choice {
+      flex: 1 1 220px;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid rgba(5, 66, 57, 0.15);
+      background: white;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      text-align: right;
+      color: inherit;
+      outline: none;
+
+      &:focus-visible {
+        box-shadow: 0 0 0 3px rgba(185, 167, 121, 0.25);
+        border-color: var(--accent-gold);
+      }
+
+      &:hover {
+        border-color: rgba(5, 66, 57, 0.35);
+        box-shadow: var(--shadow-sm);
+      }
+
+      &.active {
+        border-color: var(--primary-dark);
+        background: rgba(5, 66, 57, 0.04);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .choice-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: var(--radius-lg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-lg);
+
+        &.success {
+          background: rgba(5, 66, 57, 0.12);
+          color: var(--primary-dark);
+        }
+
+        &.neutral {
+          background: rgba(61, 58, 59, 0.1);
+          color: var(--neutral-medium);
+        }
+      }
+
+      .choice-text {
+        display: flex;
+        flex-direction: column;
+
+        .choice-title {
+          font-weight: 600;
+          color: var(--primary-dark);
+        }
+
+        small {
+          color: var(--neutral-medium);
+          font-size: var(--font-size-xs);
+        }
+      }
+    }
+  }
 }
 
 .form-actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+  padding: var(--spacing-xl);
+  background: var(--neutral-light);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+:host ::ng-deep .form-action-btn {
+  min-width: 140px;
+}
+
+/* RTL date picker (layout only) */
 .date-picker-rtl {
   direction: rtl;
   text-align: right;
   width: 100%;
 }
 
-@media (max-width: 992px) {
-  .form-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 768px) {
+  .add-edit-page {
+    padding: var(--spacing-md) 0;
   }
-}
 
-@media (max-width: 576px) {
-  :host ::ng-deep .add-edit-card .p-card-body {
+  .form-section {
     padding: var(--spacing-md);
   }
 

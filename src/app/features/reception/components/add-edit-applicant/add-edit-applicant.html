@@ -1,56 +1,75 @@
 <p-toast></p-toast>
-<div class="reception-page">
-  <div class="reception-container">
-    <app-page-header
-      variant="banner"
-      [title]="applicantId ? 'تعديل بيانات المنتسب' : 'إضافة منتسب جديد'"
-      [subtitle]="applicantId ? 'تحديث البيانات الشخصية والطبية للمنتسب' : 'أدخل البيانات الشخصية والطبية للمنتسب الجديد'"
-      icon="pi pi-user-plus">
-      @if (fileNumber) {
-        <div header-actions class="file-number-badge">
-          <i class="pi pi-file" aria-hidden="true"></i>
-          <span>رقم الملف: {{ fileNumber }}</span>
-        </div>
-      }
-    </app-page-header>
+<div class="reception-page add-edit-page">
+  <app-page-header
+    variant="banner"
+    [title]="applicantId ? 'تعديل بيانات المنتسب' : 'إضافة منتسب جديد'"
+    [subtitle]="applicantId ? 'تحديث البيانات الشخصية والطبية للمنتسب' : 'أدخل البيانات الشخصية والطبية للمنتسب الجديد'"
+    icon="pi pi-user-plus">
+    @if (fileNumber) {
+      <div header-actions class="file-number-badge">
+        <i class="pi pi-file" aria-hidden="true"></i>
+        <span>رقم الملف: {{ fileNumber }}</span>
+      </div>
+    }
+  </app-page-header>
 
-    <p-card styleClass="reception-card add-edit-card">
-      <ng-template pTemplate="header">
-        <div class="reception-card-header">
-          <i class="pi pi-id-card" aria-hidden="true"></i>
-          <span>بيانات المنتسب</span>
-        </div>
-      </ng-template>
+  <app-form-card title="بيانات المنتسب" icon="pi pi-id-card" variant="banner">
+    <form [formGroup]="applicantForm" (ngSubmit)="onSubmit()" novalidate>
 
-    <form [formGroup]="applicantForm" (ngSubmit)="onSubmit()" novalidate class="add-edit-form">
-      <p-fieldset legend="البيانات الشخصية" styleClass="add-edit-fieldset">
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-user"></i>
+          <h3>البيانات الشخصية</h3>
+        </div>
+
         <div class="form-grid">
-          <div class="form-field">
-            <label for="fullName" class="form-label">الاسم الكامل <span class="required">*</span></label>
-            <input id="fullName" pInputText type="text" formControlName="fullName" placeholder="أدخل الاسم الكامل"
-              [class.p-invalid]="isControlInvalid('fullName')" class="w-full" />
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-user"></i>
+              الاسم الكامل
+              <span class="required">*</span>
+            </label>
+            <input pInputText type="text" formControlName="fullName" placeholder="أدخل الاسم الكامل"
+              [class.p-invalid]="isControlInvalid('fullName')" />
             @if (controlHasError('required', 'fullName')) {
-              <small class="p-error">الاسم الكامل مطلوب</small>
+            <small class="p-error">الاسم الكامل مطلوب</small>
             }
           </div>
-          <div class="form-field">
-            <label for="motherName" class="form-label">اسم الأم</label>
-            <input id="motherName" pInputText type="text" formControlName="motherName" placeholder="أدخل اسم الأم" class="w-full" />
+
+          <!-- ✅ الحقول الجديدة -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-user"></i>
+              اسم الأم
+            </label>
+            <input pInputText type="text" formControlName="motherName" placeholder="أدخل اسم الأم" />
           </div>
-          <div class="form-field">
-            <label for="dateOfBirth" class="form-label">تاريخ المواليد</label>
-            <p-datepicker id="dateOfBirth" formControlName="dateOfBirth" [showIcon]="true" dateFormat="dd/mm/yy"
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-calendar"></i>
+              تاريخ المواليد
+            </label>
+            <p-datepicker formControlName="dateOfBirth" [showIcon]="true" dateFormat="dd/mm/yy"
               placeholder="اختر تاريخ المواليد" [minDate]="minDate" [maxDate]="maxDate" [appendTo]="'body'"
-              styleClass="w-full date-picker-rtl"></p-datepicker>
+              styleClass="date-picker-rtl"></p-datepicker>
           </div>
-          <div class="form-field">
-            <label for="recruitmentCenter" class="form-label">مركز التجنيد</label>
-            <input id="recruitmentCenter" pInputText type="text" formControlName="recruitmentCenter" placeholder="أدخل مركز التجنيد" class="w-full" />
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-map-marker"></i>
+              مركز التجنيد
+            </label>
+            <input pInputText type="text" formControlName="recruitmentCenter" placeholder="أدخل مركز التجنيد" />
           </div>
-          <div class="form-field">
-            <label for="bloodType" class="form-label">زمرة الدم</label>
-            <select id="bloodType" formControlName="bloodType" class="w-full form-select">
-              <option value="">اختر زمرة الدم</option>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-heart"></i>
+              زمرة الدم (فصيلة الدم)
+            </label>
+            <select formControlName="bloodType" class="form-control">
               <option value="A+">A+</option>
               <option value="A-">A-</option>
               <option value="B+">B+</option>
@@ -61,106 +80,209 @@
               <option value="O-">O-</option>
             </select>
           </div>
-          <div class="form-field">
-            <label for="job" class="form-label">العمل <span class="required">*</span></label>
-            <input id="job" pInputText type="text" formControlName="job" placeholder="أدخل نوع العمل"
-              [class.p-invalid]="isControlInvalid('job')" class="w-full" />
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-briefcase"></i>
+              العمل
+              <span class="required">*</span>
+            </label>
+            <input pInputText type="text" formControlName="job" placeholder="أدخل نوع العمل"
+              [class.p-invalid]="isControlInvalid('job')" />
             @if (controlHasError('required', 'job')) {
-              <small class="p-error">نوع العمل مطلوب</small>
+            <small class="p-error">نوع العمل مطلوب</small>
             }
           </div>
-          <div class="form-field">
-            <label for="maritalStatusID" class="form-label">الحالة الاجتماعية <span class="required">*</span></label>
-            <select id="maritalStatusID" formControlName="maritalStatusID" class="w-full form-select"
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-heart"></i>
+              الحالة الاجتماعية
+              <span class="required">*</span>
+            </label>
+            <select formControlName="maritalStatusID" class="form-control"
               [class.p-invalid]="isControlInvalid('maritalStatusID')">
-              <option [ngValue]="null">اختر الحالة الاجتماعية</option>
               @for (status of maritalStatuses; track status.maritalStatusID) {
-                <option [ngValue]="status.maritalStatusID">{{ status.description }}</option>
+              <option [value]="status.maritalStatusID">{{ status.description }}</option>
               }
             </select>
             @if (controlHasError('required', 'maritalStatusID')) {
-              <small class="p-error">يرجى اختيار الحالة الاجتماعية</small>
+            <small class="p-error">يرجى اختيار الحالة الاجتماعية</small>
             }
           </div>
-          <div class="form-field">
-            <label for="associateNumber" class="form-label">كود التجنيد <span class="required">*</span></label>
-            <input id="associateNumber" pInputText type="text" formControlName="associateNumber" placeholder="أدخل كود التجنيد"
-              [class.p-invalid]="isControlInvalid('associateNumber')" class="w-full" />
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-tag"></i>
+              كود التجنيد
+              <span class="required">*</span>
+            </label>
+            <input pInputText type="text" formControlName="associateNumber" placeholder="أدخل كود التجنيد"
+              [class.p-invalid]="isControlInvalid('associateNumber')" />
             @if (controlHasError('required', 'associateNumber')) {
-              <small class="p-error">كود التجنيد مطلوب</small>
+            <small class="p-error">كود التجنيد مطلوب</small>
             }
           </div>
         </div>
-      </p-fieldset>
+      </div>
 
-      <p-fieldset legend="البيانات الطبية" styleClass="add-edit-fieldset">
+      <!-- Medical Information Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="pi pi-heartbeat"></i>
+          <h3>البيانات الطبية</h3>
+        </div>
+
         <div class="form-grid">
-          <div class="form-field">
-            <label for="height" class="form-label">الطول (سم)</label>
-            <p-inputNumber id="height" formControlName="height" [min]="0" [step]="0.1" placeholder="الطول"
-              [useGrouping]="false" styleClass="w-full"></p-inputNumber>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-arrows-v"></i>
+              الطول (سم)
+            </label>
+            <p-inputNumber formControlName="height" [min]="0" [step]="0.1" placeholder="ادخل الطول"
+              [useGrouping]="false">
+            </p-inputNumber>
           </div>
-          <div class="form-field">
-            <label for="weight" class="form-label">الوزن (كغ)</label>
-            <p-inputNumber id="weight" formControlName="weight" [min]="0" [step]="0.1" placeholder="الوزن"
-              [useGrouping]="false" styleClass="w-full"></p-inputNumber>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-chart-line"></i>
+              الوزن (كغ)
+            </label>
+            <p-inputNumber formControlName="weight" [min]="0" [step]="0.1" placeholder="ادخل الوزن"
+              [useGrouping]="false">
+            </p-inputNumber>
           </div>
-          <div class="form-field">
-            <label for="bmi" class="form-label">مؤشر كتلة الجسم (BMI)</label>
-            <input id="bmi" pInputText type="number" min="0" formControlName="bmi" placeholder="BMI" class="w-full" />
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-calculator"></i>
+              مؤشر كتلة الجسم (BMI)
+            </label>
+            <input pInputText type="number" min="0" formControlName="bmi" placeholder="أدخل مؤشر كتلة الجسم" />
           </div>
-          <div class="form-field">
-            <label for="bloodPressure" class="form-label">ضغط الدم</label>
-            <input id="bloodPressure" pInputText type="text" formControlName="bloodPressure" placeholder="مثال: 120/80" class="w-full" />
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-heart"></i>
+              ضغط الدم
+            </label>
+            <input pInputText type="text" formControlName="bloodPressure" placeholder="مثال: 120/80" />
           </div>
-          <div class="form-field">
-            <label for="pulse" class="form-label">النبض (نبضة/دقيقة)</label>
-            <input id="pulse" pInputText type="number" min="0" formControlName="pulse" placeholder="النبض" class="w-full" />
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="pi pi-circle"></i>
+              النبض (نبضة/دقيقة)
+            </label>
+            <input pInputText type="number" min="0" formControlName="pulse" placeholder="أدخل معدل النبض" />
           </div>
         </div>
 
-        <div class="reception-divider">
-          <span class="reception-divider__label">علامات التمييز والوشم</span>
-        </div>
+        <!-- ✅ تحسين قسم الوشم والعلامات المميزة -->
+        <div class="tattoo-section">
+          <div class="section-divider"></div>
+          <h4 class="section-subtitle">
+            <i class="pi pi-palette"></i>
+            علامات التمييز والوشم
+          </h4>
 
-        <div class="form-field form-field--full">
-          <label class="form-label">هل يوجد وشم؟</label>
-          <div class="tattoo-choice-group" role="group" aria-label="حالة الوشم">
-            <button type="button" class="tattoo-choice" [class.active]="hasTattoo" (click)="setTattooChoice(true)" [attr.aria-pressed]="hasTattoo">
-              <i class="pi pi-check-circle choice-icon success"></i>
-              <span class="choice-title">يوجد وشم</span>
-            </button>
-            <button type="button" class="tattoo-choice" [class.active]="!hasTattoo" (click)="setTattooChoice(false)" [attr.aria-pressed]="!hasTattoo">
-              <i class="pi pi-ban choice-icon neutral"></i>
-              <span class="choice-title">لا يوجد</span>
-            </button>
+          <div class="form-group full-width">
+            <label class="form-label">
+              <i class="pi pi-palette"></i>
+              هل يوجد وشم؟
+            </label>
+            <div class="tattoo-choice-group" role="group" aria-label="حالة الوشم">
+              <button
+                type="button"
+                class="tattoo-choice"
+                [class.active]="hasTattoo"
+                (click)="setTattooChoice(true)"
+                [attr.aria-pressed]="hasTattoo">
+                <span class="choice-icon success">
+                  <i class="pi pi-check-circle"></i>
+                </span>
+                <div class="choice-text">
+                  <span class="choice-title">يوجد وشم</span>
+                  <small>سجل تفاصيل الوشم مع الموقع</small>
+                </div>
+              </button>
+              <button
+                type="button"
+                class="tattoo-choice"
+                [class.active]="!hasTattoo"
+                (click)="setTattooChoice(false)"
+                [attr.aria-pressed]="!hasTattoo">
+                <span class="choice-icon neutral">
+                  <i class="pi pi-ban"></i>
+                </span>
+                <div class="choice-text">
+                  <span class="choice-title">لا يوجد</span>
+                  <small>تأكيد عدم وجود أي وشم ظاهر</small>
+                </div>
+              </button>
+            </div>
           </div>
-        </div>
 
-        @if (hasTattoo) {
-          <div class="form-field form-field--full tattoo-details-field">
-            <label for="tattooDescription" class="form-label">وصف الوشم (اختياري)</label>
-            <textarea id="tattooDescription" pTextarea formControlName="tattooDescription" rows="2"
-              placeholder="وصف مفصل للوشم - الموقع، الحجم، الألوان..." class="w-full" ></textarea>
+          @if (hasTattoo) {
+          <div class="form-group full-width tattoo-details-field">
+            <label class="form-label">
+              <i class="pi pi-pencil"></i>
+              وصف الوشم (اختياري)
+            </label>
+            <textarea formControlName="tattooDescription" rows="2"
+              placeholder="وصف مفصل للوشم - الموقع، الحجم، الألوان، إلخ..." class="form-control"></textarea>
           </div>
-        }
-
-        <div class="form-field form-field--full">
-          <label for="distinctiveMarks" class="form-label">العلامات المميزة الأخرى</label>
-          <textarea id="distinctiveMarks" pTextarea formControlName="distinctiveMarks" rows="3"
-            placeholder="الندوب، الوحمات، أو أي ملاحظات مهمة" class="w-full"></textarea>
+          }
         </div>
-      </p-fieldset>
 
-      <div class="reception-section-footer form-actions">
+        <div class="form-group full-width">
+          <label class="form-label">
+            <i class="pi pi-bookmark"></i>
+            العلامات المميزة الأخرى
+          </label>
+          <textarea formControlName="distinctiveMarks" rows="3"
+            placeholder="أدخل أي علامات مميزة أو ملاحظات مهمة (الندوب، الوحمات، إلخ...)"
+            class="form-control"></textarea>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
         @if (applicantId && fileNumber) {
-          <p-button type="button" label="طباعة الباركود" icon="pi pi-print" severity="info" (onClick)="printBarcode()"></p-button>
+        <p-button
+          type="button"
+          label="طباعة الباركود"
+          icon="pi pi-print"
+          severity="info"
+          size="large"
+          styleClass="form-action-btn"
+          (onClick)="printBarcode()">
+        </p-button>
         }
-        <p-button type="submit" [label]="loading ? 'جاري الحفظ...' : 'حفظ البيانات'" icon="pi pi-save" severity="success"
-          [loading]="loading" [disabled]="loading || applicantForm.invalid"></p-button>
-        <p-button type="button" label="إعادة تعيين" icon="pi pi-refresh" severity="secondary" (onClick)="resetForm()"></p-button>
+
+        <p-button
+          type="submit"
+          [label]="loading ? 'جاري الحفظ...' : 'حفظ البيانات'"
+          icon="pi pi-save"
+          severity="primary"
+          size="large"
+          styleClass="form-action-btn"
+          [loading]="loading"
+          [disabled]="loading || applicantForm.invalid">
+        </p-button>
+
+        <p-button
+          type="button"
+          label="إعادة تعيين"
+          icon="pi pi-refresh"
+          severity="secondary"
+          size="large"
+          styleClass="form-action-btn"
+          [outlined]="true"
+          (onClick)="resetForm()">
+        </p-button>
       </div>
     </form>
-    </p-card>
-  </div>
+  </app-form-card>
 </div>

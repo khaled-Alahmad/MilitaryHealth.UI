@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Investigation } from '../../../models/investigation.model';
 import { FormsModule } from '@angular/forms';
@@ -12,12 +12,13 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { EyeExamService } from '../../../services/eye-exam.service';
-import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-eye-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
   templateUrl: './eye-investigations-list.html',
   styleUrl: './eye-investigations-list.scss'
 })
@@ -35,7 +36,6 @@ export class EyeInvestigationsList implements OnInit {
   searchText = '';
   environment = environment;
   @ViewChild('table') table?: Table;
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EyeExamService,
@@ -90,9 +90,8 @@ export class EyeInvestigationsList implements OnInit {
     this.page = 1;
     this.loadInvestigations();
   }
-  onFilterChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-    this.globalFilter = value;
+  onFilterChange(value: string) {
+    this.globalFilter = (value || '').toLowerCase().trim();
     this.page = 1;
     this.loadInvestigations();
 
@@ -133,9 +132,6 @@ export class EyeInvestigationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.searchInput) {
-      this.searchInput.nativeElement.value = '';
-    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();

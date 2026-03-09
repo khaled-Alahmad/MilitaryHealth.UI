@@ -7,7 +7,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { tap, switchMap, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
@@ -15,17 +15,16 @@ import localAr from '@angular/common/locales/ar';
 import { registerLocaleData } from '@angular/common';
 
 // PrimeNG
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
-import { FieldsetModule } from 'primeng/fieldset';
 
 // Shared
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { FormCardComponent } from '../../../../shared/components/form-card/form-card.component';
 
 // Models and Services
 import { MaritalStatus } from '../../models/marital-status.model';
@@ -43,19 +42,17 @@ registerLocaleData(localAr);
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    CardModule,
-    FieldsetModule,
     InputTextModule,
     ButtonModule,
     DatePickerModule,
     InputNumberModule,
     TextareaModule,
     ToastModule,
-    PageHeaderComponent
+    PageHeaderComponent,
+    FormCardComponent
   ],
   templateUrl: './add-edit-applicant.html',
   styleUrl: './add-edit-applicant.scss',
-  providers: [MessageService]
 })
 export class AddEditApplicant implements OnInit {
   applicantForm!: FormGroup;
@@ -73,7 +70,6 @@ export class AddEditApplicant implements OnInit {
     private maritalStatusService: MaritalStatusService,
     private applicantService: ApplicantService,
     private route: ActivatedRoute,
-    private router: Router,
     private toastr: ToastrService,
     private messageService: MessageService,
     private barcodePrintService: BarcodePrintService,

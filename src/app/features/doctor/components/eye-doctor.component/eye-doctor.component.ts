@@ -8,12 +8,14 @@ import { ConsultationFormComponent } from '../Consultations/consultation-form.co
 import { InvestigationForm } from '../Investigations/investigation-form/investigation-form';
 import { EyeExamService } from '../../services/eye-exam.service';
 import { SearchApplicantComponent } from '../../../applicants/components/search-applican/search-applicant.component.ts/search-applicant.component';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-eye-doctor',
   standalone: true,
   imports: [
     CommonModule,
+    PageHeaderComponent,
     SearchApplicantComponent,
     EyeExamForm,
     ConsultationFormComponent,

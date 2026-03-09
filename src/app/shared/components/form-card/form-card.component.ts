@@ -14,4 +14,11 @@ export class FormCardComponent {
   @Input() subtitle = '';
   @Input() icon = '';
   @Input() variant: 'default' | 'banner' = 'default';
+
+  get iconClass(): string {
+    if (!this.icon) {
+      return '';
+    }
+    return this.icon.includes('pi ') ? this.icon : `pi ${this.icon}`;
+  }
 }

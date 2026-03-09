@@ -12,9 +12,10 @@
       </div>
     </app-page-header>
 
-    <div *ngIf="loading && !applicant" class="reception-loading-state">
-      <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
-      <p>جاري تحميل البيانات...</p>
+    <!-- Loading -->
+    <div *ngIf="loading && !applicant" class="text-center py-5">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+      <p class="mt-3">جاري تحميل البيانات...</p>
     </div>
 
     <p-card *ngIf="applicant && !loading" styleClass="reception-details-card">
@@ -54,7 +55,7 @@
             <div class="info-item">
               <span class="info-label">تاريخ المواليد:</span>
               <span class="info-value">
-                {{ applicant.dateOfBirth ? (applicant.dateOfBirth | gregorianDate:'yyyy/MM/dd') : '-' }}
+                {{ applicant.dateOfBirth | gregorianDate:'yyyy/MM/dd' }}
               </span>
             </div>
             <div class="info-item">
@@ -129,9 +130,10 @@
       </div>
     </p-card>
 
-    <div *ngIf="!applicant && !loading" class="reception-empty-state">
-      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
-      <p>لم يتم العثور على بيانات المنتسب</p>
+    <!-- No Data -->
+    <div *ngIf="!applicant && !loading" class="text-center py-5">
+      <i class="pi pi-exclamation-triangle text-muted" style="font-size: 3rem;"></i>
+      <p class="mt-3 text-muted">لم يتم العثور على بيانات المنتسب</p>
     </div>
   </div>
 

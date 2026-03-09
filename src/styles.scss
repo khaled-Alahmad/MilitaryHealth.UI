@@ -842,24 +842,22 @@ html body p {
   }
 }
 
-/* Success Button - أخضر غامق (هوية التطبيق) */
+/* Success Button */
 ::ng-deep .btn-success,
-::ng-deep .p-button-success,
-::ng-deep .p-button.p-button-success,
-::ng-deep button.p-button.p-button-success {
-  background: var(--primary-dark) !important;
-  background-color: var(--primary-dark) !important;
+::ng-deep .p-button-success {
+  background: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 100%
+  ) !important;
   color: white !important;
-  border-color: var(--primary-dark) !important;
 
-  &:hover:not(:disabled):not(.p-disabled) {
-    background: var(--primary-darkest) !important;
-    background-color: var(--primary-darkest) !important;
-    border-color: var(--primary-darkest) !important;
-  }
-
-  &:focus-visible {
-    box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.35) !important;
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      var(--primary-medium) 0%,
+      var(--primary-dark) 100%
+    ) !important;
   }
 }
 

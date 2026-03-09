@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/doctor/components/doctor-not-found-component/doctor-not-found-component.ts", "src/app/features/doctor/components/doctor-not-found-component/doctor-not-found-component.html"],
+  "sourcesContent": ["import { Component } from '@angular/core';\r\n\r\n@Component({\r\n  selector: 'app-doctor-not-found-component',\r\n  standalone: true,\r\n  imports: [],\r\n  templateUrl: './doctor-not-found-component.html',\r\n  styleUrl: './doctor-not-found-component.scss'\r\n})\r\nexport class DoctorNotFoundComponent {\r\n\r\n}\r\n", " <div class=\"not-found-container\">\r\n      <h1> خطأ:مدخل غير صحيح  ⚠️</h1>\r\n      <p>الرجاء اختيار أحد التخصصات الصحيحة للطبيب.</p>\r\n </div>"],
+  "mappings": ";;;;;;;;;;;AASM,IAAO,0BAAP,MAAO,yBAAuB;;qCAAvB,0BAAuB;EAAA;yEAAvB,0BAAuB,WAAA,CAAA,CAAA,gCAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,QAAA,CAAA,CAAA,GAAA,qBAAA,CAAA,GAAA,UAAA,SAAA,iCAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACTnC,MAAA,4BAAA,GAAA,OAAA,CAAA,EAAiC,GAAA,IAAA;AACvB,MAAA,iBAAA,GAAA,uGAAA;AAAqB,MAAA,0BAAA;AAC1B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,gOAAA;AAA0C,MAAA,0BAAA,EAAI;;;;;sEDO1C,yBAAuB,CAAA;UAPnC;uBACW,kCAAgC,YAC9B,MAAI,SACP,CAAA,GAAE,UAAA,yZAAA,QAAA,CAAA,uQAAA,EAAA,CAAA;;;;6EAIA,yBAAuB,EAAA,WAAA,2BAAA,UAAA,+FAAA,YAAA,GAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

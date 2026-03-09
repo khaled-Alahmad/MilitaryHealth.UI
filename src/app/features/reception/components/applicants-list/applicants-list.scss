@@ -1,32 +1,118 @@
 @use '../../../../shared/styles/reception-shared';
 
-:host {
-  display: block;
+/* Reception list filter bar alignment (search on right) */
+:host ::ng-deep .reception-filter-bar .filter-bar {
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .reception-filter-bar .filter-bar__controls {
   width: 100%;
+  justify-content: flex-end;
+  margin-inline-start: auto;
+  direction: ltr;
 }
 
-/* تخصيص هيدر البطاقة فقط (هوية بصرية) — بدون تعديل هيكل PrimeNG */
-:host ::ng-deep .applicants-list-card.p-card .p-card-header {
-  padding: 0;
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+:host ::ng-deep .reception-filter-bar .filter-bar__search-wrap {
+  order: 2;
 }
 
-:host ::ng-deep .applicants-list-card .p-card-body {
-  padding: var(--spacing-lg);
+:host ::ng-deep .reception-filter-bar .filter-bar__search-wrap .pi-search {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-:host ::ng-deep .applicants-list-card .p-card-content {
-  padding: 0;
+:host ::ng-deep .reception-filter-bar .filter-bar__search-input {
+  padding-right: 2rem;
 }
 
-/* صف الرسالة الفارغة — إزالة الحدود لظهور أنظف (الجدول من PrimeNG) */
-:host ::ng-deep .applicants-table .p-datatable-emptymessage td {
+/* Layout + controlled table styling for reception list */
+:host ::ng-deep .reception-applicants-table .p-datatable-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+:host ::ng-deep .reception-applicants-table .p-datatable-thead > tr > th {
+  background: var(--primary-dark);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.6rem 0.5rem;
+}
+
+:host ::ng-deep .reception-applicants-table .p-datatable-tbody > tr > td {
+  font-size: var(--font-size-xs);
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+:host ::ng-deep .reception-applicants-table .p-datatable-tbody > tr:nth-child(even) {
+  background: #fafafa;
+}
+
+:host ::ng-deep .reception-applicants-table .p-datatable-tbody > tr:hover {
+  background: rgba(5, 66, 57, 0.04);
+}
+
+:host ::ng-deep .reception-applicants-table .p-datatable-emptymessage td {
   border: none;
-  padding: 0;
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--neutral-medium);
 }
 
-@media (max-width: 768px) {
-  :host ::ng-deep .applicants-list-card .p-card-body {
-    padding: var(--spacing-md);
-  }
+.cell-text {
+  font-size: var(--font-size-xs);
+  color: var(--neutral-dark);
+}
+
+.cell-text--bold {
+  font-weight: 700;
+}
+
+.queue-badge {
+  display: inline-block;
+  min-width: 2.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: var(--primary-medium);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.actions-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+:host ::ng-deep .table-action-btn {
+  width: 2rem;
+  height: 2rem;
+}
+
+:host ::ng-deep .table-action-btn .p-button-label {
+  display: none;
+}
+
+:host ::ng-deep .tattoo-tag {
+  font-size: var(--font-size-xs);
+}
+
+.empty-state {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.empty-state__icon {
+  font-size: 2rem;
+  color: var(--neutral-medium);
 }

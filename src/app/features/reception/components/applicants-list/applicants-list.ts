@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ApplicantModel } from '../../models/applicant.model';
 import { ApplicantService } from '../../services/applicant.service';
@@ -15,35 +14,26 @@ import { MessageService } from 'primeng/api';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { Table } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
-import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { ActionButtonsComponent, ActionButtonConfig } from '../../../../shared/components/action-buttons/action-buttons.component';
 
 @Component({
   selector: 'app-applicants-list',
-  standalone: true,
   imports: [
     TableModule,
-    CardModule,
     CommonModule,
-    ToastModule,
     PaginatorComponent,
     TagModule,
     ButtonModule,
     TooltipModule,
     GregorianDatePipe,
-    FilterBarComponent,
-    PageHeaderComponent,
-    ActionButtonsComponent
+    FilterBarComponent
   ],
   templateUrl: './applicants-list.html',
   styleUrl: './applicants-list.scss',
   providers: [MessageService]
 })
-export class ApplicantsList implements OnInit,AfterViewInit  {
+export class ApplicantsList implements OnInit, AfterViewInit {
   applicants: ApplicantModel[] = [];
-  filteredApplicants: ApplicantModel[] = [];
   globalFilter: string = '';
   
   page = 1;
@@ -70,10 +60,9 @@ export class ApplicantsList implements OnInit,AfterViewInit  {
   loadApplicants() {
     this.loading = true;
     const filter = this.globalFilter || '';
-    this.applicantService.getApplicants$(this.page, this.rowsPerPage,filter).subscribe({
+    this.applicantService.getApplicants$(this.page, this.rowsPerPage, filter).subscribe({
       next: (res: PagedResponse<ApplicantModel>) => {
         this.applicants = res.items;
-        this.filteredApplicants = res.items;
         this.totalRecords = res.totalCount;
         this.loading = false;
       },
@@ -83,31 +72,33 @@ export class ApplicantsList implements OnInit,AfterViewInit  {
     });
   }
 
-onPageChange(newPage: number) {
-  this.page = newPage;
-  this.loadApplicants();
-}
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.loadApplicants();
+  }
 
-onPageSizeChange(newSize: number) {
-  this.rowsPerPage = newSize;
-  this.page = 1;
-  this.loadApplicants();
-}
+  onPageSizeChange(newSize: number) {
+    this.rowsPerPage = newSize;
+    this.page = 1;
+    this.loadApplicants();
+  }
 
-onSearchChange(value: string): void {
-  this.globalFilter = (value || '').toLowerCase().trim();
-  this.page = 1;
-  this.loadApplicants();
-  setTimeout(() => this.scrollService.scrollToTop(true), 300);
-}
+  onSearchChange(value: string): void {
+    this.globalFilter = (value || '').toLowerCase().trim();
+    this.page = 1;
+    this.loadApplicants();
+    setTimeout(() => this.scrollService.scrollToTop(true), 300);
+  }
+
   ngAfterViewInit() {
-    this.tableHeight = this.calculateTableHeight(); 
-    this.cdr.detectChanges(); 
+    this.tableHeight = this.calculateTableHeight();
+    this.cdr.detectChanges();
   }
 
   calculateTableHeight(): string {
-    return window.innerHeight - 200 + 'px'; 
+    return window.innerHeight - 200 + 'px';
   }
+
   @HostListener('window:resize')
   onResize() {
     this.setTableHeight();
@@ -116,14 +107,14 @@ onSearchChange(value: string): void {
   setTableHeight() {
     const screenHeight = window.innerHeight;
 
-    const reservedSpace = 220;  
+    const reservedSpace = 220;
 
     this.tableHeight = (screenHeight - reservedSpace) + 'px';
   }
-  viewApplicant(applicant: ApplicantModel): void {
-    this.router.navigate(['/reception/applicants/details', applicant.fileNumber]);
+  viewApplicant(applicant: ApplicantModel) {
+    this.router.navigate(['reception/applicants/details', applicant.fileNumber]);
   }
-
+  
   editApplicant(applicant: ApplicantModel): void {
     if (!applicant?.applicantID) {
       this.messageService.add({
@@ -133,7 +124,7 @@ onSearchChange(value: string): void {
       });
       return;
     }
-    this.router.navigate(['/reception/applicants', applicant.applicantID]);
+    this.router.navigate(['reception', 'applicants', applicant.applicantID]);
   }
 
   printApplicant(applicant: ApplicantModel): void {
@@ -146,6 +137,7 @@ onSearchChange(value: string): void {
       return;
     }
 
+    // ✅ جلب البيانات الكاملة للحصول على queueNumber و fileNumber
     if (applicant.applicantID) {
       this.applicantService.getApplicantById$(applicant.applicantID).subscribe({
         next: (fullApplicantData: ApplicantModel) => {
@@ -185,46 +177,5 @@ onSearchChange(value: string): void {
       this.table.clear();
     }
     this.loadApplicants();
-  }
-
-  goToAdd(): void {
-    this.router.navigate(['/reception/applicants/add']);
-  }
-
-  /** نص ملخص النتائج (عرض 1–10 من 42) */
-  get resultSummary(): string {
-    if (this.totalRecords === 0) return 'لا توجد نتائج';
-    const start = (this.page - 1) * this.rowsPerPage + 1;
-    const end = Math.min(this.page * this.rowsPerPage, this.totalRecords);
-    return `عرض ${start}–${end} من ${this.totalRecords}`;
-  }
-
-  /** عنوان حالة عدم وجود بيانات */
-  get emptyStateTitle(): string {
-    return this.globalFilter?.length ? 'لا توجد نتائج للبحث' : 'لا يوجد متقدمين';
-  }
-
-  /** نص فرعي في حالة عدم النتائج (عند وجود فلتر) */
-  get emptyStateSubtext(): string | null {
-    return this.globalFilter?.length ? 'جرّب تغيير كلمات البحث أو أعد تعيين الفلتر' : null;
-  }
-
-  /** أيقونة الحالة الفارغة */
-  get emptyStateIcon(): string {
-    return this.globalFilter?.length ? 'pi pi-search' : 'pi pi-users';
-  }
-
-  getRowActions(applicant: ApplicantModel): ActionButtonConfig[] {
-    return [
-      { id: 'view', label: '', icon: 'pi pi-eye', severity: 'secondary', outlined: true, tooltip: 'عرض التفاصيل' },
-      { id: 'edit', label: '', icon: 'pi pi-pencil', severity: 'success', outlined: false, tooltip: 'تعديل المنتسب' },
-      { id: 'print', label: '', icon: 'pi pi-print', severity: 'info', outlined: false, tooltip: 'طباعة الباركود' }
-    ];
-  }
-
-  onRowAction(actionId: string, applicant: ApplicantModel): void {
-    if (actionId === 'view') this.viewApplicant(applicant);
-    else if (actionId === 'edit') this.editApplicant(applicant);
-    else if (actionId === 'print') this.printApplicant(applicant);
   }
 }

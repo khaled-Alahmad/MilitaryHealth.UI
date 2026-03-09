@@ -1,70 +1,65 @@
 .filter-bar {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
-  width: 100%;
+  margin-bottom: var(--spacing-md);
 }
 
-.filter-bar__search {
-  flex: 1 1 280px;
-  min-width: 0;
-}
-
-/* IconField يملأ العرض — بدون overrides على هيكل PrimeNG */
-:host ::ng-deep .filter-bar__iconfield.p-iconfield {
-  width: 100%;
-}
-
-.filter-bar__input {
-  width: 100%;
-}
-
-/* زر المسح داخل p-inputicon — يظهر كأيقونة فقط */
-.filter-bar__clear-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--neutral-medium);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.filter-bar__clear-btn:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: var(--neutral-dark);
-}
-
-.filter-bar__clear-btn .pi {
-  font-size: 0.875rem;
-}
-
-.filter-bar__hint {
-  display: block;
-  margin-top: var(--spacing-xs);
-  font-size: 0.7rem;
-  color: var(--neutral-medium);
-}
-
-.filter-bar__extras {
+.filter-bar__extras,
+.filter-bar__controls {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   flex-wrap: wrap;
 }
 
-.filter-bar__actions {
-  flex-shrink: 0;
+.filter-bar__extras {
+  margin-inline-end: auto;
+}
+
+.filter-bar__controls {
+  margin-inline-start: auto;
+}
+
+.filter-bar__search-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.filter-bar__search-wrap .pi-search {
+  right: 0.75rem;
+  color: var(--primary-medium);
+  font-size: 0.9rem;
+}
+
+.filter-bar__search-input {
+  min-width: 280px;
+  border-radius: var(--radius-md);
+  padding-inline-start: 0.75rem;
+  padding-inline-end: 2rem;
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+.filter-bar__search-input:focus {
+  border-color: var(--primary-medium);
+  box-shadow: 0 0 0 2px rgba(66, 129, 119, 0.15);
 }
 
 @media (max-width: 768px) {
-  .filter-bar__search {
-    flex-basis: 100%;
+  .filter-bar__extras,
+  .filter-bar__controls {
+    width: 100%;
+  }
+
+  .filter-bar__controls {
+    justify-content: flex-end;
+  }
+
+  .filter-bar__search-input {
+    min-width: 100%;
+    width: 100%;
   }
 }
