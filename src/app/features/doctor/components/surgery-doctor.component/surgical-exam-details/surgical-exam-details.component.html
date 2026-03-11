@@ -1,81 +1,46 @@
-<div class="professional-modal-container">
-  <div class="modal-header-professional">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-briefcase"></i>
+<app-dialog-wrapper
+  [visible]="true"
+  title="تفاصيل الفحص الجراحي"
+  [subtitle]="'رقم الملف: ' + (exam.applicantFileNumber || '')"
+  icon="pi pi-briefcase"
+  width="70rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <div class="surgical-exam-details-body">
+    <div class="details-grid">
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الجراحة العامة</h6>
+        <div class="info-value">{{ exam.generalSurgery || 'غير محدد' }}</div>
       </div>
-      <div class="header-text">
-        <h3 class="modal-title-professional">تفاصيل الفحص الجراحي</h3>
-        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }}</span>
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الجراحة البولية</h6>
+        <div class="info-value">{{ exam.urinarySurgery || 'غير محدد' }}</div>
       </div>
-    </div>
-    <button type="button" class="btn-close-professional" (click)="closeModal()">
-      <i class="pi pi-times"></i>
-    </button>
-  </div>
-
-  <div class="modal-body-professional">
-    <div class="exam-overview">
-      <div class="result-card">
-        <div class="result-icon">
-          <i class="pi pi-flag"></i>
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الجراحة الوعائية</h6>
+        <div class="info-value">{{ exam.vascularSurgery || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الجراحة الصدرية</h6>
+        <div class="info-value">{{ exam.thoracicSurgery || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">النتيجة</h6>
+        <div
+          class="info-value result-badge"
+          [class.result-accepted]="exam.result?.description === 'مقبول'"
+          [class.result-rejected]="exam.result?.description === 'مرفوض'"
+          [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
+          {{ exam.result?.description || 'غير محدد' }}
         </div>
-        <div class="result-content">
-          <h5>النتيجة النهائية</h5>
-          <div class="info-value result-badge"
-               [class.result-accepted]="exam.result?.description === 'مقبول'"
-               [class.result-rejected]="exam.result?.description === 'مرفوض'"
-               [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
-            {{ exam.result?.description || 'غير محدد' }}
-          </div>
-        </div>
       </div>
     </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-briefcase"></i>
-        <h4>عام</h4>
-      </div>
-      <div class="system-value">{{ exam.generalSurgery || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-filter"></i>
-        <h4>المسالك البولية</h4>
-      </div>
-      <div class="system-value">{{ exam.urinarySurgery || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-heart"></i>
-        <h4>الأوعية الدموية</h4>
-      </div>
-      <div class="system-value">{{ exam.vascularSurgery || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section">
-      <div class="system-header">
-        <i class="pi pi-wind"></i>
-        <h4>الصدر</h4>
-      </div>
-      <div class="system-value">{{ exam.thoracicSurgery || 'غير محدد' }}</div>
-    </div>
-
-    <div class="system-section reason-section" *ngIf="exam.reason">
-      <div class="system-header">
-        <i class="pi pi-info-circle"></i>
-        <h4>السبب</h4>
-      </div>
-      <div class="system-value reason-text">{{ exam.reason }}</div>
-    </div>
+    @if (exam.reason) {
+      <h6 class="details-section-title">السبب</h6>
+      <div class="info-value">{{ exam.reason }}</div>
+    }
   </div>
-
-  <div class="modal-footer-professional">
-    <button type="button" class="btn btn-secondary" (click)="closeModal()">
-      <i class="pi pi-times me-2"></i> إغلاق
-    </button>
+  <div dialog-footer class="dialog-actions">
+    <p-button label="إغلاق" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="closeModal()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

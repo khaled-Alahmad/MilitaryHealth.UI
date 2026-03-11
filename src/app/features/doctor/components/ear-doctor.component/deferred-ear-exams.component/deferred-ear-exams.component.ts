@@ -13,11 +13,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarExamComponent } from '../edit-ear-exam/edit-ear-exam';
 import { ExamDetailsComponent } from '../exam-details/exam-details';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-deferred-ear-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
+  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent, PageHeaderComponent],
   templateUrl: './deferred-ear-exams.component.html',
   styleUrls: ['./deferred-ear-exams.component.scss']
 })
@@ -64,9 +65,10 @@ export class DeferredEarExamsComponent implements OnInit {
     });
   }
 
-  onFilterChange(event: any) {
-    this.globalFilter = event.target.value;
-    this.page = 1; // إعادة تعيين الصفحة إلى الأولى عند البحث
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value?.trim() || '';
+    this.globalFilter = value;
+    this.page = 1;
     this.loadEarExams();
   }
 
@@ -82,46 +84,34 @@ export class DeferredEarExamsComponent implements OnInit {
   }
 
   getBadgeClass(result: any): string {
-    switch (result?.description) {
-      case 'مؤجل': return 'badge bg-warning text-dark';
+    if (!result || !result.description) return 'badge bg-secondary';
+    switch (result.description) {
       case 'مقبول': return 'badge bg-success';
       case 'مرفوض': return 'badge bg-danger';
+      case 'مؤجل': return 'badge bg-warning text-dark';
       default: return 'badge bg-secondary';
     }
   }
 
   openEditExam(exam: EarClinicExam) {
     const modalRef = this.modalService.open(EditEarExamComponent, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       centered: true
     });
     
     modalRef.componentInstance.exam = exam;
-    modalRef.componentInstance.earExamUpdated.subscribe((updated: boolean) => {
-      if (updated) {
-        // تحديث محلي فوري
-        const index = this.exams.findIndex(e => e.earClinicID === exam.earClinicID);
-        if (index !== -1) {
-          this.exams[index] = { ...this.exams[index], ...exam };
-          this.filteredExams = [...this.exams];
-        }
-        // إعادة تحميل من السيرفر للتأكد
-        this.loadEarExams();
-      }
-    });
+    modalRef.componentInstance.earExamUpdated.subscribe(() => this.loadEarExams());
   }
 
   openExamDetails(exam: EarClinicExam) {
-    const modalRef = this.modalService.open(ExamDetailsComponent, {
+    this.modalService.open(ExamDetailsComponent, {
       size: 'lg',
       backdrop: 'static',
       keyboard: true,
       centered: true
-    });
-    
-    modalRef.componentInstance.exam = exam;
+    }).componentInstance.exam = exam;
   }
 
   resetFilters(): void {

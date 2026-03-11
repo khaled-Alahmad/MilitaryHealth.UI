@@ -1,130 +1,88 @@
-<!-- edit-surgical-exam.component.html -->
-<div class="dialog-backdrop">
-  <div class="dialog-card" (click)="$event.stopPropagation()">
-    <div class="dialog-header">
-      <h3>تعديل الفحص الجراحي</h3>
-      <button type="button" class="btn-close" (click)="onCancel()">
-        ×
-      </button>
+<app-dialog-wrapper
+  [visible]="true"
+  title="تعديل الفحص الجراحي"
+  subtitle="تحديث بيانات الفحص والنتيجة"
+  icon="pi pi-pencil"
+  width="90rem"
+  [useDefaultFooter]="false"
+  (hide)="onCancel()">
+  <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="exam-form">
+
+    <h6 class="section-title">حالة الأجهزة الطبية</h6>
+    <div class="medical-system-row">
+      <div class="system-label">أمراض الجراحة العامة <span class="text-danger">*</span></div>
+      <div class="system-options">
+        <div class="form-check"><input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_healthy_edit" value="سليم" formControlName="generalSurgery" /><label class="form-check-label" for="generalSurgery_healthy_edit">سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_unhealthy_edit" value="غير سليم" formControlName="generalSurgery" /><label class="form-check-label" for="generalSurgery_unhealthy_edit">غير سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_other_edit" value="غير ذلك" formControlName="generalSurgery" /><label class="form-check-label" for="generalSurgery_other_edit">غير ذلك</label></div>
+      </div>
     </div>
+    @if (examForm.get('generalSurgery')?.value === 'غير ذلك') {
+      <div class="other-input-row"><input type="text" class="form-control" formControlName="generalSurgeryOther" placeholder="أدخل التفاصيل" /></div>
+    }
 
-    <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="dialog-form">
+    <div class="medical-system-row">
+      <div class="system-label">أمراض الجراحة البولية <span class="text-danger">*</span></div>
+      <div class="system-options">
+        <div class="form-check"><input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_healthy_edit" value="سليم" formControlName="urinarySurgery" /><label class="form-check-label" for="urinarySurgery_healthy_edit">سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_unhealthy_edit" value="غير سليم" formControlName="urinarySurgery" /><label class="form-check-label" for="urinarySurgery_unhealthy_edit">غير سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_other_edit" value="غير ذلك" formControlName="urinarySurgery" /><label class="form-check-label" for="urinarySurgery_other_edit">غير ذلك</label></div>
+      </div>
+    </div>
+    @if (examForm.get('urinarySurgery')?.value === 'غير ذلك') {
+      <div class="other-input-row"><input type="text" class="form-control" formControlName="urinarySurgeryOther" placeholder="أدخل التفاصيل" /></div>
+    }
 
-      <!-- جراحة عامة -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الجراحة العامة <span class="text-danger">*</span></div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_healthy_edit" value="سليم" formControlName="generalSurgery">
-            <label class="form-check-label" for="generalSurgery_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_unhealthy_edit" value="غير سليم" formControlName="generalSurgery">
-            <label class="form-check-label" for="generalSurgery_unhealthy_edit">غير سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="generalSurgery" id="generalSurgery_other_edit" value="غير ذلك" formControlName="generalSurgery">
-            <label class="form-check-label" for="generalSurgery_other_edit">غير ذلك</label>
-          </div>
-        </div>
+    <div class="medical-system-row">
+      <div class="system-label">أمراض الجراحة الوعائية <span class="text-danger">*</span></div>
+      <div class="system-options">
+        <div class="form-check"><input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_healthy_edit" value="سليم" formControlName="vascularSurgery" /><label class="form-check-label" for="vascularSurgery_healthy_edit">سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_unhealthy_edit" value="غير سليم" formControlName="vascularSurgery" /><label class="form-check-label" for="vascularSurgery_unhealthy_edit">غير سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_other_edit" value="غير ذلك" formControlName="vascularSurgery" /><label class="form-check-label" for="vascularSurgery_other_edit">غير ذلك</label></div>
       </div>
-      <div *ngIf="examForm.get('generalSurgery')?.value === 'غير ذلك'" class="other-input-row">
-        <input type="text" class="form-control" formControlName="generalSurgeryOther" placeholder="أدخل التفاصيل">
-      </div>
+    </div>
+    @if (examForm.get('vascularSurgery')?.value === 'غير ذلك') {
+      <div class="other-input-row"><input type="text" class="form-control" formControlName="vascularSurgeryOther" placeholder="أدخل التفاصيل" /></div>
+    }
 
-      <!-- جراحة بولية -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الجراحة البولية <span class="text-danger">*</span></div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_healthy_edit" value="سليم" formControlName="urinarySurgery">
-            <label class="form-check-label" for="urinarySurgery_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_unhealthy_edit" value="غير سليم" formControlName="urinarySurgery">
-            <label class="form-check-label" for="urinarySurgery_unhealthy_edit">غير سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="urinarySurgery" id="urinarySurgery_other_edit" value="غير ذلك" formControlName="urinarySurgery">
-            <label class="form-check-label" for="urinarySurgery_other_edit">غير ذلك</label>
-          </div>
-        </div>
+    <div class="medical-system-row">
+      <div class="system-label">أمراض الجراحة الصدرية <span class="text-danger">*</span></div>
+      <div class="system-options">
+        <div class="form-check"><input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_healthy_edit" value="سليم" formControlName="thoracicSurgery" /><label class="form-check-label" for="thoracicSurgery_healthy_edit">سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_unhealthy_edit" value="غير سليم" formControlName="thoracicSurgery" /><label class="form-check-label" for="thoracicSurgery_unhealthy_edit">غير سليم</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_other_edit" value="غير ذلك" formControlName="thoracicSurgery" /><label class="form-check-label" for="thoracicSurgery_other_edit">غير ذلك</label></div>
       </div>
-      <div *ngIf="examForm.get('urinarySurgery')?.value === 'غير ذلك'" class="other-input-row">
-        <input type="text" class="form-control" formControlName="urinarySurgeryOther" placeholder="أدخل التفاصيل">
-      </div>
+    </div>
+    @if (examForm.get('thoracicSurgery')?.value === 'غير ذلك') {
+      <div class="other-input-row"><input type="text" class="form-control" formControlName="thoracicSurgeryOther" placeholder="أدخل التفاصيل" /></div>
+    }
 
-      <!-- جراحة وعائية -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الجراحة الوعائية <span class="text-danger">*</span></div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_healthy_edit" value="سليم" formControlName="vascularSurgery">
-            <label class="form-check-label" for="vascularSurgery_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_unhealthy_edit" value="غير سليم" formControlName="vascularSurgery">
-            <label class="form-check-label" for="vascularSurgery_unhealthy_edit">غير سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="vascularSurgery" id="vascularSurgery_other_edit" value="غير ذلك" formControlName="vascularSurgery">
-            <label class="form-check-label" for="vascularSurgery_other_edit">غير ذلك</label>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="examForm.get('vascularSurgery')?.value === 'غير ذلك'" class="other-input-row">
-        <input type="text" class="form-control" formControlName="vascularSurgeryOther" placeholder="أدخل التفاصيل">
-      </div>
-
-      <!-- جراحة صدرية -->
-      <div class="medical-system-row">
-        <div class="system-label">أمراض الجراحة الصدرية <span class="text-danger">*</span></div>
-        <div class="system-options">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_healthy_edit" value="سليم" formControlName="thoracicSurgery">
-            <label class="form-check-label" for="thoracicSurgery_healthy_edit">سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_unhealthy_edit" value="غير سليم" formControlName="thoracicSurgery">
-            <label class="form-check-label" for="thoracicSurgery_unhealthy_edit">غير سليم</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="thoracicSurgery" id="thoracicSurgery_other_edit" value="غير ذلك" formControlName="thoracicSurgery">
-            <label class="form-check-label" for="thoracicSurgery_other_edit">غير ذلك</label>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="examForm.get('thoracicSurgery')?.value === 'غير ذلك'" class="other-input-row">
-        <input type="text" class="form-control" formControlName="thoracicSurgeryOther" placeholder="أدخل التفاصيل">
-      </div>
-
-      <!-- النتيجة -->
-      <div class="result-section">
-        <label class="form-label mb-3">النتيجة <span class="text-danger">*</span></label>
+    <h6 class="section-title mt-4">النتيجة</h6>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label mb-2">النتيجة <span class="text-danger">*</span></label>
         <select class="form-select" formControlName="resultID"
-                [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
-                [class.is-valid]="isFieldValid('resultID')">
+          [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
+          [class.is-valid]="isFieldValid('resultID')">
           <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
         </select>
-        <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">
-          <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('resultID') }}
+        <div class="invalid-feedback d-block" *ngIf="getErrorMessage('resultID')">
+          <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('resultID') }}
         </div>
       </div>
+    </div>
 
-      <!-- السبب -->
-      <div class="reason-section">
-        <label class="form-label">السبب (إن وجد)</label>
+    <h6 class="section-title mt-4">السبب (إن وجد)</h6>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label mb-2">السبب</label>
         <textarea class="form-control" formControlName="reason" rows="3" placeholder="يمكنك كتابة السبب إن وجد"></textarea>
       </div>
+    </div>
+  </form>
 
-      <!-- الأزرار -->
-      <div class="modal-footer mt-4">
-        <button type="button" class="btn btn-secondary" (click)="onCancel()">إلغاء</button>
-        <button type="submit" class="btn btn-success" [disabled]="examForm.invalid || loading">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-          حفظ
-        </button>
-      </div>
-    </form>
+  <div dialog-footer class="dialog-actions">
+    <p-button label="إلغاء" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="onCancel()"></p-button>
+    <p-button label="حفظ التعديلات" icon="pi pi-save" severity="primary" [loading]="loading" [disabled]="examForm.invalid || loading" (onClick)="onSubmit()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

@@ -1,92 +1,80 @@
-<div class=" container ">
+<div class="user-header-section p-3 container-fluid">
+  <app-page-header
+    variant="banner"
+    title="الفحوصات الجراحية المؤجلة"
+    subtitle="عرض وتعديل الفحوصات الجراحية المؤجلة"
+    icon="pi pi-clock">
+  </app-page-header>
 
-  <!-- بحث -->
-  <div class="table-toolbar my-2">
+  <div class="table-toolbar">
     <div class="filter-reset-wrapper">
       <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
       <div class="search-wrapper">
-        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-          (input)="onFilterChange($event)" />
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
         <i class="fas fa-search search-icon"></i>
       </div>
     </div>
   </div>
 
-
-  <!-- جدول النتائج (PrimeNG) -->
-  <p-table #table [value]="filteredExams" [rows]="rowsPerPage" [scrollable]="true"
-           [showCurrentPageReport]="true" responsiveLayout="scroll" class="custom-table">
+  <p-table
+    #table
+    [value]="filteredExams"
+    [loading]="loading"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table my-3"
+    [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم الملف</th>
-        <th>عام</th>
-        <th>مسالك</th>
-        <th>أوردة</th>
-        <th>صدر</th>
-        <th>السبب</th>
-        <th>النتيجة</th>
-        <th>إجراءات</th>
+        <th style="min-width: 100px" class="text-center">رقم الملف</th>
+        <th style="min-width: 100px" class="text-center">عام</th>
+        <th style="min-width: 100px" class="text-center">مسالك</th>
+        <th style="min-width: 100px" class="text-center">أوردة</th>
+        <th style="min-width: 100px" class="text-center">صدر</th>
+        <th style="min-width: 120px" class="text-center">السبب</th>
+        <th style="min-width: 100px" class="text-center">النتيجة</th>
+        <th style="min-width: 80px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-exam>
       <tr>
-        <td>{{ exam.applicantFileNumber }}</td>
-        <td>{{ exam.generalSurgery }}</td>
-        <td>{{ exam.urinarySurgery }}</td>
-        <td>{{ exam.vascularSurgery }}</td>
-        <td>{{ exam.thoracicSurgery }}</td>
-        <td>{{ exam.reason || '-' }}</td>
-        <td>
-          <span [ngClass]="getBadgeClass(exam.result)">{{ exam.result?.description }}</span>
+        <td class="text-center align-middle"><span class="fw-bold small">{{ exam.applicantFileNumber }}</span></td>
+        <td class="text-center align-middle"><span class="small">{{ exam.generalSurgery || '-' }}</span></td>
+        <td class="text-center align-middle"><span class="small">{{ exam.urinarySurgery || '-' }}</span></td>
+        <td class="text-center align-middle"><span class="small">{{ exam.vascularSurgery || '-' }}</span></td>
+        <td class="text-center align-middle"><span class="small">{{ exam.thoracicSurgery || '-' }}</span></td>
+        <td class="text-center align-middle"><span class="small">{{ exam.reason || '-' }}</span></td>
+        <td class="text-center align-middle">
+          <span [ngClass]="getBadgeClass(exam.result)" class="small">{{ exam.result?.description || '-' }}</span>
         </td>
-        <td class="text-center">
-          <button
-            type="button"
-            class="btn-icon-action"
-            pTooltip="عرض التفاصيل"
-            tooltipPosition="top"
-            (click)="viewDetails(exam)">
-            <i class="pi pi-eye"></i>
-          </button>
-          <button
-            type="button"
-            class="btn-icon-action"
-            pTooltip="تعديل الفحص"
-            tooltipPosition="top"
-            (click)="openEditDialog(exam)">
-            <i class="pi pi-pen-to-square"></i>
-          </button>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <button type="button" class="btn-icon-action" pTooltip="عرض التفاصيل" tooltipPosition="top" (click)="viewDetails(exam)">
+              <i class="pi pi-eye"></i>
+            </button>
+            <button type="button" class="btn-icon-action" pTooltip="تعديل الفحص" tooltipPosition="top" (click)="openEditDialog(exam)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="8" class="text-center">لا توجد فحوص جراحية</td>
-      </tr>
+      <tr><td colspan="8" class="text-center py-3 align-middle small">لا توجد فحوص جراحية</td></tr>
     </ng-template>
   </p-table>
 
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-                 (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
   </app-paginator>
-
-  <!-- رسالة عدم وجود بيانات -->
- 
-  <!-- مودال التعديل -->
-  <app-edit-surgical-exam
-    *ngIf="selectedExam"
-    [exam]="selectedExam"
-    (dialogClosed)="onDialogClose($event)">
-  </app-edit-surgical-exam>
-
-  <!-- مودال التفاصيل -->
-  <div class="modal-backdrop" *ngIf="selectedExamDetails" (click)="closeDetailsModal()">
-    <div class="modal-content-details" (click)="$event.stopPropagation()">
-      <app-surgical-exam-details
-        [exam]="selectedExamDetails"
-        (close)="closeDetailsModal()">
-      </app-surgical-exam-details>
-    </div>
-  </div>
-
 </div>

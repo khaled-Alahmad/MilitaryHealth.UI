@@ -5,18 +5,19 @@ import { OrthopedicExamService } from '../../../services/orthopedic-exam.service
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HEALTH_STATUS_VALUES } from '../../../constants/health-status-options';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
 
 @Component({
   selector: 'app-edit-orthopedic-exam',
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, DialogWrapperComponent],
   templateUrl: './edit-orthopedic-exam.component.html',
   styleUrl: './edit-orthopedic-exam.component.scss'
 })
 export class EditOrthopedicExamComponent implements OnInit {
   @Input() exam!: OrthopedicExam;
-  @Output() OrthopedicExamUpdated = new EventEmitter<any>();
+  @Output() OrthopedicExamUpdated = new EventEmitter<boolean>();
   @Output() dialogClosed = new EventEmitter<boolean>();
 
   examForm!: FormGroup;
@@ -97,7 +98,8 @@ export class EditOrthopedicExamComponent implements OnInit {
       ...this.exam,
       musculoskeletal: formData.musculoskeletal === 'غير ذلك' ? (formData.musculoskeletalOther || '') : formData.musculoskeletal,
       neurologicalSurgery: formData.neurologicalSurgery === 'غير ذلك' ? (formData.neurologicalSurgeryOther || '') : formData.neurologicalSurgery,
-      resultID: Number(formData.resultID)
+      resultID: Number(formData.resultID),
+      reason: formData.reason ?? this.exam.reason
     };
 
     this.loading = true;
@@ -105,8 +107,11 @@ export class EditOrthopedicExamComponent implements OnInit {
       next: () => {
         this.toastr.success('✅ تم التحديث بنجاح', 'نجاح');
         this.exam.resultID = updatedExam.resultID;
-        this.exam.result = this.results.find(r => r.resultID === updatedExam.resultID);
+        this.exam.reason = updatedExam.reason;
+        this.exam.result = this.results.find((r: any) => r.resultID === updatedExam.resultID);
         this.loading = false;
+        this.OrthopedicExamUpdated.emit(true);
+        this.dialogClosed.emit(true);
         this.close();
       },
       error: err => {

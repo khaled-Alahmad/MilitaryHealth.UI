@@ -5,26 +5,35 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { EditOrthopedicExamComponent } from '../edit-orthopedic-exam.component/edit-orthopedic-exam.component';
+import { OrthopedicExamDetailsComponent } from '../orthopedic-exam-details/orthopedic-exam-details.component';
 import { ToastrService } from 'ngx-toastr';
-import { Table, TableModule } from "primeng/table";
+import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-deferred-orthopedi-exams-component',
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent
+  ],
   templateUrl: './deferred-orthopedi-exams-component.html',
   styleUrl: './deferred-orthopedi-exams-component.scss'
 })
 export class DeferredOrthopediExamsComponent implements OnInit {
   exams: OrthopedicExam[] = [];
   filteredExams: OrthopedicExam[] = [];
-  loading = true;
-  selectedExam: OrthopedicExam | null = null;
-  searchTerm: string = '';
-  globalFilter: string = '';
+  loading = false;
+  globalFilter = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
@@ -82,6 +91,17 @@ export class DeferredOrthopediExamsComponent implements OnInit {
     }
   }
 
+  viewDetails(exam: OrthopedicExam) {
+    const modalRef = this.modalService.open(OrthopedicExamDetailsComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true
+    });
+    modalRef.componentInstance.exam = exam;
+    modalRef.componentInstance.close.subscribe(() => modalRef.close());
+  }
+
   openEditDeferredOrthopedi(orthopedicExam: OrthopedicExam) {
     const modalRef = this.modalService.open(EditOrthopedicExamComponent, {
       size: 'lg',
@@ -89,9 +109,12 @@ export class DeferredOrthopediExamsComponent implements OnInit {
       keyboard: false,
       centered: true
     });
-    modalRef.componentInstance.exam  = orthopedicExam;
-    modalRef.componentInstance.OrthopedicExamUpdated.subscribe(() => {
+    modalRef.componentInstance.exam = orthopedicExam;
+    modalRef.componentInstance.OrthopedicExamUpdated?.subscribe(() => {
       this.loadExams();
+    });
+    modalRef.componentInstance.dialogClosed?.subscribe(() => {
+      modalRef.close();
     });
   }
 

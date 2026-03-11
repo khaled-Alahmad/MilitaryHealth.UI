@@ -1,63 +1,96 @@
-<div class="orthopedic-exams-page deferred-exams-page container mt-4">
+<div class="user-header-section p-3 container-fluid">
+  <app-page-header
+    variant="banner"
+    title="الفحوصات العظمية المؤجلة"
+    subtitle="عرض وتعديل الفحوصات العظمية المؤجلة"
+    icon="pi pi-clock">
+  </app-page-header>
 
-  <div class="table-toolbar mb-3">
+  <div class="table-toolbar">
     <div class="filter-reset-wrapper">
       <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
       <div class="search-wrapper">
-        <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم"
-          (input)="onFilterChange($event)" />
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="ابحث عن رقم الملف أو الاسم"
+          (input)="onFilterChange($event)"
+        />
         <i class="fas fa-search search-icon"></i>
       </div>
     </div>
   </div>
 
-  <p-table #table [value]="filteredExams" [rows]="rowsPerPage" [sortMode]="'multiple'" [scrollable]="true" class="custom-table"
-    [totalRecords]="totalRecords">
-
+  <p-table
+    #table
+    [value]="filteredExams"
+    [loading]="loading"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalRecords"
+    class="custom-table my-3"
+    [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th>رقم ملف المنتسب</th>
-        <th>الجهاز العضلي</th>
-        <th>الجراحة العصبية</th>
-        <th>النتيجة</th>
-        <th>السبب</th>
-        <th>إجراءات</th>
+        <th style="min-width: 100px" class="text-center">رقم الملف</th>
+        <th style="min-width: 140px" class="text-center">الجهاز العضلي</th>
+        <th style="min-width: 140px" class="text-center">الجراحة العصبية</th>
+        <th style="min-width: 100px" class="text-center">النتيجة</th>
+        <th style="min-width: 120px" class="text-center">السبب</th>
+        <th style="min-width: 80px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="body" let-exam>
       <tr>
-        <td>{{ exam.applicantFileNumber }}</td>
-        <td>{{ exam.musculoskeletal }}</td>
-        <td>{{ exam.neurologicalSurgery }}</td>
-        <td>
-          <span [ngClass]="getBadgeClass(exam.result)">
-            {{ exam.result?.description }}
-          </span>
+        <td class="text-center align-middle">
+          <span class="fw-bold small">{{ exam.applicantFileNumber }}</span>
         </td>
-        <td>{{ exam.reason || '-' }}</td>
-        <td class="text-center">
-          <button 
-            type="button" 
-            class="btn-icon-action" 
-            pTooltip="تعديل الفحص"
-            tooltipPosition="top"
-            (click)="openEditDeferredOrthopedi(exam)">
-            <i class="pi pi-pen-to-square"></i>
-          </button>
+        <td class="text-center align-middle">
+          <span class="small">{{ exam.musculoskeletal || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ exam.neurologicalSurgery || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span [ngClass]="getBadgeClass(exam.result)" class="small">{{ exam.result?.description || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <span class="small">{{ exam.reason || '-' }}</span>
+        </td>
+        <td class="text-center align-middle">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="عرض التفاصيل"
+              tooltipPosition="top"
+              (click)="viewDetails(exam)">
+              <i class="pi pi-eye"></i>
+            </button>
+            <button
+              type="button"
+              class="btn-icon-action"
+              pTooltip="تعديل الفحص"
+              tooltipPosition="top"
+              (click)="openEditDeferredOrthopedi(exam)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center">لا توجد فحوص عظمية</td>
+        <td colspan="6" class="text-center py-3 align-middle small">لا توجد فحوص عظمية</td>
       </tr>
     </ng-template>
-
   </p-table>
-  <app-paginator [totalRecords]="totalRecords" [pageSize]="rowsPerPage" [currentPage]="page"
-    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
-  </app-paginator>
 
+  <app-paginator
+    [totalRecords]="totalRecords"
+    [pageSize]="rowsPerPage"
+    [currentPage]="page"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-paginator>
 </div>

@@ -1,72 +1,75 @@
-<div class="modal-header">
-  <h4 class="modal-title">إضافة نتيجة للتحليل</h4>
-  <button type="button" class="btn-close" (click)="onCancel()"></button>
-</div>
+<app-dialog-wrapper
+  [visible]="true"
+  title="إضافة نتيجة الاستقصاء"
+  subtitle="تحديث النتيجة والملف المرفق - العيادة الأذنية"
+  icon="pi pi-file-edit"
+  width="40rem"
+  [useDefaultFooter]="false"
+  (hide)="onCancel()">
+  <form [formGroup]="investigationForm" class="edit-dialog-form">
+    <input type="hidden" formControlName="type" />
 
-<div class="modal-body">
-  <form [formGroup]="investigationForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <!-- معلومات التحليل (للعرض فقط) -->
-      <div class="col-md-6 mb-3">
-        <label class="form-label">رقم ملف المريض</label>
-        <input type="text" class="form-control" [value]="investigation.applicantFileNumber" readonly>
+    <h6 class="section-title">النتيجة</h6>
+    <div class="row g-3 mb-3">
+      <div class="col-12">
+        <label class="form-label mb-2">النتيجة <span class="text-danger">*</span></label>
+        <textarea
+          class="form-control"
+          formControlName="result"
+          rows="4"
+          placeholder="أدخل نتيجة التحليل"></textarea>
       </div>
+    </div>
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label">نوع التحليل</label>
-        <input type="text" class="form-control" [value]="investigation.type" readonly>
+    <h6 class="section-title mt-4">حالة التحليل</h6>
+    <div class="row g-3 mb-3">
+      <div class="col-12">
+        <label class="form-label mb-2">الحالة</label>
+        <input type="text" class="form-control" formControlName="status" readonly />
+        <div class="form-text">تتحدّث تلقائياً عند إدخال النتيجة</div>
       </div>
+    </div>
 
-      <!-- النتيجة (قابل للتعديل) -->
-      <div class="col-md-6 mb-3">
-        <label class="form-label">النتيجة <span class="text-danger">*</span></label>
-        <textarea class="form-control" formControlName="result" rows="4" placeholder="أدخل نتيجة التحليل"></textarea>
-      </div>
-
-      <!-- الحالة (تحديث تلقائي) -->
-      <div class="col-md-6 mb-3">
-        <label class="form-label">الحالة</label>
-        <select class="form-select" formControlName="status">
-          <option value="مؤجل">مؤجل</option>
-          <option value="مكتمل">مكتمل</option>
-        </select>
-        <div class="form-text">تتحديث تلقائياً عند إدخال النتيجة</div>
-      </div>
-
-      <!-- المرفق الحالي -->
-      <div class="col-12 mb-3" *ngIf="investigation.attachment">
-        <label class="form-label">الملف المرفق الحالي</label>
-        <div class="d-flex align-items-center">
-          <button type="button" class="btn btn-outline-primary btn-sm me-2" (click)="openFile(investigation.attachment)">
+    @if (investigation.attachment) {
+      <h6 class="section-title mt-4">الملف المرفق الحالي</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="openFile(investigation.attachment)">
             <i class="pi pi-download me-1"></i>
             عرض الملف
           </button>
-          <span class="text-muted small">{{ investigation.attachment }}</span>
         </div>
       </div>
+    }
 
-      <!-- رفع ملف جديد -->
-      <div class="col-12 mb-3">
-        <label class="form-label">رفع ملف جديد (اختياري)</label>
-        <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*,.pdf,.doc,.docx">
+    <h6 class="section-title mt-4">الملف المرفق</h6>
+    <div class="row g-3 mb-3">
+      <div class="col-12">
+        <label class="form-label mb-2">رفع ملف جديد (اختياري)</label>
+        <input type="file" class="form-control" accept="image/*,.pdf,.doc,.docx" (change)="onFileSelected($event)" />
         <div class="form-text">يمكنك رفع ملفات PDF، Word، أو الصور</div>
-        
-        <!-- معاينة الملف الجديد -->
-        <div *ngIf="previewUrl && previewUrl.startsWith('data:')" class="preview-container mt-3">
-          <img [src]="previewUrl" 
-               alt="معاينة المرفق" 
-               class="img-fluid rounded" 
-               style="max-height: 200px;">
-        </div>
+        @if (previewUrl && previewUrl.startsWith('data:')) {
+          <div class="preview-container mt-3">
+            <img [src]="previewUrl" alt="معاينة المرفق" class="img-fluid rounded preview-img" />
+          </div>
+        }
       </div>
     </div>
   </form>
-</div>
 
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="onCancel()">إلغاء</button>
-  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="loading || investigationForm.invalid">
-    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-    {{ loading ? 'جاري الحفظ...' : 'حفظ النتيجة' }}
-  </button>
-</div>
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إلغاء"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="onCancel()"></p-button>
+    <p-button
+      label="حفظ التعديل"
+      icon="pi pi-save"
+      severity="primary"
+      [disabled]="investigationForm.invalid || loading"
+      [loading]="loading"
+      (onClick)="onSubmit()"></p-button>
+  </div>
+</app-dialog-wrapper>

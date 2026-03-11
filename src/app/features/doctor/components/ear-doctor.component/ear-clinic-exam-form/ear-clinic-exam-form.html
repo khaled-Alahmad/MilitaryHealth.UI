@@ -1,556 +1,222 @@
-<!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <!-- الهيدر -->
-    <div class="modal-header">
-      <h5 class="modal-title">إضافة فحص أذن وأنف وحنجرة</h5>
-      <button type="button" class="btn-close ms-0 me-auto" (click)="closeModal()"></button>
-    </div>
-    <!-- البودي -->
-    <div class="modal-body">
-      <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>
-        
-        <!-- قسم الأذن -->
-        <h6 class="section-title mb-3">الأذن</h6>
-        
-        <!-- غشاء الطبل -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label">غشاء الطبل (يمين): <span class="text-danger">*</span></label>
-            <div class="d-flex flex-wrap gap-3 mb-2">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightTympanicMembrane"
-                  id="rightTympanicMembrane_normal"
-                  value="سليم"
-                  formControlName="rightTympanicMembrane" />
-                <label class="form-check-label" for="rightTympanicMembrane_normal">سليم</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightTympanicMembrane"
-                  id="rightTympanicMembrane_other"
-                  value="غير ذلك"
-                  formControlName="rightTympanicMembrane" />
-                <label class="form-check-label" for="rightTympanicMembrane_other">غير ذلك</label>
-              </div>
+<app-dialog-wrapper
+  [(visible)]="showModal"
+  title="إضافة فحص أذن وأنف وحنجرة"
+  subtitle="إدخال بيانات الفحص الأذني بشكل كامل"
+  icon="pi pi-ear-silence"
+  width="90rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <form [formGroup]="examForm" novalidate class="edit-dialog-form exam-form">
+
+    <section class="form-section">
+      <h6 class="section-title">الأذن</h6>
+
+      <div class="ear-form-two-col">
+        <div class="ear-form-field">
+          <label class="form-label">غشاء الطبل (يمين) <span class="text-danger">*</span></label>
+          <div class="system-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rightTympanicMembrane" id="rightTympanicMembrane_normal" value="سليم" formControlName="rightTympanicMembrane" />
+              <label class="form-check-label" for="rightTympanicMembrane_normal">سليم</label>
             </div>
-            <div *ngIf="examForm.get('rightTympanicMembrane')?.value === 'غير ذلك'" class="mt-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="rightTympanicMembraneOther"
-                placeholder="أدخل تفاصيل غشاء الطبل (يمين)"
-                [class.is-invalid]="examForm.get('rightTympanicMembraneOther')?.invalid && examForm.get('rightTympanicMembraneOther')?.touched" />
-              <div class="invalid-feedback" *ngIf="getErrorMessage('rightTympanicMembraneOther')">
-                <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('rightTympanicMembraneOther') }}
-              </div>
-            </div>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('rightTympanicMembrane')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('rightTympanicMembrane') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('rightTympanicMembrane')">
-              <i class="pi pi-check-circle"></i> صحيح
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rightTympanicMembrane" id="rightTympanicMembrane_other" value="غير ذلك" formControlName="rightTympanicMembrane" />
+              <label class="form-check-label" for="rightTympanicMembrane_other">غير ذلك</label>
             </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">غشاء الطبل (يسار): <span class="text-danger">*</span></label>
-            <div class="d-flex flex-wrap gap-3 mb-2">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftTympanicMembrane"
-                  id="leftTympanicMembrane_normal"
-                  value="سليم"
-                  formControlName="leftTympanicMembrane" />
-                <label class="form-check-label" for="leftTympanicMembrane_normal">سليم</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftTympanicMembrane"
-                  id="leftTympanicMembrane_other"
-                  value="غير ذلك"
-                  formControlName="leftTympanicMembrane" />
-                <label class="form-check-label" for="leftTympanicMembrane_other">غير ذلك</label>
-              </div>
+          @if (examForm.get('rightTympanicMembrane')?.value === 'غير ذلك') {
+            <div class="other-input-row">
+              <input type="text" class="form-control" formControlName="rightTympanicMembraneOther" placeholder="تفاصيل (يمين)" [class.is-invalid]="examForm.get('rightTympanicMembraneOther')?.invalid && examForm.get('rightTympanicMembraneOther')?.touched" />
             </div>
-            <div *ngIf="examForm.get('leftTympanicMembrane')?.value === 'غير ذلك'" class="mt-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="leftTympanicMembraneOther"
-                placeholder="أدخل تفاصيل غشاء الطبل (يسار)"
-                [class.is-invalid]="examForm.get('leftTympanicMembraneOther')?.invalid && examForm.get('leftTympanicMembraneOther')?.touched" />
-              <div class="invalid-feedback" *ngIf="getErrorMessage('leftTympanicMembraneOther')">
-                <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('leftTympanicMembraneOther') }}
-              </div>
+          }
+          <div class="invalid-feedback" *ngIf="getErrorMessage('rightTympanicMembrane')">{{ getErrorMessage('rightTympanicMembrane') }}</div>
+        </div>
+        <div class="ear-form-field">
+          <label class="form-label">غشاء الطبل (يسار) <span class="text-danger">*</span></label>
+          <div class="system-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="leftTympanicMembrane" id="leftTympanicMembrane_normal" value="سليم" formControlName="leftTympanicMembrane" />
+              <label class="form-check-label" for="leftTympanicMembrane_normal">سليم</label>
             </div>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('leftTympanicMembrane')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('leftTympanicMembrane') }}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="leftTympanicMembrane" id="leftTympanicMembrane_other" value="غير ذلك" formControlName="leftTympanicMembrane" />
+              <label class="form-check-label" for="leftTympanicMembrane_other">غير ذلك</label>
             </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('leftTympanicMembrane')">
-              <i class="pi pi-check-circle"></i> صحيح
+          </div>
+          @if (examForm.get('leftTympanicMembrane')?.value === 'غير ذلك') {
+            <div class="other-input-row">
+              <input type="text" class="form-control" formControlName="leftTympanicMembraneOther" placeholder="تفاصيل (يسار)" [class.is-invalid]="examForm.get('leftTympanicMembraneOther')?.invalid && examForm.get('leftTympanicMembraneOther')?.touched" />
             </div>
+          }
+          <div class="invalid-feedback" *ngIf="getErrorMessage('leftTympanicMembrane')">{{ getErrorMessage('leftTympanicMembrane') }}</div>
+        </div>
+      </div>
+
+      <div class="row g-3 field-row">
+        <div class="col-md-6">
+          <label class="form-label">السمع (يمين) R <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="rightHearing" placeholder="أدخل القيمة" [class.is-invalid]="examForm.get('rightHearing')?.invalid && examForm.get('rightHearing')?.touched" />
+          <div class="invalid-feedback" *ngIf="getErrorMessage('rightHearing')">{{ getErrorMessage('rightHearing') }}</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">السمع (يسار) L <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="leftHearing" placeholder="أدخل القيمة" [class.is-invalid]="examForm.get('leftHearing')?.invalid && examForm.get('leftHearing')?.touched" />
+          <div class="invalid-feedback" *ngIf="getErrorMessage('leftHearing')">{{ getErrorMessage('leftHearing') }}</div>
+        </div>
+      </div>
+
+      <div class="resonator-section">
+        <label class="form-label">الرنانات W <span class="text-danger">*</span></label>
+        <div class="resonator-line">
+          <span class="resonator-display">{{ examForm.get('resonators')?.value || '—' }}</span>
+          <span class="text-muted small">اختر الرمز:</span>
+        </div>
+        <div class="resonator-options-grid">
+          @for (option of resonatorOptions; track option) {
+            <button type="button" class="symbol-option-btn" [class.active]="examForm.get('resonators')?.value === option" (click)="selectResonator(option)">{{ option }}</button>
+          }
+        </div>
+        <div class="invalid-feedback" *ngIf="getErrorMessage('resonators')">{{ getErrorMessage('resonators') }}</div>
+      </div>
+
+      <div class="ear-form-two-col">
+        <div class="ear-form-field">
+          <label class="form-label">اختبار الهمس (يمين) <span class="text-danger">*</span></label>
+          <div class="system-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rightWhisperTest" id="rightWhisperTest_good" value="جيدة" formControlName="rightWhisperTest" />
+              <label class="form-check-label" for="rightWhisperTest_good">جيدة</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rightWhisperTest" id="rightWhisperTest_other" value="غير ذلك" formControlName="rightWhisperTest" />
+              <label class="form-check-label" for="rightWhisperTest_other">غير ذلك</label>
+            </div>
+          </div>
+          @if (examForm.get('rightWhisperTest')?.value === 'غير ذلك') {
+            <div class="other-input-row">
+              <input type="text" class="form-control" formControlName="rightWhisperTestOther" placeholder="التفاصيل" />
+            </div>
+          }
+          <div class="invalid-feedback" *ngIf="getErrorMessage('rightWhisperTest')">{{ getErrorMessage('rightWhisperTest') }}</div>
+        </div>
+        <div class="ear-form-field">
+          <label class="form-label">اختبار الهمس (يسار) <span class="text-danger">*</span></label>
+          <div class="system-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="leftWhisperTest" id="leftWhisperTest_good" value="جيدة" formControlName="leftWhisperTest" />
+              <label class="form-check-label" for="leftWhisperTest_good">جيدة</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="leftWhisperTest" id="leftWhisperTest_other" value="غير ذلك" formControlName="leftWhisperTest" />
+              <label class="form-check-label" for="leftWhisperTest_other">غير ذلك</label>
+            </div>
+          </div>
+          @if (examForm.get('leftWhisperTest')?.value === 'غير ذلك') {
+            <div class="other-input-row">
+              <input type="text" class="form-control" formControlName="leftWhisperTestOther" placeholder="التفاصيل" />
+            </div>
+          }
+          <div class="invalid-feedback" *ngIf="getErrorMessage('leftWhisperTest')">{{ getErrorMessage('leftWhisperTest') }}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h6 class="section-title">الأنف</h6>
+      <div class="ear-form-two-col">
+        <div class="ear-form-field">
+          <label class="form-label">ضخامة قرينات (يمين)</label>
+          <div class="system-options">
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightHugeMates" id="rightHugeMates_none" value="لا يوجد" formControlName="rightHugeMates" /><label class="form-check-label" for="rightHugeMates_none">لا يوجد</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightHugeMates" id="rightHugeMates_simple" value="بسيطة" formControlName="rightHugeMates" /><label class="form-check-label" for="rightHugeMates_simple">بسيطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightHugeMates" id="rightHugeMates_medium" value="متوسطة" formControlName="rightHugeMates" /><label class="form-check-label" for="rightHugeMates_medium">متوسطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightHugeMates" id="rightHugeMates_severe" value="شديدة" formControlName="rightHugeMates" /><label class="form-check-label" for="rightHugeMates_severe">شديدة</label></div>
           </div>
         </div>
-
-        <!-- السمع -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label">السمع (يمين) R: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" formControlName="rightHearing"
-              [class.is-invalid]="examForm.get('rightHearing')?.invalid && examForm.get('rightHearing')?.touched"
-              [class.is-valid]="isFieldValid('rightHearing')" />
-            <div class="invalid-feedback" *ngIf="getErrorMessage('rightHearing')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('rightHearing') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('rightHearing')">
-              <i class="pi pi-check-circle"></i> صحيح
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">السمع (يسار) L: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" formControlName="leftHearing"
-              [class.is-invalid]="examForm.get('leftHearing')?.invalid && examForm.get('leftHearing')?.touched"
-              [class.is-valid]="isFieldValid('leftHearing')" />
-            <div class="invalid-feedback" *ngIf="getErrorMessage('leftHearing')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('leftHearing') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('leftHearing')">
-              <i class="pi pi-check-circle"></i> صحيح
-            </div>
+        <div class="ear-form-field">
+          <label class="form-label">ضخامة قرينات (يسار)</label>
+          <div class="system-options">
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftHugeMates" id="leftHugeMates_none" value="لا يوجد" formControlName="leftHugeMates" /><label class="form-check-label" for="leftHugeMates_none">لا يوجد</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftHugeMates" id="leftHugeMates_simple" value="بسيطة" formControlName="leftHugeMates" /><label class="form-check-label" for="leftHugeMates_simple">بسيطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftHugeMates" id="leftHugeMates_medium" value="متوسطة" formControlName="leftHugeMates" /><label class="form-check-label" for="leftHugeMates_medium">متوسطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftHugeMates" id="leftHugeMates_severe" value="شديدة" formControlName="leftHugeMates" /><label class="form-check-label" for="leftHugeMates_severe">شديدة</label></div>
           </div>
         </div>
-
-        <!-- الرنانات -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label">الرنانات W: <span class="text-danger">*</span></label>
-            <div class="resonator-selector">
-              <div class="input-group">
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary resonator-nav-btn"
-                  (click)="navigateResonator('prev')"
-                  title="السابق">
-                  <i class="pi pi-chevron-right"></i>
-                </button>
-                <input 
-                  type="text" 
-                  class="form-control text-center resonator-input" 
-                  formControlName="resonators"
-                  [class.is-invalid]="examForm.get('resonators')?.invalid && examForm.get('resonators')?.touched"
-                  [class.is-valid]="isFieldValid('resonators')"
-                  readonly
-                  [value]="examForm.get('resonators')?.value || ''" />
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary resonator-nav-btn"
-                  (click)="navigateResonator('next')"
-                  title="التالي">
-                  <i class="pi pi-chevron-left"></i>
-                </button>
-              </div>
-              <div class="resonator-options mt-2">
-                <div class="d-flex flex-wrap gap-2">
-                  @for (option of resonatorOptions; track option) {
-                    <button
-                      type="button"
-                      class="btn btn-sm resonator-option-btn"
-                      [class.active]="examForm.get('resonators')?.value === option"
-                      (click)="selectResonator(option)">
-                      {{ option }}
-                    </button>
-                  }
-                </div>
-              </div>
-            </div>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('resonators')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('resonators') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('resonators')">
-              <i class="pi pi-check-circle"></i> صحيح
-            </div>
+      </div>
+      <div class="ear-form-two-col">
+        <div class="ear-form-field">
+          <label class="form-label">الوتيرة - انحراف OL</label>
+          <div class="system-options">
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightString" id="rightString_none" value="لا يوجد" formControlName="rightString" /><label class="form-check-label" for="rightString_none">لا يوجد</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightString" id="rightString_simple" value="بسيطة" formControlName="rightString" /><label class="form-check-label" for="rightString_simple">بسيطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightString" id="rightString_medium" value="متوسطة" formControlName="rightString" /><label class="form-check-label" for="rightString_medium">متوسطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="rightString" id="rightString_severe" value="شديدة" formControlName="rightString" /><label class="form-check-label" for="rightString_severe">شديدة</label></div>
           </div>
         </div>
-
-        <!-- اختبار الهمس -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label">اختبار الهمس (يمين): <span class="text-danger">*</span></label>
-            <div class="d-flex flex-wrap gap-3 mb-2">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightWhisperTest"
-                  id="rightWhisperTest_good"
-                  value="جيدة"
-                  formControlName="rightWhisperTest" />
-                <label class="form-check-label" for="rightWhisperTest_good">جيدة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightWhisperTest"
-                  id="rightWhisperTest_other"
-                  value="غير ذلك"
-                  formControlName="rightWhisperTest" />
-                <label class="form-check-label" for="rightWhisperTest_other">غير ذلك</label>
-              </div>
-            </div>
-            <div *ngIf="examForm.get('rightWhisperTest')?.value === 'غير ذلك'" class="mt-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="rightWhisperTestOther"
-                placeholder="أدخل تفاصيل اختبار الهمس (يمين)" />
-            </div>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('rightWhisperTest')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('rightWhisperTest') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('rightWhisperTest')">
-              <i class="pi pi-check-circle"></i> صحيح
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">اختبار الهمس (يسار): <span class="text-danger">*</span></label>
-            <div class="d-flex flex-wrap gap-3 mb-2">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftWhisperTest"
-                  id="leftWhisperTest_good"
-                  value="جيدة"
-                  formControlName="leftWhisperTest" />
-                <label class="form-check-label" for="leftWhisperTest_good">جيدة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftWhisperTest"
-                  id="leftWhisperTest_other"
-                  value="غير ذلك"
-                  formControlName="leftWhisperTest" />
-                <label class="form-check-label" for="leftWhisperTest_other">غير ذلك</label>
-              </div>
-            </div>
-            <div *ngIf="examForm.get('leftWhisperTest')?.value === 'غير ذلك'" class="mt-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="leftWhisperTestOther"
-                placeholder="أدخل تفاصيل اختبار الهمس (يسار)" />
-            </div>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('leftWhisperTest')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('leftWhisperTest') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('leftWhisperTest')">
-              <i class="pi pi-check-circle"></i> صحيح
-            </div>
+        <div class="ear-form-field">
+          <label class="form-label">الوتيرة - انحراف OR</label>
+          <div class="system-options">
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftString" id="leftString_none" value="لا يوجد" formControlName="leftString" /><label class="form-check-label" for="leftString_none">لا يوجد</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftString" id="leftString_simple" value="بسيطة" formControlName="leftString" /><label class="form-check-label" for="leftString_simple">بسيطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftString" id="leftString_medium" value="متوسطة" formControlName="leftString" /><label class="form-check-label" for="leftString_medium">متوسطة</label></div>
+            <div class="form-check"><input class="form-check-input" type="radio" name="leftString" id="leftString_severe" value="شديدة" formControlName="leftString" /><label class="form-check-label" for="leftString_severe">شديدة</label></div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- قسم الأنف -->
-        <h6 class="section-title mb-3 mt-4">الأنف</h6>
-
-        <!-- ضخامة القرينات -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label mb-2">ضخامة قرينات (يمين):</label>
-            <div class="d-flex flex-wrap gap-3">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightHugeMates"
-                  id="rightHugeMates_none"
-                  value="لا يوجد"
-                  formControlName="rightHugeMates" />
-                <label class="form-check-label" for="rightHugeMates_none">لا يوجد</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightHugeMates"
-                  id="rightHugeMates_simple"
-                  value="بسيطة"
-                  formControlName="rightHugeMates" />
-                <label class="form-check-label" for="rightHugeMates_simple">بسيطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightHugeMates"
-                  id="rightHugeMates_medium"
-                  value="متوسطة"
-                  formControlName="rightHugeMates" />
-                <label class="form-check-label" for="rightHugeMates_medium">متوسطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightHugeMates"
-                  id="rightHugeMates_severe"
-                  value="شديدة"
-                  formControlName="rightHugeMates" />
-                <label class="form-check-label" for="rightHugeMates_severe">شديدة</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label mb-2">ضخامة قرينات (يسار):</label>
-            <div class="d-flex flex-wrap gap-3">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftHugeMates"
-                  id="leftHugeMates_none"
-                  value="لا يوجد"
-                  formControlName="leftHugeMates" />
-                <label class="form-check-label" for="leftHugeMates_none">لا يوجد</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftHugeMates"
-                  id="leftHugeMates_simple"
-                  value="بسيطة"
-                  formControlName="leftHugeMates" />
-                <label class="form-check-label" for="leftHugeMates_simple">بسيطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftHugeMates"
-                  id="leftHugeMates_medium"
-                  value="متوسطة"
-                  formControlName="leftHugeMates" />
-                <label class="form-check-label" for="leftHugeMates_medium">متوسطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftHugeMates"
-                  id="leftHugeMates_severe"
-                  value="شديدة"
-                  formControlName="leftHugeMates" />
-                <label class="form-check-label" for="leftHugeMates_severe">شديدة</label>
-              </div>
-            </div>
-          </div>
+    <section class="form-section">
+      <h6 class="section-title">الفم</h6>
+      <div class="mouth-options">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mouthNone" [checked]="isMouthOptionSelected('لا يوجد')" (change)="toggleMouthOption('لا يوجد', $event)" />
+          <label class="form-check-label" for="mouthNone">لا يوجد</label>
         </div>
-
-        <!-- الوتيرة -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label mb-2">الوتيرة - انحراف OL:</label>
-            <div class="d-flex flex-wrap gap-3">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightString"
-                  id="rightString_none"
-                  value="لا يوجد"
-                  formControlName="rightString" />
-                <label class="form-check-label" for="rightString_none">لا يوجد</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightString"
-                  id="rightString_simple"
-                  value="بسيطة"
-                  formControlName="rightString" />
-                <label class="form-check-label" for="rightString_simple">بسيطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightString"
-                  id="rightString_medium"
-                  value="متوسطة"
-                  formControlName="rightString" />
-                <label class="form-check-label" for="rightString_medium">متوسطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="rightString"
-                  id="rightString_severe"
-                  value="شديدة"
-                  formControlName="rightString" />
-                <label class="form-check-label" for="rightString_severe">شديدة</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label mb-2">الوتيرة - انحراف OR:</label>
-            <div class="d-flex flex-wrap gap-3">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftString"
-                  id="leftString_none"
-                  value="لا يوجد"
-                  formControlName="leftString" />
-                <label class="form-check-label" for="leftString_none">لا يوجد</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftString"
-                  id="leftString_simple"
-                  value="بسيطة"
-                  formControlName="leftString" />
-                <label class="form-check-label" for="leftString_simple">بسيطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftString"
-                  id="leftString_medium"
-                  value="متوسطة"
-                  formControlName="leftString" />
-                <label class="form-check-label" for="leftString_medium">متوسطة</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="leftString"
-                  id="leftString_severe"
-                  value="شديدة"
-                  formControlName="leftString" />
-                <label class="form-check-label" for="leftString_severe">شديدة</label>
-              </div>
-            </div>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mouthNormal" [checked]="isMouthOptionSelected('سوي')" (change)="toggleMouthOption('سوي', $event)" />
+          <label class="form-check-label" for="mouthNormal">سوي</label>
         </div>
-
-        <!-- الفم -->
-        <h6 class="section-title mb-3 mt-4">الفم</h6>
-        <div class="row g-3 mb-3">
-          <div class="col-12">
-            <div class="ms-3">
-              <div class="form-check mb-2">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="mouthNone"
-                  [checked]="isMouthOptionSelected('لا يوجد')"
-                  (change)="toggleMouthOption('لا يوجد', $event)" />
-                <label class="form-check-label" for="mouthNone">لا يوجد</label>
-              </div>
-              <div class="form-check mb-2">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="mouthNormal"
-                  [checked]="isMouthOptionSelected('سوي')"
-                  (change)="toggleMouthOption('سوي', $event)" />
-                <label class="form-check-label" for="mouthNormal">سوي</label>
-              </div>
-              <div class="form-check mb-2">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="mouthMalocclusion"
-                  [checked]="isMouthOptionSelected('سوء إطباق')"
-                  (change)="toggleMouthOption('سوء إطباق', $event)" />
-                <label class="form-check-label" for="mouthMalocclusion">سوء إطباق</label>
-              </div>
-              <div class="form-check mb-2">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="mouthClick"
-                  [checked]="isMouthOptionSelected('طَقّة مفصل')"
-                  (change)="toggleMouthOption('طَقّة مفصل', $event)" />
-                <label class="form-check-label" for="mouthClick">طَقّة مفصل</label>
-              </div>
-              <div class="form-check mb-2">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="mouthSubluxation"
-                  [checked]="isMouthOptionSelected('تحت خلع مفصل فكي')"
-                  (change)="toggleMouthOption('تحت خلع مفصل فكي', $event)" />
-                <label class="form-check-label" for="mouthSubluxation">تحت خلع مفصل فكي</label>
-              </div>
-            </div>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('mouth')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('mouth') }}
-            </div>
-            <div class="valid-feedback" *ngIf="isFieldValid('mouth')">
-              <i class="pi pi-check-circle"></i> صحيح
-            </div>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mouthMalocclusion" [checked]="isMouthOptionSelected('سوء إطباق')" (change)="toggleMouthOption('سوء إطباق', $event)" />
+          <label class="form-check-label" for="mouthMalocclusion">سوء إطباق</label>
         </div>
-
-        <!-- أمراض أخرى -->
-        <div class="row g-3 mb-3">
-          <div class="col-12">
-            <label class="form-label">أمراض أخرى:</label>
-            <textarea class="form-control" rows="3" formControlName="otherDiseases"></textarea>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mouthClick" [checked]="isMouthOptionSelected('طَقّة مفصل')" (change)="toggleMouthOption('طَقّة مفصل', $event)" />
+          <label class="form-check-label" for="mouthClick">طَقّة مفصل</label>
         </div>
-
-        <!-- النتيجة -->
-        <h6 class="section-title mb-3 mt-4">النتيجة</h6>
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label">مقبول / مرفوض / تأجيل: <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="resultID"
-              [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
-              [class.is-valid]="isFieldValid('resultID')">
-              <option *ngFor="let result of results" [value]="result.resultID">
-                {{ result.description }}
-              </option>
-            </select>
-            <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">
-              <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('resultID') }}
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">السبب:</label>
-            <input type="text" class="form-control" formControlName="reason" />
-          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mouthSubluxation" [checked]="isMouthOptionSelected('تحت خلع مفصل فكي')" (change)="toggleMouthOption('تحت خلع مفصل فكي', $event)" />
+          <label class="form-check-label" for="mouthSubluxation">تحت خلع مفصل فكي</label>
         </div>
+      </div>
+      <div class="invalid-feedback" *ngIf="getErrorMessage('mouth')">{{ getErrorMessage('mouth') }}</div>
+    </section>
 
-        <!-- الأزرار -->
-        <div class="modal-footer mt-4">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">إلغاء</button>
-          <button type="submit" class="btn btn-primary" [disabled]="examForm.invalid || loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-            حفظ الفحص
-          </button>
+    <section class="form-section">
+      <h6 class="section-title">أمراض أخرى</h6>
+      <textarea class="form-control" rows="2" formControlName="otherDiseases" placeholder="اختياري"></textarea>
+    </section>
+
+    <section class="form-section">
+      <h6 class="section-title">النتيجة</h6>
+      <div class="row g-3 result-reason-row">
+        <div class="col-md-6">
+          <label class="form-label">مقبول / مرفوض / تأجيل <span class="text-danger">*</span></label>
+          <select class="form-select" formControlName="resultID" [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched">
+            <option *ngFor="let result of results" [value]="result.resultID">{{ result.description }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">{{ getErrorMessage('resultID') }}</div>
         </div>
-      </form>
-    </div>
+        <div class="col-md-6">
+          <label class="form-label">السبب</label>
+          <input type="text" class="form-control" formControlName="reason" placeholder="اختياري" />
+        </div>
+      </div>
+    </section>
+  </form>
+
+  <div dialog-footer class="dialog-actions">
+    <p-button label="إلغاء" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="closeModal()"></p-button>
+    <p-button label="حفظ الفحص" icon="pi pi-save" severity="primary" [loading]="loading" [disabled]="examForm.invalid || loading" (onClick)="onSubmit()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

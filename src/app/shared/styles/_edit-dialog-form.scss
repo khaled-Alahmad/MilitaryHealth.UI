@@ -73,6 +73,59 @@
   display: block;
 }
 
+/* راديو وشيك بوكس: تباعد واضح بين النص والاختيار ومنع تداخل النص */
+.edit-dialog-form .form-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  white-space: nowrap;
+
+  .form-check-input {
+    margin: 0;
+    width: 1.05rem;
+    height: 1.05rem;
+    min-width: 1.05rem;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .form-check-label {
+    margin: 0;
+    cursor: pointer;
+    line-height: 1.4;
+    user-select: none;
+  }
+}
+
+/* مجموعة خيارات (راديو): مسافة مريحة بين كل خيار والآخر */
+.edit-dialog-form .system-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* مجموعة شيك بوكس (مثل الفم): تباعد أوضح لسهولة النقر وعدم تداخل الكلام */
+.edit-dialog-form .mouth-options,
+.edit-dialog-form .checkbox-options-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+
+  .form-check {
+    padding: 0.35rem 0.5rem;
+    margin: 0;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: rgba(66, 129, 119, 0.06);
+    }
+  }
+}
+
 .form-control {
   padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;

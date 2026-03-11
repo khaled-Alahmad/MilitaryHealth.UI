@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/archive/archive.routes.ts"],
-  "sourcesContent": ["import { Routes } from '@angular/router';\r\nimport { authGuard } from '../../core/guards/auth-guard';\r\nimport { UserRoles } from '../../core/models/enums/user-roles.enum';\r\n\r\nexport const   Archive_ROUTES: Routes = [\r\n  {\r\n    path: '',\r\n    loadComponent: () =>\r\n      import('./components/archive-list/archive-list').then(m => m.ArchiveList),\r\n    canActivate: [authGuard],\r\n    data: { roles: [UserRoles.Diwan] }\r\n  }\r\n];\r\n"],
-  "mappings": ";;;;;;;;;;;;;;AAIO,IAAQ,iBAAyB;EACtC;IACE,MAAM;IACN,eAAe,MACb,OAAO,qBAAwC,EAAE,KAAK,OAAK,EAAE,WAAW;IAC1E,aAAa,CAAC,SAAS;IACvB,MAAM,EAAE,OAAO,CAAC,UAAU,KAAK,EAAC;;;",
-  "names": []
-}

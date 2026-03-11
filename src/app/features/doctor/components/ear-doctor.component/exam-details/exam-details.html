@@ -1,149 +1,104 @@
-<div class="professional-modal-container">
-  <!-- Modal Header with Brand Identity -->
-  <div class="modal-header-professional">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-file-export"></i>
-      </div>
-      <div class="header-text">
-        <h3 class="modal-title-professional">تفاصيل فحص الأذن والأنف والحنجرة</h3>
-        <span class="modal-subtitle">رقم الملف: {{ exam.applicantFileNumber }}</span>
-      </div>
-    </div>
-    <button type="button" class="btn-close-professional" (click)="closeModal()">
-      <i class="pi pi-times"></i>
-    </button>
-  </div>
-
-  <div class="modal-body-professional">
-    <!-- Section Header -->
-    <div class="section-header">
-      <i class="pi pi-ear-silence"></i>
-      <h4>الأذن</h4>
-    </div>
-    
-    <!-- غشاء الطبل -->
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-shield"></i> غشاء الطبل (يمين)</label>
-        <div class="info-value">{{ exam.rightTympanicMembrane || 'غير محدد' }}</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-shield"></i> غشاء الطبل (يسار)</label>
-        <div class="info-value">{{ exam.leftTympanicMembrane || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <!-- Hearing Tests Section -->
-    <div class="section-header">
-      <i class="pi pi-volume-up"></i>
-      <h4>اختبارات السمع</h4>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-volume-up"></i> السمع (يمين) R</label>
-        <div class="info-value">{{ exam.rightHearing || 'غير محدد' }}</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-volume-up"></i> السمع (يسار) W</label>
-        <div class="info-value">{{ exam.leftHearing || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-volume-up"></i> الرنانات</label>
-        <div class="info-value">{{ exam.resonators || 'غير محدد' }}</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-volume-down"></i> اختبار الهمس (يمين)</label>
-        <div class="info-value">{{ exam.rightWhisperTest || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-volume-down"></i> اختبار الهمس (يسار)</label>
-        <div class="info-value">{{ exam.leftWhisperTest || 'غير محدد' }}</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-tag"></i> ضخامة قرينات</label>
-        <div class="info-value">
-          يمين: {{ exam.isRightHugeMates ? 'نعم' : 'لا' }} | 
-          يسار: {{ exam.isLeftHugeMates ? 'نعم' : 'لا' }}
+<app-dialog-wrapper
+  [visible]="true"
+  [subtitle]="'رقم الملف: ' + (exam.applicantFileNumber || '')"
+  title="تفاصيل فحص الأذن والأنف والحنجرة"
+  icon="pi pi-ear-silence"
+  width="70rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <div class="details-body">
+    <div class="details-two-col">
+      <div class="info-card">
+        <h6 class="details-section-title">الأذن</h6>
+        <div class="detail-rows">
+          <div class="detail-row">
+            <span class="detail-label">غشاء الطبل (يمين)</span>
+            <span class="detail-value">{{ exam.rightTympanicMembrane || '—' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">غشاء الطبل (يسار)</span>
+            <span class="detail-value">{{ exam.leftTympanicMembrane || '—' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">السمع (يمين) R</span>
+            <span class="detail-value">{{ exam.rightHearing || '—' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">السمع (يسار) L</span>
+            <span class="detail-value">{{ exam.leftHearing || '—' }}</span>
+          </div>
+          <div class="detail-row detail-row-resonator">
+            <span class="detail-label">الرنانات W</span>
+            <span class="resonator-display">{{ exam.resonators || '—' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">اختبار الهمس (يمين)</span>
+            <span class="detail-value">{{ exam.rightWhisperTest || '—' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">اختبار الهمس (يسار)</span>
+            <span class="detail-value">{{ exam.leftWhisperTest || '—' }}</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Nose Section -->
-    <div class="section-header">
-      <i class="pi pi-send"></i>
-      <h4>الأنف</h4>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-angle-right"></i> الوتيرة - انحراف OL</label>
-        <div class="info-value">{{ exam.rightString || 'غير محدد' }}</div>
-      </div>
-      <div class="form-field">
-        <label><i class="pi pi-angle-left"></i> الوتيرة - انحراف OR</label>
-        <div class="info-value">{{ exam.leftString || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <!-- Mouth Section -->
-    <div class="section-header">
-      <i class="pi pi-comment"></i>
-      <h4>الفم</h4>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-user"></i> الفم</label>
-        <div class="info-value">{{ exam.mouth || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-exclamation-triangle"></i> أمراض أخرى</label>
-        <div class="info-value">{{ exam.otherDiseases || 'غير محدد' }}</div>
-      </div>
-    </div>
-
-    <!-- Result Section -->
-    <div class="section-header">
-      <i class="pi pi-check-circle"></i>
-      <h4>النتيجة</h4>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label><i class="pi pi-flag"></i> النتيجة</label>
-        <div class="info-value result-badge" 
-             [class.result-accepted]="exam.result?.description === 'مقبول'" 
-             [class.result-rejected]="exam.result?.description === 'مرفوض'"
-             [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
-          {{ exam.result?.description || 'غير محدد' }}
+      <div class="info-card">
+        <h6 class="details-section-title">الأنف</h6>
+        <div class="detail-rows">
+          <div class="detail-row">
+            <span class="detail-label">ضخامة قرينات (يمين)</span>
+<span class="detail-value">{{ getHugeMatesLabel(exam.rightHugeMates ?? exam.isRightHugeMates) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">ضخامة قرينات (يسار)</span>
+          <span class="detail-value">{{ getHugeMatesLabel(exam.leftHugeMates ?? exam.isLeftHugeMates) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">الوتيرة OL</span>
+            <span class="detail-value">{{ exam.rightString || '—' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">الوتيرة OR</span>
+            <span class="detail-value">{{ exam.leftString || '—' }}</span>
+          </div>
         </div>
       </div>
-      <div class="form-field">
-        <label><i class="pi pi-file"></i> السبب</label>
-        <div class="info-value">{{ exam.reason || 'غير محدد' }}</div>
+
+      <div class="info-card">
+        <h6 class="details-section-title">الفم</h6>
+        <div class="detail-value-block">{{ exam.mouth || '—' }}</div>
+      </div>
+
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض أخرى</h6>
+        <div class="detail-value-block">{{ exam.otherDiseases || 'لا يوجد' }}</div>
+      </div>
+
+      <div class="info-card info-card-result">
+        <h6 class="details-section-title">النتيجة</h6>
+        <div
+          class="result-badge"
+          [class.result-accepted]="exam.result?.description === 'مقبول'"
+          [class.result-rejected]="exam.result?.description === 'مرفوض'"
+          [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
+          {{ exam.result?.description || '—' }}
+        </div>
+        @if (exam.reason) {
+          <div class="detail-row mt-2">
+            <span class="detail-label">السبب</span>
+            <span class="detail-value">{{ exam.reason }}</span>
+          </div>
+        }
       </div>
     </div>
   </div>
 
-  <div class="modal-footer-professional">
-    <button 
-      type="button" 
-      class="btn btn-secondary" 
-      (click)="closeModal()">
-      <i class="pi pi-times me-2"></i>
-      إغلاق
-    </button>
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إغلاق"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeModal()"></p-button>
   </div>
-</div>
-
+</app-dialog-wrapper>

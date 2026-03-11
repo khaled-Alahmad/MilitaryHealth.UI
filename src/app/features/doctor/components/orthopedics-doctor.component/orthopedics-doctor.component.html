@@ -1,50 +1,69 @@
-<div class="container mt-3">
-  <!-- البحث عن المريض -->
-  <div class="mb-3">
+<div class="container orthopedics-clinic-page">
+  <app-page-header
+    variant="banner"
+    title="العيادة العظمية"
+    subtitle="إدارة الفحوصات العظمية والاستشارات والتحاليل للمنتسبين"
+    icon="pi pi-bone">
+  </app-page-header>
+
+  <div class="search-panel mb-3">
     <app-search-applicant (applicantSelected)="onApplicantSelected($event)"></app-search-applicant>
   </div>
 
-  <!-- أزرار الإضافة -->
-  <div class="button-group mb-3 d-flex gap-2">
-    <button 
-      class="btn btn-outline-primary" 
-      (click)="addOrthopedicExam()" 
-      *ngIf="!hasOrthopedicExam && selectedApplicant">
+  <div *ngIf="selectedApplicant" class="selected-applicant-card mb-3">
+    <div class="applicant-info">
+      <div class="fw-semibold">{{ selectedApplicant.fullName }}</div>
+      <small class="text-muted">رقم الملف: {{ selectedApplicant.fileNumber }}</small>
+    </div>
+
+    <div class="exam-status">
+      <span *ngIf="checkingOrthopedicExam" class="status-chip status-chip--loading">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        جاري التحقق من وجود فحص سابق...
+      </span>
+      <span *ngIf="!checkingOrthopedicExam && hasOrthopedicExam" class="status-chip status-chip--exists">
+        <i class="pi pi-check-circle me-2"></i>
+        يوجد فحص عظمي سابق
+      </span>
+      <span *ngIf="!checkingOrthopedicExam && !hasOrthopedicExam" class="status-chip status-chip--new">
+        <i class="pi pi-info-circle me-2"></i>
+        لا يوجد فحص سابق
+      </span>
+    </div>
+  </div>
+
+  <div *ngIf="selectedApplicant" class="button-group me-3 mb-3 d-flex gap-2">
+    <button
+      class="btn btn-outline-primary action-btn"
+      [disabled]="checkingOrthopedicExam || hasOrthopedicExam"
+      (click)="addOrthopedicExam()">
+      <i class="pi pi-plus-circle me-1"></i>
       إضافة فحص العظام
     </button>
 
-    <button 
-      class="btn btn-outline-primary" 
-      (click)="addConsultation()" 
-      *ngIf="selectedApplicant">
+    <button class="btn btn-outline-primary action-btn" [disabled]="checkingOrthopedicExam" (click)="addConsultation()">
+      <i class="pi pi-comments me-1"></i>
       طلب استشارة
     </button>
-
-    <button 
-      class="btn btn-outline-primary" 
-      (click)="addInvestigation()" 
-      *ngIf="selectedApplicant ">
+    <button class="btn btn-outline-primary action-btn" [disabled]="checkingOrthopedicExam" (click)="addInvestigation()">
+      <i class="pi pi-file-edit me-1"></i>
       طلب تحليل
     </button>
   </div>
 
-  <!-- مودال فحص العظام -->
   <app-orthopedic-exam-form
     *ngIf="selectedApplicant"
     [applicantFileNumber]="selectedApplicant.fileNumber"
     (examAdded)="onOrthopedicExamAdded()">
   </app-orthopedic-exam-form>
 
-  <!-- مودال الاستشارة -->
   <app-consultation-form
     *ngIf="selectedApplicant"
     [applicantFileNumber]="selectedApplicant.fileNumber">
   </app-consultation-form>
 
-  <!-- فورم التحليل -->
   <app-investigation-form
     *ngIf="selectedApplicant"
-    #investigationForm
     [applicantFileNumber]="selectedApplicant.fileNumber">
   </app-investigation-form>
 </div>

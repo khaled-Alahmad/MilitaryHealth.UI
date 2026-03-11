@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditConsultation } from '../../Consultations/edit-consultation/edit-consultation';
 import { Consultation } from '../../../models/consultation.model';
@@ -7,30 +7,39 @@ import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
-import { Table, TableModule } from "primeng/table";
+import { Table, TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-surgery-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent
+  ],
   templateUrl: './surgery-consultations-list.html',
   styleUrls: ['./surgery-consultations-list.scss']
 })
 export class SurgeryConsultationsList implements OnInit {
   consultations: Consultation[] = [];
   filteredConsultations: Consultation[] = [];
-  selectedConsultation: Consultation | null = null;
   loading = false;
-  searchText = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
-  globalFilter: string = '';
+  globalFilter = '';
   @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: SurgicalExamService,
@@ -68,22 +77,22 @@ export class SurgeryConsultationsList implements OnInit {
     this.page = 1;
     this.loadConsultations();
   }
-  onFilterChange(value: string) {
-    this.globalFilter = (value || '').trim();
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value?.trim() || '';
+    this.globalFilter = value;
     this.page = 1;
     this.loadConsultations();
   }
 
-  openEditDialog(c: Consultation) { 
-    this.selectedConsultation = { ...c }; 
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) this.searchInput.nativeElement.value = '';
+    if (this.table) { this.table.first = 0; this.table.clear(); }
+    this.loadConsultations();
   }
 
-  onDialogClose(updated: boolean) {
-    this.selectedConsultation = null;
-    if (updated) this.loadConsultations();
-  }
-
-    openFile(attachment: string) {
+  openFile(attachment: string) {
     if (!attachment) {
       this.toastr.warning('⚠️ لا يوجد ملف مرفق', 'تنبيه');
       return;
@@ -93,15 +102,13 @@ export class SurgeryConsultationsList implements OnInit {
   }
   openEditConsultation(consultation: Consultation) {
     const modalRef = this.modalService.open(EditConsultation, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       centered: true
     });
-    modalRef.componentInstance.consultation  = consultation;
-    modalRef.componentInstance.consultationUpdated.subscribe(() => {
-      this.loadConsultations();
-    });
+    modalRef.componentInstance.consultation = consultation;
+    modalRef.componentInstance.consultationUpdated.subscribe(() => this.loadConsultations());
   }
 
   getBadgeClass(result: string): string {
@@ -112,13 +119,4 @@ export class SurgeryConsultationsList implements OnInit {
     return 'badge bg-secondary';
   }
 
-  resetFilters(): void {
-    this.globalFilter = '';
-    this.page = 1;
-    if (this.table) {
-      this.table.first = 0;
-      this.table.clear();
-    }
-    this.loadConsultations();
-  }
 }

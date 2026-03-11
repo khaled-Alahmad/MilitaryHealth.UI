@@ -1,5 +1,4 @@
-import { ToastModule } from 'primeng/toast';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Consultation } from '../../../models/consultation.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
@@ -8,32 +7,39 @@ import { EditConsultation } from '../../Consultations/edit-consultation/edit-con
 import { environment } from '../../../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
-import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { Table, TableModule } from "primeng/table";
+import { Table, TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
-import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-orthopedic-consultations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, PaginatorComponent, TableModule, FilterBarComponent, PageHeaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent
+  ],
   templateUrl: './orthopedic-consultations-list.html',
   styleUrls: ['./orthopedic-consultations-list.scss']
 })
 export class OrthopedicConsultationsList implements OnInit {
   consultations: Consultation[] = [];
   filteredConsultations: Consultation[] = [];
-  selectedConsultation: Consultation | null = null;
   loading = false;
-  searchText = '';
-
-  globalFilter: string = '';
+  globalFilter = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private service: OrthopedicExamService, private toastr: ToastrService,
     private modalService: NgbModal
@@ -68,19 +74,24 @@ export class OrthopedicConsultationsList implements OnInit {
     this.loadConsultations();
   }
 
-  onFilterChange(value: string) {
-    this.globalFilter = (value || '').trim();
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value?.trim() || '';
+    this.globalFilter = value;
     this.page = 1;
     this.loadConsultations();
   }
 
-  openEditDialog(c: Consultation) {
-    this.selectedConsultation = { ...c };
-  }
-
-  onDialogClose(updated: boolean) {
-    this.selectedConsultation = null;
-    if (updated) this.loadConsultations();
+  resetFilters(): void {
+    this.globalFilter = '';
+    this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
+    if (this.table) {
+      this.table.first = 0;
+      this.table.clear();
+    }
+    this.loadConsultations();
   }
 
   openFile(attachment: string) {
@@ -91,9 +102,9 @@ export class OrthopedicConsultationsList implements OnInit {
     const url = `${environment.apiUrl}/${attachment}`;
     window.open(url, '_blank');
   }
-  openEditConsultationModal(consultation: Consultation) {
+  openEditConsultation(consultation: Consultation) {
     const modalRef = this.modalService.open(EditConsultation, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       centered: true
@@ -116,13 +127,4 @@ export class OrthopedicConsultationsList implements OnInit {
     }
   }
 
-  resetFilters(): void {
-    this.globalFilter = '';
-    this.page = 1;
-    if (this.table) {
-      this.table.first = 0;
-      this.table.clear();
-    }
-    this.loadConsultations();
-  }
 }

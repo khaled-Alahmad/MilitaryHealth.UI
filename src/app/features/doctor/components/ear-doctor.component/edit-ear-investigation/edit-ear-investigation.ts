@@ -6,11 +6,13 @@ import { Investigation } from '../../../models/investigation.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-ear-investigation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './edit-ear-investigation.html',
   styleUrls: ['./edit-ear-investigation.scss']
 })

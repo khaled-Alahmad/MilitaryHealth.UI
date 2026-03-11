@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/components/form-card/form-card.component.scss"],
-  "sourcesContent": [":host ::ng-deep .form-card .p-card-header {\r\n  padding: 0;\r\n}\r\n\r\n.form-card__header {\r\n  display: flex;\r\n  align-items: center;\r\n  gap: var(--spacing-sm);\r\n  padding: var(--spacing-md);\r\n}\r\n\r\n.form-card__title {\r\n  margin: 0;\r\n  font-size: var(--font-size-lg);\r\n}\r\n\r\n.form-card__subtitle {\r\n  margin: 0;\r\n  font-size: var(--font-size-sm);\r\n  color: var(--neutral-medium);\r\n}\r\n\r\n:host ::ng-deep .form-card--banner .p-card-header .form-card__header {\r\n  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);\r\n  color: white;\r\n\r\n  .form-card__title,\r\n  .form-card__subtitle {\r\n    color: white;\r\n  }\r\n\r\n  .form-card__subtitle {\r\n    opacity: 0.9;\r\n  }\r\n\r\n  .pi {\r\n    color: var(--accent-gold);\r\n  }\r\n}\r\n"],
-  "mappings": ";AAAA,MAAA,UAAA,CAAA,UAAA,CAAA;AACE,WAAA;;AAGF,CAAA;AACE,WAAA;AACA,eAAA;AACA,OAAA,IAAA;AACA,WAAA,IAAA;;AAGF,CAAA;AACE,UAAA;AACA,aAAA,IAAA;;AAGF,CAAA;AACE,UAAA;AACA,aAAA,IAAA;AACA,SAAA,IAAA;;AAGF,MAAA,UAAA,CAAA,kBAAA,CAtBA,cAsBA,CAlBA;AAmBE;IAAA;MAAA,MAAA;MAAA,IAAA,gBAAA,EAAA;MAAA,IAAA,kBAAA;AACA,SAAA;;AAEA,MAAA,UAAA,CAJF,kBAIE,CA1BF,cA0BE,CAtBF,kBAsBE,CAfF;AAeE,MAAA,UAAA,CAJF,kBAIE,CA1BF,cA0BE,CAtBF,kBAsBE,CAVF;AAYI,SAAA;;AAGF,MAAA,UAAA,CATF,kBASE,CA/BF,cA+BE,CA3BF,kBA2BE,CAfF;AAgBI,WAAA;;AAGF,MAAA,UAAA,CAbF,kBAaE,CAnCF,cAmCE,CA/BF,kBA+BE,CAAA;AACE,SAAA,IAAA;;",
-  "names": []
-}

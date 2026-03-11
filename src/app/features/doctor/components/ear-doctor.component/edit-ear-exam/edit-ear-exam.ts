@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
 
 @Component({
   selector: 'app-edit-ear-exam',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, DialogWrapperComponent],
   templateUrl: './edit-ear-exam.html',
   styleUrls: ['./edit-ear-exam.scss']
 })
@@ -75,31 +76,29 @@ export class EditEarExamComponent implements OnInit {
     const rightTympanicOther = rightTympanicValue !== 'سليم' ? rightTympanicValue : '';
     const leftTympanicOther = leftTympanicValue !== 'سليم' ? leftTympanicValue : '';
     
-    // معالجة اختبار الهمس
+    // معالجة اختبار الهمس - افتراضي جيدة
     const rightWhisperValue = this.exam.rightWhisperTest || '';
     const leftWhisperValue = this.exam.leftWhisperTest || '';
-    const rightWhisperStatus = rightWhisperValue === 'جيدة' ? 'جيدة' : (rightWhisperValue ? 'غير ذلك' : '');
-    const leftWhisperStatus = leftWhisperValue === 'جيدة' ? 'جيدة' : (leftWhisperValue ? 'غير ذلك' : '');
+    const rightWhisperStatus = rightWhisperValue === 'جيدة' ? 'جيدة' : (rightWhisperValue ? 'غير ذلك' : 'جيدة');
+    const leftWhisperStatus = leftWhisperValue === 'جيدة' ? 'جيدة' : (leftWhisperValue ? 'غير ذلك' : 'جيدة');
     const rightWhisperOther = rightWhisperStatus === 'غير ذلك' ? rightWhisperValue : '';
     const leftWhisperOther = leftWhisperStatus === 'غير ذلك' ? leftWhisperValue : '';
     
-    // معالجة ضخامة القرينات - نحتاج إلى تحويل من boolean إلى string
-    // إذا كان isRightHugeMates = true، نستخدم قيمة افتراضية "بسيطة"
-    // إذا كان false، نستخدم "لا يوجد"
-    const rightHugeMates = this.exam.isRightHugeMates ? 'بسيطة' : 'لا يوجد';
-    const leftHugeMates = this.exam.isLeftHugeMates ? 'بسيطة' : 'لا يوجد';
+    // ضخامة القرينات: نفس النص من API إن وُجد، وإلا من boolean
+    const rightHugeMates = this.exam.rightHugeMates ?? (this.exam.isRightHugeMates ? 'بسيطة' : 'لا يوجد');
+    const leftHugeMates = this.exam.leftHugeMates ?? (this.exam.isLeftHugeMates ? 'بسيطة' : 'لا يوجد');
     
     // معالجة الوتيرة (الانحراف)
     const rightString = this.exam.rightString || 'لا يوجد';
     const leftString = this.exam.leftString || 'لا يوجد';
     
-    // معالجة الرنانات
-    const resonatorsValue = this.exam.resonators || '';
+    // معالجة الرنانات - افتراضي متساوي (=)
+    const resonatorsValue = this.exam.resonators || '=';
     const resonatorIndex = this.resonatorOptions.indexOf(resonatorsValue);
-    this.currentResonatorIndex = resonatorIndex !== -1 ? resonatorIndex : 0;
+    this.currentResonatorIndex = resonatorIndex !== -1 ? resonatorIndex : 2;
     
-    // معالجة الفم - تحويل من string إلى array
-    const mouthValue = this.exam.mouth || '';
+    // معالجة الفم - افتراضي سوي عند عدم وجود قيمة
+    const mouthValue = this.exam.mouth || 'سوي';
 
     this.examForm = this.fb.group({
       rightTympanicMembrane: [rightTympanicStatus, Validators.required],
@@ -205,6 +204,8 @@ export class EditEarExamComponent implements OnInit {
         : formData.leftWhisperTest,
       isRightHugeMates: formData.rightHugeMates !== 'لا يوجد',
       isLeftHugeMates: formData.leftHugeMates !== 'لا يوجد',
+      rightHugeMates: formData.rightHugeMates,
+      leftHugeMates: formData.leftHugeMates,
       rightString: formData.rightString === 'لا يوجد' ? '' : formData.rightString,
       leftString: formData.leftString === 'لا يوجد' ? '' : formData.leftString,
       mouth: formData.mouth || '',

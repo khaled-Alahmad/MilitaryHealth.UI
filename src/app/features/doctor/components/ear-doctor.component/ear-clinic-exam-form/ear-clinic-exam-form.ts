@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
 import { EarClinicExam } from '../../../models/ear-clinic-exam.model';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-ear-clinic-exam-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './ear-clinic-exam-form.html',
   styleUrls: ['./ear-clinic-exam-form.scss']
 })
@@ -46,7 +48,8 @@ export class EarClinicExamForm implements OnInit {
     '●'       // دائرة مملوءة
   ];
   
-  currentResonatorIndex = 0;
+  /** فهرس الرنانات الافتراضي = متساوي */
+  currentResonatorIndex = 2;
 
   private readonly statusFields = [
     { control: 'rightTympanicMembrane', otherControl: 'rightTympanicMembraneOther' },
@@ -73,16 +76,16 @@ export class EarClinicExamForm implements OnInit {
       leftTympanicMembraneOther: [''],
       rightHearing: ['', Validators.required],
       leftHearing: ['', Validators.required],
-      resonators: ['', Validators.required],
-      rightWhisperTest: ['', Validators.required],
+      resonators: ['=', Validators.required],
+      rightWhisperTest: ['جيدة', Validators.required],
       rightWhisperTestOther: [''],
-      leftWhisperTest: ['', Validators.required],
+      leftWhisperTest: ['جيدة', Validators.required],
       leftWhisperTestOther: [''],
       rightHugeMates: ['لا يوجد'],
       leftHugeMates: ['لا يوجد'],
       rightString: ['لا يوجد'],
       leftString: ['لا يوجد'],
-      mouth: ['', Validators.required], // Array of selected options as comma-separated string
+      mouth: ['سوي', Validators.required],
       otherDiseases: [''],
       resultID: [null, Validators.required],
       reason: ['']
@@ -192,6 +195,8 @@ export class EarClinicExamForm implements OnInit {
           : formData.leftWhisperTest,
         isRightHugeMates: formData.rightHugeMates !== 'لا يوجد',
         isLeftHugeMates: formData.leftHugeMates !== 'لا يوجد',
+        rightHugeMates: formData.rightHugeMates,
+        leftHugeMates: formData.leftHugeMates,
         rightString: formData.rightString === 'لا يوجد' ? '' : formData.rightString,
         leftString: formData.leftString === 'لا يوجد' ? '' : formData.leftString,
         mouth: formData.mouth || '',
@@ -344,16 +349,16 @@ export class EarClinicExamForm implements OnInit {
     }, {
       rightHearing: '',
       leftHearing: '',
-      resonators: '',
-      rightWhisperTest: '',
+      resonators: '=',
+      rightWhisperTest: 'جيدة',
       rightWhisperTestOther: '',
-      leftWhisperTest: '',
+      leftWhisperTest: 'جيدة',
       leftWhisperTestOther: '',
       rightHugeMates: 'لا يوجد',
       leftHugeMates: 'لا يوجد',
       rightString: 'لا يوجد',
       leftString: 'لا يوجد',
-      mouth: '',
+      mouth: 'سوي',
       otherDiseases: '',
       resultID: null,
       reason: ''

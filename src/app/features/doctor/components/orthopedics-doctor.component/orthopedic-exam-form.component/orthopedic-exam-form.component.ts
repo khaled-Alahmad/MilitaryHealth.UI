@@ -5,11 +5,13 @@ import { OrthopedicExam } from '../../../models/orthopedic-exam.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-orthopedic-exam-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './orthopedic-exam-form.component.html',
   styleUrls: ['./orthopedic-exam-form.component.scss']
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { OrthopedicExamService } from '../../../services/orthopedic-exam.service';
 import { CommonModule } from '@angular/common';
@@ -8,29 +8,37 @@ import { environment } from '../../../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonModule } from 'primeng/button';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Table, TableModule } from "primeng/table";
-import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
-import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { Table, TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-orthopedic-investigations-list',
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent
+  ],
   templateUrl: './orthopedic-investigations-list.html',
   styleUrl: './orthopedic-investigations-list.scss'
 })
 export class OrthopedicInvestigationsList implements OnInit {
   investigations: Investigation[] = [];
   filteredInvestigations: Investigation[] = [];
-  selectedInvestigation: Investigation | null = null;
   loading = false;
-  searchText = '';
-
-  globalFilter: string = '';
+  globalFilter = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
   @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private service: OrthopedicExamService,private toastr:ToastrService,
     private modalService: NgbModal,
@@ -64,8 +72,9 @@ export class OrthopedicInvestigationsList implements OnInit {
     this.loadInvestigations();
   }
 
-  onFilterChange(value: string) {
-    this.globalFilter = (value || '').trim();
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value?.trim() || '';
+    this.globalFilter = value;
     this.page = 1;
     this.loadInvestigations();
   }
@@ -73,6 +82,9 @@ export class OrthopedicInvestigationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
     if (this.table) {
       this.table.first = 0;
       this.table.clear();
@@ -80,16 +92,7 @@ export class OrthopedicInvestigationsList implements OnInit {
     this.loadInvestigations();
   }
 
-  openEditDialog(inv: Investigation) {
-    this.selectedInvestigation = { ...inv };
-  }
-
-  onDialogClose(updated: boolean) {
-    this.selectedInvestigation = null;
-    if (updated) this.loadInvestigations();
-  }
-
-   openFile(attachment: string) {
+  openFile(attachment: string) {
     if (!attachment) {
       this.toastr.warning('⚠️ لا يوجد ملف مرفق', 'تنبيه');
       return;
@@ -99,12 +102,12 @@ export class OrthopedicInvestigationsList implements OnInit {
   }
   openEditInvestigation(investigation: Investigation) {
     const modalRef = this.modalService.open(EditInvestigation, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       centered: true
     });
-    modalRef.componentInstance.investigation  = investigation;
+    modalRef.componentInstance.investigation = investigation;
     modalRef.componentInstance.investigationUpdated.subscribe(() => {
       this.loadInvestigations();
     });

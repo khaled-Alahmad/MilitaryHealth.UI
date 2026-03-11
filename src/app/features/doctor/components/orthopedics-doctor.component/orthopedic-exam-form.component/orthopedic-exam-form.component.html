@@ -1,93 +1,94 @@
-<!-- المودال -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    
-    <!-- الهيدر -->
-    <div class="modal-header">
-      <h5 class="modal-title">إضافة فحص العظام</h5>
-      <button type="button" class="btn-close" (click)="closeModal()">×</button>
+<app-dialog-wrapper
+  [(visible)]="showModal"
+  title="إضافة فحص العظام"
+  subtitle="إدخال بيانات الفحص العظمي والنتيجة"
+  icon="pi pi-bone"
+  width="90rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate class="exam-form">
+
+    <h6 class="section-title">حالة الأجهزة الطبية</h6>
+    <div class="medical-system-row">
+      <div class="system-label">أمراض الجهاز الحركي والهيكلي <span class="text-danger">*</span></div>
+      <div class="system-options">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_healthy" value="سليم" formControlName="musculoskeletal" />
+          <label class="form-check-label" for="musculoskeletal_healthy">سليم</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_unhealthy" value="غير سليم" formControlName="musculoskeletal" />
+          <label class="form-check-label" for="musculoskeletal_unhealthy">غير سليم</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_other" value="غير ذلك" formControlName="musculoskeletal" />
+          <label class="form-check-label" for="musculoskeletal_other">غير ذلك</label>
+        </div>
+      </div>
+    </div>
+    @if (examForm.get('musculoskeletal')?.value === 'غير ذلك') {
+      <div class="other-input-row">
+        <input type="text" class="form-control" formControlName="musculoskeletalOther" placeholder="أدخل التفاصيل" />
+      </div>
+    }
+
+    <div class="medical-system-row">
+      <div class="system-label">أمراض الجراحة العصبية <span class="text-danger">*</span></div>
+      <div class="system-options">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_healthy" value="سليم" formControlName="neurologicalSurgery" />
+          <label class="form-check-label" for="neurologicalSurgery_healthy">سليم</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_unhealthy" value="غير سليم" formControlName="neurologicalSurgery" />
+          <label class="form-check-label" for="neurologicalSurgery_unhealthy">غير سليم</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_other" value="غير ذلك" formControlName="neurologicalSurgery" />
+          <label class="form-check-label" for="neurologicalSurgery_other">غير ذلك</label>
+        </div>
+      </div>
+    </div>
+    @if (examForm.get('neurologicalSurgery')?.value === 'غير ذلك') {
+      <div class="other-input-row">
+        <input type="text" class="form-control" formControlName="neurologicalSurgeryOther" placeholder="أدخل التفاصيل" />
+      </div>
+    }
+
+    <h6 class="section-title mt-4">النتيجة</h6>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label mb-2">النتيجة <span class="text-danger">*</span></label>
+        <select
+          class="form-select"
+          formControlName="resultID"
+          [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
+          [class.is-valid]="isFieldValid('resultID')">
+          <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
+        </select>
+        <div class="invalid-feedback d-block" *ngIf="getErrorMessage('resultID')">
+          <i class="pi pi-exclamation-circle me-1"></i>{{ getErrorMessage('resultID') }}
+        </div>
+      </div>
     </div>
 
-    <!-- البودي -->
-    <div class="modal-body">
-      <form [formGroup]="examForm" (ngSubmit)="onSubmit()" novalidate>
-        
-        <!-- أمراض الجهاز الحركي والهيكلي -->
-        <div class="medical-system-row">
-          <div class="system-label">أمراض الجهاز الحركي والهيكلي <span class="text-danger">*</span></div>
-          <div class="system-options">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_healthy" value="سليم" formControlName="musculoskeletal">
-              <label class="form-check-label" for="musculoskeletal_healthy">سليم</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_unhealthy" value="غير سليم" formControlName="musculoskeletal">
-              <label class="form-check-label" for="musculoskeletal_unhealthy">غير سليم</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="musculoskeletal" id="musculoskeletal_other" value="غير ذلك" formControlName="musculoskeletal">
-              <label class="form-check-label" for="musculoskeletal_other">غير ذلك</label>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="examForm.get('musculoskeletal')?.value === 'غير ذلك'" class="other-input-row">
-          <input type="text" class="form-control" formControlName="musculoskeletalOther" placeholder="أدخل التفاصيل">
-        </div>
-
-        <!-- أمراض الجراحة العصبية -->
-        <div class="medical-system-row">
-          <div class="system-label">أمراض الجراحة العصبية <span class="text-danger">*</span></div>
-          <div class="system-options">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_healthy" value="سليم" formControlName="neurologicalSurgery">
-              <label class="form-check-label" for="neurologicalSurgery_healthy">سليم</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_unhealthy" value="غير سليم" formControlName="neurologicalSurgery">
-              <label class="form-check-label" for="neurologicalSurgery_unhealthy">غير سليم</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="neurologicalSurgery" id="neurologicalSurgery_other" value="غير ذلك" formControlName="neurologicalSurgery">
-              <label class="form-check-label" for="neurologicalSurgery_other">غير ذلك</label>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="examForm.get('neurologicalSurgery')?.value === 'غير ذلك'" class="other-input-row">
-          <input type="text" class="form-control" formControlName="neurologicalSurgeryOther" placeholder="أدخل التفاصيل">
-        </div>
-
-        <!-- النتيجة -->
-        <div class="result-section">
-          <label class="form-label mb-3">النتيجة <span class="text-danger">*</span></label>
-          <select class="form-select" formControlName="resultID"
-                  [class.is-invalid]="examForm.get('resultID')?.invalid && examForm.get('resultID')?.touched"
-                  [class.is-valid]="isFieldValid('resultID')">
-            <option *ngFor="let r of results" [value]="r.resultID">{{ r.description }}</option>
-          </select>
-          <div class="invalid-feedback" *ngIf="getErrorMessage('resultID')">
-            <i class="pi pi-exclamation-circle"></i>{{ getErrorMessage('resultID') }}
-          </div>
-          <!-- <div class="valid-feedback" *ngIf="isFieldValid('resultID')">
-            <i class="pi pi-check-circle"></i> صحيح
-          </div> -->
-        </div>
-
-        <!-- السبب -->
-        <div class="reason-section">
-          <label class="form-label">السبب (إن وجد)</label>
-          <textarea class="form-control" formControlName="reason" rows="3" placeholder="يمكنك كتابة السبب إن وجد"></textarea>
-        </div>
-
-        <!-- الأزرار -->
-        <div class="modal-footer mt-4">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">إلغاء</button>
-          <button type="submit" class="btn btn-success" [disabled]="examForm.invalid || loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-            حفظ
-          </button>
-        </div>
-
-      </form>
+    <h6 class="section-title mt-4">السبب (إن وجد)</h6>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label mb-2">السبب</label>
+        <textarea class="form-control" formControlName="reason" rows="3" placeholder="يمكنك كتابة السبب إن وجد"></textarea>
+      </div>
     </div>
+  </form>
+
+  <div dialog-footer class="dialog-actions">
+    <p-button label="إلغاء" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="closeModal()"></p-button>
+    <p-button
+      label="حفظ الفحص"
+      icon="pi pi-save"
+      severity="primary"
+      [loading]="loading"
+      [disabled]="examForm.invalid || loading"
+      (onClick)="onSubmit()"></p-button>
   </div>
-</div>
+</app-dialog-wrapper>

@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
@@ -8,12 +8,14 @@ import { ConsultationFormComponent } from '../Consultations/consultation-form.co
 import { InvestigationForm } from '../Investigations/investigation-form/investigation-form';
 import { EarClinicExamService } from '../../services/ear-clinic-exam.service';
 import { SearchApplicantComponent } from '../../../applicants/components/search-applican/search-applicant.component.ts/search-applicant.component';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-ear-doctor',
   standalone: true,
   imports: [
     CommonModule,
+    PageHeaderComponent,
     SearchApplicantComponent,
     EarClinicExamForm,
     ConsultationFormComponent,
@@ -25,6 +27,7 @@ import { SearchApplicantComponent } from '../../../applicants/components/search-
 export class EarDoctorComponent {
   selectedApplicant: Applicant | null = null;
   hasEarClinicExam = false;
+  checkingEarExam = false;
 
   @ViewChild(EarClinicExamForm) earClinicExamForm!: EarClinicExamForm;
   @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
@@ -37,18 +40,24 @@ export class EarDoctorComponent {
 
   onApplicantSelected(applicant: Applicant) {
     this.selectedApplicant = applicant;
+    this.hasEarClinicExam = false;
+    this.checkingEarExam = true;
 
     if (!applicant?.fileNumber) {
       this.hasEarClinicExam = false;
+      this.checkingEarExam = false;
       return;
     }
 
-    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ ÙØ­Øµ Ø³Ø§Ø¨Ù‚
     this.earClinicExamService.getByFileNumber(applicant.fileNumber).subscribe({
       next: (exam) => {
-        this.hasEarClinicExam = !!(exam && exam.earClinicID); 
+        this.checkingEarExam = false;
+        this.hasEarClinicExam = !!(exam && exam.earClinicID);
       },
-      error: () => this.hasEarClinicExam = false
+      error: () => {
+        this.checkingEarExam = false;
+        this.hasEarClinicExam = false;
+      }
     });
   }
 
@@ -56,22 +65,13 @@ export class EarDoctorComponent {
     this.hasEarClinicExam = true;
   }
 
-  onConsultationSaved() {
-    this.toastr.success('ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¨Ù†Ø¬Ø§Ø­');
-  }
-
-  onInvestigationSaved() {
-    this.toastr.success('ØªÙ… Ø­ÙØ¸ Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø¨Ù†Ø¬Ø§Ø­');
-  }
-
-  resetForms() {
-    this.earClinicExamForm?.resetForm();
-    // Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ù…Ø´ØªØ±ÙƒØ© Ù„Ø§ ØªØ­ØªØ§Ø¬ resetForm
-  }
-
   addEarClinicExam() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ø±ÙŠØ¶ Ø£ÙˆÙ„Ø§Ù‹');
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
+      return;
+    }
+    if (this.hasEarClinicExam) {
+      this.toastr.error('المريض لديه فحص أذني سابق ولا يمكن إضافته مرة أخرى');
       return;
     }
     this.earClinicExamForm?.addEarClinicExam();
@@ -79,7 +79,7 @@ export class EarDoctorComponent {
 
   addConsultation() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ø±ÙŠØ¶ Ø£ÙˆÙ„Ø§Ù‹');
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
       return;
     }
     this.consultationForm?.openModal();
@@ -87,7 +87,7 @@ export class EarDoctorComponent {
 
   addInvestigation() {
     if (!this.selectedApplicant) {
-      this.toastr.warning('ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ø±ÙŠØ¶ Ø£ÙˆÙ„Ø§Ù‹');
+      this.toastr.warning('يرجى البحث عن مريض أولاً');
       return;
     }
     this.investigationForm?.openModal();

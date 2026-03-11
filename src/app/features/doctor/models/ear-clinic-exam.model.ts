@@ -22,6 +22,9 @@ export interface EarClinicExam {
   leftWhisperTest: string;
   isRightHugeMates: boolean;
   isLeftHugeMates: boolean;
+  /** إن وُجدت من الـ API: لا يوجد | بسيطة | متوسطة | شديدة */
+  rightHugeMates?: string;
+  leftHugeMates?: string;
   rightString?: string; // OL Deviation - "بسيط", "متوسط", "شديد"
   leftString?: string; // OR Deviation - "بسيط", "متوسط", "شديد"
   mouth: string;

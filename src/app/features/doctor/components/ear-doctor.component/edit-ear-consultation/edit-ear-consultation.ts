@@ -6,11 +6,13 @@ import { AuthService } from '../../../../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-ear-consultation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './edit-ear-consultation.html',
   styleUrls: ['./edit-ear-consultation.scss']
 })

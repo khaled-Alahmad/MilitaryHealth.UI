@@ -7,27 +7,34 @@ import { SurgicalExamDetailsComponent } from '../surgical-exam-details/surgical-
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Table, TableModule } from "primeng/table";
+import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-deferred-surgical-exams',
   standalone: true,
-  imports: [CommonModule, ButtonModule, EditSurgicalExam, SurgicalExamDetailsComponent, FormsModule, TableModule, PaginatorComponent, TooltipModule, ResetFiltersButtonComponent],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    FormsModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent
+  ],
   templateUrl: './deferred-surgical-exams.component.html',
   styleUrls: ['./deferred-surgical-exams.component.scss']
 })
 export class DeferredSurgicalExamsComponent implements OnInit {
   exams: SurgicalExam[] = [];
   filteredExams: SurgicalExam[] = [];
-  loading = true;
-  selectedExam: SurgicalExam | null = null;
-  selectedExamDetails: SurgicalExam | null = null;
-  searchTerm: string = '';
-
-  globalFilter: string = '';
+  loading = false;
+  globalFilter = '';
   page = 1;
   rowsPerPage = 10;
   totalRecords = 0;
@@ -36,7 +43,8 @@ export class DeferredSurgicalExamsComponent implements OnInit {
 
   constructor(
     private examService: SurgicalExamService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -77,26 +85,29 @@ export class DeferredSurgicalExamsComponent implements OnInit {
 
   }
 
-  onEnterSearch() {
-    this.page = 1;
-    this.loadExams();
+  viewDetails(exam: SurgicalExam) {
+    const modalRef = this.modalService.open(SurgicalExamDetailsComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true
+    });
+    modalRef.componentInstance.exam = exam;
+    modalRef.componentInstance.close.subscribe(() => modalRef.close());
   }
 
   openEditDialog(exam: SurgicalExam) {
-    this.selectedExam = { ...exam };
-  }
-
-  viewDetails(exam: SurgicalExam) {
-    this.selectedExamDetails = { ...exam };
-  }
-
-  closeDetailsModal() {
-    this.selectedExamDetails = null;
-  }
-
-  onDialogClose(updated: boolean) {
-    this.selectedExam = null;
-    if (updated) this.loadExams();
+    const modalRef = this.modalService.open(EditSurgicalExam, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true
+    });
+    modalRef.componentInstance.exam = exam;
+    modalRef.componentInstance.dialogClosed.subscribe((updated: boolean) => {
+      modalRef.close();
+      if (updated) this.loadExams();
+    });
   }
   getBadgeClass(result: any): string {
     if (!result || !result.description) {

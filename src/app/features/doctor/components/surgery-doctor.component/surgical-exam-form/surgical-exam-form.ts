@@ -5,10 +5,12 @@ import { AuthService } from '../../../../auth/services/auth.service';
 import { SurgicalExam } from '../../../models/surgical-exam-post.model';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { ToastrService } from 'ngx-toastr';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-surgical-exam-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './surgical-exam-form.html',
   styleUrls: ['./surgical-exam-form.scss']
 })

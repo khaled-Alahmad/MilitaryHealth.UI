@@ -7,14 +7,16 @@ import { ConsultationFormComponent } from '../Consultations/consultation-form.co
 import { InvestigationForm } from '../Investigations/investigation-form/investigation-form';
 import { ToastrService } from 'ngx-toastr';
 import { OrthopedicExamService } from '../../services/orthopedic-exam.service';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-orthopedics-doctor.component',
   standalone: true,
   imports: [
+    CommonModule,
+    PageHeaderComponent,
     SearchApplicantComponent,
     OrthopedicExamFormComponent,
-    CommonModule,
     ConsultationFormComponent,
     InvestigationForm
   ],
@@ -22,8 +24,9 @@ import { OrthopedicExamService } from '../../services/orthopedic-exam.service';
   styleUrls: ['./orthopedics-doctor.component.scss']
 })
 export class OrthopedicsDoctorComponent {
-selectedApplicant: Applicant | null = null;
+  selectedApplicant: Applicant | null = null;
   hasOrthopedicExam = false;
+  checkingOrthopedicExam = false;
 
   @ViewChild(OrthopedicExamFormComponent) orthopedicForm!: OrthopedicExamFormComponent;
   @ViewChild(ConsultationFormComponent) consultationForm!: ConsultationFormComponent;
@@ -36,13 +39,24 @@ selectedApplicant: Applicant | null = null;
 
   onApplicantSelected(applicant: Applicant) {
     this.selectedApplicant = applicant;
+    this.hasOrthopedicExam = false;
+    this.checkingOrthopedicExam = true;
 
-    if (applicant?.fileNumber) {
-      this.orthopedicService.getByFileNumber(applicant.fileNumber).subscribe({
-        next: (exam) => this.hasOrthopedicExam = !!exam,
-        error: () => this.hasOrthopedicExam = false
-      });
+    if (!applicant?.fileNumber) {
+      this.checkingOrthopedicExam = false;
+      return;
     }
+
+    this.orthopedicService.getByFileNumber(applicant.fileNumber).subscribe({
+      next: (exam) => {
+        this.checkingOrthopedicExam = false;
+        this.hasOrthopedicExam = !!exam;
+      },
+      error: () => {
+        this.checkingOrthopedicExam = false;
+        this.hasOrthopedicExam = false;
+      }
+    });
   }
 
   addOrthopedicExam() {

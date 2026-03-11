@@ -1,0 +1,45 @@
+<app-dialog-wrapper
+  [visible]="true"
+  title="تفاصيل الفحص العظمي"
+  [subtitle]="'رقم الملف: ' + (exam.applicantFileNumber || '')"
+  icon="pi pi-bone"
+  width="70rem"
+  [useDefaultFooter]="false"
+  (hide)="closeModal()">
+  <div class="orthopedic-exam-details-body">
+    <div class="details-grid">
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الجهاز الحركي والهيكلي</h6>
+        <div class="info-value">{{ exam.musculoskeletal || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">أمراض الجراحة العصبية</h6>
+        <div class="info-value">{{ exam.neurologicalSurgery || 'غير محدد' }}</div>
+      </div>
+      <div class="info-card">
+        <h6 class="details-section-title">النتيجة</h6>
+        <div
+          class="info-value result-badge"
+          [class.result-accepted]="exam.result?.description === 'مقبول'"
+          [class.result-rejected]="exam.result?.description === 'مرفوض'"
+          [class.result-postponed]="exam.result?.description === 'تأجيل' || exam.result?.description === 'مؤجل'">
+          {{ exam.result?.description || 'غير محدد' }}
+        </div>
+      </div>
+    </div>
+
+    @if (exam.reason) {
+      <h6 class="details-section-title">السبب</h6>
+      <div class="info-value">{{ exam.reason }}</div>
+    }
+  </div>
+
+  <div dialog-footer class="dialog-actions">
+    <p-button
+      label="إغلاق"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeModal()"></p-button>
+  </div>
+</app-dialog-wrapper>

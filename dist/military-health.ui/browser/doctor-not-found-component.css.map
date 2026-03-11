@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/doctor/components/doctor-not-found-component/doctor-not-found-component.scss"],
-  "sourcesContent": [" .not-found-container {\r\n      text-align: center;\r\n      margin-top: 100px;\r\n    }\r\n    h1 { color: #d9534f; }"],
-  "mappings": ";AAAC,CAAA;AACK,cAAA;AACA,cAAA;;AAEF;AAAK,SAAA;;",
-  "names": []
-}

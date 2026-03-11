@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/reception/services/marital-status.service.ts"],
-  "sourcesContent": ["import { Injectable } from '@angular/core';\r\nimport { environment } from '../../../../environments/environment';\r\nimport { HttpClient } from '@angular/common/http';\r\nimport { map, Observable } from 'rxjs';\r\nimport { MaritalStatus } from '../models/marital-status.model';\r\nimport { ApiResponse, PagedResponse } from '../../../shared/models/paged-response.model';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class MaritalStatusService {\r\n  private apiUrl = `${environment.apiUrl}/api/MaritalStatuses`;\r\n  constructor(private http: HttpClient) {}\r\n\r\ngetMaritalStatus(): Observable<MaritalStatus[]> {\r\n  return this.http.get<ApiResponse<PagedResponse<MaritalStatus>>>(`${this.apiUrl}?sortDesc=false&page=1&pageSize=20`)\r\n    .pipe(\r\n      map(response => response.data.items) // الوصول مباشرة إلى data.items\r\n    );\r\n}\r\n}\r\n"],
-  "mappings": ";;;;;;;;;;;;;AAUM,IAAO,uBAAP,MAAO,sBAAoB;EAEX;EADZ,SAAS,GAAG,YAAY,MAAM;EACtC,YAAoB,MAAgB;AAAhB,SAAA,OAAA;EAAmB;EAEzC,mBAAgB;AACd,WAAO,KAAK,KAAK,IAA+C,GAAG,KAAK,MAAM,oCAAoC,EAC/G;MACC,IAAI,cAAY,SAAS,KAAK,KAAK;;;EAEzC;;qCATa,uBAAoB,mBAAA,UAAA,CAAA;EAAA;4EAApB,uBAAoB,SAApB,sBAAoB,WAAA,YAFnB,OAAM,CAAA;;;sEAEP,sBAAoB,CAAA;UAHhC;WAAW;MACV,YAAY;KACb;;;",
-  "names": []
-}

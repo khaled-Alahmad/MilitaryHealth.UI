@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/doctor/components/Investigations/investigation-form/investigation-form.scss"],
-  "sourcesContent": [".investigation-form {\r\n  direction: rtl;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 1rem;\r\n}\r\n\r\n.form-field {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 0.5rem;\r\n}\r\n\r\nlabel {\r\n  color: var(--primary-dark);\r\n  font-weight: 600;\r\n}\r\n\r\n.required {\r\n  color: var(--status-danger);\r\n}\r\n\r\ninput[pInputText],\r\ntextarea[pTextarea] {\r\n  width: 100%;\r\n}\r\n\r\n.error-message {\r\n  color: var(--status-danger);\r\n}\r\n\r\n.dialog-actions {\r\n  display: flex;\r\n  justify-content: flex-end;\r\n  gap: 0.5rem;\r\n}\r\n"],
-  "mappings": ";AAAA,CAAA;AACE,aAAA;AACA,WAAA;AACA,kBAAA;AACA,OAAA;;AAGF,CAAA;AACE,WAAA;AACA,kBAAA;AACA,OAAA;;AAGF;AACE,SAAA,IAAA;AACA,eAAA;;AAGF,CAAA;AACE,SAAA,IAAA;;AAGF,KAAA,CAAA;AAAA,QAAA,CAAA;AAEE,SAAA;;AAGF,CAAA;AACE,SAAA,IAAA;;AAGF,CAAA;AACE,WAAA;AACA,mBAAA;AACA,OAAA;;",
-  "names": []
-}

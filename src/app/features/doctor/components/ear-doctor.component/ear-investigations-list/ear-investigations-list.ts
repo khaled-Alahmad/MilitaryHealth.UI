@@ -1,34 +1,44 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Investigation } from '../../../models/investigation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
-import { PaginatorComponent } from "../../../../../shared/components/paginator/paginator.component";
+import { TooltipModule } from 'primeng/tooltip';
+import { PaginatorComponent } from '../../../../../shared/components/paginator/paginator.component';
 import { ToastrService } from 'ngx-toastr';
 import { EarClinicExamService } from '../../../services/ear-clinic-exam.service';
-import { PagedResponse } from '../../../../../shared/models/paged-response.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditEarInvestigationComponent } from '../edit-ear-investigation/edit-ear-investigation';
-import { FilterBarComponent } from '../../../../../shared/components/filter-bar/filter-bar.component';
+import { ResetFiltersButtonComponent } from '../../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-ear-investigations-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, FormsModule, TableModule, PaginatorComponent, FilterBarComponent, PageHeaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    TableModule,
+    TooltipModule,
+    PaginatorComponent,
+    ResetFiltersButtonComponent,
+    PageHeaderComponent
+  ],
   templateUrl: './ear-investigations-list.html',
   styleUrls: ['./ear-investigations-list.scss']
 })
 export class EarInvestigationsList implements OnInit {
-  investigations: Investigation[] = []
-  filteredInvestigations: Investigation[] = []
-  globalFilter: string = ''
-  page = 1
-  rowsPerPage = 10
-  totalRecords = 0
-  loading = false
+  investigations: Investigation[] = [];
+  filteredInvestigations: Investigation[] = [];
+  globalFilter = '';
+  page = 1;
+  rowsPerPage = 10;
+  totalRecords = 0;
+  loading = false;
   @ViewChild('table') table?: Table;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private service: EarClinicExamService,
@@ -50,25 +60,25 @@ export class EarInvestigationsList implements OnInit {
   }
   
   loadInvestigations() {
-    this.loading = true
-    const filter = this.globalFilter || ''
-    this.service.getAllEarClinicInvestigations(this.page, this.rowsPerPage, filter).subscribe(
-      (res: any) => {
-        this.investigations = res.items
-        this.filteredInvestigations = res.items
-        console.log(res)
-        this.totalRecords = res.totalCount
-        this.loading = false
+    this.loading = true;
+    const filter = this.globalFilter || '';
+    this.service.getAllEarClinicInvestigations(this.page, this.rowsPerPage, filter).subscribe({
+      next: (res: any) => {
+        this.investigations = res.items ?? [];
+        this.filteredInvestigations = res.items ?? [];
+        this.totalRecords = res.totalCount ?? 0;
+        this.loading = false;
       },
-      () => {
-        this.toastr.error('❌ خطأ في جلب التحاليل', 'خطأ')
-        this.loading = false
+      error: () => {
+        this.toastr.error('❌ خطأ في جلب التحاليل', 'خطأ');
+        this.loading = false;
       }
-    )
+    });
   }
-  
-  onFilterChange(value: string) {
-    this.globalFilter = (value || '').trim();
+
+  onFilterChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value?.trim() || '';
+    this.globalFilter = value;
     this.page = 1;
     this.loadInvestigations();
   }
@@ -76,10 +86,8 @@ export class EarInvestigationsList implements OnInit {
   resetFilters(): void {
     this.globalFilter = '';
     this.page = 1;
-    if (this.table) {
-      this.table.first = 0;
-      this.table.clear();
-    }
+    if (this.searchInput) this.searchInput.nativeElement.value = '';
+    if (this.table) { this.table.first = 0; this.table.clear(); }
     this.loadInvestigations();
   }
 
@@ -105,24 +113,12 @@ export class EarInvestigationsList implements OnInit {
 
   openEditInvestigation(investigation: Investigation) {
     const modalRef = this.modalService.open(EditEarInvestigationComponent, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       centered: true
     });
-    
     modalRef.componentInstance.investigation = investigation;
-    modalRef.componentInstance.investigationUpdated.subscribe((updated: boolean) => {
-      if (updated) {
-        // تحديث محلي فوري
-        const index = this.investigations.findIndex(i => i.investigationID === investigation.investigationID);
-        if (index !== -1) {
-          this.investigations[index] = { ...this.investigations[index], ...investigation };
-          this.filteredInvestigations = [...this.investigations];
-        }
-        // إعادة تحميل من السيرفر للتأكد
-        this.loadInvestigations();
-      }
-    });
+    modalRef.componentInstance.investigationUpdated.subscribe(() => this.loadInvestigations());
   }
 }

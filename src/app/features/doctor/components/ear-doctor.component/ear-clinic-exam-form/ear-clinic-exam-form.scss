@@ -1,387 +1,158 @@
-.modal-backdrop {
-  position: fixed;
-  margin: 0;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, .7);
-  z-index: 1050;
-  backdrop-filter: blur(3px);
+@use '../../../../../shared/styles/edit-dialog-form' as *;
+
+/* أقسام النموذج - مسافات واضحة دون تشويه */
+.form-section {
+  margin-bottom: 1.5rem;
 }
 
-.modal-content {
-  background: #fff;
-  border-radius: 16px;
-  max-width: 800px;
-  width: 100%;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
-  animation: fadeIn 0.35s ease;
-}
-
-.modal-content {
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
-  animation: fadeIn 0.3s ease;
-}
-
-.modal-header {
-  background: linear-gradient(135deg, #054239 0%, #428177 100%) !important;
-  padding: 1.5rem 2rem !important;
-  border-bottom: 2px solid #B9A779 !important;
-  border-radius: 16px 16px 0 0 !important;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header .modal-title {
-  font-size: 1.5rem !important;
-  font-weight: 700 !important;
-  color: white !important;
+/* صفوف الخيارات - التباعد من shared (form-check, system-options) */
+.medical-system-row {
   display: flex;
   align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
   gap: 0.5rem;
-}
 
-.modal-body {
-  padding: var(--spacing-xl);
-  overflow-y: auto;
-  max-height: calc(85vh - 100px);
-  
-  /* Custom scrollbar */
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: var(--neutral-light);
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: var(--primary-medium);
-    border-radius: var(--radius-sm);
-    
-    &:hover {
-      background: var(--primary-dark);
-    }
+  .system-label {
+    flex: 0 0 auto;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1f2937;
+    min-width: 160px;
   }
 }
 
-.section-title {
-  font-size: var(--font-size-lg);
+.other-input-row {
+  padding: 0 0 0.5rem 0.25rem;
+  margin-bottom: 0.25rem;
+
+  .form-control {
+    max-width: 280px;
+    min-height: 2.25rem;
+  }
+}
+
+/* عمودان للعناصر المزدوجة (يمين/يسار) - توازن بصري */
+.ear-form-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ear-form-field {
+  .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  .form-control {
+    min-height: 2.25rem;
+    width: 100%;
+  }
+}
+
+/* حقول السمع في صف واحد */
+.field-row .form-control {
+  min-height: 2.25rem;
+}
+
+/* الرنانات: كتلة مستقلة - عرض القيمة ثم شبكة أزرار بحجم موحد */
+.resonator-section {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.resonator-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.resonator-display {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.25rem;
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--primary-dark);
-  margin: var(--spacing-lg) 0 var(--spacing-md);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--primary-medium);
-  display: flex;
+  background: #f8fafc;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.resonator-options-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 2.5rem);
+  gap: 0.35rem;
+  justify-content: start;
+}
+
+.symbol-option-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  padding: 0;
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  
-  &::before {
-    content: '';
-    width: 4px;
-    height: 20px;
-    background: var(--accent-gold);
-    border-radius: var(--radius-sm);
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--primary-dark);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: var(--primary-medium);
+    background: rgba(66, 129, 119, 0.06);
+  }
+
+  &.active {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: #fff;
   }
 }
 
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--primary-medium) !important;
-  box-shadow: 0 0 0 3px rgba(66, 129, 119, 0.1) !important;
+/* شيك بوكس الفم - التباعد من shared (mouth-options) */
+.mouth-options {
+  padding: 0.5rem 0;
 }
 
-.btn-primary {
-  background: #054239 !important;
-  border: 2px solid #054239 !important;
-  color: white !important;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #428177 !important;
-  border-color: #428177 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.btn-secondary {
-  background: #3D3A3B !important;
-  border: 2px solid #3D3A3B !important;
-  color: white !important;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: #161616 !important;
-  border-color: #161616 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.modal-footer {
+.dialog-actions {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: white;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 16px;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  width: 100%;
 }
 
-// التحقق من البيانات - رسائل الخطأ والنجاح
 .invalid-feedback {
   display: block;
   color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: flex;
-  align-items: center;
-  
-  i {
-    margin-left: 0.25rem;
-  }
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
 }
 
-.form-control.is-valid,
-.form-select.is-valid {
-  border-color: #28a745 !important;
-  
-  &:focus {
-    border-color: #28a745 !important;
-    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
-  }
-  
-  &::after {
-    content: '✓';
-    color: #28a745;
-    font-weight: bold;
-    margin-right: 0.5rem;
-  }
+.result-reason-row .form-select,
+.result-reason-row .form-control {
+  min-height: 2.25rem;
 }
 
-/* ===========================================
-   Professional Radio Buttons Styling
-   Matching Visual Identity
-   =========================================== */
-
-.form-check {
-  margin-bottom: 0.5rem !important;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem !important;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  
-  &:hover {
-    background-color: rgba(66, 129, 119, 0.05);
-  }
-  
-  .form-check-input {
-    margin: 0 !important;
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-    border: 2px solid var(--primary-medium) !important;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-    background-color: white;
-    position: relative;
-    
-    &:hover {
-      border-color: var(--primary-dark) !important;
-      transform: scale(1.1);
-    }
-    
-    &:checked {
-      background-color: var(--primary-dark) !important;
-      border-color: var(--primary-dark) !important;
-      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.2);
-      
-      &::after {
-        background-color: white;
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 50%;
-        transform: scale(1);
-      }
-    }
-    
-    &:focus {
-      border-color: var(--primary-dark) !important;
-      box-shadow: 0 0 0 3px rgba(5, 66, 57, 0.15) !important;
-      outline: none;
-    }
-  }
-  
-  .form-check-label {
-    margin: 0 !important;
-    padding: 0 !important;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: var(--font-size-base);
-    color: var(--neutral-dark);
-    flex: 0 0 auto;
-    user-select: none;
-    transition: color 0.2s ease;
-    
-    &:hover {
-      color: var(--primary-dark);
-    }
-  }
-  
-  // عندما يكون Radio محدد
-  &:has(.form-check-input:checked) {
-    background-color: rgba(5, 66, 57, 0.08);
-    
-    .form-check-label {
-      color: var(--primary-dark);
-      font-weight: 600;
-    }
-  }
-}
-
-// تحسين المسافات في Radio Buttons inline
-.d-flex.gap-3 {
-  gap: 0.75rem !important;
-  
-  .form-check {
-    gap: 0.5rem !important;
-    margin-bottom: 0.25rem !important;
-  }
-}
-
-// تحسين Checkboxes
-input[type="checkbox"] {
-  margin-top: 0 !important;
-  margin-right: 0 !important;
-  margin-left: 0 !important;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===========================================
-   Resonator Selector Styles
-   =========================================== */
-
-.resonator-selector {
-  .input-group {
-    display: flex;
-    align-items: stretch;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
-    .resonator-nav-btn {
-      background: var(--primary-dark) !important;
-      border: none !important;
-      color: white !important;
-      padding: 0.75rem 1rem;
-      font-size: 1.25rem;
-      font-weight: 700;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 50px;
-      
-      &:hover:not(:disabled) {
-        background: var(--primary-medium) !important;
-        transform: scale(1.05);
-      }
-      
-      &:active:not(:disabled) {
-        transform: scale(0.95);
-      }
-      
-      i {
-        font-size: 1.1rem;
-      }
-    }
-    
-    .resonator-input {
-      flex: 1;
-      text-align: center;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      background: white;
-      border: 2px solid var(--primary-medium);
-      border-left: none;
-      border-right: none;
-      padding: 0.75rem 1rem;
-      min-height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      &:focus {
-        border-color: var(--primary-medium);
-        box-shadow: none;
-        outline: none;
-      }
-      
-      &.is-valid {
-        border-color: #28a745;
-        background-color: rgba(40, 167, 69, 0.05);
-      }
-      
-      &.is-invalid {
-        border-color: #dc3545;
-        background-color: rgba(220, 53, 69, 0.05);
-      }
-    }
-  }
-  
-  .resonator-options {
-    .resonator-option-btn {
-      background: white;
-      border: 2px solid var(--primary-medium);
-      color: var(--primary-dark);
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      border-radius: var(--radius-md);
-      transition: all 0.2s ease;
-      cursor: pointer;
-      white-space: nowrap;
-      
-      &:hover:not(.active) {
-        background: rgba(66, 129, 119, 0.1);
-        border-color: var(--primary-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      
-      &.active {
-        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
-        border-color: var(--primary-dark);
-        color: white;
-        font-weight: 600;
-        box-shadow: 0 2px 6px rgba(5, 66, 57, 0.3);
-      }
-    }
-  }
+.result-reason-row textarea.form-control {
+  min-height: 72px;
 }

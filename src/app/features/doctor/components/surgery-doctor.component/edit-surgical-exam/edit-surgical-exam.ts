@@ -5,10 +5,12 @@ import { CommonModule } from '@angular/common';
 import { SurgicalExamService } from '../../../services/surgical-exam.service';
 import { ToastrService } from 'ngx-toastr';
 import { HEALTH_STATUS_VALUES } from '../../../constants/health-status-options';
+import { DialogWrapperComponent } from '../../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-surgical-exam',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DialogWrapperComponent, ButtonModule],
   templateUrl: './edit-surgical-exam.html',
   styleUrls: ['./edit-surgical-exam.scss']
 })

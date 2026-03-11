@@ -1,5 +1,11 @@
 <div class="user-header-section p-3 container-fluid">
-  <h4 class="mb-3">فحوصات الأذن والأنف والحنجرة</h4>
+  <app-page-header
+    variant="banner"
+    title="الفحوصات الأذنية المؤجلة"
+    subtitle="عرض وإدارة فحوصات الأذن والأنف والحنجرة المؤجلة"
+    icon="pi pi-clock">
+  </app-page-header>
+
   <div class="table-toolbar">
     <div class="filter-reset-wrapper">
       <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
@@ -16,8 +22,7 @@
     </div>
   </div>
 
-  <div class="table-wrapper">
-    <p-table
+  <p-table
       #table
       [value]="filteredExams"
       [rows]="rowsPerPage"
@@ -28,9 +33,9 @@
     >
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-center">رقم الملف</th>
-        <th class="text-center">النتيجة</th>
-        <th class="text-center">إجراءات</th>
+        <th style="min-width:100px" class="text-center">رقم الملف</th>
+        <th style="min-width:80px" class="text-center">النتيجة</th>
+        <th style="min-width:80px" class="text-center">إجراءات</th>
       </tr>
     </ng-template>
 
@@ -40,12 +45,12 @@
           <span class="fw-bold small">{{ exam.applicantFileNumber }}</span>
         </td>
         <td class="text-center align-middle">
-          <span [class]="getBadgeClass(exam.result)">
+          <span [ngClass]="getBadgeClass(exam.result)" class="small d-inline-block">
             {{ exam.result?.description || 'غير محدد' }}
           </span>
         </td>
         <td class="text-center align-middle">
-          <div class="d-flex gap-2 justify-content-center">
+          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
             <button
               type="button"
               class="btn-icon-action"
@@ -69,16 +74,10 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="3" class="text-center py-4">
-          <div class="d-flex flex-column align-items-center">
-            <i class="pi pi-inbox text-muted mb-2" style="font-size: 2rem;"></i>
-            <span class="text-muted">لا توجد فحوصات</span>
-          </div>
-        </td>
+        <td colspan="3" class="text-center py-3 align-middle small">لا توجد فحوصات لعرضها.</td>
       </tr>
     </ng-template>
-    </p-table>
-  </div>
+  </p-table>
 
   <app-paginator
     [totalRecords]="totalRecords"

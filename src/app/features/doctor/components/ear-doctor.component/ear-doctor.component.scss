@@ -5,12 +5,87 @@
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-md);
   border: 1px solid #e9ecef;
+  max-width: 100%;
+  width: 100%;
+}
+
+.ear-clinic-page {
+  direction: rtl;
+}
+
+.search-panel {
+  padding: 10px;
+  border: 1px solid #ebeff5;
+  border-radius: 10px;
+  background: #fcfdff;
+  display: flex;
+  justify-content: center;
+}
+
+.search-panel app-search-applicant {
+  width: 50%;
+}
+
+:host ::ng-deep .search-panel .search-applicant-container.container {
+  max-width: 100%;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+:host ::ng-deep .search-panel .search-applicant-container .col-md-8 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.selected-applicant-card {
+  border: 1px solid #e9edf3;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #ffffff;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.status-chip--loading {
+  color: #6b5a00;
+  background: #fff9db;
+  border: 1px solid #f1df8a;
+}
+
+.status-chip--exists {
+  color: #0f5132;
+  background: #e9f7ef;
+  border: 1px solid #bfe7cf;
+}
+
+.status-chip--new {
+  color: #0c5460;
+  background: #e7f8ff;
+  border: 1px solid #b8eaf7;
 }
 
 .button-group {
   display: flex;
-  gap: 15px; /* مسافة بين الأزرار */
+  gap: 15px;
   flex-wrap: wrap;
+}
+
+.action-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 button.btn-outline-primary {
