@@ -16,6 +16,8 @@ import { ApplicantService } from '../../../reception/services/applicant.service'
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
 
 @Component({
   selector: 'app-recruitment-export',
@@ -30,7 +32,9 @@ import { ResetFiltersButtonComponent } from '../../../../shared/components/reset
     TagModule,
     ProgressBarModule,
     GregorianDatePipe,
-    ResetFiltersButtonComponent
+    ResetFiltersButtonComponent,
+    PageHeaderComponent,
+    FilterBarComponent
   ],
   templateUrl: './recruitment-export.html',
   styleUrls: ['./recruitment-export.scss'],
@@ -77,6 +81,11 @@ export class RecruitmentExportComponent implements OnInit {
     const value = (event.target as HTMLInputElement)?.value || '';
     this.globalFilter = value;
     this.table?.filterGlobal(value, 'contains');
+  }
+
+  onGlobalFilterFromBar(value: string): void {
+    this.globalFilter = value || '';
+    this.table?.filterGlobal(this.globalFilter, 'contains');
   }
 
   resetFilters(): void {

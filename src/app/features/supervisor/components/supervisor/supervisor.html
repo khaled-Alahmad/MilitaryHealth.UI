@@ -1,13 +1,28 @@
 <div class="supervisor-page container-fluid">
-  <!-- ✅ Search Section - استخدام مكون البحث المتقدم -->
-  <div class="row justify-content-center mb-4">
+  <app-page-header
+    class="supervisor-page-header mb-4"
+    title="تقييم المنتسب"
+    subtitle="عرض الفحوصات الطبية واتخاذ القرار النهائي"
+    icon="pi pi-user-check"
+    variant="banner">
+  </app-page-header>
+
+  <!-- Search Section -->
+  <div class="row mb-4">
     <div class="col-12">
-      <app-search-applicant [hideApplicantDetails]="true"
-        (applicantDetailsSelected)="onApplicantDetailsSelected($event)"></app-search-applicant>
-      <div *ngIf="applicant && !hasAllExams()" class="alert alert-danger mt-3" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        الفحوصات الطبية غير مكتملة
-      </div>
+      <app-form-card
+        title="البحث عن منتسب"
+        subtitle="أدخل رقم الملف للوصول إلى بيانات الفحوص والتقييم النهائي"
+        icon="pi pi-search">
+        <app-search-applicant
+          [hideApplicantDetails]="true"
+          (applicantDetailsSelected)="onApplicantDetailsSelected($event)">
+        </app-search-applicant>
+        <div *ngIf="applicant && !hasAllExams()" class="alert alert-danger mt-3" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          الفحوصات الطبية غير مكتملة
+        </div>
+      </app-form-card>
     </div>
   </div>
 
@@ -22,16 +37,13 @@
   <div *ngIf="applicant && !loading" class="row g-4">
     <!-- Personal Information Card -->
     <div class="col-12">
-      <p-card>
-        <ng-template pTemplate="header">
-          <div class="card-header-custom">
-            <div class="d-flex align-items-center gap-2">
-              <i class="pi pi-user"></i>
-              <h5 class="mb-0">البيانات الشخصية والطبية</h5>
-            </div>
-            <p-tag [value]="'ملف: ' + applicant.fileNumber" severity="info" styleClass="file-badge"></p-tag>
-          </div>
-        </ng-template>
+      <app-section-card
+        title="البيانات الشخصية والطبية"
+        subtitle="معلومات عامة عن المنتسب"
+        icon="pi-user">
+        <div card-actions>
+          <p-tag [value]="'ملف: ' + applicant.fileNumber" severity="info" styleClass="file-badge"></p-tag>
+        </div>
 
         <div class="personal-info-grid">
           <div class="info-item">
@@ -163,22 +175,28 @@
             <div class="info-value">{{ applicant.distinctiveMarks || 'لا توجد' }}</div>
           </div>
         </div>
-      </p-card>
+      </app-section-card>
     </div>
 
     <!-- Clinics Cards -->
     <div class="col-12" *ngFor="let clinic of clinicsData">
-      <p-card>
-        <ng-template pTemplate="header">
-          <div class="clinic-header">
-            <div class="d-flex align-items-center gap-2">
-              <i [class]="clinic.icon" class="clinic-icon"></i>
-              <h5 class="mb-0">{{ clinic.name }}</h5>
-            </div>
-            <p-tag [value]="clinic.exam ? 'تم الفحص' : 'لم يتم الفحص'" [severity]="clinic.exam ? 'success' : 'danger'"
-              styleClass="exam-status-badge"></p-tag>
+      <app-section-card
+        [title]="clinic.name"
+        headerVariant="neutral">
+        <div card-actions>
+          <p-tag
+            [value]="clinic.exam ? 'تم الفحص' : 'لم يتم الفحص'"
+            [severity]="clinic.exam ? 'success' : 'danger'"
+            styleClass="exam-status-badge">
+          </p-tag>
+        </div>
+
+        <div class="clinic-header">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i [class]="clinic.icon" class="clinic-icon"></i>
+            <h5 class="mb-0">{{ clinic.name }}</h5>
           </div>
-        </ng-template>
+        </div>
 
         <div class="clinic-content">
           <!-- Exam Section -->
@@ -688,20 +706,15 @@
             </ng-template>
           </div>
         </div>
-      </p-card>
+      </app-section-card>
     </div>
 
     <!-- Final Decision Card -->
     <div class="col-12">
-      <p-card>
-        <!-- <ng-template pTemplate="header">
-          <div class="card-header-custom">
-            <div class="d-flex align-items-center gap-2">
-              <i class="pi pi-check-circle"></i>
-              <h5 class="mb-0">القرار النهائي</h5>
-            </div>
-          </div>
-        </ng-template> -->
+      <app-form-card
+        title="القرار النهائي"
+        subtitle="معلومات القرار النهائي أو إرسال قرار جديد"
+        icon="pi pi-file-check">
 
         <!-- ✅ معلومات القرار النهائي الحالي (إن وجد) -->
         @if (applicant && applicant.finalDecision) {
@@ -728,95 +741,6 @@
 
           <!-- Content Section -->
           <div class="decision-card-body">
-            <!-- التواريخ Section -->
-            <!-- <div class="decision-info-section dates-section">
-                <div class="section-header">
-                  <div class="section-icon">
-                    <i class="pi pi-calendar"></i>
-                  </div>
-                  <h6 class="section-title">التواريخ والأوقات</h6>
-                </div>
-                <div class="info-list">
-                  <div class="info-item">
-                    <div class="info-item-icon">
-                      <i class="pi pi-calendar-plus"></i>
-                    </div>
-                    <div class="info-item-content">
-                      <div class="info-item-label">تاريخ الإضافة من الريسبشن</div>
-                      <div class="info-item-value">
-                        @if (finalDecision.receptionAddedAt) {
-                          <span class="value-text">{{ finalDecision.receptionAddedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
-                        } @else {
-                          <span class="value-empty">غير محدد</span>
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="info-item">
-                    <div class="info-item-icon">
-                      <i class="pi pi-user-plus"></i>
-                    </div>
-                    <div class="info-item-content">
-                      <div class="info-item-label">تاريخ الإضافة من المشرف</div>
-                      <div class="info-item-value">
-                        @if (finalDecision.supervisorAddedAt) {
-                          <span class="value-text">{{ finalDecision.supervisorAddedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
-                        } @else {
-                          <span class="value-empty">غير محدد</span>
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="info-item">
-                    <div class="info-item-icon">
-                      <i class="pi pi-pencil"></i>
-                    </div>
-                    <div class="info-item-content">
-                      <div class="info-item-label">تاريخ آخر تعديل من المشرف</div>
-                      <div class="info-item-value">
-                        @if (finalDecision.supervisorLastModifiedAt) {
-                          <span class="value-text">{{ finalDecision.supervisorLastModifiedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
-                        } @else {
-                          <span class="value-empty">غير محدد</span>
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="info-item info-item-featured">
-                    <div class="info-item-icon info-item-icon-featured">
-                      <i class="pi pi-calendar-check"></i>
-                    </div>
-                    <div class="info-item-content">
-                      <div class="info-item-label">تاريخ القرار</div>
-                      <div class="info-item-value">
-                        @if (finalDecision.decisionDate) {
-                          <span class="value-text value-text-featured">{{ finalDecision.decisionDate | gregorianDate:'yyyy/MM/dd' }}</span>
-                        } @else {
-                          <span class="value-empty">غير محدد</span>
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  @if (finalDecision.isExportedToRecruitment && finalDecision.exportedAt) {
-                    <div class="info-item info-item-exported">
-                      <div class="info-item-icon info-item-icon-exported">
-                        <i class="pi pi-upload"></i>
-                      </div>
-                      <div class="info-item-content">
-                        <div class="info-item-label">تاريخ التصدير للتجنيد</div>
-                        <div class="info-item-value">
-                          <span class="value-text value-text-exported">{{ finalDecision.exportedAt | gregorianDate:'yyyy/MM/dd HH:mm' }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  }
-                </div>
-              </div> -->
-
             <!-- الحالة والنتيجة Section -->
             <div class="decision-info-section status-section">
               <div class="section-header">
@@ -861,25 +785,8 @@
         </div>
         }
 
-        <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود -->
-        @if (applicant && applicant.finalDecision) {
-        <div class="decision-locked-message">
-          <div class="locked-icon">
-            <i class="pi pi-lock"></i>
-          </div>
-          <div class="locked-content">
-            <h6 class="locked-title">
-              <i class="pi pi-info-circle"></i>
-              القرار النهائي مسجل مسبقاً
-            </h6>
-            <p class="locked-text">
-              تم تسجيل القرار النهائي لهذا المنتسب مسبقاً ولا يمكن تعديله أو إضافة قرار جديد.
-              يمكنك عرض تفاصيل القرار في قسم "معلومات القرار النهائي" أعلاه.
-            </p>
-          </div>
-        </div>
-        } @else if (previousDecisionLocked) {
-        <!-- ✅ رسالة توضيحية إذا كان هناك قرار نهائي موجود (من checkExistingDecision) -->
+        <!-- رسالة توضيحية إذا كان القرار النهائي مقفلاً -->
+        @if ((applicant && applicant.finalDecision) || previousDecisionLocked) {
         <div class="decision-locked-message">
           <div class="locked-icon">
             <i class="pi pi-lock"></i>
@@ -945,8 +852,7 @@
                 <i class="pi pi-info-circle"></i>
                 {{ isAccept ? 'التوصية' : 'السبب' }}
               </label>
-              <textarea class="form-control-enhanced" [value]="decisionModel.reason || 'لا يوجد'" rows="4" readonly
-                style="background-color: var(--neutral-light); cursor: not-allowed;">
+              <textarea class="form-control-enhanced readonly-field" [value]="decisionModel.reason || 'لا يوجد'" rows="4" readonly>
                 </textarea>
             </div>
 
@@ -966,8 +872,7 @@
                 <i class="pi pi-clock"></i>
                 مدة التأجيل
               </label>
-              <input type="text" class="form-control-enhanced" [value]="decisionModel.postponeDuration" readonly
-                style="background-color: var(--neutral-light); cursor: not-allowed;">
+              <input type="text" class="form-control-enhanced readonly-field" [value]="decisionModel.postponeDuration" readonly>
             </div>
           </div>
 
@@ -989,16 +894,18 @@
           }
         </form>
         }
-      </p-card>
+      </app-form-card>
     </div>
   </div>
 
   <!-- Consultation Modal -->
-  <p-dialog [(visible)]="showConsultationModal" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
-    [style]="{width: '40rem', minWidth: '40rem'}"
-    [closable]="true" [draggable]="false" [resizable]="false" (onHide)="closeConsultationModal()"
-    [header]="(selectedConsultation?.consultationID ?? 0) > 0 ? 'تعديل الاستشارة' : 'إضافة استشارة جديدة'">
-
+  <app-dialog-wrapper
+    [(visible)]="showConsultationModal"
+    [title]="(selectedConsultation?.consultationID ?? 0) > 0 ? 'تعديل الاستشارة' : 'إضافة استشارة جديدة'"
+    icon="pi pi-comments"
+    width="40rem"
+    [useDefaultFooter]="false"
+    (hide)="closeConsultationModal()">
     <form [formGroup]="consultationForm" *ngIf="consultationForm" (ngSubmit)="saveConsultation()">
       <div class="form-group mb-3">
         <label class="form-label">
@@ -1048,21 +955,30 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-end gap-2">
-        <p-button label="إلغاء" icon="pi pi-times" styleClass="p-button-secondary" (onClick)="closeConsultationModal()"
+      <div dialog-footer class="d-flex justify-content-end gap-2">
+        <p-button
+          label="إلغاء"
+          icon="pi pi-times"
+          styleClass="p-button-secondary"
+          (onClick)="closeConsultationModal()"
           [disabled]="loading"></p-button>
-        <p-button label="حفظ" icon="pi pi-check" type="submit"
+        <p-button
+          label="حفظ"
+          icon="pi pi-check"
+          type="submit"
           [disabled]="consultationForm.invalid || loading || uploadingFile"></p-button>
       </div>
     </form>
-  </p-dialog>
+  </app-dialog-wrapper>
 
   <!-- Investigation Modal -->
-  <p-dialog [(visible)]="showInvestigationModal" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
-    [style]="{width: '40rem', minWidth: '40rem'}"
-    [closable]="true" [draggable]="false" [resizable]="false" (onHide)="closeInvestigationModal()"
-    [header]="(selectedInvestigation?.investigationID ?? 0) > 0 ? 'تعديل التحليل' : 'إضافة تحليل جديد'">
-
+  <app-dialog-wrapper
+    [(visible)]="showInvestigationModal"
+    [title]="(selectedInvestigation?.investigationID ?? 0) > 0 ? 'تعديل التحليل' : 'إضافة تحليل جديد'"
+    icon="pi pi-flask"
+    width="40rem"
+    [useDefaultFooter]="false"
+    (hide)="closeInvestigationModal()">
     <form [formGroup]="investigationForm" *ngIf="investigationForm" (ngSubmit)="saveInvestigation()">
       <div class="form-group mb-3">
         <label class="form-label">
@@ -1115,12 +1031,19 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-end gap-2">
-        <p-button label="إلغاء" icon="pi pi-times" styleClass="p-button-secondary" (onClick)="closeInvestigationModal()"
+      <div dialog-footer class="d-flex justify-content-end gap-2">
+        <p-button
+          label="إلغاء"
+          icon="pi pi-times"
+          styleClass="p-button-secondary"
+          (onClick)="closeInvestigationModal()"
           [disabled]="loading"></p-button>
-        <p-button label="حفظ" icon="pi pi-check" type="submit"
+        <p-button
+          label="حفظ"
+          icon="pi pi-check"
+          type="submit"
           [disabled]="investigationForm.invalid || loading || uploadingFile"></p-button>
       </div>
     </form>
-  </p-dialog>
+  </app-dialog-wrapper>
 </div>

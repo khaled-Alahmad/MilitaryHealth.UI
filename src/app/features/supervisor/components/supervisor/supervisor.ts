@@ -30,7 +30,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { PagedResponse } from '../../../../shared/models/paged-response.model';
 import { ApiResponse } from '../../../applicants/models/api-response.model';
 import { ToastrService } from 'ngx-toastr';
-import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SearchApplicantComponent } from '../../../applicants/components/search-applican/search-applicant.component.ts/search-applicant.component';
@@ -39,6 +38,10 @@ import { Refraction } from '../../../doctor/models/refraction.model';
 import { RefractionType } from '../../../doctor/models/refraction-type.model';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
 import { Router } from '@angular/router';
+import { SectionCardComponent } from '../../../../shared/components/section-card/section-card.component';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { FormCardComponent } from '../../../../shared/components/form-card/form-card.component';
+import { DialogWrapperComponent } from '../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
 
 interface ClinicData {
   name: string;
@@ -59,10 +62,13 @@ interface ClinicData {
     TagModule,
     ButtonModule,
     DividerModule,
-    DialogModule,
     InputTextModule,
     SearchApplicantComponent,
     GregorianDatePipe,
+    SectionCardComponent,
+    PageHeaderComponent,
+    FormCardComponent,
+    DialogWrapperComponent,
   ],
   templateUrl: './supervisor.html',
   styleUrl: './supervisor.scss',

@@ -8,6 +8,8 @@ import { TagModule } from 'primeng/tag';
 import { ToastrService } from 'ngx-toastr';
 import { RecruitmentExportService, PendingExportItem } from '../../services/recruitment-export.service';
 import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
 
 @Component({
   selector: 'app-recruitment-exported',
@@ -19,10 +21,12 @@ import { GregorianDatePipe } from '../../../../shared/pipes/gregorian-date.pipe'
     ButtonModule,
     CheckboxModule,
     TagModule,
-    GregorianDatePipe
+    GregorianDatePipe,
+    PageHeaderComponent,
+    FilterBarComponent
   ],
   templateUrl: './recruitment-exported.html',
-  styleUrls: ['./recruitment-exported.scss']
+  styleUrl: './recruitment-exported.scss'
 })
 export class RecruitmentExportedComponent implements OnInit {
   exportedList: PendingExportItem[] = [];
@@ -66,11 +70,10 @@ export class RecruitmentExportedComponent implements OnInit {
       }
     });
   }
-
-  onGlobalFilter(event: Event): void {
-    const value = (event.target as HTMLInputElement)?.value ?? '';
-    this.globalFilter = value;
-    this.table?.filterGlobal(value, 'contains');
+  
+  onGlobalFilterFromBar(value: string): void {
+    this.globalFilter = value || '';
+    this.table?.filterGlobal(this.globalFilter, 'contains');
   }
 
   downloadAgain(decisionIds: number[]): void {

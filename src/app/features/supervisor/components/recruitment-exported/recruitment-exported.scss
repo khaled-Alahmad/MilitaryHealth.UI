@@ -1,125 +1,103 @@
 @use '../../../../shared/styles/mixins' as *;
 
+:root {
+  --export-green: #0b7d62;
+}
+
 .recruitment-exported-page {
-  background: linear-gradient(180deg, #f5f8f7 0%, #e6ebe8 100%);
-  padding: clamp(1rem, 2.5vw, 2.5rem);
-  min-height: calc(100vh - 120px);
-  font-family: var(--font-family-primary);
-  color: #0a1d1a;
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 25px 60px rgba(7, 22, 20, 0.18);
-}
-
-.table-shell {
-  padding: 1.5rem;
-  background: #fff;
-
-  .table-headline {
-    border-bottom: 1px solid rgba(8, 61, 47, 0.08);
-    padding-bottom: 1rem;
-
-    h2 {
-      margin: 0 0 0.25rem 0;
-      font-size: 1.35rem;
-      color: #054239;
-    }
-    p {
-      margin: 0;
-      color: #6c757d;
-      font-size: 0.9rem;
-    }
-  }
-
-  .table-controls {
-    margin: 1.2rem 0 0;
-    padding: 1rem;
-    border: 1px solid rgba(6, 73, 62, 0.08);
-    border-radius: 20px;
-    background: #f8fbfa;
-  }
-
-  .toolbar-one-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.65rem;
-  }
-
-  .search-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 12px;
-    border: 1px solid rgba(5, 66, 57, 0.2);
-    padding: 0.5rem 0.9rem;
-    background: white;
-    flex: 1 1 200px;
-    min-width: 180px;
-    i { color: #4b6e64; font-size: 0.95rem; }
-    .search-input {
-      border: none;
-      outline: none;
-      font-size: 0.9rem;
-      color: #223b35;
-      min-width: 0;
-      &::placeholder { color: #8aa39a; }
-    }
-  }
-
-  .btn-refresh {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border-radius: 10px;
-    border: 1px solid rgba(5, 66, 57, 0.25);
-    padding: 0.5rem 0.85rem;
-    background: white;
-    color: #054239;
-    font-size: 0.875rem;
-    font-weight: 600;
-    &:hover:not(:disabled) {
-      background: #054239;
-      color: white;
-      box-shadow: 0 4px 12px rgba(5, 66, 57, 0.25);
-    }
-    &:disabled { opacity: 0.55; cursor: not-allowed; }
-  }
-
-  .btn-divider {
-    width: 1px;
-    height: 1.75rem;
-    background: rgba(5, 66, 57, 0.15);
-    flex-shrink: 0;
-    margin: 0 0.15rem;
+  .page-header {
+    @include page-header;
+    margin-bottom: var(--spacing-md);
   }
 }
 
+.table-toolbar {
+  margin-bottom: var(--spacing-sm);
+}
+
+.toolbar-one-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.export-filter-bar {
+  flex: 1 1 220px;
+  max-width: 420px;
+}
+
+.btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid rgba(5, 66, 57, 0.25);
+  padding: 0.5rem 0.85rem;
+  background: white;
+  color: #054239;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.2s ease;
+
+  i {
+    font-size: 0.95rem;
+  }
+
+  &:hover:not(:disabled) {
+    background: #054239;
+    color: white;
+    box-shadow: 0 4px 12px rgba(5, 66, 57, 0.25);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.btn-divider {
+  width: 1px;
+  height: 1.75rem;
+  background: rgba(5, 66, 57, 0.15);
+  flex-shrink: 0;
+  margin: 0 0.15rem;
+}
+
+/* أزرار PrimeNG في شريط الأدوات */
 ::ng-deep .recruitment-exported-page .toolbar-btn.p-button {
   min-height: 2.35rem !important;
   padding: 0.45rem 0.9rem !important;
   font-size: 0.875rem !important;
   font-weight: 600 !important;
   border-radius: 10px !important;
-}
-::ng-deep .recruitment-exported-page .toolbar-btn-success.p-button {
-  background: linear-gradient(135deg, #0b9d6e, #0a7d5a) !important;
-  border: none !important;
-}
-::ng-deep .recruitment-exported-page .toolbar-btn-info.p-button {
-  background: linear-gradient(135deg, #2a7c9e, #1e5f7a) !important;
-  border: none !important;
+  transition: box-shadow 0.2s ease, transform 0.15s ease !important;
+
+  .p-button-icon {
+    font-size: 0.95rem;
+  }
+
+  &:not(:disabled):hover {
+    box-shadow: 0 4px 12px rgba(5, 66, 57, 0.2);
+  }
+
+  &:not(:disabled):active {
+    transform: scale(0.98);
+  }
 }
 
-::ng-deep .recruitment-exported-page .p-table {
+::ng-deep .recruitment-exported-page .toolbar-btn-success.p-button {
+  background: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: #fff !important;
+}
+
+::ng-deep .recruitment-exported-page .p-table.custom-table {
   border-radius: 24px;
   box-shadow: 0 18px 35px rgba(8, 61, 47, 0.12);
   overflow: hidden;
 }
+
 ::ng-deep .recruitment-exported-page .p-datatable-thead > tr > th {
   background: #032422 !important;
   color: #cde9df !important;
@@ -128,27 +106,22 @@
   text-align: center !important;
   padding: 0.65rem !important;
 }
+
 ::ng-deep .recruitment-exported-page .p-datatable-tbody > tr {
   transition: 0.2s ease;
-  &:nth-child(even) { background: rgba(5, 66, 57, 0.02); }
-  &:hover { background: rgba(5, 66, 57, 0.08); }
+
+  &:nth-child(even) {
+    background: rgba(5, 66, 57, 0.02);
+  }
+
+  &:hover {
+    background: rgba(5, 66, 57, 0.08);
+  }
 }
+
 ::ng-deep .recruitment-exported-page .p-datatable-tbody > tr > td {
   padding: 0.55rem 0.4rem !important;
   font-size: 0.85rem !important;
-}
-::ng-deep .recruitment-exported-page .p-paginator {
-  border-top: 1px solid rgba(3, 36, 34, 0.08);
-  padding: 1rem;
-  background: white;
-}
-::ng-deep .recruitment-exported-page .p-checkbox .p-checkbox-box {
-  border-radius: 10px !important;
-  border-width: 2px !important;
-  border-color: rgba(5, 66, 57, 0.6) !important;
-}
-::ng-deep .recruitment-exported-page .p-checkbox-box.p-highlight {
-  background: linear-gradient(135deg, #0b7d62, #0a4032) !important;
 }
 
 .badge-seq {
@@ -161,12 +134,32 @@
   color: #054239;
   font-weight: 700;
 }
+
 .file-number {
   color: #035e55;
   font-weight: 600;
 }
+
 .empty-state {
   text-align: center;
   color: #6f7b7a;
-  i { font-size: 2rem; color: #0b7d62; }
+
+  i {
+    font-size: 2rem;
+    color: var(--export-green);
+  }
 }
+
+@media (max-width: 768px) {
+  .toolbar-one-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  ::ng-deep .recruitment-exported-page .p-datatable-thead > tr > th,
+  ::ng-deep .recruitment-exported-page .p-datatable-tbody > tr > td {
+    font-size: 0.75rem !important;
+    white-space: normal !important;
+  }
+}
+

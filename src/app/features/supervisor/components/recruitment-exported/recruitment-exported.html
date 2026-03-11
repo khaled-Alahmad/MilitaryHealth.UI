@@ -1,18 +1,22 @@
 <div class="recruitment-exported-page container-fluid">
-  <section class="table-shell glass-card">
-    <header class="table-headline">
-      <div>
-        <h2>الملفات المُصدَّرة للتجنيد</h2>
-        <p>عرض جميع الملفات التي تم تصديرها سابقاً. يمكنك تحميلها مرة ثانية عند الحاجة.</p>
-      </div>
-    </header>
+  <app-page-header
+    title="الملفات المُصدَّرة للتجنيد"
+    subtitle="سجل الملفات التي تم تصديرها مع إمكانية التحميل مرة أخرى"
+    icon="pi pi-history"
+    variant="banner">
+  </app-page-header>
 
-    <div class="table-controls toolbar-one-row">
-      <div class="search-wrapper">
-        <i class="pi pi-search"></i>
-        <input #searchInput type="text" class="search-input" placeholder="ابحث باسم المنتسب أو رقم الملف..."
-          [value]="globalFilter" (input)="onGlobalFilter($event)" />
-      </div>
+  <div class="list-page-section">
+    <div class="table-toolbar toolbar-one-row">
+      <app-filter-bar
+        class="export-filter-bar"
+        [searchValue]="globalFilter"
+        [searchPlaceholder]="'ابحث باسم المنتسب أو رقم الملف...'"
+        [loading]="loading"
+        [showReset]="false"
+        (searchChange)="onGlobalFilterFromBar($event)">
+      </app-filter-bar>
+
       <button class="btn-refresh" type="button" (click)="loadExported()" [disabled]="loading">
         <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
         <span>تحديث</span>
@@ -21,15 +25,25 @@
       <p-button label="تحميل المحدد مرة ثانية" icon="pi pi-download" severity="success" styleClass="toolbar-btn toolbar-btn-success"
         [disabled]="selectedItems.length === 0 || downloading" (onClick)="downloadSelected()">
       </p-button>
-      <p-button label="تحميل الكل مرة ثانية" icon="pi pi-file-pdf" severity="info" styleClass="toolbar-btn toolbar-btn-info"
+      <p-button label="تحميل الكل مرة ثانية" icon="pi pi-file-excel" severity="success" styleClass="toolbar-btn toolbar-btn-success"
         [disabled]="exportedList.length === 0 || downloading" (onClick)="downloadAll()">
       </p-button>
     </div>
 
-    <p-table #exportedTable [value]="exportedList" [loading]="loading" [paginator]="true" [rows]="10"
+    <p-table
+      #exportedTable
+      class="custom-table"
+      [value]="exportedList"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
       [rowsPerPageOptions]="[10, 20, 50, 100]"
-      [globalFilterFields]="['fileNumber', 'fullName']" [sortMode]="'single'"
-      responsiveLayout="scroll" [scrollable]="true" [scrollHeight]="tableHeight" [rowHover]="true"
+      [globalFilterFields]="['fileNumber', 'fullName']"
+      [sortMode]="'single'"
+      responsiveLayout="scroll"
+      [scrollable]="true"
+      [scrollHeight]="tableHeight"
+      [rowHover]="true"
       dataKey="decisionID">
 
       <ng-template pTemplate="header">
@@ -86,5 +100,5 @@
         </tr>
       </ng-template>
     </p-table>
-  </section>
+  </div>
 </div>

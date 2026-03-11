@@ -7,8 +7,7 @@
     @if (showReset) {
       <app-reset-filters-button [disabled]="disabled || loading" (reset)="reset.emit()"></app-reset-filters-button>
     }
-    <span class="p-input-icon-right filter-bar__search-wrap">
-      <i class="pi pi-search" aria-hidden="true"></i>
+    <span class="filter-bar__search-wrap">
       <input
         pInputText
         type="text"

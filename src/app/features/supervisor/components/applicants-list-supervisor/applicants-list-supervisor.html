@@ -1,41 +1,52 @@
 <div class="applicants-list-supervisor container-fluid">
-  <!-- Header Section -->
-  <div class="page-header applicants-list-header">
-    <div class="header-content">
-      <div class="header-icon">
-        <i class="pi pi-users"></i>
-      </div>
-      <div class="header-text">
-        <h2 class="page-title">قائمة المنتسبين</h2>
-        <p class="page-subtitle">عرض وإدارة جميع المنتسبين في النظام</p>
-      </div>
-    </div>
+  <app-page-header
+    class="applicants-list-header"
+    title="قائمة المنتسبين"
+    subtitle="عرض وإدارة جميع المنتسبين في النظام"
+    icon="pi pi-users"
+    variant="banner">
+  </app-page-header>
+
+  <div class="list-page-section">
     <div class="table-toolbar">
-      <div class="toolbar-filters">
-        <div class="filter-reset-wrap">
-          <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
-        </div>
-        <div class="date-filters-wrapper">
-          <div class="date-field">
-            <span class="date-label">من تاريخ</span>
-            <p-datepicker [(ngModel)]="dateFrom" [showIcon]="true" dateFormat="dd/mm/yy" [maxDate]="dateTo"
-              (onSelect)="onDateFilterChange()" [appendTo]="'body'" styleClass="date-picker-toolbar"></p-datepicker>
+      <div class="table-toolbar__filter">
+        <div class="table-toolbar__filter-inner">
+          <div class="date-filters-wrapper">
+            <div class="date-field">
+              <span class="date-label">من تاريخ</span>
+              <p-datepicker
+                [(ngModel)]="dateFrom"
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                [maxDate]="dateTo"
+                (onSelect)="onDateFilterChange()"
+                [appendTo]="'body'">
+              </p-datepicker>
+            </div>
+            <div class="date-field">
+              <span class="date-label">إلى تاريخ</span>
+              <p-datepicker
+                [(ngModel)]="dateTo"
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                [minDate]="dateFrom"
+                [maxDate]="maxDate"
+                (onSelect)="onDateFilterChange()"
+                [appendTo]="'body'">
+              </p-datepicker>
+            </div>
           </div>
-          <div class="date-field">
-            <span class="date-label">إلى تاريخ</span>
-            <p-datepicker [(ngModel)]="dateTo" [showIcon]="true" dateFormat="dd/mm/yy" [minDate]="dateFrom"
-              [maxDate]="maxDate" (onSelect)="onDateFilterChange()" [appendTo]="'body'"
-              styleClass="date-picker-toolbar"></p-datepicker>
-          </div>
-        </div>
-        <div class="search-wrapper">
-          <i class="pi pi-search search-icon"></i>
-          <input #searchInput type="text" class="search-input" placeholder="ابحث عن رقم الملف أو الاسم..."
-            (input)="onFilterChange($event)" [value]="globalFilter">
+          <app-filter-bar
+            [searchValue]="globalFilter"
+            [searchPlaceholder]="'ابحث عن رقم الملف أو الاسم...'"
+            [loading]="loading"
+            [showReset]="false"
+            (searchChange)="onFilterChangeFromBar($event)">
+          </app-filter-bar>
         </div>
       </div>
+      <app-reset-filters-button (reset)="resetFilters()"></app-reset-filters-button>
     </div>
-  </div>
 
   <!-- Table Section -->
   <div class="table-container">
@@ -64,45 +75,53 @@
       <ng-template pTemplate="body" let-applicant>
         <tr>
           <td class="text-center align-middle">
-            <span class="fw-bold badge bg-primary text-white" style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">{{
-              applicant.queueNumber || '-' }}</span>
+            <span class="queue-pill">
+              {{ applicant.queueNumber || '-' }}
+            </span>
           </td>
           <td class="text-center align-middle">
-            <span class="fw-bold text-primary" style="font-size: 0.65rem;">{{ applicant.fileNumber }}</span>
+            <span class="file-number">
+              {{ applicant.fileNumber }}
+            </span>
           </td>
           <td class="text-center align-middle">
-            <span style="font-size: 0.65rem;">{{ applicant.fullName }}</span>
+            <span class="cell-text-sm">
+              {{ applicant.fullName }}
+            </span>
           </td>
 
           <td class="text-center align-middle">
-            <span *ngIf="applicant.createdAt" style="font-size: 0.65rem;">
+            <span *ngIf="applicant.createdAt" class="cell-text-sm">
               {{ applicant.createdAt | gregorianDate:'yyyy/MM/dd' }}
             </span>
-            <span *ngIf="!applicant.createdAt" style="font-size: 0.65rem;">-</span>
+            <span *ngIf="!applicant.createdAt" class="cell-text-muted">-</span>
           </td>
           <td class="text-center align-middle">
-            <span [ngClass]="getBadgeClass(getFinalResult(applicant.fileNumber))" style="font-size: 0.65rem;">
+            <span [ngClass]="getBadgeClass(getFinalResult(applicant.fileNumber))" class="final-result-badge">
               {{ getFinalResult(applicant.fileNumber) }}
             </span>
           </td>
           <td class="text-center align-middle">
-            <span *ngIf="applicant.maritalStatus" style="font-size: 0.65rem;">
+            <span *ngIf="applicant.maritalStatus" class="cell-text-sm">
               {{ applicant.maritalStatus.description }}
             </span>
-            <span *ngIf="!applicant.maritalStatus" style="font-size: 0.65rem;">-</span>
+            <span *ngIf="!applicant.maritalStatus" class="cell-text-muted">-</span>
           </td>
           <td class="text-center align-middle">
-            <span *ngIf="applicant.bloodType" class="badge bg-info text-white"
-              style="font-size: 0.65rem; padding: 0.25rem 0.5rem;">
-              {{ applicant.bloodType }}
+            <p-tag *ngIf="applicant.bloodType" [value]="applicant.bloodType"
+              severity="info" styleClass="blood-type-pill">
+            </p-tag>
+            <span *ngIf="!applicant.bloodType" class="cell-text-muted">-</span>
+          </td>
+          <td class="text-center align-middle">
+            <span class="cell-text-sm">
+              {{ applicant.height ? applicant.height + ' سم' : '-' }}
             </span>
-            <span *ngIf="!applicant.bloodType" style="font-size: 0.65rem;">-</span>
           </td>
           <td class="text-center align-middle">
-            <span style="font-size: 0.65rem;">{{ applicant.height ? applicant.height + ' سم' : '-' }}</span>
-          </td>
-          <td class="text-center align-middle">
-            <span style="font-size: 0.65rem;">{{ applicant.weight ? applicant.weight + ' كغ' : '-' }}</span>
+            <span class="cell-text-sm">
+              {{ applicant.weight ? applicant.weight + ' كغ' : '-' }}
+            </span>
           </td>
           <td class="text-center align-middle">
             <div class="d-flex gap-1 justify-content-center">
@@ -121,8 +140,8 @@
         <tr>
           <td colspan="10" class="text-center py-4">
             <div class="d-flex flex-column align-items-center">
-              <i class="fas fa-users text-muted mb-2" style="font-size: 2rem;"></i>
-              <span class="text-muted">لا يوجد منتسبين</span>
+              <i class="pi pi-users empty-icon mb-2"></i>
+              <span class="cell-text-muted">لا يوجد منتسبين</span>
             </div>
           </td>
         </tr>
@@ -131,12 +150,13 @@
   </div>
 
   <!-- Details Dialog: نفس آلية وحجم تفاصيل الفحص العيني 70rem -->
-  <p-dialog [(visible)]="showDetailsDialog" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
-    [style]="{width: '70rem', minWidth: '70rem'}"
-    [closable]="true" [draggable]="false" [resizable]="false" header="تفاصيل المنتسب الكاملة"
-    (onHide)="closeDetailsDialog()">
-
-
+  <app-dialog-wrapper
+    [(visible)]="showDetailsDialog"
+    title="تفاصيل المنتسب الكاملة"
+    icon="pi pi-user"
+    width="70rem"
+    [useDefaultFooter]="false"
+    (hide)="closeDetailsDialog()">
 
     <div *ngIf="!detailsLoading && selectedApplicant" class="applicant-details">
       <!-- البيانات الشخصية -->
@@ -397,13 +417,16 @@
         </div>
       </div>
     </div>
-  </p-dialog>
+  </app-dialog-wrapper>
 
   <!-- Requests Dialog: نفس حجم طلب استشارة/تحليل 40rem -->
-  <p-dialog [(visible)]="showRequestsDialog" [modal]="true" [dismissableMask]="false" [closeOnEscape]="true"
-    [style]="{width: '40rem', minWidth: '40rem'}"
-    [closable]="true" [draggable]="false" [resizable]="false" header="التحاليل والاستشارات"
-    (onHide)="closeRequestsDialog()">
+  <app-dialog-wrapper
+    [(visible)]="showRequestsDialog"
+    title="التحاليل والاستشارات"
+    icon="pi pi-list"
+    width="40rem"
+    [useDefaultFooter]="false"
+    (hide)="closeRequestsDialog()">
 
     <div *ngIf="requestsLoading" class="text-center py-5">
 
@@ -482,5 +505,5 @@
         </div>
       </ng-template>
     </div>
-  </p-dialog>
+  </app-dialog-wrapper>
 </div>

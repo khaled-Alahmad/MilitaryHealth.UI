@@ -5,7 +5,6 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
-import { DialogModule } from 'primeng/dialog';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ToastrService } from 'ngx-toastr';
@@ -31,6 +30,9 @@ import { TextareaModule } from 'primeng/textarea';
 import { Table } from 'primeng/table';
 import { ResetFiltersButtonComponent } from '../../../../shared/components/reset-filters-button/reset-filters-button.component';
 import { DatePickerModule } from 'primeng/datepicker';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { FilterBarComponent } from '../../../../shared/components/filter-bar/filter-bar.component';
+import { DialogWrapperComponent } from '../../../../shared/components/dialog-wrapper/dialog-wrapper.component';
 
 interface ApplicantTimeline {
   event: string;
@@ -48,14 +50,16 @@ interface ApplicantTimeline {
     ButtonModule,
     TagModule,
     InputTextModule,
-    DialogModule,
     CardModule,
     DividerModule,
     GregorianDatePipe,
     FormsModule,
     NgSelectModule,
     ResetFiltersButtonComponent,
-    DatePickerModule
+    DatePickerModule,
+    PageHeaderComponent,
+    FilterBarComponent,
+    DialogWrapperComponent
   ],
   templateUrl: './applicants-list-supervisor.html',
   styleUrl: './applicants-list-supervisor.scss'
@@ -243,6 +247,12 @@ export class ApplicantsListSupervisor implements OnInit {
 
   onFilterChange(event: any): void {
     this.globalFilter = event.target.value;
+    this.page = 1;
+    this.loadApplicants();
+  }
+
+  onFilterChangeFromBar(value: string): void {
+    this.globalFilter = value;
     this.page = 1;
     this.loadApplicants();
   }
