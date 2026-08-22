@@ -25,7 +25,7 @@ export class AuthService {
   constructor(private http: HttpClient, private toastr: ToastrService) { }
 
   login(userDto: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/api/auth/login`, userDto).pipe(
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, userDto).pipe(
       tap(response => {
         if (response?.succeeded && response.data?.accessToken) {
           this.setToken(response.data.accessToken, response.data.refreshToken);
